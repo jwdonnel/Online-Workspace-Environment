@@ -1,0 +1,692 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Tables>
+    <Table name="aspnet_BlockedChats" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="ChatUser" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="DateTime" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_Chat" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="tUser" type="nvarchar" length="150" nullable="false"></Column>
+            <Column id="sUser" type="nvarchar" length="150" nullable="false"></Column>
+            <Column id="sMsg" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="SessionDate" type="nvarchar" length="50" nullable="false"></Column>
+            <Column id="Date" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_ChatLogsDeleted" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="LogDate" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_CustomProjectDLLs" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="ProjectFolder" type="nvarchar" length="250" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_GroupIPListener" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="GroupId" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="IPAddress" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="Active" type="bit" nullable="false"></Column>
+            <Column id="DateUpdated" type="datetime" nullable="false"></Column>
+            <Column id="AddedBy" type="nvarchar" length="250" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_LoginActivity" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="IPAddress" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="NameUsed" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="LoginGroup" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="Success" type="bit" nullable="false"></Column>
+            <Column id="ActType" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="DateAdded" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_Membership" for="System.Data.SqlClient" primaryKey="UserId">
+        <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="UserId" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="Password" type="nvarchar" length="128" nullable="false"></Column>
+            <Column id="PasswordFormat" type="int" nullable="false"></Column>
+            <Column id="PasswordSalt" type="nvarchar" length="128" nullable="false"></Column>
+            <Column id="MobilePIN" type="nvarchar" length="16" nullable="true"></Column>
+            <Column id="Email" type="nvarchar" length="256" nullable="true"></Column>
+            <Column id="LoweredEmail" type="nvarchar" length="256" nullable="true"></Column>
+            <Column id="PasswordQuestion" type="nvarchar" length="256" nullable="true"></Column>
+            <Column id="PasswordAnswer" type="nvarchar" length="128" nullable="true"></Column>
+            <Column id="IsApproved" type="bit" nullable="false"></Column>
+            <Column id="IsLockedOut" type="bit" nullable="false"></Column>
+            <Column id="CreateDate" type="datetime" nullable="false"></Column>
+            <Column id="LastLoginDate" type="datetime" nullable="false"></Column>
+            <Column id="LastPasswordChangedDate" type="datetime" nullable="false"></Column>
+            <Column id="LastLockoutDate" type="datetime" nullable="false"></Column>
+            <Column id="FailedPasswordAttemptCount" type="int" nullable="false"></Column>
+            <Column id="FailedPasswordAttemptWindowStart" type="datetime" nullable="false"></Column>
+            <Column id="FailedPasswordAnswerAttemptCount" type="int" nullable="false"></Column>
+            <Column id="FailedPasswordAnswerAttemptWindowStart" type="datetime" nullable="false"></Column>
+            <Column id="Comment" type="ntext" nullable="true"></Column>
+            <Column id="CommentDate" type="datetime" nullable="true"></Column>
+            <Column id="ReceiveAllMail" type="bit" nullable="true"></Column>
+            <Column id="EnabledApps" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="AdminPages" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="ActivationCode" type="uniqueidentifier" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_OverlayDLLs" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="OverlayID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="FolderPath" type="nvarchar" length="250" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_ServerSettings">
+        <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
+            <Column id="DocumentsFolder" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="RecordActivity" type="bit" nullable="true"></Column>
+            <Column id="AutoUpdates" type="bit" nullable="true"></Column>
+            <Column id="LastCacheDate" type="datetime" nullable="true"></Column>
+            <Column id="Override1" type="bit" nullable="true"></Column>
+            <Column id="Override2" type="bit" nullable="true"></Column>
+            <Column id="Override3" type="bit" nullable="true"></Column>
+            <Column id="Override4" type="bit" nullable="true"></Column>
+            <Column id="Override5" type="bit" nullable="true"></Column>
+            <Column id="EmailActivity" type="bit" nullable="true"></Column>
+            <Column id="AdminNote" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="AdminNoteBy" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="SiteOffLine" type="bit" nullable="true"></Column>
+            <Column id="ChatEnabled" type="bit" nullable="true"></Column>
+            <Column id="AppInstallerPackage" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="CacheHomePage" type="bit" nullable="true"></Column>
+            <Column id="LockFileEditor" type="bit" nullable="true"></Column>
+            <Column id="LockStartupScripts" type="bit" nullable="true"></Column>
+            <Column id="LockASCXEdit" type="bit" nullable="true"></Column>
+            <Column id="LockCustomTables" type="bit" nullable="true"></Column>
+            <Column id="LockIPListener" type="bit" nullable="true"></Column>
+            <Column id="LoginScreenTheme" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="AllowUserSignUp" type="bit" nullable="true"></Column>
+            <Column id="UserSignUpEmailChecker" type="bit" nullable="true"></Column>
+            <Column id="UserSignUpEmailAssociation" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="UserSignUpRole" type="nvarchar" length="150" nullable="true"></Column>
+            <Column id="CustomizationsLocked" type="bit" nullable="true"></Column>
+            <Column id="WebEventsToKeep" type="int" nullable="true"></Column>
+            <Column id="AutoBlockIP" type="bit" nullable="true"></Column>
+            <Column id="AutoBlockIPCount" type="int" nullable="true"></Column>
+            <Column id="SSLRedirect" type="bit" nullable="true"></Column>
+            <Column id="URLValidation" type="bit" nullable="true"></Column>
+            <Column id="EmailSystemStatus" type="bit" nullable="true"></Column>
+            <Column id="AllowPrivacy" type="bit" nullable="true"></Column>
+            <Column id="LogoOpacity" type="nvarchar" length="10" nullable="true"></Column>
+            <Column id="SitePluginsLocked" type="bit" nullable="true"></Column>
+            <Column id="ShowUpdatesPopupDate" type="datetime" nullable="true"></Column>
+            <Column id="NotificationsLocked" type="bit" nullable="true"></Column>
+            <Column id="OverlaysLocked" type="bit" nullable="true"></Column>
+            <Column id="AutoBackupSystem" type="bit" nullable="true"></Column>
+            <Column id="ShowPreviewButtonLogin" type="bit" nullable="true"></Column>
+            <Column id="HideAllAppIcons" type="bit" nullable="true"></Column>
+            <Column id="LoginMessage" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="LoginMessageDate" type="datetime" nullable="true"></Column>
+            <Column id="EmailOnRegister" type="bit" nullable="true"></Column>
+            <Column id="TwitterAccessToken" type="nvarchar" length="1000" nullable="true"></Column>
+            <Column id="TwitterAccessTokenSecret" type="nvarchar" length="1000" nullable="true"></Column>
+            <Column id="TwitterConsumerKey" type="nvarchar" length="1000" nullable="true"></Column>
+            <Column id="TwitterConsumerSecret" type="nvarchar" length="1000" nullable="true"></Column>
+            <Column id="NoLoginRequired" type="bit" nullable="true"></Column>
+            <Column id="AssociateWithGroups" type="bit" nullable="true"></Column>
+            <Column id="RecordLoginActivity" type="bit" nullable="true"></Column>
+            <Column id="TotalWorkspacesAllowed" type="int" nullable="true"></Column>
+            <Column id="AllowAppRating" type="bit" nullable="true"></Column>
+            <Column id="SignUpConfirmationEmail" type="bit" nullable="true"></Column>
+            <Column id="SignInWithGoogle" type="bit" nullable="true"></Column>
+            <Column id="SignInWithTwitter" type="bit" nullable="true"></Column>
+            <Column id="SignInWithFacebook" type="bit" nullable="true"></Column>
+            <Column id="GoogleClientId" type="nvarchar" length="1000" nullable="true"></Column>
+            <Column id="GoogleClientSecret" type="nvarchar" length="1000" nullable="true"></Column>
+            <Column id="FacebookAppId" type="nvarchar" length="1000" nullable="true"></Column>
+            <Column id="FacebookAppSecret" type="nvarchar" length="1000" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_ShowUpdates">
+        <Columns>
+            <Column id="UserName" type="nvarchar" length="256" nullable="false"></Column>
+            <Column id="ShowPopup" type="bit" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_Users" for="System.Data.SqlClient" primaryKey="UserId">
+        <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="UserId" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="UserName" type="nvarchar" length="256" nullable="false"></Column>
+            <Column id="LoweredUserName" type="nvarchar" length="256" nullable="false"></Column>
+            <Column id="MobileAlias" type="nvarchar" length="16" nullable="true"></Column>
+            <Column id="IsAnonymous" type="bit" nullable="false"></Column>
+            <Column id="LastActivityDate" type="datetime" nullable="false"></Column>
+            <Column id="FirstName" type="nvarchar" length="256" nullable="true"></Column>
+            <Column id="LastName" type="nvarchar" length="256" nullable="true"></Column>
+            <Column id="Signature" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="UserColor" type="nvarchar" length="10" nullable="true"></Column>
+            <Column id="EnableChat" type="bit" nullable="true"></Column>
+            <Column id="AdminChatControlled" type="bit" nullable="true"></Column>
+            <Column id="ChatStatus" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="ChatStatusMessage" type="nvarchar" length="100" nullable="true"></Column>
+            <Column id="StatusChanged" type="bit" nullable="true"></Column>
+            <Column id="ChatTimeStamp" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="ChatUpdateFlag" type="bit" nullable="true"></Column>
+            <Column id="ChatTimeout" type="int" nullable="true"></Column>
+            <Column id="ChatSoundNoti" type="bit" nullable="true"></Column>
+            <Column id="IsAway" type="bit" nullable="true"></Column>
+            <Column id="Theme" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="GroupName" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="IsNewMember" type="bit" nullable="true"></Column>
+            <Column id="IPAddress" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="EmailUponLogin" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="AppRemoteID" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="AppRemoteOptions" type="nvarchar" length="500" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_UserBookmarks" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="BookmarkName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="BookmarkHTML" type="nvarchar" length="1000" nullable="false"></Column>
+            <Column id="DateAdded" type="datetime" nullable="false"></Column>
+            <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_UserCalendar" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="StartDate" type="datetime" nullable="false"></Column>
+            <Column id="EndDate" type="datetime" nullable="false"></Column>
+            <Column id="Description" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="Title" type="nvarchar" length="200" nullable="false"></Column>
+            <Column id="ColorCode" type="nvarchar" length="50" nullable="false"></Column>
+            <Column id="DateUpdated" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_UserCustomization" primaryKey="UserId">
+        <Columns>
+            <Column id="UserId" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="WorkspaceRotate" type="bit" nullable="true"></Column>
+            <Column id="WorkspaceRotateInterval" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="WorkspaceRotateScreens" type="int" nullable="true"></Column>
+            <Column id="RotateAutoRefresh" type="nvarchar" length="200" nullable="true"></Column>
+            <Column id="BackgroundImgs" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="EnableBackgrounds" type="bit" nullable="true"></Column>
+            <Column id="ShowAppTitle" type="bit" nullable="true"></Column>
+            <Column id="AppHeaderIcon" type="bit" nullable="true"></Column>
+            <Column id="TaskBarShowAll" type="bit" nullable="true"></Column>
+            <Column id="HideAppIcon" type="bit" nullable="true"></Column>
+            <Column id="ShowWorkspaceNumApp" type="bit" nullable="true"></Column>
+            <Column id="PrivateAccount" type="bit" nullable="true"></Column>
+            <Column id="AnimationSpeed" type="int" nullable="true"></Column>
+            <Column id="ShowMinimizedPreview" type="bit" nullable="true"></Column>
+            <Column id="ShowToolTips" type="bit" nullable="true"></Column>
+            <Column id="AppContainer" type="bit" nullable="true"></Column>
+            <Column id="ClearPropOnSignOff" type="bit" nullable="true"></Column>
+            <Column id="ShowDateTime" type="bit" nullable="true"></Column>
+            <Column id="LockAppIcons" type="bit" nullable="true"></Column>
+            <Column id="CurrentWorkspace" type="int" nullable="true"></Column>
+            <Column id="AppSnapToGrid" type="bit" nullable="true"></Column>
+            <Column id="AppGridSize" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="GroupIcons" type="bit" nullable="true"></Column>
+            <Column id="ShowCategoryCount" type="bit" nullable="true"></Column>
+            <Column id="LoadLinksBlankPage" type="bit" nullable="true"></Column>
+            <Column id="VacationTime" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="AcctImage" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="AutoHideMode" type="bit" nullable="true"></Column>
+            <Column id="PresentationMode" type="bit" nullable="true"></Column>
+            <Column id="TotalWorkspaces" type="int" nullable="true"></Column>
+            <Column id="HoverPreviewWorkspace" type="bit" nullable="true"></Column>
+            <Column id="IsSocialAccount" type="bit" nullable="true"></Column>
+            <Column id="WorkspaceMode" type="nvarchar" length="50" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_UserNotificationMessages" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="NotificationID" type="nvarchar" length="500" nullable="false"></Column>
+            <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="Message" type="nvarchar" length="4000" nullable="false"></Column>
+            <Column id="Date" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_UserNotifications">
+        <Columns>
+            <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="NotificationID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="Email" type="bit" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_UserOverlays">
+        <Columns>
+            <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="OverlayID" type="uniqueidentifier" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_UserPlugins" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="Plugin" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="DateAdded" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_WebEvent_Events" primaryKey="EventId">
+        <Columns>
+            <Column id="EventId" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="EventName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="EventComment" type="nvarchar" length="4000" nullable="false"></Column>
+            <Column id="DatePosted" type="datetime" nullable="false"></Column>
+            <Column id="ApplicationPath" type="nvarchar" length="256" nullable="true"></Column>
+            <Column id="MachineName" type="nvarchar" length="256" nullable="true"></Column>
+            <Column id="RequestUrl" type="nvarchar" length="1024" nullable="true"></Column>
+            <Column id="ExceptionType" type="nvarchar" length="256" nullable="true"></Column>
+            <Column id="StackTrace" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="UserName" type="nvarchar" length="256" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_WebEvents_Ignored" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="EventComment" type="nvarchar" length="4000" nullable="false"></Column>
+            <Column id="TimesHit" type="nvarchar" length="10" nullable="true"></Column>
+            <Column id="RefreshOnError" type="bit" nullable="true"></Column>
+            <Column id="DatePosted" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_AppDLLs" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="AppID" type="nvarchar" length="250" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="AutoBackupSystem" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="BackupDay" type="nvarchar" length="500" nullable="false"></Column>
+            <Column id="BackupTime" type="nvarchar" length="500" nullable="false"></Column>
+            <Column id="BackupType" type="nvarchar" length="50" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="CustomProjects" primaryKey="ProjectID">
+        <Columns>
+            <Column id="ProjectID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="Folder" type="nvarchar" length="2000" nullable="false"></Column>
+            <Column id="Description" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="UploadDate" type="datetime" nullable="false"></Column>
+            <Column id="UploadedBy" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="UploadName" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="DefaultPage" type="nvarchar" length="250" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="CustomTables" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="TableName" type="nvarchar" length="100" nullable="false"></Column>
+            <Column id="CreatedBy" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="TableID" type="nvarchar" length="50" nullable="false"></Column>
+            <Column id="AppID" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="Sidebar" type="bit" nullable="true"></Column>
+            <Column id="DateCreated" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="WorkspaceOverlays" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="OverlayName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="FileLoc" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="UserName" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="Description" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="DisplayType" type="nvarchar" length="250" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="FileDriveDocuments" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="FileName" type="nvarchar" length="500" nullable="false"></Column>
+            <Column id="FileExtension" type="nvarchar" length="50" nullable="false"></Column>
+            <Column id="FileSize" type="nvarchar" length="50" nullable="false"></Column>
+            <Column id="FilePath" type="nvarchar" length="500" nullable="false"></Column>
+            <Column id="Comment" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="UploadDate" type="datetime" nullable="false"></Column>
+            <Column id="Folder" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="Owner" type="nvarchar" length="500" nullable="false"></Column>
+            <Column id="GroupName" type="nvarchar" length="500" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="FileDriveFolders" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="Folder" type="nvarchar" length="500" nullable="false"></Column>
+            <Column id="Date" type="datetime" nullable="false"></Column>
+            <Column id="GroupName" type="nvarchar" length="500" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="GroupList" primaryKey="GroupID">
+        <Columns>
+            <Column id="GroupID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="GroupName" type="nvarchar" length="500" nullable="false"></Column>
+            <Column id="Address" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="City" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="State" type="nvarchar" length="2" nullable="true"></Column>
+            <Column id="Country" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="PostalCode" type="nvarchar" length="10" nullable="true"></Column>
+            <Column id="PhoneNumber" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="Date" type="datetime" nullable="false"></Column>
+            <Column id="CreatedBy" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="Image" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="IsURL" type="bit" nullable="true"></Column>
+            <Column id="IsPrivate" type="bit" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="IPListener" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="IPAddress" type="nvarchar" length="150" nullable="false"></Column>
+            <Column id="Active" type="bit" nullable="false"></Column>
+            <Column id="UpdatedBy" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="Date" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="IPWatchList" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="IPAddress" type="nvarchar" length="150" nullable="false"></Column>
+            <Column id="Attempts" type="int" nullable="false"></Column>
+            <Column id="Blocked" type="bit" nullable="false"></Column>
+            <Column id="LastAttempt" type="datetime" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="Memberships" for="System.Data.SqlServerCe.4.0" primaryKey="UserId">
+        <Columns>
+            <Column id="UserId" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="Password" type="nvarchar" length="128" nullable="false"></Column>
+            <Column id="PasswordFormat" type="int" nullable="false"></Column>
+            <Column id="PasswordSalt" type="nvarchar" length="128" nullable="false"></Column>
+            <Column id="Email" type="nvarchar" length="256" nullable="true"></Column>
+            <Column id="PasswordQuestion" type="nvarchar" length="256" nullable="true"></Column>
+            <Column id="PasswordAnswer" type="nvarchar" length="128" nullable="true"></Column>
+            <Column id="IsApproved" type="bit" nullable="false"></Column>
+            <Column id="IsLockedOut" type="bit" nullable="false"></Column>
+            <Column id="CreateDate" type="datetime" nullable="false"></Column>
+            <Column id="LastLoginDate" type="datetime" nullable="false"></Column>
+            <Column id="LastPasswordChangedDate" type="datetime" nullable="false"></Column>
+            <Column id="LastLockoutDate" type="datetime" nullable="false"></Column>
+            <Column id="FailedPasswordAttemptCount" type="int" nullable="false"></Column>
+            <Column id="FailedPasswordAttemptWindowStart" type="datetime" nullable="false"></Column>
+            <Column id="FailedPasswordAnswerAttemptCount" type="int" nullable="false"></Column>
+            <Column id="FailedPasswordAnswerAttemptWindowsStart" type="datetime" nullable="false"></Column>
+            <Column id="Comment" type="nvarchar" length="2000" nullable="true"></Column>
+            <Column id="CommentDate" type="datetime" nullable="true"></Column>
+            <Column id="ReceiveAllMail" type="bit" nullable="true"></Column>
+            <Column id="EnabledApps" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="AdminPages" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="ActivationCode" type="uniqueidentifier" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="MessageBoard" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="Post" type="nvarchar" length="4000" nullable="false"></Column>
+            <Column id="Date" type="datetime" nullable="false"></Column>
+            <Column id="GroupName" type="nvarchar" length="500" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="NewUserDefaults" primaryKey="Role">
+        <Columns>
+            <Column id="Role" type="nvarchar" length="150" nullable="false"></Column>
+            <Column id="Theme" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="ShowDateTime" type="bit" nullable="true"></Column>
+            <Column id="LockAppIcons" type="bit" nullable="true"></Column>
+            <Column id="GroupIcons" type="bit" nullable="true"></Column>
+            <Column id="IconCategoryCount" type="bit" nullable="true"></Column>
+            <Column id="ToolTips" type="bit" nullable="true"></Column>
+            <Column id="WorkspaceRotate" type="bit" nullable="true"></Column>
+            <Column id="WorkspaceRotateInterval" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="WorkspaceRotateScreens" type="int" nullable="true"></Column>
+            <Column id="RotateAutoRefresh" type="bit" nullable="true"></Column>
+            <Column id="ShowAppTitle" type="bit" nullable="true"></Column>
+            <Column id="AppHeaderIcon" type="bit" nullable="true"></Column>
+            <Column id="ClearPropOnSignOff" type="bit" nullable="true"></Column>
+            <Column id="AppContainer" type="bit" nullable="true"></Column>
+            <Column id="EnableChat" type="bit" nullable="true"></Column>
+            <Column id="ChatTimeout" type="int" nullable="true"></Column>
+            <Column id="ChatSoundNoti" type="bit" nullable="true"></Column>
+            <Column id="SnapToGrid" type="bit" nullable="true"></Column>
+            <Column id="BackgroundImgs" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="EnableBackgrounds" type="bit" nullable="true"></Column>
+            <Column id="AppPackage" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="UserSignUpAdminPages" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="Groups" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="ReceiveAll" type="bit" nullable="true"></Column>
+            <Column id="TaskBarShowAll" type="bit" nullable="true"></Column>
+            <Column id="HideAppIcon" type="bit" nullable="true"></Column>
+            <Column id="ShowWorkspaceNumApp" type="bit" nullable="true"></Column>
+            <Column id="AnimationSpeed" type="int" nullable="true"></Column>
+            <Column id="ShowMinimizedPreview" type="bit" nullable="true"></Column>
+            <Column id="LoadLinksBlankPage" type="bit" nullable="true"></Column>
+            <Column id="AutoHideMode" type="bit" nullable="true"></Column>
+            <Column id="PresentationMode" type="bit" nullable="true"></Column>
+            <Column id="TotalWorkspaces" type="int" nullable="true"></Column>
+            <Column id="HoverPreviewWorkspace" type="bit" nullable="true"></Column>
+            <Column id="WorkspaceMode" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="AppGridSize" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="DateUpdated" type="datetime" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="Notifications" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="NotificationName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="NotificationImage" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="Description" type="nvarchar" length="500" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="RSSFeeds" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="CustomFeed" type="bit" nullable="false"></Column>
+            <Column id="RSSFeedTitle" type="nvarchar" length="500" nullable="false"></Column>
+            <Column id="RSSFeedLoc" type="nvarchar" length="500" nullable="false"></Column>
+            <Column id="RSSID" type="nvarchar" length="500" nullable="false"></Column>
+            <Column id="DateAdded" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="SitePlugins" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="PluginName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="PluginLocation" type="nvarchar" length="2000" nullable="false"></Column>
+            <Column id="Description" type="nvarchar" length="2000" nullable="false"></Column>
+            <Column id="Enabled" type="bit" nullable="false"></Column>
+            <Column id="InitCode" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="AssociatedWith" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="CreatedBy" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="DateAdded" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="StartupScripts" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="ScriptPath" type="nvarchar" length="500" nullable="false"></Column>
+            <Column id="Sequence" type="int" nullable="false"></Column>
+            <Column id="ApplyTo" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="UpdatedBy" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="DateUpdated" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="StartupStyleSheets" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="ScriptPath" type="nvarchar" length="500" nullable="false"></Column>
+            <Column id="Sequence" type="int" nullable="false"></Column>
+            <Column id="ApplyTo" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="UpdatedBy" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="DateUpdated" type="datetime" nullable="false"></Column>
+            <Column id="Theme" type="nvarchar" length="500" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="TwitterFeeds" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="Title" type="nvarchar" length="150" nullable="false"></Column>
+            <Column id="Caption" type="nvarchar" length="150" nullable="false"></Column>
+            <Column id="TwitterSearch" type="nvarchar" length="500" nullable="false"></Column>
+            <Column id="Display" type="int" nullable="false"></Column>
+            <Column id="Type" type="nvarchar" length="150" nullable="false"></Column>
+            <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="Date" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="Users" for="System.Data.SqlServerCe.4.0" primaryKey="UserId">
+        <Columns>
+            <Column id="UserId" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="UserName" type="nvarchar" length="50" nullable="false"></Column>
+            <Column id="IsAnonymous" type="bit" nullable="false"></Column>
+            <Column id="LastActivityDate" type="datetime" nullable="false"></Column>
+            <Column id="FirstName" type="nvarchar" length="256" nullable="true"></Column>
+            <Column id="LastName" type="nvarchar" length="256" nullable="true"></Column>
+            <Column id="Signature" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="UserColor" type="nvarchar" length="10" nullable="true"></Column>
+            <Column id="EnableChat" type="bit" nullable="true"></Column>
+            <Column id="AdminChatControlled" type="bit" nullable="true"></Column>
+            <Column id="ChatStatus" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="ChatStatusMessage" type="nvarchar" length="100" nullable="true"></Column>
+            <Column id="StatusChanged" type="bit" nullable="true"></Column>
+            <Column id="ChatTimeStamp" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="ChatUpdateFlag" type="bit" nullable="true"></Column>
+            <Column id="ChatTimeout" type="int" nullable="true"></Column>
+            <Column id="ChatSoundNoti" type="bit" nullable="true"></Column>
+            <Column id="IsAway" type="bit" nullable="true"></Column>
+            <Column id="Theme" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="GroupName" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="IsNewMember" type="bit" nullable="true"></Column>
+            <Column id="IPAddress" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="EmailUponLogin" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="AppRemoteID" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="AppRemoteOptions" type="nvarchar" length="500" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="UserUpdateFlags" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="AppID" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="GroupName" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="Date" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="UserApps" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="AppID" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="AppName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="PosX" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="PosY" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="Width" type="nvarchar" length="100" nullable="false"></Column>
+            <Column id="Height" type="nvarchar" length="100" nullable="false"></Column>   
+            <Column id="Closed" type="bit" nullable="false"></Column>
+            <Column id="Minimized" type="bit" nullable="false"></Column>
+            <Column id="Maximized" type="bit" nullable="false"></Column>
+            <Column id="Workspace" type="nvarchar" length="50" nullable="false"></Column>
+            <Column id="DateTime" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="WebServices" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="Filename" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="Description" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="UploadDate" type="datetime" nullable="false"></Column>
+            <Column id="UploadedBy" type="nvarchar" length="250" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="AppCategory" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="Category" type="nvarchar" length="500" nullable="false"></Column>
+            <Column id="DateAdded" type="datetime" nullable="false"></Column>
+            <Column id="CreatedBy" type="nvarchar" length="250" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="AppList" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="AppID" type="nvarchar" length="50" nullable="false"></Column>
+            <Column id="Name" type="nvarchar" length="50" nullable="false"></Column>
+            <Column id="Filename" type="nvarchar" length="500" nullable="false"></Column>
+            <Column id="Icon" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="AllowResize" type="bit" nullable="true"></Column>
+            <Column id="AllowMaximize" type="bit" nullable="true"></Column>
+            <Column id="About" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="Description" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="CssClass" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="AutoLoad" type="bit" nullable="true"></Column>
+            <Column id="AutoFullScreen" type="bit" nullable="true"></Column>
+            <Column id="Category" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="MinHeight" type="int" nullable="true"></Column>
+            <Column id="MinWidth" type="int" nullable="true"></Column>
+            <Column id="CreatedBy" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="AllowParams" type="bit" nullable="true"></Column>
+            <Column id="AllowPopOut" type="bit" nullable="true"></Column>
+            <Column id="PopOutLoc" type="nvarchar" length="2000" nullable="true"></Column>
+            <Column id="OverlayID" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="NotificationID" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="DisplayNav" type="bit" nullable="true"></Column>
+            <Column id="AllowStats" type="bit" nullable="true"></Column>
+            <Column id="AutoOpen" type="bit" nullable="true"></Column>
+            <Column id="DefaultWorkspace" type="int" nullable="true"></Column>
+            <Column id="IsPrivate" type="bit" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="AppPackages" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="PackageName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="AppList" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="UpdatedBy" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="Date" type="datetime" nullable="false"></Column>
+            <Column id="CreatedBy" type="nvarchar" length="250" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="AppParams" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="AppID" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="Parameter" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="Description" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="CreatedBy" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="DateTime" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="AppRatings" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="AppID" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="UserName" type="nvarchar" length="256" nullable="false"></Column>
+            <Column id="Rating" type="int" nullable="false"></Column>
+            <Column id="Description" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="DateRated" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+</Tables>

@@ -1,0 +1,483 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Items>
+    <version>ver. 4.2.2</version>
+    <log name="1/8/2015">
+        Fixes to the openWSE, appRemote, and UserList javascript files.<br />
+        Code base updated from .Net 4.0 to 4.5.
+    </log>
+    <log name="12/24/2014">
+        Replaced all alert and confirm windows with a custom window built into the site.<br />
+        Some redesign on the Settings / Tools pages.<br />
+        Performance increase in Account Settings.<br />
+        Alert messages will have a Report button that allows users to report new issues.<br />
+        Improved error logging system.
+    </log>
+    <log name="12/17/2014">
+        <h3 class="font-bold">
+            New to Version 4.2
+        </h3>
+        Database Viewer now features a schema table for the selected table.<br />
+        You can now set the default background image from the Site Customizations section of the Server Settings page.<br />
+        Database Imports are now fixed for updating.<br />
+        Database has been updated to support bit data types as well as integers for representing boolean values.<br />
+        Fixed some issues when first deploying the site. After user selects their database, the Administrator is automatically logged in and prompted to change their password.<br />
+        New feature under Site Customizations that allows you to edit the site description meta tag and keywords meta tag.<br />
+        Administrators can now create new Standard Roles under the Customize New Users link in User Accounts.<br />
+        New feature that allows users to add custom projects by connecting to an FTP location.<br />
+        Removed feature to hide sidebar.<br />
+        New feature that allows users to choose the type of workspace they want to use. There are 2 options - Paged and App Mode. Paged mode uses more of a standard click and load new page environment while App mode uses the existing workspace.<br />
+        Webservices used by the site can now be accessed through the Web Services page in Settings / Tools. This only applies to Administrators.<br />
+        Searching for an item not found on the site will take the user to Google's search page.<br />
+        New feature under Site Customizations that allows Administrative users to create the sitemap.xml and the robots.txt files needed for search engines.<br />
+        Notifications now avaialble under the Mobile Workspace (App Remote).
+    </log>
+    <log name="11/25/2014">
+        Bug fixes to the Chat Client users using a Social Account.<br />
+        Bug fixes to the Custom Project Creator.
+    </log>
+    <log name="11/19/2014">
+        <h3 class="font-bold">
+            New to Version 4.1
+        </h3>
+        New pop-in feature on the external app holder that allows the user to pop the app back into the workspace.<br />
+        The App Remote has been made into the mobile site. The remote still functions the same as before but you can now open apps inside the page.<br />
+        Fix to the ExternalAppHolder page that adds another div with the app Id. Some apps require this.<br />
+        Performance increase on server side. (Code refactored to only call the database once)<br />
+        New Social Sign In feature that allows users to sign in using their Google+, Twitter, or Facebook accounts.
+    </log>
+    <log name="11/7/2014">
+        Shop role has been removed.<br />
+        MachineKey is auto generated when first setting up the site.<br />
+        Database updates to event log.<br />
+        Added search feature to Group Organizer.
+    </log>
+    <log name="11/4/2014">
+        New Database Scanner under Database Manager that checks to see if your site is up to date. This can only be used for both SqlCe and Sql Express.<br />
+        New setup wizard that lets you choose the type of database you want to use for the site. This will only show when you first deploy the website.
+    </log>
+    <log name="10/23/2014">
+        More bug fixes to the apps SaveControls webservice and the openWSE javascript file.<br />
+        Fixed issue with creating a new user.
+    </log>
+    <log name="10/22/2014">
+        Added support to download .dll file(s) (if available) when downloading app from the App Editor.<br />
+        Added new Rating system to all apps. Users can rate a app by either going to the 'About App'.<br />
+        Updated code base.<br />
+        Bug fix to the DatabaseCall class - If updating a table that uses the same update query as the query, it wouldn't work.<br />
+        Removed the minimized preview size from the account settings. All minimized previews will be viewed with the current top and left properties.<br />
+        Added new workspace hover preview to workspace selector dropdown. Hovering over a workspace will show a preview of that workspace.
+    </log>
+    <log name="10/15/2014">
+        The default database has officially been changed to SqlCe. You can reset the entire database by deleting the current sdf file in the App_Data and restarting the site.<br />
+        Bug fixes to saving user apps - A column in the sql table was being called wrong.<br />
+        Site now supports both SqlCe and Sql Express. Have to modify Web.config with correct database if using Sql Express.
+    </log>
+    <log name="9/25/2014">
+        <h3 class="font-bold">
+            Offical Release of the openWSE (Version 4.0)
+        </h3>
+    </log>
+    <log name="9/18/2014">
+        New workspace layout that takes the site tools and combines it with the workspace.<br />
+        New feature that allow you to choose how many workspaces to display.<br />
+        Overlays are now on a seperate overlay. You can press ALT + O to access them or by clicking the overlay button at the top right, next to the search button.<br />
+        You can now switch between workspaces by pressing ALT + Up and ALT + Down.<br />
+        Faster load times with apps.
+    </log>
+    <log name="9/4/2014">
+        Major bug fix to deleting dlls when deleting any app/database import/overlay/custom projects. If folder isn't found, it would delete the Bin directory instead.<br />
+        Added new feature to Group Organizer - Users can now setup the IP Listener for a specific group.<br />
+        Security fixes to Group Organizer and IP Listener.
+    </log>
+    <log name="8/29/2014">
+        Tablet/Mobile version of the App Remote is now available.<br />
+        You can now invite users to a group through the Group Organizer. This will only work if the end user has the Group Alerts notification enabled.<br />
+        When adding an RSS feed to the Message Board, this will automatically create the RSS in the RSS News Feed app for all users associated with that RSS group.<br />
+        New Custom Project Editor available under the Custom Projects screen.<br />
+        New setting under Account Settings that allows you to access the app list anywhere on the workspace by clicking the right mouse button.<br />
+        Increased upload file size to max.<br />
+        Database Import app updated to automatically fill in any unique ID fields.
+    </log>
+    <log name="7/2/2014">
+        <h3 class="font-bold">
+            New to Beta Version 3.2
+        </h3>
+        Bug fixes to Work Calendar and Personal Calendar - Would duplicate month entries when app is refreshed.<br />
+        Removed the popup modal in the top left corner to notify when you change workspaces.<br />
+        New Login Page design.<br />
+        Fixed hashchange issue with help overlay.<br />
+        New Login Activity Log under the Network Log is available. This log will record any login (successful and non-successful) up to 5 days.<br />
+        Added a new field to the IP Watchlist that will display the last attempted login from a given IP Address.<br />
+        Minor fixes and changes to site css and openWSE code.<br />
+        Combined DemoCustomizations.aspx and UserAccountsCustomize.aspx to the AcctSettings.aspx page. No longer need the two customization pages.<br />
+        Added a sorting option on the Bookmark Viewer app.<br />
+        New Account Image available - Upload a Profile Image for your account. This will show up in features such as chat and message board.<br />
+        Chat Client UI has been updated. It also supports Account Images instead of User Color. (Will use the User Color if Account Image is not available)<br />
+        Fixed issue with uploading new Site Plugins.<br />
+        AutoHide and Presentation Mode are now available under Account Settings.<br />
+        FileDrive has been updated with a new Upload manager.
+    </log>
+    <log name="6/3/2014">
+        Bug fixes to Message Board app.<br />
+        You can now post to all groups on the Message Board app.<br />
+        openWSE.js has been modified to allow for easier stylesheet theme integration.
+    </log>
+    <log name="5/20/2014">
+        New Custom Projects page (Formerly known as Integrated Pages) in the Site Tools. Upload your own pages that can be hosted from this site.<br />
+        Fixes to app DLLs.<br />
+        New layout to Site Tools that features the tool links on the left hand side of the page instead of the very top.<br />
+        Disabled app tab on the app remote when the Chat Client is disabled.<br />
+        Workspace Overlays have been rewritten to allow for easy uploading and integration.
+    </log>
+    <log name="5/3/2014">
+        Bug fix for the Bookmark Viewer import tool.<br />
+        Bug fixes and improvements to AppList table and User Groups.<br />
+        Performance improvements to the Workspace and Site Settings.<br />
+        New feature for apps - You can now make a app private if it is created by you. This means that no one (including administrators) can view or modify that app.
+    </log>
+    <log name="4/21/2014">
+        <h3 class="font-bold">
+            New to Beta Version 3.1
+        </h3>
+        New Alarm Clock app available.<br />
+        Added support for update panels in a user control (.ascx).<br />
+        Added a reset button to the hit count in the Network Log.<br />
+        Various fixes in the AppSource to properly place hidden workspaces behind the current one by setting the z-index to -1.<br />
+        New feature on the My Apps overlay that lets you adjust the number of columns to display. This feature uses cookies to save the state.<br />
+        New options added to App Remote loading options: App Position and App Size can now be adjusted from the App Remote.<br />
+        Security fixes to the User Accounts page.<br />
+        Added default position property in the Overlay Manager.<br />
+        Apps can now be associated with multiple overlays and notifications.<br />
+        Bug fix in the AutoUpdate System - Setting interval to 0 would not turn it off.<br />
+        Potential security risk fixed in FileDrive app - Files being uploaded kept the file name and file extention. This has now been changed to replace the file name with a unique id and the file extention with a new '.file' extention.<br />
+        Bug fix in Message Board app - TinyMCE would not load on page refresh if app is already open (syntax error).<br />
+        Bug fix in App Editor - TinyMCE would not reload on asyn-postback.<br />
+        New feature in Database Restore - You can now select the tables you wish to restore that are on the restore file.<br />
+        Help pages have been updated to reflect the current webpage.<br />
+        New Webservices folder and manager page that allows you to upload open web services that can be accessed by anyone.<br />
+        Bug fixes to App Editor - When creating a new app, the div html element wasn't closed properly.<br />
+        Removed loading icon customizations. These customizations are now theme specific. Also removed them from every app and other component to replace with a style.<br />
+        A complete rewrite of the openWSE Code and the App Source Code.<br />
+        You can now upload apps with DLL files in the solution. Those DLL files will be uploaded in the Bin directory.
+    </log>
+    <log name="3/11/2014">
+        Added new feature to Overlays: You can now select All Workspaces to display an overlay on every workspace.<br />
+        Fixes to the Datbase Importer: Implemented the different Providers (ODBC, OLEDB, SQL...)<br />
+        Changes in the Custom Tables creator: When creating a new table, the table name will not match the actual database table name, giving you the ability to change the table name without effecting any data.
+    </log>
+    <log name="3/6/2014">
+        Updated site to jQuery 1.11.0 and jQueryUI to 1.10.4<br />
+        Fixes in the App Remote - Could not open to a new tab if properties were cleared.<br />
+        Fixes to the Rss Feed app. Overlay stopped working due to javascript errors. Added ability to remove a feed if it doesn't populate.<br />
+        Fixes to app layout.<br />
+        Removed paging from the FileDrive app.
+    </log>
+    <log name="3/2/2014">
+        App stats now shows a pie chart to display the currently opened, closed, minimized and installed app.<br />
+        Fixed bug in the Network Log to show the correct upload/download speeds of the server (displayed in KB/s).
+    </log>
+    <log name="2/26/2014">
+        Updated version of the personal calendar and work calendar apps.<br />
+        Added Chat Client to App Remote.<br />
+        Updated App Remote to resemble more of the workspace's app selector.<br />
+        Autohide plugin updated to work with new layout.
+    </log>
+    <log name="2/2/2014">
+        Fixes to some images not showing up due to folder changes.
+    </log>
+    <log name="1/31/2014">
+        Bug fix for the Database Importer and the recreating of a app.<br />
+        Change made in the User Manage page that will hide the Chat Client status if the chat client is turned off for entire site.
+    </log>
+    <log name="1/28/2014">
+        <h3 class="font-bold">
+            New to Beta Version 3.0
+        </h3>
+        An updated layout to the workspace and site settings.<br />
+        Many features such as the sidebar, site view, panel customizations, and various other settings have been removed to make for a more simple and reliable workspace.<br />
+        Mobile site has been removed. The desktp version of this site currently may not support all browsers but that is being worked on and will be released in future versions.<br />
+        Complete code redesign for both database and html.<br />
+        Improved web event system. The site only records error messages if enabled. Error messages now show the stack trace, user who performed the error, machine name, request url, and exception type.<br />
+        Removed the JQuery plugin Pretty Photo and replaced it with a new plugin within the openWSE Code.<br />
+        New apps overlay available. This overlay will display your app icons within the overlay. (This is a replacement to the sidebar icons)<br />
+        New feature called App Remote. Under your list of apps, there will be a "Pop out" link that will bring up and new window that displays your app icons. You can use this to load apps from your phone, tablet or simply another window.<br />
+        New Manage Users page.
+    </log>
+    <log name="12/1/2014">
+        <h3 class="font-bold">
+            New to Beta Version 2.5
+        </h3>
+        Twitter Station is finally working again with the latest Twitter API. Administrator must have OAuth Settings setup through the site settings in order for the app to work properly.<br />
+        Initial page load for the workspace site is a little faster due to less SQL calls being made.<br />
+        New app features such as Auto Open and Default Workspace have been added to the App Creator.<br />
+        Users can now add EmoIcons when chatting or post a url image.<br />
+        New feature that allows the Administrator to change whether or not a user needs to be authenticated. If not, then Login Page is never used.<br />
+        New Site Preview on Login screen features a live interactive workspace for users to play with.<br />
+        New notification alert for Add/Removed groups.<br />
+        Improvements to site organization. Links under user menu dropdown are categorized.<br />
+        New Custom Table creator.<br />
+        Database imports can be set to edit or read only modes.<br />
+        Startup Scripts simplified. No longer have option between base, load, and iframe options.<br />
+        Stylesheets merged for slightly faster load times.<br />
+        All action button words are replaced with images now.<br />
+        Close button removed from Site Settings pages.<br />
+        Database Viewer seperated from Database Manager page. Now its own page.<br />
+        App Installer updated.<br />
+        Fixed issue with resizing app in a container.
+    </log>
+    <log name="9/27/2013">
+        Users can now block users from being able to chat with.<br />
+        App Source has been updated to Version 3. This version features better performance in saving, remembering positions of a app. Extra features such as Refresh, About and Workspace selector have been moved to a dropdown menu on the right side of the app header.<br />
+        New App Statistics for each app (must be enabled per app) that allows users to see how many people have the app installed, opened, closed, and minimized.<br />
+        Wiget Preview on the Login Screen features a live interactive demo that users can play with.<br />
+        Each email notification will feature a link that you can click on to unregister the email notification.
+    </log>
+    <log name="9/19/2013">
+        Chat Client windows are now app based.<br />
+        Fixed some issues within the AppSource.js and added support for Chat Client apps.<br />
+        <b>Features Removed: </b>Mobile Scrollbars, Workspace Drag Fix. (Will be replaced by plugins if needed)<br />
+        Fixed issue with certain apps not saving size after resizing app. (Message Board, Personal Calendar...)<br />
+        Smaller App Icons in sidebar (Change made only to the workspace version of the site)<br />
+        New preview window when hovering over a minimized app in the top toolbar. You can adjust the setting in the Control Panels.
+    </log>
+    <log name="9/2/2013">
+        New Personal Calendar App and Overlay.
+    </log>
+    <log name="8/31/2013">
+        New RSS News Feed app is available.<br />
+        Message Board app can now create an RSS feed for use on any device. The rss feed can only be created by the creater of the group.<br />
+        Fixes to the App Loader functions. <b>Issue Notes:</b> Could not load multiple ascx apps at a time. Had to wait for each one to load.<br />
+        Export to Excel has been added to the CTL Report and SMW Steel Trucks apps.<br />
+        You can now disable the app icon in the header of the app.<br />
+        You can now delete individual chat logs by date.<br />
+        Performance improvements to the Chat Client.
+    </log>
+    <log name="8/8/2013">
+        Fixed issue with Message Board not retrieving correct article image upon quick post.<br />
+        New feature added to Workspace Auto Rotate: User can now enable the workspace and all controls on that workspace to auto refresh when rotating.
+    </log>
+    <log name="8/7/2013">
+        Fixes to Message Board app and overlay.<br />
+        <b>New Feature: </b>Users can select their background from the workspace.
+    </log>
+    <log name="8/5/2013">
+        Password protected deletes for the Database Importer and App Editor have been added.<br />
+        Updated Loading box look.<br />
+        Site folder structure has been redesigned to work for the automatic backup system. (Previously could not work due to folder proection)
+    </log>
+    <log name="8/1/2013">
+        A complete rewrite of the notification system. Notifications are now determined by what apps you have installed. You can setup your notifications in the Account Settings page. Each setting can be enabled/disabled. You can choose whether to allow email of a notification or not.<br />
+        New navigation buttons on selected apps - use these buttons to navigate back and foward within an iframe.<br />
+        New Automatic Backup System available. Administrators can set this up through the Database Manager.
+    </log>
+    <log name="7/23/2013">
+        Fixed Work Calendars (Admin and Standard Versions) duplicate entries being added to the calendar upon resize.<br />
+        New Overlay Manager under Site Tools.<br />
+        You can now hide individual notifications.<br />
+        Workspace Overlays rewrite - Overlays are now a user control (.ascx). You can place these overlays on any workspace. Use the current Accounts Overlay page to set up your overlays.<br />
+        You can also set up the overlays by pressing the menu button at the top right hand corner of the overlay (If available).
+    </log>
+    <log name="7/18/2013">
+        Added new security feature for users - Users can now set their account to Private. To learn more about this, go to your Account Settings.<br />
+        Can now set the opacity of the main site logo under the Site Customizations (Administrators only).<br />
+        New Feature Site Plugins feature - Allow users to install customized content for their workspace.<br />
+        Network Log redesign to use Google Line Chart APIs.<br />
+        Removed Network Summary from sidebar in Site Tools. The network summary has been moved to the Network Log. (Performance increase on the Site Tools)<br />
+        Updated version of the App Installer and notifications tab<br />
+        New pop out button on certain apps that allows you to pop the app out from the workspace into a new window that you can place anywhere on your computer. (Feature is only available with non ascx based apps)<br />
+        Fixed issue with Uncategorized apps not showing up in all app lists.
+    </log>
+    <log name="6/30/2013">
+        Password protected Restore/Delete in the DB Manager.<br />
+        Improvements to the chat client. Sends fewer requests thus increasing performance.<br />
+        Removed the elRTE Open Source WYSIWYG editor on the message board and replaced it with tinyMCE.<br />
+        New feature to the Message Board: Quote other posts that acts as a reply<br />
+        Message board is now an ascx based app. (This will become the standard for most apps)<br />
+        New Setting under Mail Settings (Administrator Only): Turn on/off the outgoing email system. This will prevent any emails being sent out.<br />
+        Fixed issue with files not showing up after upload in the File Drive
+    </log>
+    <log name="6/23/2013">
+        <h3 class="font-bold">
+            New to Beta Version 2.4
+        </h3>
+        New customizations under Site Manager. You can now customize your emails with a header and footer.<br />
+        Bug fixes to the File Drive and Chat Client. (<b>File Drive:</b> Personal Folder showing up on other accounts. Errors when uploading to a folder other than the Root directory. <b>Chat Client:</b> Time was incorrect, would display pm instead of am.)<br/>
+        New Custom Projects folder - Add custom content for different sites. (eRequests, Contact forms, etc...)<br />
+        New Bookmark Viewer - Import your bookmarks from google or add them manually. YouTube links will display the video preview image instead of the YouTube logo.<br />
+        New To the File Drive - Listen to music from within the app. Postbacks will not effect playback of the file. Image previews will also appear for an image type file.<br />
+        Upgraded TinyMCE html editor from 4.0b1 to 4.0 release.<br />
+        Message Board overlay will expand if hovered over for more than a second.<br/>
+        New features on the App Editor - Can upload zip files that contain multiple files for a app (For more advanced apps).<br />
+        More on the App Editor - Can now download a couple of the app. Download will be in the form of a zip file that contains all the files for that app.<br />
+        Can install a app to the current user upon the app creation.<br />
+        Filename is automatically generated in the App Editor.<br />
+        New customization for the user sidebar - Disable the sidebar tabs to display everything (App Icons, Chat Client, Notes...)<br />
+        Complete redesign of how apps are stored in the user profile. (Will fix any instance of apps not appearing or loading correctly)<br />
+        New setting that allows the user to show all minimized apps in the taskbar or only those on the current workspace.<br />
+        New setting that allows the user to hide the app icon in the sidebar panel.<br />
+        New setting that allows the user to display the workspace number a app is on. This will be shown in the app icon panel on the right side of the icon.<br />
+        Complete redesign of the Mobile/Tablet site. Can now set the default site to display when logging in (workspace/Mobile).<br />
+        Chat Client now supports multiple chat sessions with users.<br />
+        Admin/Site Controls redesigned to resemble more of the workspace.
+    </log>
+    <log name="5/18/2013">
+        New loading icons.<br />
+        Administrators can now customize the loading icons in the Site Manager.
+    </log>
+    <log name="5/17/2013">
+        Added support for SSL. New option that allows for site redirect for https.<br />
+        Fixes to the App Editor: If database import is deleted from the App Editor,
+        it will delete the values in the dbImporter table<br />
+        Animation speeds for app panel quicker.
+    </log>
+    <log name="5/8/2013">
+        Fixes to the Daily Overview (Keeps selected date when auto update system is triggered)<br />
+        Fixes to the Common Carriers (Edit mode uses correct date)<br />
+        Improvements to the apps. You can now click anywhere in the app to bring it
+        to the front of the screen. All other apps behind the activated app will have
+        an overlay that will block any requests until selected.<br />
+        Fixed bug issue with App Installer not refreshing page upon add or removal of
+        a app.
+    </log>
+    <log name="4/21/2013">
+        <h3 class="font-bold">
+            New to Beta Version 2.3
+        </h3>
+        Updated version of the App Editor. No longer uses CKEditor. Replaced with TinyMCE.<br />
+        New sidebar items: App Command Line and Sidebar Notes.<br />
+        <span class="pad-left">
+            <b>Sidebar Notes:</b> Gives the user the ability to create small
+        </span><br />
+        <span class="pad-left">
+            <b>App Command Line:</b> Type in the desired app to load/search.
+        </span><br />
+        Posted notes that will appear on the sidebar.<br />
+        Chat client moved to the sidebar.<br />
+        Administrators are able to setup default settings for new users. Also able to enable/disable
+        registration on the login page.<br />
+        New Mobile site for Tablets. Mobile site will be used for Internet Explorer 8.0
+        and below.
+    </log>
+    <log name="4/8/2013">New look to the Admin/Site Controls.</log>
+    <log name="3/25/2013">
+        New automatic update system. More efficient and accurate when updating.<br />
+        Increased real estate on certain apps.<br />
+        Fixes to Work Calendar app, Database Backup System, and various other bugs.<br />
+        New Twitter Station app that allows you to create a layout of your favorite people/companies.
+        Updates every minute<br />
+        Redesigned Database Import apps. The new version includes an auto update system
+        that will update viewable records every given interval.<br />
+        Multiple backgrounds allowed on workspace. Each workspace/workspace can be assigned
+        a different background image/color.
+    </log>
+    <log name="3/17/2013">
+        <h3 class="font-bold">
+            New to Beta Version 2.2
+        </h3>
+        Improved performance to the Chat Client.<br />
+        Improved performance to the User Accounts Admin Page.<br />
+        Bug fixes to the App Editor<br />
+        Enhancements to the Database Backup System. Will determine if the database table
+        is consistent with the new table before deleting the contents.<br />
+        New Javascript/CSS Startup Scripts added.<br />
+        New Theme selector in the Account Settings<br />
+        New Admin Pages feature added to the Standard users that allows for users to create
+        their own apps, groups, categories, packages, and database imports.
+    </log>
+    <log name="2/25/2013">
+        <h3 class="font-bold">
+            New to Beta Version 2.1
+        </h3>
+        Fixes to the Message Board overlay (Sorting entries by newest date).<br />
+        New quick create for App Editor.<br />
+        Bug fixes to the Database Viewer, Code Editor, Chat Client, Auto Updates.<br />
+        New feature to Message Board overlay - Choose the amount of posts to display.<br />
+        Updated layout to Account Settings - Now broken up into pages for better performance.<br />
+        New Feature to App Icons side bar. Enable grouping to group the app icons
+        by category.<br />
+        New apps available through the App Installer - Chat Log, Bookmark Viewer.
+    </log>
+    <log name="1/13/2013">
+        New workspace overlays available under Account Settings. Now saves the current workspace
+        your on and will reload to that workspace on postback. Updated app editor.
+    </log>
+    <log name="1/5/2013">
+        <h3 class="font-bold">
+            New Beta version of Site
+        </h3>
+        <div class="clear-space-two">
+        </div>
+        Version 2.0 features a wide range of flexibility, customization, and integration.
+        New features include:
+        <div class="pad-all">
+            <ul>
+                <li>App based pages</li>
+                <li>Automated Production Lead Times</li>
+                <li>Production Lead Times history log.</li>
+                <li>New User Interface that features multiple workspaces</li>
+                <li>New General Direction Editor.</li>
+                <li>
+                    Updated version of the Truck Scheduler that allows for easy access to schedules.
+                </li>
+                <li>Improved performance and memory management, database optimization and security.</li>
+                <li>
+                    Database Downloads. Have the ability to import other databases.
+                </li>
+                <li>Draggable/Resizeable/Customizable modal windows known as apps.</li>
+                <li>Summary report of past and current days/months.</li>
+            </ul>
+        </div>
+    </log>
+    <log name="6/7/2012">
+        Site is now compatible with Internet Explorer 7 and 8.<br />
+        Applied fixes for the chat client, truck schedule, and various other bugs.<br />
+        New Feature Available: User Status can be assigned - 'Available, Busy, Away, Offline'.
+    </log>
+    <log name="6/3/2012">
+        Chat Client fixed.<br />
+        Can now insert URL's into chat box and they will display as a link.<br />
+        Fixed various issues with the truck schedule.
+    </log>
+    <log name="5/23/2012">
+        Commas added to weight totals.<br />
+        Chat client improved for faster message sending, and bug fixes.<br />
+        New notification sound when new chat message comes in.<br />
+        General direction added to SMW truck scheduler.<br />
+        Files compressed for faster load times.<br />
+        New tab under workspace called "Todays Schedule" that displays all the weight for the current day for each category: General Direction, SMW Trucks, Common Carriers, Units.<br />
+        New menu tab on the workspace called RydeSmart.com.<br />
+        <b>Future Additions: </b>General Motors and Metal Trax integration.
+    </log>
+    <log name="4/29/2012">
+        New chat client added that features live chat with Users.<br />
+        All pages are live (anytime anything is updated, it updates everyone at the same time).<br />
+        New User Message board look.<br />
+        Files compressed for faster load times.<br />
+        Shop posts are automatically emailed to everyone.<br />
+        Users are now able to send emails through the built in messaging system.
+    </log>
+    <log name="3/22/2012">
+        Redisgned layout of the home workspace. Minor bug fixes in the sheduler and messages.<br />
+        <b class="pad-right">Features being worked on:</b>Company calendar with ability
+        to set vacation times, events, and meetings. Instant updates of new messages, User
+        posts, delivery and pickups, and production lead times as they are being updated
+        (Currently set to update every one minute). Live chat with other Users (and
+        customers eventually). And the ability to send (not receive) emails through your
+        message box (THIS FEATURE IS NO LONGER AVAILABLE). <i>The calendar tab is disabled at this time</i>
+    </log>
+    <log name="3/20/2012">
+        New security rules added. New check/uncheck all users button added to the Production
+        Lead Times email list. Can be found on the sidebar under the Production Lead Times
+        tab in the Workspace.
+    </log>
+    <log name="3/14/2012">
+        New Design layout. Fixed some minor bugs and added additional support for older
+        browsers. Users may add as many posts as possible without deleting previous
+        post. Added Yahoo! Weather Gadget to home workspace.
+    </log>
+    <log name="3/1/2012">
+        <h3 class="font-bold">
+            Beta Version 1.0 uploaded
+        </h3>
+    </log>
+</Items>

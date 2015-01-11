@@ -1,0 +1,295 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Integrating with the OpenWSE</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <link id="Link1" runat="server" rel="shortcut icon" href="Standard_Images/favicon.ico"
+        type="image/x-icon" />
+    <link id="Link2" runat="server" rel="icon" href="Standard_Images/favicon.ico" type="image/ico" />
+    <link href="App_Themes/Standard/site_desktop.css" rel="stylesheet" type="text/css" />
+    <link href="App_Themes/Standard/jqueryUI.css" rel="stylesheet" type="text/css" />
+    <link type="text/css" rel="stylesheet" href='Scripts/SyntaxHighlighter/Styles/shCore.css' />
+    <link type="text/css" rel="stylesheet" href='Scripts/SyntaxHighlighter/Styles/shThemeDefault.css' />
+    <style type="text/css">
+        .integration-part h2
+        {
+            font-weight: bold;
+            clear: both;
+            padding-bottom: 10px;
+        }
+
+        .sample-code
+        {
+            padding: 10px 0;
+        }
+
+            .sample-code h4
+            {
+                clear: both;
+                padding-bottom: 5px;
+            }
+    </style>
+</head>
+<body>
+    <div class="stylefour">
+        <span>OpenWSE Code Integration</span>
+    </div>
+    <div class="clear" style="height: 50px;">
+    </div>
+    <div class="pad-all-big">
+        <h4>The OpenWSE allows you to integrate your own code with this platform. Currently there are only 4 types to integrate with the openWSE.<br />
+            This uses C# .Net 4.0 and users integrating with this will need some basic knowledge of coding.<br />
+            To use the OpenWSE classes, you need to add App_Code.dll to your project. This dll file can be found in the Bin directory of the site.
+        </h4>
+        <div class="clear-space">
+        </div>
+        <div id="accordion">
+            <h3>1.) Notification System</h3>
+            <div class="integration-part">
+                The notification system allows you to notify users of any updates from a given app. There are 3 classes that you will need to call in order to successfully integrate the notification system.
+               <br />
+                <br />
+                <img alt="" src="Standard_Images/Integration/notification-2.png" />
+                <div class="clear-space"></div>
+                <pre class="brush: c-sharp">
+                    using OpenWSE_Tools.Notifications;
+
+                    /// <summary>
+                    /// This initializes the UserNotificationMessages class which you will need to call the method attemptAdd
+                    /// </summary>
+                    /// <param name="username">The username of the current user</param>
+                    public UserNotificationMessages(string username)
+                </pre>
+                <div class="clear-space"></div>
+                <pre class="brush: c-sharp">
+                    /// <summary>
+                    /// Determine if a notification can be logged in for a user
+                    /// </summary>
+                    /// <param name="appId">The app id that the notification needs to identify with</param>
+                    /// <param name="message">Message to post</param>
+                    /// <param name="addFlag">Add the flag for the Auto Update System</param>
+                    /// <param name="date">Date posted - Defaults to current date</param>
+                    /// <returns>The email address of the current user</returns>
+                    public string attemptAdd(string appId, string message, bool addFlag, string date = "")
+                </pre>
+                <div class="clear-space"></div>
+                <pre class="brush: c-sharp">
+                    /// <summary>
+                    /// Finish adding all the notifications to all the users in the mailTo list
+                    /// </summary>
+                    /// <param name="mailTo">MailMessage list</param>
+                    /// <param name="appId">App Id to associate notification with</param>
+                    /// <param name="message">Message body to post</param>
+                    /// <param name="subject">The subject or title of the notification</param>
+                    public static void finishAdd(MailMessage mailTo, string appId, string message, string subject = "")
+                </pre>
+                <div class="clear-space"></div>
+                <div class="sample-code">
+                    <h4 class="font-bold">Sample Code</h4>
+                    <h4>This is a simple integration that sends every user in the database a notification if enabled</h4>
+                    <pre class="brush: c-sharp">
+                private void AddNotifications() {
+                    // Call the list of users in the database
+                    MembershipUserCollection userlist = Membership.GetAllUsers();
+
+                    // You will need to specify the app id that the notification is being sent from.
+                    string app_id = "app-messageboard";
+
+                    string messagebody = "OpenWSE Integration Notification.";
+
+                    // Initialize the MailMessage
+                    var message = new MailMessage();
+
+                    foreach (MembershipUser u in userlist) {
+                        // Create a new UserNotificationMessage for the current user in the list
+                        UserNotificationMessages un = new UserNotificationMessages(u.UserName);
+                        
+                        // The attemptAdd will determine if the user has the email notification enabled and if so,
+                        // will return the email address of that user.
+                        string email = un.attemptAdd(app_id, messagebody, true);
+                        
+                        // Add the email to the MailMessage list
+                        if (!string.IsNullOrEmpty(email)) {
+                            message.To.Add(email);
+                        }
+                    }
+
+                    // Add, notify, and email all users in the message list
+                    UserNotificationMessages.finishAdd(message, app_id, messagebody);
+                }
+                </pre>
+                </div>
+                <div class="clear-space"></div>
+                <h4>Once you have successfully created your methods for adding notifications, navigate to the Notification Manager under the Settings/Tools tab on the left sidebar.<br />
+                    In order for the app to post the notification, you will need to add it to the list of notifications. Simply give the notification any name, icon (Or use app icon), description, and select the app to associate with. You can have more than 1 app associated with a notification.<br />
+                    <img alt="" src="Standard_Images/Integration/notification-1.png" />
+                    <div class="clear-space"></div>
+                </h4>
+            </div>
+            <h3>2.) Auto Update System</h3>
+            <div class="integration-part">
+                The Auto Update system allows you to automatically update a app or the workspace immediately.
+                <br />
+                <br />
+                <pre class="brush: c-sharp">
+                    using OpenWSE_Tools.AutoUpdates;
+
+                    // This initializes the UserUpdateFlags class which you will need to call the method addFlag
+                    UserUpdateFlags _uuf = new UserUpdateFlags();
+                </pre>
+                <div class="clear-space"></div>
+                <pre class="brush: c-sharp">
+                    /// <summary>
+                    /// Adds a flag to the given user to update their current state
+                    /// </summary>
+                    /// <param name="username"></param>
+                    /// <param name="appID">The app to update. Use "workspace" to update everything.</param>
+                    /// <param name="groupname">The groupname. Leave blank if none.</param>
+                    public void addFlag(string username, string appID, string groupname)
+                </pre>
+                <div class="clear-space"></div>
+                <pre class="brush: c-sharp">
+                    /// <summary>
+                    /// Updates all users with the given app and groupname
+                    /// </summary>
+                    /// <param name="appID">The app to update. Use "workspace" to update everything.</param>
+                    /// <param name="groupname">The groupname. Leave blank if none.</param>
+                    /// <param name="updateForCurrUser">Update the current user</param>
+                    public void addFlag(string appID, string groupname, bool updateForCurrUser = true)
+                </pre>
+                <div class="clear-space"></div>
+                <pre class="brush: c-sharp">
+                    /// <summary>
+                    /// Gets the update flag for the given user for the workspace
+                    /// </summary>
+                    /// <param name="username">Any given user in the database</param>
+                    /// <returns></returns>
+                    public string getFlag(string username)
+                </pre>
+                <div class="clear-space"></div>
+                <pre class="brush: c-sharp">
+                    /// <summary>
+                    /// Gets the update flag for the given user for a app
+                    /// </summary>
+                    /// <param name="username">Any given user in the database</param>
+                    /// <param name="appID">The app to update. Use "workspace" to update everything.</param>
+                    /// <returns></returns>
+                    public string getFlag(string username, string appID)
+                </pre>
+                <div class="clear-space"></div>
+                <pre class="brush: c-sharp">
+                    /// <summary>
+                    /// Gets the update flag for the given user on a given workspace for a given group
+                    /// </summary>
+                    /// <param name="username">Any given user in the database</param>
+                    /// <param name="appID">The app to update. Use "workspace" to update everything.</param>
+                    /// <param name="groupname">The groupname. Leave blank if none.</param>
+                    /// <returns></returns>
+                    public string getFlag(string username, string appID, string groupname)
+                </pre>
+            </div>
+            <h3>3.) Overlays</h3>
+            <div class="integration-part">
+                Creating an overlay is a very simple process. All overlays will need to be created as a User Control (.ascx).
+                <div class="clear-space"></div>
+                <div class="sample-code">
+                    <h4 class="font-bold">Sample Code</h4>
+                    <h4>This is a simple example using the Rss News Feed Overlay.</h4>
+                    <pre class="brush: c-sharp">
+                    <div id="RSSFeed_Overlay_Position" runat="server" class="rss-feed-workspace">
+                        <asp:Panel ID="rssfeeds_pnl_entries" runat="server" CssClass="overlay-entries rss-feed-pnl-entries">
+                            <div class="font-color-light-black pad-all">
+                                <small><i>If overlay fails to load, refresh the page</i></small></div>
+                        </asp:Panel>
+                    </div>
+                    </pre>
+                    <div class="clear-space"></div>
+                    <h4>When creating the main div of the overlay, make sure you give it a unique Id and set the runat to server.</h4>
+                    <div class="clear-space"></div>
+                    <h4 class="font-bold">Sample Code</h4>
+                    <h4>In the .ascx.cs file of your overlay, make sure you create these private variables at the top before the Page_Load.</h4>
+                    <pre class="brush: c-sharp">
+                        private OverlayInitializer _overlayInit;
+                    </pre>
+                    <div class="clear-space"></div>
+                    <h4>In the Page_Load method, create a new instance of the _overlayInit.</h4>
+                    <pre class="brush: c-sharp">
+                        protected void Page_Load(object sender, EventArgs e)
+                        {
+                            _overlayInit = new OverlayInitializer(string.Empty, "Overlays/RSSFeed_Overlay.ascx");
+                            if (_overlayInit.TryLoadOverlay)
+                            {
+                                LoadOverlay();
+                            }
+                        }
+
+                        private void LoadOverlay()
+                        {
+                            AppInitializer _appInitializer = new AppInitializer("app-rssfeed", string.Empty, Page);
+                            _appInitializer.LoadScripts_JS(true, "StartRSSFeederOverlay()");
+                        }
+                    </pre>
+                    <div class="clear-space"></div>
+                    <h4>Once you have the overlay completed, you are ready to upload it to the Overlay Manager. Navigate to the Overlay Manager under the Settings/Tools tab in the left sidebar.</h4>
+                    <img alt="" src="Standard_Images/Integration/overlay-1.png" />
+                </div>
+            </div>
+            <h3>4.) Apps</h3>
+            <div class="integration-part">
+                <h4>There are a couple of different ways to create a app. The first is to use the Create App feature under the App Editor. Creating a app through the site is for more simple apps, ones that don't need any major code in the backend.<br />
+                    The best way to do it is to create a new User Control (.ascx) or a new website under Microsoft Visual Studio or equivalent. There are a few css classes you will need to know before beginning creating your app:
+                    <br />
+                    <br />
+                    <b>The css class below is for the main div of the app:</b>
+                    <pre class="brush: c-sharp">
+                        .main-div-app-bg{background:#FFF;overflow:auto;position:absolute;right:0px;left:0px;top:0px;bottom:0px;z-index:0;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px}
+                    </pre>
+                    <br />
+                    <br />
+                    <b>The css classes below are for any modal windows within a User Control style app:</b>
+                    <pre class="brush: c-sharp">
+                        .outside-main-app-div { /* Used for jquery */ }
+                    </pre>
+                    <br />
+                    <br />
+                    <b>Sample C# Code for initializing the App - Message Board</b>
+                    <pre class="brush: c-sharp">
+                        private readonly App _apps = new App();
+                        private AppInitializer _appInitializer;
+                        private const string app_id = "app-messageboard";
+
+                        protected void Page_Load(object sender, EventArgs e)
+                        {
+                            _appInitializer = new AppInitializer(app_id, Page.User.Identity.Name, Page);
+                            _appInitializer.LoadScripts_JS(true, "StartMessageBoard();LoadMessageBoardPosts()");
+
+                            string script = "$.getScript('//tinymce.cachefly.net/4.1/tinymce.min.js').done(function( script, textStatus ) { LoadTinyMCEControls_Simple();$('#Editor_messageboard_ifr').tooltip({ disabled: true }) });";
+                            ScriptManager.RegisterStartupScript(this, GetType(), Guid.NewGuid().ToString(), script, true);
+                        }
+
+                    </pre>
+                    <div class="clear-space"></div>
+                    When uploading a new app, use the Upload App feature under the App Editor. You can upload a zip file that contains all your code and dlls.<br />
+
+                </h4>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
+    <script type="text/javascript" language="javascript" src='Scripts/SyntaxHighlighter/Scripts/shCore.js'> </script>
+    <script type="text/javascript" language="javascript" src='Scripts/SyntaxHighlighter/Scripts/shBrushCSharp.js'> </script>
+    <script type="text/javascript" language="javascript" src='Scripts/SyntaxHighlighter/Scripts/shBrushXml.js'> </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            SyntaxHighlighter.all();
+            $("#accordion").accordion({
+                heightStyle: "content",
+                collapsible: true,
+                active: 0
+            });
+        });
+    </script>
+</body>
+</html>

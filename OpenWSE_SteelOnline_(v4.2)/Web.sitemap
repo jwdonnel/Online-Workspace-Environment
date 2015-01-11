@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+    <siteMapNode url="/">
+        <siteMapNode url="~/SiteSettings/UserMaintenance/AcctSettings.aspx" title="Account Settings" icon="SiteLinkIcons/accountsettings.png" />
+        <siteMapNode url="~/SiteSettings/AppMaintenance/AppCategory.aspx" title="App Category" icon="SiteLinkIcons/appcategory.png" />
+        <siteMapNode url="~/SiteSettings/AppMaintenance/AppManager.aspx" title="App Manager" icon="SiteLinkIcons/appmanager.png">
+            <siteMapNode url="~/SiteSettings/AppMaintenance/AppManager.aspx?c=create" title="Create" />
+            <siteMapNode url="~/SiteSettings/AppMaintenance/AppManager.aspx?c=easycreate" title="Quick Create" />
+            <siteMapNode url="~/SiteSettings/AppMaintenance/AppManager.aspx?c=upload" title="Upload" />
+            <siteMapNode url="~/SiteSettings/AppMaintenance/AppManager.aspx?c=params" title="Parameters" />
+            <siteMapNode url="~/SiteSettings/AppMaintenance/AppManager.aspx?c=stats" title="Stats/Ratings" />
+        </siteMapNode>
+        <siteMapNode url="~/SiteSettings/AppMaintenance/AppPackages.aspx" title="App Packages" icon="SiteLinkIcons/apppackages.png" />
+        <siteMapNode url="~/SiteSettings/CustomContent/CustomProjects.aspx" title="Custom Projects" icon="SiteLinkIcons/customprojects.png" />
+        <siteMapNode url="~/SiteSettings/CustomContent/CustomTables.aspx" title="Custom Tables" icon="SiteLinkIcons/customtables.png" />
+        <siteMapNode url="~/SiteSettings/DBMaintenance/dbImporter.aspx" title="Database Importer" icon="SiteLinkIcons/dbimporter.png" />
+        <siteMapNode url="~/SiteSettings/DBMaintenance/dbManager.aspx" title="Database Manager" icon="SiteLinkIcons/dbmanager.png" />
+        <siteMapNode url="~/SiteSettings/DBMaintenance/dbViewer.aspx" title="Database Viewer" icon="SiteLinkIcons/dbviewer.png" />
+        <siteMapNode url="~/SiteSettings/ServerMaintenance/FileEditor.aspx" title="File Editor" icon="SiteLinkIcons/fileeditor.png" />
+        <siteMapNode url="~/SiteSettings/UserMaintenance/GroupOrg.aspx" title="Group Organizer" icon="SiteLinkIcons/grouporg.png" />
+        <siteMapNode url="~/SiteSettings/ServerMaintenance/LicenseManager.aspx" title="License Manager" roles="Administrator" icon="SiteLinkIcons/license.png" />
+        <siteMapNode url="~/SiteSettings/ServerMaintenance/NetworkLog.aspx" title="Network Log" icon="SiteLinkIcons/networklog.png">
+            <siteMapNode url="~/SiteSettings/ServerMaintenance/NetworkLog.aspx#?a=activity" title="Activity" />
+            <siteMapNode url="~/SiteSettings/ServerMaintenance/NetworkLog.aspx#?a=errors" title="Errors" />
+            <siteMapNode url="~/SiteSettings/ServerMaintenance/NetworkLog.aspx#?a=ignore" title="Ignored Errors" />
+            <siteMapNode url="~/SiteSettings/ServerMaintenance/NetworkLog.aspx#?a=loginActivity" title="Logins" />
+            <siteMapNode url="~/SiteSettings/ServerMaintenance/NetworkLog.aspx#?a=ipwatchlist" title="IP WatchList" />
+            <siteMapNode url="~/SiteSettings/ServerMaintenance/NetworkLog.aspx#?a=iplistener" title="IP Listener" />
+        </siteMapNode>
+        <siteMapNode url="~/SiteSettings/CustomContent/NotifiManager.aspx" title="Notification Manager" icon="SiteLinkIcons/notifications.png" />
+        <siteMapNode url="~/SiteSettings/CustomContent/Overlays.aspx" title="Overlay Manager" icon="SiteLinkIcons/overlays.png" />
+        <siteMapNode url="~/SiteSettings/ServerMaintenance/SiteSettings.aspx" title="Site Settings" icon="SiteLinkIcons/sitesettings.png" />
+        <siteMapNode url="~/SiteSettings/CustomContent/SitePlugins.aspx" title="Plugins" icon="SiteLinkIcons/siteplugins.png" />
+        <siteMapNode url="~/SiteSettings/ServerMaintenance/StartupScripts.aspx" title="Startup Scripts" icon="SiteLinkIcons/startupscripts.png" />
+        <siteMapNode url="~/SiteSettings/UserMaintenance/UserAccounts.aspx" title="User Accounts" icon="SiteLinkIcons/useraccounts.png" />
+        <siteMapNode url="~/SiteSettings/CustomContent/WebServices.aspx" title="Web Services" icon="SiteLinkIcons/webservices.png" />
+        <siteMapNode url="~/Workspace.aspx" title="Workspace" icon="SiteLinkIcons/workspace.png" />
+    </siteMapNode>
+</siteMap>
