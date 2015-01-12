@@ -34,10 +34,10 @@ The workspace works like your desktop computer. You can open, close, minimize, m
 You can choose the number of workspaces you want to show.<br />
 Apps can be opened to specific workspaces.<br />
 Each workspace can have its own background. (If enabled)<br />
-You can switch between workspaces by selecting the <img alt="" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/App_Themes/Standard/Icons/workspace.png"> Workspace at the top left corner of the screen or by pressing Alt + Up Key/Down Key<br />
-You can also toggle the overlays by selecting the <img alt="" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/App_Themes/Standard/Icons/overlay.png"> or by pressing Alt + O<br />
-<img alt="Workspace" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/Standard_Images/About Logos/openwse_v4.2.PNG" style="width: 480px; float: left; margin-right: 30px;">
-<img alt="Workspace" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/Standard_Images/About Logos/openwse_v4.2_overlays.PNG" style="width: 480px; float: left;">
+You can switch between workspaces by selecting the <img alt="" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/App_Themes/Standard/Icons/workspace.png"> Workspace at the top left corner of the screen or by pressing Alt + Up Key/Down Key<br />
+You can also toggle the overlays by selecting the <img alt="" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/App_Themes/Standard/Icons/overlay.png"> or by pressing Alt + O<br />
+<img alt="Workspace" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About Logos/openwse_v4.2.PNG" style="width: 480px; float: left; margin-right: 30px;">
+<img alt="Workspace" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About Logos/openwse_v4.2_overlays.PNG" style="width: 480px; float: left;">
 <br />
 <br />
 <b>Site Tools</b>
@@ -53,12 +53,12 @@ Track issues, user logins, site request, speeds, and enable the IP Listener whic
 <table style="width: 100%;">
                         <tbody><tr>
                             <td align="center" valign="top">
-                                <img alt="Site Settings" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/Standard_Images/About Logos/sitesettings.PNG" style="width: 400px;">
+                                <img alt="Site Settings" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About Logos/sitesettings.PNG" style="width: 400px;">
                                 <div class="clear-space"></div>
                                 <h3>Site Settings</h3>
                             </td>
                             <td align="center" valign="top">
-                                <img alt="Custom Tables" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/Standard_Images/About Logos/customtables.PNG" style="width: 400px;">
+                                <img alt="Custom Tables" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About Logos/customtables.PNG" style="width: 400px;">
                                 <div class="clear-space"></div>
                                 <h3>Custom Tables</h3>
                             </td>
