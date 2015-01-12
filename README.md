@@ -36,7 +36,7 @@ Apps can be opened to specific workspaces.<br />
 Each workspace can have its own background. (If enabled)<br />
 You can switch between workspaces by selecting the <img alt="" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/App_Themes/Standard/Icons/workspace.png"> Workspace at the top left corner of the screen or by pressing Alt + Up Key/Down Key<br />
 You can also toggle the overlays by selecting the <img alt="" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/App_Themes/Standard/Icons/overlay.png"> or by pressing Alt + O<br />
-<img alt="Workspace" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About Logos/openwse_v4.2.PNG" style="width: 480px; float: left; margin-right: 30px;">
+<img alt="Workspace" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About Logos/openwse_v4.2.PNG" style="width: 480px; float: left;">
 <img alt="Workspace" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About Logos/openwse_v4.2_overlays.PNG" style="width: 480px; float: left;">
 <br />
 <br />
@@ -71,7 +71,7 @@ Track issues, user logins, site request, speeds, and enable the IP Listener whic
 Control your workspace from your mobile device.<br />
 Use the App Remote on your mobile device to open up apps on the device and chat.<br />
 You do not have to be on the same network as your workspace. The App Remote works from anywhere as long as there is an internet connection.<br />
-<img alt="App Remote" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About%20Logos/appremote.PNG">
+<img alt="App Remote" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About%20Logos/appremote.png">
 <br />
 <br />
 <b>Chat Client</b>
