@@ -88,12 +88,12 @@ Set your current state to either Available, Away, Busy, or Offline.<br />
 <b>Frameworks and Technologies Used</b>
 <br />
 Microsoft ASP.NET 4.5<br />
-JQuery (www.jquery.com)<br />
-JQuery UI(www.jqueryui.com)<br />
-TinyMCE - Javascript WYSIWYG editor(View License)<br />
-ASP.Net AJAX Control Toolkit (www.asp.net)<br />
-SharpZipLib - The Zip, GZip, BZip2 and Tar Implementation For .NET(www.icsharpcode.net)<br />
-SyntaxHighlighter - JavaScript code syntax highlighter(www.alexgorbatchev.com/SyntaxHighlighter)<br />
+JQuery<br />
+JQuery UI<br />
+TinyMCE - Javascript WYSIWYG editor<br />
+ASP.Net AJAX Control Toolkit<br />
+SharpZipLib - The Zip, GZip, BZip2 and Tar Implementation For .NET<br />
+SyntaxHighlighter - JavaScript code syntax highlighter<br />
 Google APIs
 <br />
 <br />
