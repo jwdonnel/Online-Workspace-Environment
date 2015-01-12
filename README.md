@@ -34,5 +34,64 @@ The workspace works like your desktop computer. You can open, close, minimize, m
 You can choose the number of workspaces you want to show.<br />
 Apps can be opened to specific workspaces.<br />
 Each workspace can have its own background. (If enabled)<br />
-You can switch between workspaces by selecting the   Workspace at the top left corner of the screen or by pressing Alt + Up Key/Down Key<br />
-You can also toggle the overlays by selecting the   or by pressing Alt + O<br />
+You can switch between workspaces by selecting the <img alt="" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/App_Themes/Standard/Icons/workspace.png"> Workspace at the top left corner of the screen or by pressing Alt + Up Key/Down Key<br />
+You can also toggle the overlays by selecting the <img alt="" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/App_Themes/Standard/Icons/overlay.png"> or by pressing Alt + O<br />
+<img alt="Workspace" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/Standard_Images/About Logos/openwse_v4.2.PNG" style="width: 480px; float: left; margin-right: 30px;">
+<img alt="Workspace" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/Standard_Images/About Logos/openwse_v4.2_overlays.PNG" style="width: 480px; float: left;">
+<br />
+<br />
+<b>Site Tools</b>
+<br />
+The site tools give you the ability to customize the entire site to your liking.<br />
+There are 20 different site tools to play with.<br />
+Customize user defaults for new users, create, edit, delete existing users.<br />
+Create/Import your own database tables which also creates its own app for you to interact with.<br />
+Upload custom projects such as full web sites that can be hosted from this site.<br />
+Host web services.<br />
+Create and upload Site Plugins that can give the workspace extra functionality.<br />
+Track issues, user logins, site request, speeds, and enable the IP Listener which can make your site available to only certain IP addresses.<br />
+<table style="width: 100%;">
+                        <tbody><tr>
+                            <td align="center" valign="top">
+                                <img alt="Site Settings" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/Standard_Images/About Logos/sitesettings.PNG" style="width: 400px;">
+                                <div class="clear-space"></div>
+                                <h3>Site Settings</h3>
+                            </td>
+                            <td align="center" valign="top">
+                                <img alt="Custom Tables" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/Standard_Images/About Logos/customtables.PNG" style="width: 400px;">
+                                <div class="clear-space"></div>
+                                <h3>Custom Tables</h3>
+                            </td>
+                        </tr>
+                    </tbody></table>
+<br />
+<br />
+<b>App Remote</b>
+<br />
+Control your workspace from your mobile device.<br />
+Use the App Remote on your mobile device to open up apps on the device and chat.<br />
+You do not have to be on the same network as your workspace. The App Remote works from anywhere as long as there is an internet connection.<br />
+<img alt="App Remote" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About Logos/appremote.PNG">
+<br />
+<br />
+<b>Chat Client</b>
+<br />
+Communicate with other users that are apart of your group.<br />
+Add emoicons, images, url links, and even YouTube videos. These will be formated to view, click, and play in the chat session.<br />
+Set your current state to either Available, Away, Busy, or Offline.<br />
+<img alt="Chat Client" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About%20Logos/chatclient.PNG">
+<br />
+<br />
+<b>Frameworks and Technologies Used</b>
+<br />
+Microsoft ASP.NET 4.5<br />
+JQuery (www.jquery.com)<br />
+JQuery UI(www.jqueryui.com)<br />
+TinyMCE - Javascript WYSIWYG editor(View License)<br />
+ASP.Net AJAX Control Toolkit (www.asp.net)<br />
+SharpZipLib - The Zip, GZip, BZip2 and Tar Implementation For .NET(www.icsharpcode.net)<br />
+SyntaxHighlighter - JavaScript code syntax highlighter(www.alexgorbatchev.com/SyntaxHighlighter)<br />
+<br />
+OpenWSE by John Donnelly is licensed under a Creative Commons Attribution-NoDerivatives 4.0 International License.
+
+Google APIs
