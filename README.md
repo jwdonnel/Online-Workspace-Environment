@@ -1,8 +1,6 @@
 <img alt="OpenWSE - Open Workspace Environment" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/logo.png" />
 <br />
-<br />
 <hr />
-<br />
 <br />
 <b>Introduction</b>
 <br />
