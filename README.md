@@ -71,7 +71,7 @@ Track issues, user logins, site request, speeds, and enable the IP Listener whic
 Control your workspace from your mobile device.<br />
 Use the App Remote on your mobile device to open up apps on the device and chat.<br />
 You do not have to be on the same network as your workspace. The App Remote works from anywhere as long as there is an internet connection.<br />
-<img alt="App Remote" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About Logos/appremote.PNG">
+<img alt="App Remote" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About%20Logos/appremote.PNG">
 <br />
 <br />
 <b>Chat Client</b>
@@ -91,7 +91,8 @@ TinyMCE - Javascript WYSIWYG editor(View License)<br />
 ASP.Net AJAX Control Toolkit (www.asp.net)<br />
 SharpZipLib - The Zip, GZip, BZip2 and Tar Implementation For .NET(www.icsharpcode.net)<br />
 SyntaxHighlighter - JavaScript code syntax highlighter(www.alexgorbatchev.com/SyntaxHighlighter)<br />
+Google APIs
+<br />
+<br />
 <br />
 OpenWSE by John Donnelly is licensed under a Creative Commons Attribution-NoDerivatives 4.0 International License.
-
-Google APIs
