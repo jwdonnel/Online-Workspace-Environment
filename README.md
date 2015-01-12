@@ -1,4 +1,5 @@
-# OpenWSE
+<img alt="OpenWSE - Open Workspace Environment" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/logo.png" />
+<br />
 <b>Introduction</b>
 <br />
 The OpenWSE is a Windows desktop like workspace. The goal of this site is to provide a Windows like experience but from your web browser on any computer. Much like your desktop, you can have multiple modal windows (called apps) opened on your workspace. And just like your desktop, if you have apps opened that you dont want to close, but dont want to show, you can simply minimize them in the taskbar at the top. Apps can be based off of UserControls (.ascx), existing webpages, or just custom html pages. Apps can incorporate their own css stylesheets along with javascript files and other code. This allows for any developer to integrate with the OpenWSE code. Each user can register an account (if enabled by the Administrator) that allows you to save your apps position, size, and whats loaded so you can go from any browser or computer and keep the same settings.
@@ -28,7 +29,7 @@ Personal social network<br />
 Your own personal development tool for creating user controls and viewing<br />
 <br />
 <br />
-<b>The Workspace</b>
+<b>#The Workspace</b>
 <br />
 The workspace works like your desktop computer. You can open, close, minimize, maximize, resize and move apps across the workspace.<br />
 You can choose the number of workspaces you want to show.<br />
