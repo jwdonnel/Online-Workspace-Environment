@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <title>Sticky Note</title>
+</head>
+<body>
+    <div style="height: 256px; min-height: 256px; min-width: 256px; width: 256px; background: url('Apps/Notepad/notepad.png') no-repeat center center;">
+        <textarea cols="18" id="textnote_notepad" rows="20" style="background: none; border: 0 solid transparent; font-family: Comic Sans MS; font-size: 13px; height: 159px; outline: 0px solid transparent; width: 225px; margin-left: 15px; margin-top: 50px;"
+            maxlength="256"></textarea>
+    </div>
+    <script type='text/javascript'>
+        $(document).ready(function () {
+            $.ajax({
+                url: openWSE.siteRoot() + "WebServices/SaveControls.asmx/Comment_GetMessage",
+                type: "POST",
+                data: '{ }',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    var response = data.d;
+                    if (response != "") {
+                        $("#textnote_notepad").val(unescape(response));
+                    }
+                }
+            });
+
+            $("#textnote_notepad").focusout(function () {
+                $.ajax({
+                    url: openWSE.siteRoot() + "WebServices/SaveControls.asmx/Comment_UpdateMessage",
+                    type: "POST",
+                    data: '{ "comment": "' + escape($.trim($("#textnote_notepad").val())) + '" }',
+                    contentType: "application/json; charset=utf-8"
+                });
+            });
+        });
+    </script>
+</body>
+</html>

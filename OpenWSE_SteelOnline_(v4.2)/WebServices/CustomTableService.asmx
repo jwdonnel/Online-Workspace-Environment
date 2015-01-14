@@ -1,1 +1,0 @@
-﻿<%@ WebService Language="C#" CodeBehind="~/App_Code/CustomTableService.cs" Class="CustomTableService" %>
