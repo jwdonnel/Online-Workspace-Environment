@@ -372,7 +372,7 @@ html{height:100%;min-height:100%}
 
 /* Image Boxes
 ----------------------------------*/
-.img-administrator,.img-checkmark,.img-folder,.img-file,.img-imgFile,.img-addOverlay,.img-network,.img-share,.img-backup,.img-restore,.img-overlay,.img-download,.img-refresh,.img-refresh-alt,.img-popin,.img-close-alt,.img-norefresh,.img-addremove,.img-users,.img-pause,.img-play,.img-allow,.img-ignore,.img-back,.img-customize,.img-upload,.img-document,.img-lock,.img-unlock,.img-about,.img-about-2,.img-group,.img-signoff,.img-app-dark,.img-app-light,.img-colors,.img-view,.img-stats,.img-approve,.img-current-user,.img-menudropdown,.img-menudropdown-light,.img-downright,.img-columns,.img-password,.img-printer,.img-camera,.img-mail,.img-nomail,.img-quote,.img-expand-sml,.img-collapse-sml,.img-expand-lrg,.img-collapse-lrg,.img-grouplogoff,.img-links,.img-chat,.img-settings,.img-replace{width:16px;height:16px;background-repeat:no-repeat;background-position:center center;display:inline-block;zoom:1;*display:inline}
+.img-administrator,.img-checkmark,.img-folder,.img-file,.img-imgFile,.img-addOverlay,.img-network,.img-share,.img-backup,.img-restore,.img-overlay,.img-download,.img-present,.img-refresh,.img-refresh-alt,.img-popin,.img-close-alt,.img-norefresh,.img-addremove,.img-users,.img-pause,.img-play,.img-allow,.img-ignore,.img-back,.img-customize,.img-upload,.img-document,.img-lock,.img-unlock,.img-about,.img-about-2,.img-group,.img-signoff,.img-app-dark,.img-app-light,.img-colors,.img-view,.img-stats,.img-approve,.img-current-user,.img-menudropdown,.img-menudropdown-light,.img-downright,.img-columns,.img-password,.img-printer,.img-camera,.img-mail,.img-nomail,.img-quote,.img-expand-sml,.img-collapse-sml,.img-expand-lrg,.img-collapse-lrg,.img-grouplogoff,.img-links,.img-chat,.img-settings,.img-replace{width:16px;height:16px;background-repeat:no-repeat;background-position:center center;display:inline-block;zoom:1;*display:inline}
 .img-administrator{background-image:url(Icons/administrator.png);height:32px;width:32px}
 .img-checkmark{background-image:url(Icons/check_mark.png)}
 .img-folder{background-image:url(Icons/folder.png);height:24px;width:24px}
@@ -385,6 +385,7 @@ html{height:100%;min-height:100%}
 .img-backup{background-image:url(Icons/backup.png)}
 .img-restore{background-image:url(Icons/restore.png)}
 .img-download{background-image:url(Icons/download.png)}
+.img-present{background-image:url(Icons/present.png)}
 .img-refresh{background-image:url(Icons/update.png)}
 .img-refresh-alt{background-image:url(Icons/update-alt.png)}
 .img-popin{background-image:url(Icons/pop-in.png)}

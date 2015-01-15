@@ -76,7 +76,34 @@
             font-size: 14px;
         }
 
-         #forkme_banner
+        .lnk_Download
+        {
+            border: 1px solid #5D7196;
+            background: #687DA8;
+            float: left;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            -webkit-transition: all .2s ease-in-out;
+            -moz-transition: all .2s ease-in-out;
+            transition: all .2s ease-in-out;
+        }
+
+            .lnk_Download .download-text
+            {
+                color: #FFF;
+                font-size: 14px;
+                font-weight: bold;
+                padding: 10px 15px;
+                float: left;
+            }
+
+            .lnk_Download:hover
+            {
+                background: #5D7196;
+            }
+
+        #forkme_banner
         {
             float: left;
             z-index: 10;
@@ -128,7 +155,7 @@
         </div>
         <div class="clear"></div>
         <div id="siteInfo">
-            <a id="forkme_banner" href="https://github.com/jwdonnel/OpenWSE">View on GitHub</a>
+            <a id="forkme_banner" href="https://github.com/jwdonnel/OpenWSE" target="_blank">View on GitHub</a>
             <div id="lbl_currentVer" runat="server" class="float-right pad-right-big">
             </div>
             <div class="clear-space">
@@ -307,12 +334,14 @@
                     <div class="clear-space"></div>
                     <img alt="Chat Client" src="Standard_Images/About Logos/chatclient.PNG" class="boxshadow" class="screenshot-img" />
                 </div>
-                <div class="about-section">
+                <div id="IWantThis" class="about-section">
                     <h2>Wiki and Documentation</h2>
                     <div class="clear-space-five"></div>
-                    <a href="https://github.com/jwdonnel/OpenWSE">Go to GitHub</a> to get updates and other documentation.
+                    <a href="https://github.com/jwdonnel/OpenWSE" target="_blank">Go to GitHub</a> to get updates and other documentation.
                     <div class="clear-space-two"></div>
                     An integration guide is available <a href="Integration.html" target="_blank">here.</a>
+                    <div class="clear-space"></div>
+                    OpenWSE is free for personal use. In order to buy a license, download and run the OpenWSE_Installer.exe which will setup a website on your local machine using IIS. Once you buy the license, you can make any changes you want to the source code. 
                 </div>
                 <div class="about-section">
                     <h2>Frameworks and Technologies Used</h2>
