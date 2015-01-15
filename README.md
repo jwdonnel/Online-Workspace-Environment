@@ -1,8 +1,11 @@
-<img alt="OpenWSE - Open Workspace Environment" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/logo.png" />
+<img alt="OpenWSE - Open Workspace Environment" src="http://openwse.com/Standard_Images/logo.png" />
 <br />
 <hr />
 <br />
 OpenWSE is free for personal use. In order to buy a license, download and run the OpenWSE_Installer.exe which will setup a website on your local machine using IIS. Once you buy the license, you can make any changes you want to the source code.
+<br />
+<br />
+<img alt="workspace" src="http://openwse.com/Standard_Images/About%20Logos/Workspace.PNG" />
 <br />
 <br />
 <b>Introduction</b>
@@ -40,10 +43,10 @@ The workspace works like your desktop computer. You can open, close, minimize, m
 You can choose the number of workspaces you want to show.<br />
 Apps can be opened to specific workspaces.<br />
 Each workspace can have its own background. (If enabled)<br />
-You can switch between workspaces by selecting the <img alt="" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/App_Themes/Standard/Icons/workspace.png"> Workspace at the top left corner of the screen or by pressing Alt + Up Key/Down Key<br />
-You can also toggle the overlays by selecting the <img alt="" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/App_Themes/Standard/Icons/overlay.png"> or by pressing Alt + O<br />
-<img alt="Workspace" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About Logos/openwse_v4.2.PNG" style="width: 480px; float: left;">
-<img alt="Workspace" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About Logos/openwse_v4.2_overlays.PNG" style="width: 480px; float: left;">
+You can switch between workspaces by selecting the <img alt="" src="http://openwse.com/App_Themes/Standard/Icons/workspace.png"> Workspace at the top left corner of the screen or by pressing Alt + Up Key/Down Key<br />
+You can also toggle the overlays by selecting the <img alt="" src="http://openwse.com/App_Themes/Standard/Icons/overlay.png"> or by pressing Alt + O<br />
+<img alt="Workspace" src="http://openwse.com/Standard_Images/About Logos/openwse_v4.2.PNG" style="width: 480px; float: left;">
+<img alt="Workspace" src="http://openwse.com/Standard_Images/About Logos/openwse_v4.2_overlays.PNG" style="width: 480px; float: left;">
 <br />
 <br />
 <b>Site Tools</b>
@@ -59,12 +62,12 @@ Track issues, user logins, site request, speeds, and enable the IP Listener whic
 <table style="width: 100%;">
                         <tbody><tr>
                             <td align="center" valign="top">
-                                <img alt="Site Settings" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About Logos/sitesettings.PNG" style="width: 400px;">
+                                <img alt="Site Settings" src="http://openwse.com/Standard_Images/About Logos/sitesettings.PNG" style="width: 400px;">
                                 <div class="clear-space"></div>
                                 <h3>Site Settings</h3>
                             </td>
                             <td align="center" valign="top">
-                                <img alt="Custom Tables" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About Logos/customtables.PNG" style="width: 400px;">
+                                <img alt="Custom Tables" src="http://openwse.com/Standard_Images/About Logos/customtables.PNG" style="width: 400px;">
                                 <div class="clear-space"></div>
                                 <h3>Custom Tables</h3>
                             </td>
@@ -77,7 +80,7 @@ Track issues, user logins, site request, speeds, and enable the IP Listener whic
 Control your workspace from your mobile device.<br />
 Use the App Remote on your mobile device to open up apps on the device and chat.<br />
 You do not have to be on the same network as your workspace. The App Remote works from anywhere as long as there is an internet connection.<br />
-<img alt="App Remote" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About%20Logos/appremote.png">
+<img alt="App Remote" src="http://openwse.com/Standard_Images/About%20Logos/appremote.png">
 <br />
 <br />
 <b>Chat Client</b>
@@ -85,7 +88,7 @@ You do not have to be on the same network as your workspace. The App Remote work
 Communicate with other users that are apart of your group.<br />
 Add emoicons, images, url links, and even YouTube videos. These will be formated to view, click, and play in the chat session.<br />
 Set your current state to either Available, Away, Busy, or Offline.<br />
-<img alt="Chat Client" src="https://raw.githubusercontent.com/jwdonnel/OpenWSE/master/OpenWSE_SteelOnline_(v4.2)/Standard_Images/About%20Logos/chatclient.PNG">
+<img alt="Chat Client" src="http://openwse.com/Standard_Images/About%20Logos/chatclient.PNG">
 <br />
 <br />
 <b>Frameworks and Technologies Used</b>
