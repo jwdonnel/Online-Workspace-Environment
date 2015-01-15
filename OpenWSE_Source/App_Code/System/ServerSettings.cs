@@ -156,7 +156,7 @@ public class ServerSettings {
                     return;
                 }
 
-                // DefaultDBTables.CopyCorrectDatabase();
+                DefaultDBTables.CopyCorrectDatabase();
                
                 string[] roles = Roles.GetAllRoles();
                 if (roles != null && roles.Length > 0) {
