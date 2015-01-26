@@ -37,7 +37,7 @@ Personal social network<br />
 Your own personal development tool for creating user controls and viewing<br />
 <br />
 <br />
-<b>#The Workspace</b>
+<b>The Workspace</b>
 <br />
 The workspace works like your desktop computer. You can open, close, minimize, maximize, resize and move apps across the workspace.<br />
 You can choose the number of workspaces you want to show.<br />
