@@ -63,26 +63,15 @@ public class AppInstallerService : System.Web.Services.WebService {
         foreach (Apps_Coll dr in _apps.AppList) {
             bool cancontinue = true;
 
-            string categoryName = _appCategory.GetCategoryName(dr.Category);
-            if (dr.AppId.ToLower() == _appId.ToLower())
-                cancontinue = false;
-            else {
-                if ((category.ToLower() == "all") || (string.IsNullOrEmpty(category))) {
-                    if ((!string.IsNullOrEmpty(search)) && (search.ToLower() != "search apps/plugins")) {
-                        if ((dr.AppName.ToLower().Contains(search.ToLower()))
-                            || (dr.AppId.ToLower().Contains(search.ToLower()))
-                            || (categoryName.ToLower().Contains(search.ToLower()))
-                            || (dr.Description.ToLower().Contains(search.ToLower()))) {
-                            cancontinue = MatchApp(dr.AppId);
-                        }
-                        else
-                            cancontinue = false;
-                    }
-                    else
-                        cancontinue = MatchApp(dr.AppId);
-                }
+            string[] categorySplit = dr.Category.Split(ServerSettings.StringDelimiter_Array, StringSplitOptions.RemoveEmptyEntries);
+            string categoryName = dr.Category;
+            
+            foreach (string c in categorySplit) {
+                categoryName = _appCategory.GetCategoryName(c);
+                if (dr.AppId.ToLower() == _appId.ToLower())
+                    cancontinue = false;
                 else {
-                    if (dr.Category == category) {
+                    if ((category.ToLower() == "all") || (string.IsNullOrEmpty(category))) {
                         if ((!string.IsNullOrEmpty(search)) && (search.ToLower() != "search apps/plugins")) {
                             if ((dr.AppName.ToLower().Contains(search.ToLower()))
                                 || (dr.AppId.ToLower().Contains(search.ToLower()))
@@ -90,17 +79,39 @@ public class AppInstallerService : System.Web.Services.WebService {
                                 || (dr.Description.ToLower().Contains(search.ToLower()))) {
                                 cancontinue = MatchApp(dr.AppId);
                             }
-                            else
+                            else {
                                 cancontinue = false;
+                            }
                         }
-                        else
+                        else {
                             cancontinue = MatchApp(dr.AppId);
+                            break;
+                        }
                     }
-                    else
-                        cancontinue = false;
+                    else {
+                        if (c == category) {
+                            if ((!string.IsNullOrEmpty(search)) && (search.ToLower() != "search apps/plugins")) {
+                                if ((dr.AppName.ToLower().Contains(search.ToLower()))
+                                    || (dr.AppId.ToLower().Contains(search.ToLower()))
+                                    || (categoryName.ToLower().Contains(search.ToLower()))
+                                    || (dr.Description.ToLower().Contains(search.ToLower()))) {
+                                    cancontinue = MatchApp(dr.AppId);
+                                }
+                                else {
+                                    cancontinue = false;
+                                }
+                            }
+                            else {
+                                cancontinue = MatchApp(dr.AppId);
+                                break;
+                            }
+                        }
+                        else {
+                            cancontinue = false;
+                        }
+                    }
                 }
             }
-
             if (AssociateWithGroups) {
                 if (!ServerSettings.CheckAppGroupAssociation(dr, _member)) {
                     continue;

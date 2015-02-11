@@ -8,7 +8,7 @@
             cursor: move;
         }
 
-        .columnIDRow, .border-right
+        .entryIDRow, .border-right
         {
             cursor: default !important;
         }
@@ -18,6 +18,11 @@
             float: left;
             padding-left: 10px;
             margin-top: -3px;
+        }
+
+        .checkbox-click
+        {
+            cursor: default;
         }
     </style>
 </asp:Content>
@@ -43,40 +48,121 @@
                 </div>
                 <asp:CheckBox ID="cb_showSidebar" runat="server" Text="&nbsp;Show sidebar with month selector"
                     ClientIDMode="Static" Checked="true" />
+                <div class="clear-space-five">
+                </div>
+                <asp:CheckBox ID="cb_addChart" runat="server" Text="&nbsp;Enable Data Chart"
+                    ClientIDMode="Static" Checked="true" />
+                <div class="clear-space-five">
+                </div>
+                <asp:CheckBox ID="cb_allowNotifi" runat="server" Text="&nbsp;Enable Notifications - Notify users upon change"
+                    ClientIDMode="Static" Checked="true" />
+                <div class="clear-space">
+                </div>
+                <div id="chart_selector">
+                    <table>
+                        <tr>
+                            <td align="right" style="width: 127px;">
+                                <span class="pad-right font-bold">Chart Type</span>
+
+                            </td>
+                            <td>
+                                <asp:DropDownList ID="ddl_ChartType" runat="server" CssClass="margin-left margin-right" ClientIDMode="Static">
+                                </asp:DropDownList>
+                            </td>
+                            <td>
+                                <img id="img_charttype" alt="charttype" src="../../Standard_Images/ChartTypes/area.png" class="margin-left-big margin-right" style="max-height: 80px;" />
+
+                            </td>
+                            <td>
+                                <small>This chart image will be used as the main App Icon.<br />
+                                    Click <a id="lnk_chartTypeSetup" href="https://google-developers.appspot.com/chart/interactive/docs/gallery/areachart" target="_blank">HERE</a> to see how the data should be setup for this chart type.
+                                </small>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="clear-space">
+                    </div>
+                </div>
             </div>
-            <div class="clear-space">
-            </div>
-            <table width="650px">
-                <tr>
-                    <td align="left" style="width: 100px;">
-                        <span class="pad-right font-bold">Table Name</span>
+            <table>
+                <tr id="tr-chart-title">
+                    <td align="right" style="width: 127px;">
+                        <span class="pad-right font-bold">Chart Title</span>
+                        <div class="clear-space"></div>
                     </td>
-                    <td style="width: 250px;">
+                    <td>
+                        <asp:TextBox ID="tb_chartTitle" runat="server" CssClass="textEntry margin-left float-left"
+                            MaxLength="250" Width="400px" ClientIDMode="Static"></asp:TextBox>
+                        <div class="clear-space"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" style="width: 127px;">
+                        <span class="pad-right font-bold">Table Name</span>
+                        <div class="clear-space"></div>
+                    </td>
+                    <td>
                         <asp:TextBox ID="tb_tablename" runat="server" CssClass="textEntry margin-left float-left"
                             MaxLength="100" AutoCompleteType="Search" Width="175px" ClientIDMode="Static"></asp:TextBox>
+                        <div class="clear-space"></div>
                     </td>
-                    <td align="right">
-                        <div id="createBtns">
-                            <a href="#" onclick="ClearControls();return false;" class="sb-links margin-right-big">Clear Entries</a>
-                            <input type="button" id="btn_createtable" class="input-buttons margin-left" onclick="CreateTable()"
-                                value="Create Table" />
+                </tr>
+                <tr id="tr-usersallowed">
+                    <td align="right" style="width: 127px;">
+                        <span class="pad-right font-bold">Users Allowed&nbsp;&nbsp;<br />
+                            To Edit
+                        </span>
+                        <div class="clear-space"></div>
+                    </td>
+                    <td>
+                        <a href="#" class="margin-left sb-links" onclick="openWSE.LoadModalWindow(true, 'UsersAllowed-element', 'Users Allowed To Edit');return false;"><span class="img-users float-left margin-right-sml"></span>Select Users</a>
+                        <div id="UsersAllowed-element" class="Modal-element">
+                            <div class="Modal-overlay">
+                                <div class="Modal-element-align">
+                                    <div class="Modal-element-modal" style="width: 650px;">
+                                        <div class="ModalHeader">
+                                            <div>
+                                                <div class="app-head-button-holder-admin">
+                                                    <a href="#" onclick="openWSE.LoadModalWindow(false, 'UsersAllowed-element', '');return false;"
+                                                        class="ModalExitButton"></a>
+                                                </div>
+                                                <span class="Modal-title"></span>
+                                            </div>
+                                        </div>
+                                        <div class="ModalPadContent">
+                                            <asp:Panel ID="pnl_usersAllowedToEdit" runat="server">
+                                            </asp:Panel>
+                                            <div align="right">
+                                                <input type="button" class="input-buttons no-margin" value="Done" onclick="openWSE.LoadModalWindow(false, 'UsersAllowed-element', '');" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div id="editBtns" style="display: none;">
-                            <input type="button" class="input-buttons margin-left" onclick="CancelUpdate()" value="Cancel" />
-                            <input type="button" class="input-buttons margin-left" onclick="UpdateTable()" value="Update Table" />
+                        <div class="clear-space"></div>
+                    </td>
+                </tr>
+                <tr style="display: none;">
+                    <td align="right" style="width: 127px;">
+                        <span class="pad-right font-bold">Import Excel File
+                        </span>
+                    </td>
+                    <td>
+                        <div id="div-excelFileUpload" class="margin-left">
+                            <input type="file" id="excelFileUpload" class="margin-right" /><input type="button" class="input-buttons" onclick="ImportExcelSpreadSheet()" value="Import" />
                         </div>
+                        <div class="clear-space-two"></div>
+                        <small class="margin-left">Only file extensions .xlsx and .xls are allowed</small>
                     </td>
                 </tr>
             </table>
-            <div class="clear">
-            </div>
-            <span id="successMessage"></span>
             <div class="clear" style="height: 30px;">
             </div>
             <h2>Column Editor</h2>
             <div class="clear-space">
             </div>
-            <small><b class="pad-right-sml">Note:</b>A column ID row and TimeStamp row are already included
+            <small><b class="pad-right-sml">Note:</b>Entry ID row and TimeStamp row are already included
             in the list of columns. These rows cannot be deleted or edited.<br />
                 Certain characters are not allowed for the column name. These include [|&;$%@"<>()+,],
             and spaces.</small>
@@ -139,6 +225,16 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="clear" style="height: 20px;"></div>
+            <div id="createBtns" style="width: 625px;">
+                <a href="#" onclick="ClearControls();return false;" class="sb-links float-left">Clear Entries</a>
+                <input type="button" id="btn_createtable" class="input-buttons float-right no-margin" onclick="CreateTable()"
+                    value="Create Table" />
+            </div>
+            <div id="editBtns" style="width: 625px; display: none;">
+                <input type="button" class="input-buttons" onclick="CancelUpdate()" value="Cancel" />
+                <input type="button" class="input-buttons float-right no-margin" onclick="UpdateTable()" value="Update Table" />
+            </div>
         </asp:Panel>
         <div class="actions no-pad-left" style="margin-top: 40px;">
             <div class="clear-space">
@@ -153,17 +249,25 @@
             be able to see any of the created tables except your own.</small>
             <div class="clear-space-five">
             </div>
-            <table class="myHeaderStyle" cellpadding="5" cellspacing="0" style="width: 750px!important;">
+            <table class="myHeaderStyle" cellpadding="5" cellspacing="0">
                 <tbody>
                     <tr>
                         <td width="45px"></td>
-                        <td>Table Name
+                        <td width="150px">Table Name
+                        </td>
+                        <td>Chart Title
                         </td>
                         <td align="center" width="180px">Created By
                         </td>
                         <td align="center" width="180px">Date Created
                         </td>
-                        <td align="center" width="75px">Sidebar
+                        <td align="center" width="60px">Sidebar
+                        </td>
+                        <td align="center" width="60px">Notify
+                        </td>
+                        <td align="center" width="125px">Chart Type
+                        </td>
+                        <td align="center" width="100px">Users Allowed
                         </td>
                         <td align="center" width="75px">Actions
                         </td>
@@ -204,6 +308,21 @@
                         <div class="clear-space-five"></div>
                         <div class="float-left">
                             <small><b class="pad-right-sml">Note:</b>Enter in Created By user password.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="UsersAllowedEdit-element" class="Modal-element">
+            <div class="Modal-overlay">
+                <div class="Modal-element-align">
+                    <div class="Modal-element-modal" style="width: 650px;">
+                        <div class="ModalHeader">
+                            <div>
+                                <span class="Modal-title"></span>
+                            </div>
+                        </div>
+                        <div class="ModalPadContent">
                         </div>
                     </div>
                 </div>

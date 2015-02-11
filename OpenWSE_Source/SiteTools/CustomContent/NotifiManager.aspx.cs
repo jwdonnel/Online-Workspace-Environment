@@ -160,7 +160,7 @@ public partial class SiteTools_NotifiManager : System.Web.UI.Page {
         }
 
         bool showRefresh = true;
-        if ((nIds.Contains("1159aca6-2449-4aff-bacb-5f29e479e2d7")) && (nIds.Contains("adaefeb2-9ef2-4ffa-b6ca-c76fc2815d4f"))) {
+        if ((nIds.Contains("1159aca6-2449-4aff-bacb-5f29e479e2d7")) && (nIds.Contains("adaefeb2-9ef2-4ffa-b6ca-c76fc2815d4f")) && (nIds.Contains("707ecc6c-2480-4080-bad6-fb135bb5cf13"))) {
             showRefresh = false;
         }
 
@@ -262,6 +262,11 @@ public partial class SiteTools_NotifiManager : System.Web.UI.Page {
         if (string.IsNullOrEmpty(_notifications.GetNotification("236a9dc9-c92a-437f-8825-27809af36a3f").ID))
             _notifications.AddNotification(_username, "Error Report", "~/Standard_Images/Notifications/error-lg-color.png", "Add alert when an error occurs on the site. (For Administrators only)", "236a9dc9-c92a-437f-8825-27809af36a3f");
 
+        // create Custom Table Change notification if not available
+        if (string.IsNullOrEmpty(_notifications.GetNotification("707ecc6c-2480-4080-bad6-fb135bb5cf13").ID))
+            _notifications.AddNotification(_username, "Table Updates", "~/Standard_Images/Notifications/database.png", "Alert users when a custom table or database import has changed. (Only works for users that have a custom table or database import app installed)", "707ecc6c-2480-4080-bad6-fb135bb5cf13");
+
+
         BuildNotifi();
         BuildAppAssociation();
     }
@@ -277,7 +282,8 @@ public partial class SiteTools_NotifiManager : System.Web.UI.Page {
         _notifications.GetNotifications();
         foreach (Notifications_Coll coll in _notifications.NotificationList) {
             if (!string.IsNullOrEmpty(coll.NotificationName)) {
-                if ((coll.ID == "236a9dc9-c92a-437f-8825-27809af36a3f") || (coll.ID == "1159aca6-2449-4aff-bacb-5f29e479e2d7") || (coll.ID == "adaefeb2-9ef2-4ffa-b6ca-c76fc2815d4f")) {
+                if ((coll.ID == "236a9dc9-c92a-437f-8825-27809af36a3f") || (coll.ID == "1159aca6-2449-4aff-bacb-5f29e479e2d7")
+                    || (coll.ID == "adaefeb2-9ef2-4ffa-b6ca-c76fc2815d4f") || (coll.ID == "707ecc6c-2480-4080-bad6-fb135bb5cf13")) {
                     continue;
                 }
 

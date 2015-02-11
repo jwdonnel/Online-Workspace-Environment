@@ -53,7 +53,7 @@ public class UserImageColorCreator
             if (acctImage.ToLower().Contains("http") || acctImage.ToLower().Contains("www.")) {
                 imgLoc = acctImage;
             }
-            img = "<img alt='' src='" + imgLoc + "' class='top-menu-acctImage' />";
+            img = "<img alt='' src='" + imgLoc + "' class='top-menu-acctImage'>";
         }
 
         return img + "<div class='sch_ColorCode' style='background-color: #" + usercolor + "'></div>" + userFullName;
@@ -67,16 +67,16 @@ public class UserImageColorCreator
     /// <param name="userId"></param>
     /// <returns></returns>
     public static string CreateImgColorChatList(string acctImage, string usercolor, string userId) {
-        string uc = "<div class='sch_ColorCode_chat' style='background-color: " + usercolor + "'></div>";
+        string uc = string.Empty;
         if (!string.IsNullOrEmpty(acctImage)) {
             string imgLoc = ServerSettings.ResolveUrl(ServerSettings.AccountImageLoc + userId + "/" + acctImage);
             if (acctImage.ToLower().Contains("http") || acctImage.ToLower().Contains("www.")) {
                 imgLoc = acctImage;
             }
-            string img = "<img alt='' src='" + imgLoc + "' class='chat-acctImage' />";
-            uc += img;
+            uc += "<img alt='' src='" + imgLoc + "' class='chat-acctImage'>";
         }
 
+        uc += "<div class='sch_ColorCode_chat' style='background-color: " + usercolor + "'></div>";
         return uc;
     }
 

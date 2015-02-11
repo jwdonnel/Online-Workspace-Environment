@@ -746,7 +746,7 @@ public partial class SiteTools_UserAccounts : Page {
         ShowHideManagedRoleButtons(false);
         UpdatePanel22.Update();
 
-        RegisterPostbackScripts.RegisterStartupScript(this, "openWSE.LoadModalWindow(true, 'ManageRoles-element', 'Manage Roles');");
+        RegisterPostbackScripts.RegisterStartupScript(this, "openWSE.LoadModalWindow(true, 'ManageRoles-element', 'Manage Custom Roles');");
     }
     protected void btn_roleEdit_Click(object sender, EventArgs e) {
         ShowHideManagedRoleButtons(true);

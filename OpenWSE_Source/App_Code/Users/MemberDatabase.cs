@@ -1156,16 +1156,18 @@ public class MemberDatabase : IRequiresSessionState {
             List<Dictionary<string, string>> dbSelect = dbCall.CallSelect(_usersTableName, "", new List<DatabaseQuery>() { new DatabaseQuery("UserName", _username) });
             if (dbSelect.Count > 0) {
                 try {
-                    UsersTable.Add(_username, new Dictionary<string, string>());
+                    if (!UsersTable.ContainsKey(_username) && !string.IsNullOrEmpty(_username)) {
+                        UsersTable.Add(_username, new Dictionary<string, string>());
 
-                    AddUserSettingToTable(dbSelect);
-
-                    dbSelect = dbCall.CallSelect(_userCustomizeTable, "", new List<DatabaseQuery>() { new DatabaseQuery("UserName", _username) });
-                    AddUserSettingToTable(dbSelect);
-
-                    if (!string.IsNullOrEmpty(UsersTable[_username]["UserId"])) {
-                        dbSelect = dbCall.CallSelect(_membershipTableName, "Email, CommentDate, ReceiveAllMail, EnabledApps, AdminPages, ActivationCode", new List<DatabaseQuery>() { new DatabaseQuery("UserId", UsersTable[_username]["UserId"]) });
                         AddUserSettingToTable(dbSelect);
+
+                        dbSelect = dbCall.CallSelect(_userCustomizeTable, "", new List<DatabaseQuery>() { new DatabaseQuery("UserName", _username) });
+                        AddUserSettingToTable(dbSelect);
+
+                        if (!string.IsNullOrEmpty(UsersTable[_username]["UserId"])) {
+                            dbSelect = dbCall.CallSelect(_membershipTableName, "Email, CommentDate, ReceiveAllMail, EnabledApps, AdminPages, ActivationCode", new List<DatabaseQuery>() { new DatabaseQuery("UserId", UsersTable[_username]["UserId"]) });
+                            AddUserSettingToTable(dbSelect);
+                        }
                     }
                 }
                 catch (Exception e) {

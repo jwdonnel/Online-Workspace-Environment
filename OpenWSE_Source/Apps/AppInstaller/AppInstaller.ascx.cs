@@ -21,7 +21,7 @@ public partial class Apps_AppInstaller_AppInstaller : System.Web.UI.UserControl
     protected void Page_Load(object sender, EventArgs e)
     {
         IIdentity userId = Page.User.Identity;
-        InitializeAppList();
+        // InitializeAppList();
         GetCounts();
         UpdatePanel();
     }
@@ -66,7 +66,6 @@ public partial class Apps_AppInstaller_AppInstaller : System.Web.UI.UserControl
         {
             bool cancontinue = true;
 
-            string categoryName = _appCategory.GetCategoryName(dr.Category);
             if (dr.AppId.ToLower() == app_id.ToLower())
                 cancontinue = false;
             else
@@ -85,8 +84,8 @@ public partial class Apps_AppInstaller_AppInstaller : System.Web.UI.UserControl
                 continue;
             }
 
-            if (cancontinue)
-            {
+            if (cancontinue) {
+                string categoryName = _appCategory.GetCategoryName(dr.Category);
                 var memberdata = new MemberDatabase(Page.User.Identity.Name);
                 string image = "<img alt='icon' src='Standard_Images/App_Icons/" + dr.Icon + "' style='width: 48px; position: absolute;' />";
                 if (_ss.HideAllAppIcons)

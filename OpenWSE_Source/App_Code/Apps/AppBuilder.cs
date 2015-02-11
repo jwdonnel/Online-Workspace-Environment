@@ -53,7 +53,7 @@ public class AppBuilder : Page {
     /// <summary>
     /// Apps for the Authenticated user
     /// </summary>
-    public void AppDivGenerator(string id, string title, string img, int ar, int am, string css, string workspace, string filename, bool isUc, string height, string width, bool allowpopout, string popoutloc, bool displayNav, bool allowStats, bool autoFullScreen, bool autoLoad, bool autoOpen) {
+    public void AppDivGenerator(string id, string title, string img, int ar, int am, string css, string workspace, string filename, bool isUc, string height, string width, bool allowpopout, string popoutloc, bool autoFullScreen, bool autoLoad, bool autoOpen) {
         var widg = new StringBuilder();
         Panel appHolder = Getworkspace(workspace);
 
@@ -82,10 +82,10 @@ public class AppBuilder : Page {
             }
 
             if (ar == 1) {
-                widg.Append("<div id='" + id + "' class='" + css + "' style='display: none;" + minheightMinwidth + "'>");
+                widg.Append("<div data-appid='" + id + "' class='app-main-holder " + css + "' style='display: none;" + minheightMinwidth + "'>");
             }
             else {
-                widg.Append("<div id='" + id + "' class='" + css + " no-resize' style='display: none;" + minheightMinwidth + "'>");
+                widg.Append("<div data-appid='" + id + "' class='app-main-holder " + css + " no-resize' style='display: none;" + minheightMinwidth + "'>");
             }
 
 
@@ -93,35 +93,28 @@ public class AppBuilder : Page {
             widg.Append("<div class='app-head-button-holder'>");
             widg.Append("<a href='#" + id + "' class='options-button-app' title='View app options'></a>");
             widg.Append("<div class='app-popup-inner-app'>");
-            widg.Append("<table><tbody><tr>");
+            widg.Append("<table><tbody>");
 
-            widg.Append("<td valign='top'><b>Options</b><div class='clear-space-five'></div><ul>");
+            widg.Append("<tr><td valign='top'><h3>App Options</h3><div class='clear-space-five'></div><ul>");
             widg.Append("<li onclick='openWSE.ReloadApp(this)' title='Refresh'><a href='#" + id + "' class='reload-button-app'></a>Refresh</li>");
             string popoutClick = "openWSE.PopOutFrame(this,'" + CheckPopoutURL(popoutloc) + "')";
             if ((allowpopout) && (!string.IsNullOrEmpty(popoutloc)))
                 widg.Append("<li onclick=\"" + popoutClick + "\" title='Pop Out'><a href='#" + id + "' class='popout-button-app'></a>Pop out</li>");
-            if (displayNav) {
-                widg.Append("<li onclick='openWSE.NavigationBtns(this, \"forward\")' title='History Forward'><a href='#" + id + "' class='forwardHistory-button-app'></a>Foward</li>");
-                widg.Append("<li onclick='openWSE.NavigationBtns(this, \"back\")' title='History Back'><a href='#" + id + "' class='backHistory-button-app'></a>Back</li>");
-            }
-            if (allowStats)
-                widg.Append("<li onclick='openWSE.AppStats(this)' title='App Statistics'><div class='stats-app'></div>Stats</li>");
 
             widg.Append("<li onclick='openWSE.AboutApp(this)' title='About App'><div class='about-app'></div>About</li>");
-            widg.Append("</ul></td>");
+            widg.Append("</ul></td></tr>");
 
 
             if (_totalWorkspaces > 1) {
-                widg.Append("<td valign='top'><div class='pad-left'><b>Workspace</b><div class='clear-space-five'></div>");
+                widg.Append("<tr><td><div class='clear-space'></div><span class='workspace-selector-app-option'>Workspace:</span>");
                 widg.Append("<select class='app-options-workspace-switch'>");
                 for (int ii = 0; ii < _totalWorkspaces; ii++) {
                     widg.Append("<option>" + (ii + 1).ToString() + "</option>");
                 }
-
-                widg.Append("</select></div></td>");
+                widg.Append("</select></td></tr>");
             }
 
-            widg.Append("</tr></tbody></table></div>");
+            widg.Append("</tbody></table></div>");
 
             widg.Append("<a href='#" + id + "' class='exit-button-app' title='Close'></a>");
             if (am == 1)
@@ -225,7 +218,7 @@ public class AppBuilder : Page {
     }
 
 
-    public void AppDivGenerator_NoLogin(string id, string title, string img, int ar, int am, string css, string workspace, string filename, bool isUc, string height, string width, bool allowpopout, string popoutloc, bool displayNav, bool allowStats, bool autoFullScreen, bool autoLoad, bool autoOpen) {
+    public void AppDivGenerator_NoLogin(string id, string title, string img, int ar, int am, string css, string workspace, string filename, bool isUc, string height, string width, bool allowpopout, string popoutloc, bool autoFullScreen, bool autoLoad, bool autoOpen) {
         var widg = new StringBuilder();
         Panel appHolder = Getworkspace(workspace);
 
@@ -251,44 +244,37 @@ public class AppBuilder : Page {
             }
 
             if (ar == 1)
-                widg.Append("<div id='" + id + "' class='" + css + "' style='display: none;" + minheightMinwidth + "'>");
+                widg.Append("<div data-appid='" + id + "' class='app-main-holder " + css + "' style='display: none;" + minheightMinwidth + "'>");
             else
-                widg.Append("<div id='" + id + "' class='" + css + " no-resize' style='display: none;" + minheightMinwidth + "'>");
+                widg.Append("<div data-appid='" + id + "' class='app-main-holder " + css + " no-resize' style='display: none;" + minheightMinwidth + "'>");
 
 
             #region Build Button Header
             widg.Append("<div class='app-head-button-holder'>");
             widg.Append("<a href='#" + id + "' class='options-button-app' title='View app options'></a>");
             widg.Append("<div class='app-popup-inner-app'>");
-            widg.Append("<table><tbody><tr>");
+            widg.Append("<table><tbody>");
 
-            widg.Append("<td valign='top'><b>Options</b><div class='clear-space-five'></div><ul>");
+            widg.Append("<tr><td valign='top'><h3>App Options</h3><div class='clear-space-five'></div><ul>");
             widg.Append("<li onclick='openWSE.ReloadApp(this)' title='Refresh'><a href='#" + id + "' class='reload-button-app'></a>Refresh</li>");
             string popoutClick = "openWSE.PopOutFrame(this,'" + CheckPopoutURL(popoutloc) + "')";
             if ((allowpopout) && (!string.IsNullOrEmpty(popoutloc)))
                 widg.Append("<li onclick=\"" + popoutClick + "\" title='Pop Out'><a href='#" + id + "' class='popout-button-app'></a>Pop out</li>");
-            if (displayNav) {
-                widg.Append("<li onclick='openWSE.NavigationBtns(this, \"forward\")' title='History Forward'><a href='#" + id + "' class='forwardHistory-button-app'></a>Foward</li>");
-                widg.Append("<li onclick='openWSE.NavigationBtns(this, \"back\")' title='History Back'><a href='#" + id + "' class='backHistory-button-app'></a>Back</li>");
-            }
-            // if (allowStats)
-            // widg.Append("<li onclick='AppStats(this)' title='App Statistics'><div class='stats-app'></div>Stats</li>");
 
             // widg.Append("<li onclick='openWSE.AboutApp(this)' title='About App'><div class='about-app'></div>About</li>");
-            widg.Append("</ul></td>");
+            widg.Append("</ul></td></tr>");
+
 
             if (_totalWorkspaces > 1) {
-                widg.Append("<td valign='top'><div class='pad-left'><b>Workspace</b><div class='clear-space-five'></div>");
+                widg.Append("<tr><td><div class='clear-space'></div><span class='workspace-selector-app-option'>Workspace:</span>");
                 widg.Append("<select class='app-options-workspace-switch'>");
-
                 for (int ii = 0; ii < _totalWorkspaces; ii++) {
                     widg.Append("<option>" + (ii + 1).ToString() + "</option>");
                 }
-
-                widg.Append("</select></div></td>");
+                widg.Append("</select></td></tr>");
             }
 
-            widg.Append("</tr></tbody></table></div>");
+            widg.Append("</tbody></table></div>");
 
             widg.Append("<a href='#" + id + "' class='exit-button-app' title='Close'></a>");
             if (am == 1)
@@ -439,7 +425,7 @@ public class AppBuilder : Page {
 
         Panel appHolder = Getworkspace(workspace);
         if (appHolder != null) {
-            widg.Append("<div id='" + id + "' class='app-main chat-modal' chat-username='" + chatUser + "' style='display: none; min-height: 400px; min-width: 300px;'>");
+            widg.Append("<div data-appid='" + id + "' class='app-main-holder app-main chat-modal' chat-username='" + chatUser + "' style='display: none; min-height: 400px; min-width: 300px;'>");
 
 
             #region Build Button Header
@@ -448,21 +434,21 @@ public class AppBuilder : Page {
             widg.Append("<div class='app-popup-inner-app'>");
             widg.Append("<table><tbody><tr>");
 
-            widg.Append("<td valign='top'><b>Options</b><div class='clear-space-five'></div><ul>");
+            widg.Append("<td valign='top'><h3>App Options</h3><div class='clear-space-five'></div><ul>");
             widg.Append("<li onclick='openWSE.ReloadApp(this)' title='Refresh'><a href='#" + id + "' class='reload-button-app'></a>Refresh</li>");
-            string popoutClick = "openWSE.PopOutFrame(this,'" + CheckPopoutURL("~/ChatClient/ChatWindow.html?user=" + chatUser + "'");
+            string popoutClick = "openWSE.PopOutFrame(this,'" + CheckPopoutURL("~/ExternalAppHolder.aspx?chatuser=" + chatUser) + "');";
             widg.Append("<li onclick=\"" + popoutClick + "\" title='Pop Out'><a href='#" + id + "' class='popout-button-app'></a>Pop out</li>");
             widg.Append("<li onclick='openWSE.AboutApp(this)' title='About App'><div class='about-app'></div>About</li>");
-            widg.Append("</ul></td>");
+            widg.Append("</ul></td></tr>");
 
             if (_totalWorkspaces > 1) {
-                widg.Append("<td valign='top'><div class='pad-left'><b>Workspace</b><div class='clear-space-five'></div>");
+                widg.Append("<tr><td><div class='clear-space'></div><span class='workspace-selector-app-option'>Workspace</span>");
                 widg.Append("<select class='app-options-workspace-switch'>");
                 for (int i = 0; i < _totalWorkspaces; i++) {
                     string val = (i + 1).ToString();
                     widg.Append("<option value='" + val + "'>" + val + "</option>");
                 }
-                widg.Append("</select></div></td>");
+                widg.Append("</select></div></td></tr>");
             }
 
             widg.Append("</tr></tbody></table></div>");

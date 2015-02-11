@@ -32,7 +32,7 @@
                 <asp:HiddenField ID="hf_currPackage" runat="server" Value="" ClientIDMode="Static" />
             </ContentTemplate>
         </asp:UpdatePanel>
-        <small><b class="pad-right-sml">Note:</b>Apps can only be in one category. Adding a app
+        <small><b class="pad-right-sml">Note:</b>Apps can be in as many categories as you want. Adding a app
         to a category will remove it from the previous category.</small>
         <div class="clear-space">
         </div>

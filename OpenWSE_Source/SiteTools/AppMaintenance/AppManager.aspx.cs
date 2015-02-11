@@ -215,27 +215,6 @@ public partial class SiteTools_AppManager : Page {
                     hf_isParams.Value = "1";
                     RegisterPostbackScripts.RegisterStartupScript(this, "$('#_hdl4').addClass('active');");
                 }
-                else if (Request.QueryString["c"] == "stats") {
-                    btn_viewCode.Visible = false;
-                    pnl_app_stats.Enabled = true;
-                    pnl_app_stats.Visible = true;
-                    pnl_app_information.Enabled = false;
-                    pnl_app_information.Visible = false;
-                    pnl_htmleditor.Style["display"] = "none";
-                    btn_clear_controls.Enabled = false;
-                    btn_clear_controls.Visible = false;
-                    btn_create.Enabled = false;
-                    btn_create.Visible = false;
-                    btn_create_easy.Enabled = false;
-                    btn_create_easy.Visible = false;
-                    pnl_appicon.Enabled = false;
-                    pnl_appicon.Visible = false;
-                    pnl_apphtml.Enabled = false;
-                    pnl_apphtml.Visible = false;
-                    hf_isParams.Value = "0";
-                    BuildStatistics();
-                    RegisterPostbackScripts.RegisterStartupScript(this, "$('#_hdl5').addClass('active');");
-                }
                 else {
                     pnl_appList2.Controls.Add(new LiteralControl(sidebar.BuildAppEditor(Page)));
                     if (Request.QueryString["b"] == "app_created") {
@@ -353,184 +332,11 @@ public partial class SiteTools_AppManager : Page {
         }
     }
 
-    protected void btn_refreshStats_Clicked(object sender, EventArgs e) {
-        BuildStatistics();
-    }
-
-    private void BuildStatistics() {
-        pnl_app_stats_holder.Controls.Clear();
-        StringBuilder str = new StringBuilder();
-
-        _apps.GetAllApps();
-        List<Apps_Coll> allApps = _apps.AppList;
-
-        HttpCookie myCookie = new HttpCookie("ddl_pageSize_appStats");
-
-        if (Request.Cookies["ddl_pageSize_appStats"] != null) {
-            myCookie = Request.Cookies["ddl_pageSize_appStats"];
-        }
-
-        if ((string.IsNullOrEmpty(myCookie.Value)) || (IsPostBack)) {
-            myCookie.Value = ddl_pageSize.SelectedValue;
-        }
-        myCookie.Expires = DateTime.Now.AddDays(30);
-        Response.Cookies.Add(myCookie);
-
-        if (!IsPostBack) {
-            for (int i = 0; i < ddl_pageSize.Items.Count; i++) {
-                if (ddl_pageSize.Items[i].Value == myCookie.Value) {
-                    ddl_pageSize.SelectedIndex = i;
-                    break;
-                }
-            }
-        }
-
-        int _pageSize = 3;
-        int.TryParse(myCookie.Value, out _pageSize);
-
-        int _pageNm = 1;
-        int _count = 0;
-        string page = Request.QueryString["page"];
-        if (!string.IsNullOrEmpty(page)) {
-            int.TryParse(page, out _count);
-            int.TryParse(page, out _pageNm);
-        }
-
-        if (((_count - 1) * _pageSize) > allApps.Count) {
-            pnl_app_stats_holder.Controls.Add(new LiteralControl("Page index is out of range. <a href='AppManager.aspx?c=stats&page=1'>Click here</a> to return to page 1."));
-            return;
-        }
-
-        if ((_count > 1) && (_pageSize != 0)) {
-            _count = (_pageSize * _count) - _pageSize;
-        }
-        else {
-            _count = 0;
-        }
-
-        int _index = 0;
-
-        AppRatings ratings = new AppRatings();
-        StringBuilder strRatings = new StringBuilder();
-
-        bool allowAppRating = _ss.AllowAppRating;
-
-        for (int i = _count; i < allApps.Count; i++) {
-            if ((_index >= _pageSize) && (_pageSize != 0)) {
-                break;
-            }
-
-            Apps_Coll coll = allApps[i];
-            string appId = coll.AppId;
-            string appName = coll.AppName;
-            int numberInstalled = _apps.GetTotalInstalledApp(appId);
-            int numberOpened = 0;
-            int numberClosed = 0;
-            int numberMinimized = 0;
-            string modified = "N/A";
-
-            bool isAllowed = true;
-            if (!Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
-                MemberDatabase mdata = new MemberDatabase(_username);
-                List<string> userApps = mdata.EnabledApps;
-                if (!userApps.Contains(appId)) {
-                    isAllowed = false;
-                }
-            }
-
-            if ((_username.ToLower() != coll.CreatedBy.ToLower()) && (coll.IsPrivate)) {
-                isAllowed = false;
-            }
-
-            bool rateDisabled = false;
-            if (_username.ToLower() == ServerSettings.AdminUserName.ToLower()) {
-                isAllowed = true;
-                rateDisabled = true;
-            }
-
-            if (isAllowed) {
-                List<UserApps_Coll> db = _apps.GetUserApps_AllUsers(appId);
-                if (db != null) {
-                    List<string> usersTemp = new List<string>();
-                    foreach (UserApps_Coll dr in db) {
-                        if (!usersTemp.Contains(dr.Username.ToLower())) {
-                            usersTemp.Add(dr.Username.ToLower());
-                            modified = dr.DateUpdated.ToString();
-                            if (dr.Closed) {
-                                numberClosed++;
-                            }
-                            else {
-                                numberOpened++;
-                            }
-                            if (dr.Minimized) {
-                                numberMinimized++;
-                            }
-                        }
-                    }
-                }
-
-                int[] pieChart = { numberInstalled, numberClosed, numberOpened, numberMinimized };
-                int maxWidth = 475;
-                int maxHeight = 150;
-
-                string iconName = "<img alt='' src='" + ResolveUrl("~/Standard_Images/App_Icons/" + _apps.GetAppIconName(appId)) + "' class='float-left pad-right' style='height: 32px;' />";
-                str.Append("<div class='contact-card-main contact-card-main-category-packages'>");
-                str.Append(iconName + "<h2 class='float-left pad-top-sml'>" + appName + "</h2>");
-                if (allowAppRating) {
-                    str.Append("<div class='float-left pad-left-big'><div id='app-rater-" + appId + "' class='rounded-corners-5 boxshadow pad-all-sml' style='background: #F9F9F9; border: 1px solid #E5E5E5;'></div></div>");
-                }
-                str.Append("<div class='float-right pad-top-sml'><b class='pad-left pad-right-sml'>Last Modified:</b>" + modified + "</div>");
-
-                if (_apps.AllowStats(appId)) {
-                    str.Append("<div class='clear-space'></div>");
-                    str.Append("<img alt='' src='" + App.GoogleChartBuilder(pieChart, 475, 150) + "' class='rounded-corners-10 boxshadow ' style='max-width: " + maxWidth + "px!important; max-height: " + maxHeight + "px!important; border: 1px solid #E5E5E5;' />");
-                }
-
-                if (allowAppRating) {
-                    str.Append("<div class='clear-space'></div>");
-                    str.Append("<div id='" + appId + "-rating-reviews' style='max-height: 400px; overflow: auto;'>" + _apps.GetReviews(appId) + "</div>");
-                }
-
-                str.Append("<div class='clear'></div>");
-                str.Append("</div>");
-
-                if (allowAppRating) {
-                    strRatings.Append("openWSE.RatingStyleInit('#app-rater-" + appId + "', '" + ratings.GetAverageRating(appId) + "', " + rateDisabled.ToString().ToLower() + ", '" + appId + "', true);");
-                }
-
-                _index++;
-            }
-        }
-
-        if (!string.IsNullOrEmpty(strRatings.ToString())) {
-            RegisterPostbackScripts.RegisterStartupScript(this, strRatings.ToString());
-        }
-
-        if (!string.IsNullOrEmpty(str.ToString())) {
-            pnl_app_stats_holder.Controls.Add(new LiteralControl(str.ToString() + "<div class='clear-space'></div>"));
-            if (_pageSize != 0) {
-                StringBuilder strPaging = new StringBuilder();
-                if (_pageNm > 1) {
-                    strPaging.Append("<a href='AppManager.aspx?c=stats&page=" + (_pageNm - 1) + "' class='float-left sb-links pad-right' onclick='openWSE.LoadingMessage1(\"Loading. Please Wait...\");'><div class='pg-prev-btn float-left' style='padding: 0px 5px 0px 0px!important;'></div>Previous Page</a>");
-                }
-
-                if (_count < allApps.Count - 1) {
-                    strPaging.Append("<a href='AppManager.aspx?c=stats&page=" + (_pageNm + 1) + "' class='float-right sb-links pad-left' onclick='openWSE.LoadingMessage1(\"Loading. Please Wait...\");'><div class='pg-next-btn float-right' style='padding: 0px 0px 0px 5px!important;'></div>Next Page</a>");
-                }
-
-                pnl_app_stats_holder.Controls.Add(new LiteralControl(strPaging.ToString()));
-            }
-        }
-        else {
-            pnl_app_stats_holder.Controls.Add(new LiteralControl("There are no apps with the Allow Statistics Property enabled"));
-        }
-    }
-
     private void BuildCategories() {
         dd_category.Items.Clear();
         dd_category_edit.Items.Clear();
         foreach (Dictionary<string, string> dr in _category.category_dt) {
-            var item = new ListItem(dr["Category"], dr["ID"]);
+            var item = new ListItem("&nbsp;" + dr["Category"], dr["ID"]);
             if (!dd_category.Items.Contains(item)) {
                 dd_category.Items.Add(item);
             }
@@ -595,7 +401,7 @@ public partial class SiteTools_AppManager : Page {
         }
 
         hf_performCleanup.Value = string.Empty;
-        RegisterPostbackScripts.RegisterStartupScript(this, "$('#MessageActivationPopup').remove();");
+        RegisterPostbackScripts.RegisterStartupScript(this, "$('#ConfirmCleanup-element').remove();");
     }
 
     private void SetReturnMessage(string text, bool error, int delayTime) {
@@ -847,7 +653,7 @@ public partial class SiteTools_AppManager : Page {
             foreach (WorkspaceOverlay_Coll doc in _workspaceOverlays.OverlayList) {
                 if ((Roles.IsUserInRole(_username, ServerSettings.AdminUserName))
                     || ((doc.UserName.ToLower() == _username.ToLower()) && (!Roles.IsUserInRole(_username, ServerSettings.AdminUserName)))) {
-                    ListItem item = new ListItem("&nbsp;" + doc.OverlayName, doc.ID);
+                    ListItem item = new ListItem("&nbsp;" + doc.OverlayName + " - " + doc.Description, doc.ID);
                     if (!cb_associatedOverlay.Items.Contains(item))
                         cb_associatedOverlay.Items.Add(item);
                 }
@@ -866,7 +672,7 @@ public partial class SiteTools_AppManager : Page {
             foreach (WorkspaceOverlay_Coll doc in _workspaceOverlays.OverlayList) {
                 if ((Roles.IsUserInRole(_username, ServerSettings.AdminUserName))
                     || ((doc.UserName.ToLower() == _username.ToLower()) && (!Roles.IsUserInRole(_username, ServerSettings.AdminUserName)))) {
-                    ListItem item = new ListItem(doc.OverlayName, doc.ID);
+                        ListItem item = new ListItem("&nbsp;" + doc.OverlayName + " - " + doc.Description, doc.ID);
                     if (!cc_associatedOverlayNew.Items.Contains(item))
                         cc_associatedOverlayNew.Items.Add(item);
                 }
@@ -878,9 +684,8 @@ public partial class SiteTools_AppManager : Page {
         }
     }
 
-    protected void btn_updateAssociatedOverlay_Clicked(object sender, EventArgs e) {
+    private void UpdateAssociatedOverlay() {
         string name = "";
-        lbl_AppOverlay.Text = "";
         foreach (ListItem item in cb_associatedOverlay.Items) {
             if (item.Selected) {
                 name += item.Value + ";";
@@ -892,19 +697,9 @@ public partial class SiteTools_AppManager : Page {
         string appId = hf_appchange.Value;
         if ((!string.IsNullOrEmpty(name)) && (!string.IsNullOrEmpty(appId))) {
             _apps.UpdateAppOverlayID(appId, name);
-            for (int i = 0; i < names.Length; i++) {
-                WorkspaceOverlay_Coll tempColl = _workspaceOverlays.GetWorkspaceOverlay(names[i]);
-                if (tempColl.ID != null) {
-                    lbl_AppOverlay.Text += tempColl.OverlayName;
-                    if (i < names.Length - 1) {
-                        lbl_AppOverlay.Text += "<br />";
-                    }
-                }
-            }
         }
         else {
             _apps.UpdateAppOverlayID(appId, "");
-            lbl_AppOverlay.Text = "N/A";
         }
         LoadAppDownloadBtn();
     }
@@ -1114,11 +909,10 @@ public partial class SiteTools_AppManager : Page {
 
         tb_filename_edit.Text = db.filename;
 
-        int count = 0;
+        List<string> categoryList = db.Category.Split(ServerSettings.StringDelimiter_Array, StringSplitOptions.RemoveEmptyEntries).ToList();
         foreach (ListItem item in dd_category_edit.Items) {
-            if (item.Value == db.Category)
-                dd_category_edit.SelectedIndex = count;
-            count++;
+            if (categoryList.Contains(item.Value))
+                item.Selected = true;
         }
 
         dd_allowresize_edit.SelectedIndex = db.AllowResize ? 0 : 1;
@@ -1127,9 +921,6 @@ public partial class SiteTools_AppManager : Page {
         dd_allow_params_edit.SelectedIndex = db.AllowParams ? 0 : 1;
         dd_allowpopout_edit.SelectedIndex = db.AllowPopOut ? 0 : 1;
 
-        dd_allowStats_edit.SelectedIndex = db.AllowStats ? 0 : 1;
-
-        dd_displayNavBtns_edit.SelectedIndex = db.DisplayNav ? 0 : 1;
         dd_enablebg_edit.SelectedIndex = db.CssClass.ToLower() == "app-main" ? 0 : 1;
 
         dd_maxonload_edit.SelectedIndex = db.AutoFullScreen ? 0 : 1;
@@ -1166,17 +957,14 @@ public partial class SiteTools_AppManager : Page {
         tb_minwidth_edit.Text = db.MinWidth;
         tb_allowpopout_edit.Text = db.PopOutLoc;
 
-        lbl_AppOverlay.Text = string.Empty;
         hf_AppOverlay.Value = string.Empty;
         if (!string.IsNullOrEmpty(db.OverlayID)) {
             string[] oIds = db.OverlayID.Split(ServerSettings.StringDelimiter_Array, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < oIds.Length; i++) {
                 WorkspaceOverlay_Coll doc = _workspaceOverlays.GetWorkspaceOverlay(oIds[i]);
                 if (!string.IsNullOrEmpty(doc.OverlayName)) {
-                    lbl_AppOverlay.Text += doc.OverlayName;
                     hf_AppOverlay.Value += doc.ID;
                     if (i < oIds.Length - 1) {
-                        lbl_AppOverlay.Text += "<br />";
                         hf_AppOverlay.Value += ServerSettings.StringDelimiter;
                     }
                 }
@@ -1265,6 +1053,8 @@ public partial class SiteTools_AppManager : Page {
             title = dt.Icon;
         }
 
+        UpdateAssociatedOverlay();
+
         string ar = "false";
         string am = "false";
         if (HelperMethods.ConvertBitToBoolean(dd_allowresize_edit.SelectedValue)) {
@@ -1278,20 +1068,26 @@ public partial class SiteTools_AppManager : Page {
         _apps.UpdateAutoFullScreen(dt.AppId, HelperMethods.ConvertBitToBoolean(dd_maxonload_edit.SelectedValue));
         _apps.UpdateAllowParams(dt.AppId, HelperMethods.ConvertBitToBoolean(dd_allow_params_edit.SelectedValue));
 
-        _apps.UpdateCategory(dt.AppId, dd_category_edit.SelectedValue);
+        string categorySelectedVals = string.Empty;
+        foreach (ListItem checkedItem in dd_category_edit.Items) {
+            if (checkedItem.Selected) {
+                categorySelectedVals += checkedItem.Value + ServerSettings.StringDelimiter;
+            }
+        }
+
+        _apps.UpdateCategory(dt.AppId, categorySelectedVals);
         _apps.UpdateAppLocal(dt.AppId, title);
         _apps.UpdateAppList(dt.AppId, title, ar, am, tb_about_edit.Text,
                                   tb_description_edit.Text, dd_enablebg_edit.SelectedValue, tb_minheight_edit.Text.Replace("px", ""),
                                   tb_minwidth_edit.Text.Replace("px", ""), HelperMethods.ConvertBitToBoolean(dd_allowpopout_edit.SelectedValue), tb_allowpopout_edit.Text.Trim(),
-                                  HelperMethods.ConvertBitToBoolean(dd_displayNavBtns_edit.SelectedValue), HelperMethods.ConvertBitToBoolean(dd_allowStats_edit.SelectedValue), HelperMethods.ConvertBitToBoolean(dd_autoOpen_edit.SelectedValue),
-                                  dd_defaultworkspace_edit.SelectedValue, HelperMethods.ConvertBitToBoolean(dd_isPrivate_Edit.SelectedValue));
+                                  HelperMethods.ConvertBitToBoolean(dd_autoOpen_edit.SelectedValue), dd_defaultworkspace_edit.SelectedValue, HelperMethods.ConvertBitToBoolean(dd_isPrivate_Edit.SelectedValue));
 
         if (File.Exists(ServerSettings.GetServerMapLocation + "Apps\\Database_Imports\\" + dt.AppId.Replace("app-", "") + ".ascx")) {
             var db = new DBImporter();
             db.BinaryDeserialize();
             foreach (DBImporter_Coll dbColl in db.DBColl) {
                 if (dbColl.ID == dt.AppId.Replace("app-", "")) {
-                    db.UpdateEntry(dbColl.ID, title, dbColl.SelectCommand, dbColl.AllowEdit);
+                    db.UpdateEntry(dbColl.ID, title, dbColl.SelectCommand, dbColl.AllowEdit, dbColl.Chart_Type, dbColl.ChartTitle, dbColl.NotifyUsers);
                     break;
                 }
             }
@@ -1360,10 +1156,9 @@ public partial class SiteTools_AppManager : Page {
 
     private void SetStandardApps(string appId) {
         if ((appId == "app-appinstaller") || (appId == "app-rssfeed") || (appId == "app-documents") ||
-            (appId == "app-notepad") || (appId == "app-bookmarkviewer") || (appId == "app-sitemonitor") ||
+            (appId == "app-notepad") || (appId == "app-bookmarkviewer") || (appId == "app-googletraffic") ||
             (appId == "app-chatsettings") || (appId == "app-messageboard") || (appId == "app-twitter") ||
-            (appId == "app-personalcalendar") || (appId == "app-alarmclock") || (appId == "app-feedback") ||
-            (appId == "app-googletraffic")) {
+            (appId == "app-personalcalendar") || (appId == "app-alarmclock") || (appId == "app-feedback")) {
             btn_delete.Enabled = false;
             btn_delete.Visible = false;
             lb_editsource.Enabled = false;
@@ -1833,10 +1628,8 @@ public partial class SiteTools_AppManager : Page {
                             html.AppendLine("</div>");
                         }
 
-                        bool allowStats = HelperMethods.ConvertBitToBoolean(dd_allowStats_create.SelectedValue);
                         bool allowparams = HelperMethods.ConvertBitToBoolean(dd_allow_params.SelectedValue);
                         bool allowpopout = HelperMethods.ConvertBitToBoolean(dd_allowpopout_create.SelectedValue);
-                        bool displayNav = HelperMethods.ConvertBitToBoolean(dd_displayNav_create.SelectedValue);
                         bool autoOpen = HelperMethods.ConvertBitToBoolean(dd_autoOpen_create.SelectedValue);
 
                         string popoutloc = tb_popoutLoc_create.Text.Trim();
@@ -1864,12 +1657,19 @@ public partial class SiteTools_AppManager : Page {
                             _isPrivate = false;
                         }
 
+                        string categorySelectedVals = string.Empty;
+                        foreach (ListItem checkedItem in dd_category.Items) {
+                            if (checkedItem.Selected) {
+                                categorySelectedVals += checkedItem.Value + ServerSettings.StringDelimiter;
+                            }
+                        }
+
                         _apps.CreateItem(appId, tb_appname.Text, fileLocation, picname,
                                             dd_allowresize_create.SelectedValue, dd_allowmax_create.SelectedValue,
                                             tb_about_create.Text, tb_description_create.Text,
-                                            dd_enablebg_create.SelectedValue, dd_category.SelectedValue,
+                                            dd_enablebg_create.SelectedValue, categorySelectedVals,
                                             tb_minheight_create.Text.Replace("px", ""), tb_minwidth_create.Text.Replace("px", ""), allowparams,
-                                            allowpopout, popoutloc, oIds, "", displayNav, allowStats, autoOpen, dd_defaultworkspace_create.SelectedValue, _isPrivate);
+                                            allowpopout, popoutloc, oIds, "", autoOpen, dd_defaultworkspace_create.SelectedValue, _isPrivate);
 
                         bool maxonload = HelperMethods.ConvertBitToBoolean(dd_maxonload_create.SelectedValue);
                         _apps.UpdateAutoFullScreen(appId, maxonload);
@@ -1997,10 +1797,8 @@ public partial class SiteTools_AppManager : Page {
                                 html.AppendLine("</body>");
                                 html.AppendLine("</html>");
 
-                                bool allowStats = HelperMethods.ConvertBitToBoolean(dd_allowStats_create.SelectedValue);
                                 bool allowparams = HelperMethods.ConvertBitToBoolean(dd_allow_params.SelectedValue);
                                 bool allowpopout = HelperMethods.ConvertBitToBoolean(dd_allowpopout_create.SelectedValue);
-                                bool displayNav = HelperMethods.ConvertBitToBoolean(dd_displayNav_create.SelectedValue);
                                 string popoutloc = tb_popoutLoc_create.Text.Trim();
                                 bool autoOpen = HelperMethods.ConvertBitToBoolean(dd_autoOpen_create.SelectedValue);
 
@@ -2016,14 +1814,21 @@ public partial class SiteTools_AppManager : Page {
                                     _isPrivate = false;
                                 }
 
+                                string categorySelectedVals = string.Empty;
+                                foreach (ListItem checkedItem in dd_category.Items) {
+                                    if (checkedItem.Selected) {
+                                        categorySelectedVals += checkedItem.Value + ServerSettings.StringDelimiter;
+                                    }
+                                }
+
                                 File.WriteAllText(filePath + ".html", html.ToString());
                                 _apps.CreateItem(appId, tb_appname.Text,
                                                     newAppID + ".html", picname,
                                                     dd_allowresize_create.SelectedValue, dd_allowmax_create.SelectedValue,
                                                     tb_about_create.Text, tb_description_create.Text,
-                                                    dd_enablebg_create.SelectedValue, dd_category.SelectedValue,
+                                                    dd_enablebg_create.SelectedValue, categorySelectedVals,
                                                     tb_minheight_create.Text.Replace("px", ""), tb_minwidth_create.Text.Replace("px", ""), allowparams,
-                                                    allowpopout, popoutloc, oIds, "", displayNav, allowStats, autoOpen, dd_defaultworkspace_create.SelectedValue, _isPrivate);
+                                                    allowpopout, popoutloc, oIds, "", autoOpen, dd_defaultworkspace_create.SelectedValue, _isPrivate);
 
                                 bool maxonload = HelperMethods.ConvertBitToBoolean(dd_maxonload_create.SelectedValue);
                                 _apps.UpdateAutoFullScreen(appId, maxonload);
@@ -2059,10 +1864,8 @@ public partial class SiteTools_AppManager : Page {
     }
 
     private void UploadAppParameters(string filename, string fi, string picname) {
-        bool allowStats = HelperMethods.ConvertBitToBoolean(dd_allowStats_create.SelectedValue);
         bool allowparams = HelperMethods.ConvertBitToBoolean(dd_allow_params.SelectedValue);
         bool allowpopout = HelperMethods.ConvertBitToBoolean(dd_allowpopout_create.SelectedValue);
-        bool displayNav = HelperMethods.ConvertBitToBoolean(dd_displayNav_create.SelectedValue);
         string popoutloc = tb_popoutLoc_create.Text.Trim();
         bool autoOpen = HelperMethods.ConvertBitToBoolean(dd_autoOpen_create.SelectedValue);
 
@@ -2078,13 +1881,20 @@ public partial class SiteTools_AppManager : Page {
             _isPrivate = false;
         }
 
+        string categorySelectedVals = string.Empty;
+        foreach (ListItem checkedItem in dd_category.Items) {
+            if (checkedItem.Selected) {
+                categorySelectedVals += checkedItem.Value + ServerSettings.StringDelimiter;
+            }
+        }
+
         string appId = "app-" + fi;
         _apps.CreateItem(appId, tb_appname.Text, filename, picname,
                             dd_allowresize_create.SelectedValue, dd_allowmax_create.SelectedValue,
                             tb_about_create.Text, tb_description_create.Text,
-                            dd_enablebg_create.SelectedValue, dd_category.SelectedValue,
+                            dd_enablebg_create.SelectedValue, categorySelectedVals,
                             tb_minheight_create.Text, tb_minwidth_create.Text, allowparams,
-                            allowpopout, popoutloc, oIds, "", displayNav, allowStats, autoOpen, dd_defaultworkspace_create.SelectedValue, _isPrivate);
+                            allowpopout, popoutloc, oIds, "", autoOpen, dd_defaultworkspace_create.SelectedValue, _isPrivate);
         bool maxonload = HelperMethods.ConvertBitToBoolean(dd_maxonload_create.SelectedValue);
         _apps.UpdateAutoFullScreen(appId, maxonload);
 

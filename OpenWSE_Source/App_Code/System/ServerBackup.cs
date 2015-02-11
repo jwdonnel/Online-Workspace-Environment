@@ -202,9 +202,9 @@ public class ServerBackup {
                         if (!categoryFound)
                             category.addItem("Custom Tables", categoryId);
 
-                        string fileName = ctwc.CreateApp(true, table.Replace("CT_", "").Replace("_", " "), categoryId, "", "database.png", true, false);
+                        string fileName = ctwc.CreateApp(true, table.Replace("CT_", "").Replace("_", " "), categoryId, "", "database.png", true, false, string.Empty);
                         CustomTableViewer ctv = new CustomTableViewer(username);
-                        ctv.AddItem(table.Replace("CT_", ""), username, table, "app-" + fileName, DateTime.Now.ToString(), true);
+                        ctv.AddItem(table.Replace("CT_", ""), username, table, "app-" + fileName, DateTime.Now.ToString(), true, true, string.Empty, string.Empty, string.Empty);
                     }
                     #endregion
                 }

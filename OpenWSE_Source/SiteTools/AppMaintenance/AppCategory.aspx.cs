@@ -132,9 +132,13 @@ public partial class SiteTools_AppCategory : Page {
         AppCategory app_category = new AppCategory(false);
 
         foreach (Apps_Coll dr in appColl) {
-            string categoryname = app_category.GetCategoryName(dr.Category);
-            if (categoryname == "Uncategorized") {
-                count++;
+            string[] categoryList = dr.Category.Split(ServerSettings.StringDelimiter_Array, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string cn in categoryList) {
+                string categoryname = app_category.GetCategoryName(cn);
+                if (categoryname == "Uncategorized") {
+                    count++;
+                }
             }
         }
         return count;
@@ -178,11 +182,8 @@ public partial class SiteTools_AppCategory : Page {
                 if ((string.IsNullOrEmpty(icon)) || (_ss.HideAllAppIcons))
                     image = string.Empty;
 
-                appScript.Append("<div class='app-icon-admin inline-block' style='padding: 0 !important;'>" +
-                                    image);
-                appScript.Append(
-                    "<span class='app-span-modify' style='text-align: left; padding: 11px 0 0 0 !important; line-height: 4px !important; font-size: 12px; width: 182px;'>" +
-                    name + "</span></div>");
+                appScript.Append("<div class='app-icon-admin inline-block' style='padding: 0 !important;'>" + image);
+                appScript.Append("<span class='app-span-modify' style='text-align: left; padding: 11px 0 0 0 !important; line-height: 4px !important; font-size: 12px; width: 182px;'>" + name + "</span></div>");
             }
         }
 
@@ -201,39 +202,44 @@ public partial class SiteTools_AppCategory : Page {
         apps.GetAllApps();
         List<Apps_Coll> coll = apps.AppList;
         foreach (Apps_Coll dr in apps.AppList) {
-            string categoryname = app_category.GetCategoryName(dr.Category);
-            if (categoryname == "Uncategorized") {
-                if (AssociateWithGroups) {
-                    if (!ServerSettings.CheckAppGroupAssociation(dr, _member)) {
+
+            string[] categoryList = dr.Category.Split(ServerSettings.StringDelimiter_Array, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string cn in categoryList) {
+                string categoryname = app_category.GetCategoryName(cn);
+                if (categoryname == "Uncategorized") {
+                    if (AssociateWithGroups) {
+                        if (!ServerSettings.CheckAppGroupAssociation(dr, _member)) {
+                            continue;
+                        }
+                    }
+
+                    if ((_username.ToLower() != dr.CreatedBy.ToLower()) && (dr.IsPrivate) && (_username.ToLower() != ServerSettings.AdminUserName.ToLower())) {
                         continue;
                     }
-                }
 
-                if ((_username.ToLower() != dr.CreatedBy.ToLower()) && (dr.IsPrivate) && (_username.ToLower() != ServerSettings.AdminUserName.ToLower())) {
-                    continue;
-                }
-
-                bool cancontinue = false;
-                if (!Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
-                    if (dr.CreatedBy.ToLower() == _username.ToLower())
+                    bool cancontinue = false;
+                    if (!Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
+                        if (dr.CreatedBy.ToLower() == _username.ToLower())
+                            cancontinue = true;
+                    }
+                    else
                         cancontinue = true;
-                }
-                else
-                    cancontinue = true;
 
-                if (!cancontinue) continue;
-                if (apps.IconExists(dr.AppId)) {
-                    string name = dr.AppName;
-                    string icon = dr.Icon;
-                    string image = "<img alt='icon' src='../../Standard_Images/App_Icons/" + icon + "' style='height: 25px; padding-right: 7px;' />";
-                    if ((string.IsNullOrEmpty(icon)) || (_ss.HideAllAppIcons))
-                        image = string.Empty;
+                    if (!cancontinue) continue;
+                    if (apps.IconExists(dr.AppId)) {
+                        string name = dr.AppName;
+                        string icon = dr.Icon;
+                        string image = "<img alt='icon' src='../../Standard_Images/App_Icons/" + icon + "' style='height: 25px; padding-right: 7px;' />";
+                        if ((string.IsNullOrEmpty(icon)) || (_ss.HideAllAppIcons))
+                            image = string.Empty;
 
-                    appScript.Append("<div class='app-icon-admin inline-block' style='padding: 0 !important;'>" +
-                                        image);
-                    appScript.Append(
-                        "<span class='app-span-modify' style='text-align: left; padding: 11px 0 0 0 !important; line-height: 4px !important; font-size: 12px; width: 182px;'>" +
-                        name + "</span></div>");
+                        appScript.Append("<div class='app-icon-admin inline-block' style='padding: 0 !important;'>" +
+                                            image);
+                        appScript.Append(
+                            "<span class='app-span-modify' style='text-align: left; padding: 11px 0 0 0 !important; line-height: 4px !important; font-size: 12px; width: 182px;'>" +
+                            name + "</span></div>");
+                    }
                 }
             }
         }
@@ -429,18 +435,34 @@ public partial class SiteTools_AppCategory : Page {
         var apps = new App();
         string id = hf_currPackage.Value;
         string appId = hf_addapp.Value;
-        if ((!string.IsNullOrEmpty(id)) && (!string.IsNullOrEmpty(appId)))
-            apps.UpdateCategory(appId, id);
+        if ((!string.IsNullOrEmpty(id)) && (!string.IsNullOrEmpty(appId))) {
+            List<string> categories = apps.GetCategoriesForApp(appId);
+            if (!categories.Contains(id)) {
+                string categoryStr = string.Join(ServerSettings.StringDelimiter, categories.ToArray());
+                if (!string.IsNullOrEmpty(categoryStr) && categoryStr[categoryStr.Length - 1] != ';') {
+                    categoryStr += ";";
+                }
 
+                categoryStr += id;
+                apps.UpdateCategory(appId, categoryStr);
+            }
+        }
         hf_addapp.Value = string.Empty;
         hf_currPackage.Value = string.Empty;
     }
 
     protected void hf_removeapp_ValueChanged(object sender, EventArgs e) {
         var apps = new App();
+        string id = hf_currPackage.Value;
         string appId = hf_removeapp.Value;
-        if (!string.IsNullOrEmpty(appId))
-            apps.UpdateCategory(appId, "");
+        if ((!string.IsNullOrEmpty(id)) && (!string.IsNullOrEmpty(appId))) {
+            List<string> categories = apps.GetCategoriesForApp(appId);
+            if (categories.Contains(id)) {
+                categories.Remove(id);
+            }
+            string categoryStr = string.Join(ServerSettings.StringDelimiter, categories.ToArray());
+            apps.UpdateCategory(appId, categoryStr);
+        }
 
         hf_removeapp.Value = string.Empty;
         hf_currPackage.Value = string.Empty;

@@ -17,7 +17,6 @@ using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using AjaxControlToolkit;
 using System.Net;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
@@ -36,6 +35,8 @@ public class ServerSettings {
     private static DatabaseCall dbCall = new DatabaseCall();
     private static Dictionary<string, string> SettingsTable = new Dictionary<string, string>();
     private const string dbTable = "aspnet_ServerSettings";
+
+    public const string RobotsMetaTag = "index, follow";
 
     public const string AdminUserName = "Administrator";
     public const string OverrideMobileSessionString = "OverrideMobile";
@@ -235,6 +236,21 @@ public class ServerSettings {
                 }
             }
             return false;
+        }
+    }
+
+    public void AutoUpdateDatabaseCheck() {
+        if (CheckWebConfigFile() && AutoFixDBIssues) {
+            if (dbCall.ConnectionString == null) {
+                return;
+            }
+
+            try {
+                DefaultDBTables.UpdateDefaults();
+            }
+            catch (Exception e) {
+                new AppLog(false).AddError(e);
+            }
         }
     }
 
@@ -924,6 +940,18 @@ public class ServerSettings {
         }
     }
 
+    public bool RecordActivityToLogFile {
+        get {
+            CheckAndBuildServerSettingsTable();
+            try {
+                return HelperMethods.ConvertBitToBoolean(SettingsTable["RecordActivityToLogFile"]);
+            }
+            catch { }
+
+            return false;
+        }
+    }
+
     public bool SiteOffLine {
         get {
             CheckAndBuildServerSettingsTable();
@@ -1250,6 +1278,39 @@ public class ServerSettings {
         }
     }
 
+    public string MetaTagDescription {
+        get {
+            CheckAndBuildServerSettingsTable();
+            if (SettingsTable.ContainsKey("MetaTagDescription")) {
+                return SettingsTable["MetaTagDescription"];
+            }
+
+            return string.Empty;
+        }
+    }
+
+    public string MetaTagKeywords {
+        get {
+            CheckAndBuildServerSettingsTable();
+            if (SettingsTable.ContainsKey("MetaTagKeywords")) {
+                return SettingsTable["MetaTagKeywords"];
+            }
+
+            return string.Empty;
+        }
+    }
+
+    public bool AutoFixDBIssues {
+        get {
+            CheckAndBuildServerSettingsTable();
+            if (SettingsTable.ContainsKey("AutoFixDBIssues")) {
+                return HelperMethods.ConvertBitToBoolean(SettingsTable["AutoFixDBIssues"]);
+            }
+
+            return false;
+        }
+    }
+
     #endregion
 
 
@@ -1499,6 +1560,15 @@ public class ServerSettings {
             temp = 1;
         }
         dbCall.CallUpdate(dbTable, new List<DatabaseQuery>() { new DatabaseQuery("RecordActivity", temp.ToString()) }, null);
+        UpdateServerSettingsTable();
+    }
+
+    public static void update_RecordActivityToLogFile(bool saveFile) {
+        int temp = 0;
+        if (saveFile) {
+            temp = 1;
+        }
+        dbCall.CallUpdate(dbTable, new List<DatabaseQuery>() { new DatabaseQuery("RecordActivityToLogFile", temp.ToString()) }, null);
         UpdateServerSettingsTable();
     }
 
@@ -1759,6 +1829,24 @@ public class ServerSettings {
     }
     public static void update_FacebookAppSecret(string appSecret) {
         dbCall.CallUpdate(dbTable, new List<DatabaseQuery>() { new DatabaseQuery("FacebookAppSecret", appSecret) }, null);
+        UpdateServerSettingsTable();
+    }
+
+    public static void update_MetaTagDescription(string description) {
+        dbCall.CallUpdate(dbTable, new List<DatabaseQuery>() { new DatabaseQuery("MetaTagDescription", description) }, null);
+        UpdateServerSettingsTable();
+    }
+    public static void update_MetaTagKeywords(string keywords) {
+        dbCall.CallUpdate(dbTable, new List<DatabaseQuery>() { new DatabaseQuery("MetaTagKeywords", keywords) }, null);
+        UpdateServerSettingsTable();
+    }
+
+    public static void update_AutoFixDBIssues(bool autoFix) {
+        int temp = 0;
+        if (autoFix) {
+            temp = 1;
+        }
+        dbCall.CallUpdate(dbTable, new List<DatabaseQuery>() { new DatabaseQuery("AutoFixDBIssues", temp.ToString()) }, null);
         UpdateServerSettingsTable();
     }
 

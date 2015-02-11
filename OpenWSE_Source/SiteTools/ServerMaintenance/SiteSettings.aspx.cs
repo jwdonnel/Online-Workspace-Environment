@@ -138,6 +138,21 @@ public partial class SiteTools_SiteSettings : Page {
                             pnl_sslValidation.Visible = false;
                         }
 
+
+                        tbCustomErrorPageRedirect.Text = GetCustomErrorRedirectSettings();
+                        if (GetCustomErrorSettings()) {
+                            rb_CustomErrorPage_on.Checked = true;
+                            rb_CustomErrorPage_off.Checked = false;
+                            pnl_ErrorPageRedirect.Enabled = true;
+                            pnl_ErrorPageRedirect.Visible = true;
+                        }
+                        else {
+                            rb_CustomErrorPage_on.Checked = false;
+                            rb_CustomErrorPage_off.Checked = true;
+                            pnl_ErrorPageRedirect.Enabled = false;
+                            pnl_ErrorPageRedirect.Visible = false;
+                        }
+
                         if (_ss.AssociateWithGroups) {
                             rb_AssociateWithGroups_on.Checked = true;
                             rb_AssociateWithGroups_off.Checked = false;
@@ -335,6 +350,38 @@ public partial class SiteTools_SiteSettings : Page {
         }
     }
 
+    private bool GetCustomErrorSettings() {
+        string path = HttpContext.Current.Server.MapPath("~/Web.Config");
+        XmlDocument doc = new XmlDocument();
+        doc.Load(path);
+        XmlNode node = doc.DocumentElement.SelectSingleNode("system.web/customErrors");
+        if (node != null) {
+            if (node.Attributes["mode"] != null && !string.IsNullOrEmpty(node.Attributes["mode"].Value)) {
+                if (node.Attributes["mode"].Value == "Off") {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private string GetCustomErrorRedirectSettings() {
+        string path = HttpContext.Current.Server.MapPath("~/Web.Config");
+        XmlDocument doc = new XmlDocument();
+        doc.Load(path);
+        XmlNode node = doc.DocumentElement.SelectSingleNode("system.web/customErrors");
+        if (node != null) {
+            if (node.Attributes["defaultRedirect"] != null) {
+                return node.Attributes["defaultRedirect"].Value;
+            }
+        }
+
+        return string.Empty;
+    }
+
     private void CustomizationOptionsEnabledDisabled(bool x) {
         pnl_ImageCustomizations.Enabled = x;
         pnl_ImageCustomizations.Visible = x;
@@ -369,7 +416,7 @@ public partial class SiteTools_SiteSettings : Page {
                 GetLogoOpacity();
             }
 
-            if (!ctlId.Contains("hf_keywordsMetaTag")) {
+            if (!ctlId.Contains("hf_keywordsMetaTag") && !ctlId.Contains("btn_descriptionMetaTag")) {
                 if (Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
                     pnl_meteTagCustomizations.Enabled = true;
                     pnl_meteTagCustomizations.Visible = true;
@@ -519,13 +566,11 @@ public partial class SiteTools_SiteSettings : Page {
     }
 
     private void LoadMetaTags() {
-        tb_descriptionMetaTage.Text = string.Empty;
+        tb_descriptionMetaTag.Text = string.Empty;
         pnl_keywordsMetaTag.Controls.Clear();
 
-        string siteMasterLoc = ServerSettings.GetServerMapLocation + "Site.master";
-
-        tb_descriptionMetaTage.Text = HelperMethods.GetMetaTagContent(siteMasterLoc, "description");
-        if (string.IsNullOrEmpty(tb_descriptionMetaTage.Text)) {
+        tb_descriptionMetaTag.Text = _ss.MetaTagDescription;
+        if (string.IsNullOrEmpty(tb_descriptionMetaTag.Text)) {
             lbtn_clearDescriptionMeta.Enabled = false;
             lbtn_clearDescriptionMeta.Visible = false;
         }
@@ -534,7 +579,7 @@ public partial class SiteTools_SiteSettings : Page {
             lbtn_clearDescriptionMeta.Visible = true;
         }
 
-        string[] splitKeywords = HelperMethods.GetMetaTagContent(siteMasterLoc, "keywords").Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+        string[] splitKeywords = _ss.MetaTagKeywords.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
         if (splitKeywords.Length == 0) {
             lbtn_clearAllKeywordsMeta.Enabled = false;
             lbtn_clearAllKeywordsMeta.Visible = false;
@@ -701,6 +746,8 @@ public partial class SiteTools_SiteSettings : Page {
         if (_ss.RecordActivity) {
             cb_netactOn.Checked = true;
             cb_netactOff.Checked = false;
+            pnl_RecordLogFile.Enabled = true;
+            pnl_RecordLogFile.Visible = true;
             tableEmailAct.Style["display"] = "block";
             if (_ss.EmailActivity) {
                 cb_emailon.Checked = true;
@@ -714,7 +761,18 @@ public partial class SiteTools_SiteSettings : Page {
         else {
             cb_netactOn.Checked = false;
             cb_netactOff.Checked = true;
+            pnl_RecordLogFile.Enabled = false;
+            pnl_RecordLogFile.Visible = false;
             tableEmailAct.Style["display"] = "none";
+        }
+
+        if (_ss.RecordActivityToLogFile) {
+            rb_recordLogFile_on.Checked = true;
+            rb_recordLogFile_off.Checked = false;
+        }
+        else {
+            rb_recordLogFile_on.Checked = false;
+            rb_recordLogFile_off.Checked = true;
         }
 
         if (_ss.RecordLoginActivity) {
@@ -799,6 +857,86 @@ public partial class SiteTools_SiteSettings : Page {
         lbl_dateUpdated_sup.Text = date;
 
     }
+
+    protected void rb_CustomErrorPage_on_CheckedChanged(object sender, EventArgs e) {
+        UpdateCustomErrorPageConfigFile(true);
+        rb_CustomErrorPage_on.Checked = true;
+        rb_CustomErrorPage_off.Checked = false;
+        pnl_ErrorPageRedirect.Enabled = true;
+        pnl_ErrorPageRedirect.Visible = true;
+    }
+    protected void rb_CustomErrorPage_off_CheckedChanged(object sender, EventArgs e) {
+        UpdateCustomErrorPageConfigFile(false);
+        rb_CustomErrorPage_on.Checked = false;
+        rb_CustomErrorPage_off.Checked = true;
+        pnl_ErrorPageRedirect.Enabled = false;
+        pnl_ErrorPageRedirect.Visible = false;
+    }
+    private void UpdateCustomErrorPageConfigFile(bool isOn) {
+        if (_username.ToLower() == ServerSettings.AdminUserName.ToLower()) {
+            try {
+                string path = HttpContext.Current.Server.MapPath("~/Web.Config");
+                XmlDocument doc = new XmlDocument();
+                doc.Load(path);
+                XmlNode node = doc.DocumentElement.SelectSingleNode("system.web/customErrors");
+                if (node != null) {
+                    if (node.Attributes["mode"] == null) {
+                        doc.CreateAttribute("mode");
+                        node.Attributes.Append(doc.CreateAttribute("mode"));
+                    }
+
+                    if (isOn) {
+                        node.Attributes["mode"].Value = "On";
+                    }
+                    else {
+                        node.Attributes["mode"].Value = "Off";
+                    }
+
+                    doc.Save(path);
+                }
+            }
+            catch (Exception e) {
+                new AppLog(false).AddError(e);
+            }
+        }
+    }
+
+    private void UpdateCustomErrorPageRedirectConfigFile(string redirectLoc) {
+        if (_username.ToLower() == ServerSettings.AdminUserName.ToLower()) {
+            try {
+                string path = HttpContext.Current.Server.MapPath("~/Web.Config");
+                XmlDocument doc = new XmlDocument();
+                doc.Load(path);
+                XmlNode node = doc.DocumentElement.SelectSingleNode("system.web/customErrors");
+                if (node != null) {
+                    if (node.Attributes["defaultRedirect"] == null) {
+                        doc.CreateAttribute("defaultRedirect");
+                        node.Attributes.Append(doc.CreateAttribute("defaultRedirect"));
+                    }
+
+                    if (string.IsNullOrEmpty(redirectLoc)) {
+                        redirectLoc = "ErrorPages\\Error.html";
+                    }
+
+                    node.Attributes["defaultRedirect"].Value = redirectLoc;
+                    doc.Save(path);
+                }
+            }
+            catch (Exception e) {
+                new AppLog(false).AddError(e);
+            }
+        }
+    }
+
+    protected void lbtn_UserDefaultRedirectPage_Click(object sender, EventArgs e) {
+        tbCustomErrorPageRedirect.Text = "ErrorPages\\Error.html";
+        UpdateCustomErrorPageRedirectConfigFile(tbCustomErrorPageRedirect.Text);
+    }
+
+    protected void btnCustomErrorPageRedirect_Click(object sender, EventArgs e) {
+        UpdateCustomErrorPageRedirectConfigFile(tbCustomErrorPageRedirect.Text);
+    }
+
 
     protected void btn_updateTotalWorkspaces_Click(object sender, EventArgs e) {
         if (_username.ToLower() == ServerSettings.AdminUserName.ToLower()) {
@@ -1394,6 +1532,10 @@ public partial class SiteTools_SiteSettings : Page {
         cb_netactOff.Checked = false;
         cb_netactOn.Checked = true;
         ServerSettings.update_RecordActivity(true);
+
+        pnl_RecordLogFile.Enabled = true;
+        pnl_RecordLogFile.Visible = true;
+
         if (_ss.EmailActivity) {
             cb_emailon.Checked = true;
             cb_emailoff.Checked = false;
@@ -1412,9 +1554,27 @@ public partial class SiteTools_SiteSettings : Page {
     protected void cb_netactOff_CheckedChanged(object sender, EventArgs e) {
         cb_netactOff.Checked = true;
         cb_netactOn.Checked = false;
+
+        pnl_RecordLogFile.Enabled = false;
+        pnl_RecordLogFile.Visible = false;
+
         tableEmailAct.Style["display"] = "none";
         _notifications.DeleteNotification("236a9dc9-c92a-437f-8825-27809af36a3f");
         ServerSettings.update_RecordActivity(false);
+
+    }
+
+
+    protected void rb_recordLogFile_on_CheckedChanged(object sender, EventArgs e) {
+        rb_recordLogFile_off.Checked = false;
+        rb_recordLogFile_on.Checked = true;
+        ServerSettings.update_RecordActivityToLogFile(true);
+
+    }
+    protected void rb_recordLogFile_off_CheckedChanged(object sender, EventArgs e) {
+        rb_recordLogFile_off.Checked = true;
+        rb_recordLogFile_on.Checked = false;
+        ServerSettings.update_RecordActivityToLogFile(false);
 
     }
 
@@ -1649,14 +1809,17 @@ public partial class SiteTools_SiteSettings : Page {
 
     }
 
-    protected void btn_descriptionMetaTage_Click(object sender, EventArgs e) {
-        string siteMasterLoc = ServerSettings.GetServerMapLocation + "Site.master";
-        HelperMethods.UpdateMetaTags(siteMasterLoc, "description", tb_descriptionMetaTage.Text.Trim());
+    protected void btn_descriptionMetaTag_Click(object sender, EventArgs e) {
+        string description = tb_descriptionMetaTag.Text.Trim();
+        if (description.Length > 3999) {
+            description = description.Substring(0, 3999);
+        }
+
+        ServerSettings.update_MetaTagDescription(description);
         LoadMetaTags();
     }
     protected void lbtn_clearDescriptionMeta_Click(object sender, EventArgs e) {
-        string siteMasterLoc = ServerSettings.GetServerMapLocation + "Site.master";
-        HelperMethods.UpdateMetaTags(siteMasterLoc, "description", string.Empty);
+        ServerSettings.update_MetaTagDescription(string.Empty);
         LoadMetaTags();
     }
     protected void hf_keywordsMetaTag_Changed(object sender, EventArgs e) {
@@ -1669,15 +1832,17 @@ public partial class SiteTools_SiteSettings : Page {
                 keywords = keywords.Remove(keywords.Length - 1);
             }
 
-            string siteMasterLoc = ServerSettings.GetServerMapLocation + "Site.master";
-            HelperMethods.UpdateMetaTags(siteMasterLoc, "keywords", keywords);
+            if (keywords.Length > 3999) {
+                keywords = keywords.Substring(0, 3999);
+            }
+
+            ServerSettings.update_MetaTagKeywords(keywords);
         }
         LoadMetaTags();
         hf_keywordsMetaTag.Value = string.Empty;
     }
     protected void lbtn_clearAllKeywordsMeta_Click(object sender, EventArgs e) {
-        string siteMasterLoc = ServerSettings.GetServerMapLocation + "Site.master";
-        HelperMethods.UpdateMetaTags(siteMasterLoc, "keywords", string.Empty);
+        ServerSettings.update_MetaTagKeywords(string.Empty);
         LoadMetaTags();
     }
 

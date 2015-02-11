@@ -12,6 +12,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Web.UI.WebControls;
 using System.Data.SqlServerCe;
+using OpenWSE_Tools.Notifications;
+using System.Web.Security;
+using System.Net.Mail;
 
 [WebService(Namespace = "http://tempuri.org/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
@@ -45,21 +48,34 @@ public class CustomTableService : System.Web.Services.WebService {
             int count = 50;
             int.TryParse(recordstopull, out count);
 
-            string tableName = ctv.GetTableIDByAppID("app-" + id);
+            CustomTable_Coll tableInfo = ctv.GetTableInfoByAppId("app-" + id);
             DBViewer dbViewer = new DBViewer(false);
-            dbViewer.GetCustomDataSort(tableName, sortCol, sortDir);
+            dbViewer.GetCustomDataSort(tableInfo.TableID, sortCol, sortDir);
             DataTable dt = dbViewer.dt;
+            List<object> list1 = new List<object>();
             if (dt != null) {
-                BuildRowHeader(dt.Columns, id, ref list, sortCol, sortDir);
-                BuildRowItem(dt, id, ref list, count, recordstopull, search, date);
+                BuildRowHeader(dt.Columns, id, ref list1, sortCol, sortDir);
+                BuildRowItem(dt, id, ref list1, count, recordstopull, search, date);
             }
+            list.Add(list1);
+
+            string userAllowed = tableInfo.UsersAllowedToEdit.Find(x => x.ToLower() == _userId.Name.ToLower());
+            if (!string.IsNullOrEmpty(userAllowed)) {
+                list.Add("true");
+            }
+            else {
+                list.Add("false");
+            }
+
+            DataChartsOpened dco = new DataChartsOpened(_userId.Name);
+            list.Add(dco.IsChartOpenedForUser("app-" + id).ToString().ToLower());
         }
         return list.ToArray();
     }
     private void BuildRowHeader(DataColumnCollection columns, string id, ref List<object> list1, string sortCol, string sortDir) {
         StringBuilder str = new StringBuilder();
         foreach (DataColumn dc in columns) {
-            if ((dc.ColumnName.ToLower() != "columnid") && (dc.ColumnName.ToLower() != "timestamp")) {
+            if ((dc.ColumnName.ToLower() != "entryid") && (dc.ColumnName.ToLower() != "timestamp")) {
                 string active = string.Empty;
                 if (sortCol.ToLower() == dc.ColumnName.ToLower()) {
                     if (sortDir.ToLower() == "asc")
@@ -67,7 +83,7 @@ public class CustomTableService : System.Web.Services.WebService {
                     else
                         active = " active desc";
                 }
-                str.Append("<td class=\"td-sort-click" + active + "\" onclick=\"OnSortClick_CustomTables(this,'" + dc.ColumnName + "','" + id + "');\" title=\"Sort by " + dc.ColumnName.Replace("_", " ") + "\">" + dc.ColumnName.Replace("_", " ") + "</td>");
+                str.Append("<td class=\"td-sort-click" + active + "\" onclick=\"customTables.OnSortClick(this,'" + dc.ColumnName + "','" + id + "');\" title=\"Sort by " + dc.ColumnName.Replace("_", " ") + "\">" + dc.ColumnName.Replace("_", " ") + "</td>");
             }
         }
 
@@ -78,18 +94,17 @@ public class CustomTableService : System.Web.Services.WebService {
 
         // Add Entry Row
         foreach (DataColumn dc in dt.Columns) {
-            if ((dc.ColumnName.ToLower() != "columnid") && (dc.ColumnName.ToLower() != "timestamp")) {
+            if ((dc.ColumnName.ToLower() != "entryid") && (dc.ColumnName.ToLower() != "timestamp")) {
                 string nullable = string.Empty;
                 if (!dc.AllowDBNull)
                     nullable = "<span class=\"not-nullable\" style=\"color: Red; padding: 0 0 0 10px!important;\">*</span>";
 
                 int maxLength = dc.MaxLength;
-                if (maxLength > 5000)
+                if (maxLength > 5000 || maxLength <= 0)
                     maxLength = 5000;
 
                 str.Append("<td class=\"border-right border-bottom\" align=\"center\"><span class=\"td-columnName-add\" style=\"display: none!important;\">" + dc.ColumnName + "</span>");
-                str.Append("<span class=\"td-columnType-add\" style=\"display: none!important;\">" + dc.DataType.Name.ToLower() + "</span>");
-                str.Append("<input type='text' class='textEntry-noWidth' maxlength='" + maxLength + "' onkeyup=\"AddRecordKeyPress_CustomTables(event, '" + id + "');\" style='width: 85%;' />" + nullable + "</td>");
+                str.Append("<input type='text' class='textEntry-noWidth' maxlength='" + maxLength + "' onkeyup=\"customTables.AddRecordKeyPress(event, '" + id + "');\" data-type='" +  dc.DataType.Name.ToLower() + "' style='width: 85%;' />" + nullable + "</td>");
             }
         }
         list1.Add(str.ToString());
@@ -106,7 +121,7 @@ public class CustomTableService : System.Web.Services.WebService {
             List<object> list4 = new List<object>();
             bool canAdd = false;
             foreach (DataColumn dc in dt.Columns) {
-                if ((dc.ColumnName.ToLower() != "columnid") && (dc.ColumnName.ToLower() != "timestamp")) {
+                if ((dc.ColumnName.ToLower() != "entryid") && (dc.ColumnName.ToLower() != "timestamp")) {
                     DateTime dateTime = new DateTime();
                     DateTime.TryParse(dr["TimeStamp"].ToString(), out dateTime);
                     string currDateSel = (dateTime.Month + "_" + dateTime.Year).ToString();
@@ -114,8 +129,10 @@ public class CustomTableService : System.Web.Services.WebService {
                     if (((string.IsNullOrEmpty(search)) || (search.ToLower() == "search this table") || (dr[dc.ColumnName].ToString().ToLower().Contains(search.ToLower())))
                         && ((string.IsNullOrEmpty(date)) || (currDateSel == date)))
                         canAdd = true;
-
-                    list4.Add(dr[dc.ColumnName].ToString());
+                    List<object> list5 = new List<object>();
+                    list5.Add(dr[dc.ColumnName].ToString());
+                    list5.Add(dc.DataType.Name.ToLower());
+                    list4.Add(list5);
                 }
             }
 
@@ -123,7 +140,7 @@ public class CustomTableService : System.Web.Services.WebService {
                 // list3[0] = column id
                 // list3[1] = array row data
                 // list3[2] = edit mode
-                list3.Add(dr["ColumnID"].ToString());
+                list3.Add(dr["EntryID"].ToString());
                 list3.Add(list4);
                 list3.Add(false);
 
@@ -132,6 +149,19 @@ public class CustomTableService : System.Web.Services.WebService {
             }
         }
         list1.Add(list2);
+    }
+
+    [WebMethod]
+    public void SetChartView(string id, string view) {
+        if (_userId.IsAuthenticated) {
+            DataChartsOpened dco = new DataChartsOpened(_userId.Name);
+            if (view == "true") {
+                dco.AddItem("app-" + id);
+            }
+            else {
+                dco.DeleteItem("app-" + id);
+            }
+        }
     }
 
 
@@ -176,7 +206,9 @@ public class CustomTableService : System.Web.Services.WebService {
             int count = 50;
             int.TryParse(recordstopull, out count);
 
-            string tableName = ctv.GetTableIDByAppID("app-" + id);
+            CustomTable_Coll tableInfo = ctv.GetTableInfoByAppId("app-" + id);
+            string tableName = tableInfo.TableID;
+
             DBViewer dbViewer = new DBViewer(false);
             dbViewer.GetCustomDataSort(tableName, sortCol, sortDir);
             DataTable dt = dbViewer.dt;
@@ -192,7 +224,7 @@ public class CustomTableService : System.Web.Services.WebService {
 
         // Add Entry Row
         foreach (DataColumn dc in dt.Columns) {
-            if ((dc.ColumnName.ToLower() != "columnid") && (dc.ColumnName.ToLower() != "timestamp"))
+            if ((dc.ColumnName.ToLower() != "entryid") && (dc.ColumnName.ToLower() != "timestamp"))
                 str.Append("<td align=\"center\" class=\"border-right border-bottom\"></td>");
         }
         list1.Add(str.ToString());
@@ -209,9 +241,9 @@ public class CustomTableService : System.Web.Services.WebService {
             List<object> list4 = new List<object>();
 
 
-            if (dr["ColumnID"].ToString() == cid) {
+            if (dr["EntryID"].ToString() == cid) {
                 foreach (DataColumn dc in dt.Columns) {
-                    if ((dc.ColumnName.ToLower() != "columnid") && (dc.ColumnName.ToLower() != "timestamp")) {
+                    if ((dc.ColumnName.ToLower() != "entryid") && (dc.ColumnName.ToLower() != "timestamp")) {
                         string nullable = string.Empty;
                         if (!dc.AllowDBNull)
                             nullable = "<span class=\"not-nullable\" style=\"color: Red; padding: 0 0 0 10px!important;\">*</span>";
@@ -221,9 +253,13 @@ public class CustomTableService : System.Web.Services.WebService {
                             maxLength = 5000;
 
                         string inputText = "<span class=\"td-columnName-edit\" style=\"display: none!important;\">" + dc.ColumnName + "</span>";
-                        inputText += "<span class=\"td-columnType-edit\" style=\"display: none!important;\">" + dc.DataType.Name.ToLower() + "</span>";
-                        inputText += "<input type='text' class='textEntry-noWidth' value=\"" + dr[dc.ColumnName].ToString() + "\" maxlength='" + maxLength + "' onkeyup=\"UpdateRecordKeyPress_CustomTables(event, '" + id + "', '" + cid + "');\" style='width: 85%;' />" + nullable;
-                        list4.Add(inputText);
+                        inputText += "<span class=\"td-columnValue-edit\" style=\"display: none!important;\">" + dr[dc.ColumnName].ToString() + "</span>";
+                        inputText += "<input type='text' class='textEntry-noWidth' maxlength='" + maxLength + "' onkeyup=\"customTables.UpdateRecordKeyPress(event, '" + id + "', '" + cid + "');\" data-type='" + dc.DataType.Name.ToLower() + "' style='width: 85%;' />" + nullable;
+
+                        List<object> list5 = new List<object>();
+                        list5.Add(inputText);
+                        list5.Add(dc.DataType.Name.ToLower());
+                        list4.Add(list5);
                     }
                 }
 
@@ -231,7 +267,7 @@ public class CustomTableService : System.Web.Services.WebService {
                 // list3[0] = column id
                 // list3[1] = array row data
                 // list3[2] = edit mode
-                list3.Add(dr["ColumnID"].ToString());
+                list3.Add(dr["EntryID"].ToString());
                 list3.Add(list4);
                 list3.Add(true);
 
@@ -241,7 +277,7 @@ public class CustomTableService : System.Web.Services.WebService {
             else {
                 bool canAdd = false;
                 foreach (DataColumn dc in dt.Columns) {
-                    if ((dc.ColumnName.ToLower() != "columnid") && (dc.ColumnName.ToLower() != "timestamp")) {
+                    if ((dc.ColumnName.ToLower() != "entryid") && (dc.ColumnName.ToLower() != "timestamp")) {
                         DateTime dateTime = new DateTime();
                         DateTime.TryParse(dr["TimeStamp"].ToString(), out dateTime);
                         string currDateSel = (dateTime.Month + "_" + dateTime.Year).ToString();
@@ -250,7 +286,10 @@ public class CustomTableService : System.Web.Services.WebService {
                             && ((string.IsNullOrEmpty(date)) || (currDateSel == date)))
                             canAdd = true;
 
-                        list4.Add(dr[dc.ColumnName].ToString());
+                        List<object> list5 = new List<object>();
+                        list5.Add(dr[dc.ColumnName].ToString());
+                        list5.Add(dc.DataType.Name.ToLower());
+                        list4.Add(list5);
                     }
                 }
 
@@ -258,7 +297,7 @@ public class CustomTableService : System.Web.Services.WebService {
                     // list3[0] = column id
                     // list3[1] = array row data
                     // list3[2] = edit mode
-                    list3.Add(dr["ColumnID"].ToString());
+                    list3.Add(dr["EntryID"].ToString());
                     list3.Add(list4);
                     list3.Add(false);
 
@@ -276,10 +315,13 @@ public class CustomTableService : System.Web.Services.WebService {
         List<object> returnVals = new List<object>();
 
         if (_userId.IsAuthenticated) {
-            string tableName = ctv.GetTableIDByAppID("app-" + id);
+            CustomTable_Coll tableInfo = ctv.GetTableInfoByAppId("app-" + id);
+            string tableName = tableInfo.TableID;
+
             if (DeleteEntry(tableName, cid, out errorMessage)) {
                 returnVals.Add("Success");
                 returnVals.Add("");
+                AddNotification(tableInfo, string.Empty, "delete");
                 return returnVals.ToArray();
             }
             else {
@@ -297,7 +339,7 @@ public class CustomTableService : System.Web.Services.WebService {
         errorMessage = string.Empty;
         bool didDelete = true;
 
-        if (!dbCall.CallDelete(table, new List<DatabaseQuery>() { new DatabaseQuery("ColumnID", cid) })) {
+        if (!dbCall.CallDelete(table, new List<DatabaseQuery>() { new DatabaseQuery("EntryID", cid) })) {
             didDelete = false;
             errorMessage = "Error deleting entry! Please try again";
         }
@@ -311,22 +353,26 @@ public class CustomTableService : System.Web.Services.WebService {
         List<object> returnVals = new List<object>();
         object[] vals = recordVals as object[];
 
+        string changeMade = CustomTableViewer.BuildChangeText(vals);
+
         Dictionary<string, string> dic = new Dictionary<string, string>();
-        dic.Add("ColumnID", Guid.NewGuid().ToString());
+        dic.Add("EntryID", Guid.NewGuid().ToString());
         dic.Add("TimeStamp", DateTime.Now.ToString());
         foreach (object obj in vals) {
             object[] objArray = obj as object[];
             dic.Add(objArray[0].ToString().Trim(), objArray[1].ToString().Trim());
         }
 
+        CustomTable_Coll tableInfo = ctv.GetTableInfoByAppId("app-" + id);
+        string tableName = tableInfo.TableID;
 
-        string tableName = ctv.GetTableIDByAppID("app-" + id);
         DBViewer dbViewer = new DBViewer(false);
         dbViewer.GetTableData(tableName);
         List<string> newcolumns = BuildColumnList(dbViewer.dt);
         if (AddEntry(tableName, dic, newcolumns, out errorMessage)) {
             returnVals.Add("Success");
             returnVals.Add("");
+            AddNotification(tableInfo, changeMade, "add");
             return returnVals.ToArray();
         }
         else {
@@ -360,20 +406,24 @@ public class CustomTableService : System.Web.Services.WebService {
         List<object> returnVals = new List<object>();
         object[] vals = recordVals as object[];
 
+        string changeMade = CustomTableViewer.BuildChangeText(vals);
+
         Dictionary<string, string> dic = new Dictionary<string, string>();
         foreach (object obj in vals) {
             object[] objArray = obj as object[];
             dic.Add(objArray[0].ToString().Trim(), objArray[1].ToString().Trim());
         }
 
+        CustomTable_Coll tableInfo = ctv.GetTableInfoByAppId("app-" + id);
+        string tableName = tableInfo.TableID;
 
-        string tableName = ctv.GetTableIDByAppID("app-" + id);
         DBViewer dbViewer = new DBViewer(false);
         dbViewer.GetTableData(tableName);
         List<string> newcolumns = BuildColumnList(dbViewer.dt);
         if (UpdateEntry(tableName, cid, dic, newcolumns, out errorMessage)) {
             returnVals.Add("Success");
             returnVals.Add("");
+            AddNotification(tableInfo, changeMade, "update");
             return returnVals.ToArray();
         }
         else {
@@ -387,11 +437,11 @@ public class CustomTableService : System.Web.Services.WebService {
         bool didUpdate = true;
 
         List<DatabaseQuery> query = new List<DatabaseQuery>();
-        query.Add(new DatabaseQuery("ColumnID", rowId));
+        query.Add(new DatabaseQuery("EntryID", rowId));
 
         List<DatabaseQuery> updateQuery = new List<DatabaseQuery>();
         foreach (string column in columns) {
-            if ((column.ToLower() != "columnid") && (column.ToLower() != "timestamp")) {
+            if ((column.ToLower() != "entryid") && (column.ToLower() != "timestamp")) {
                 string val = "";
                 dic.TryGetValue(column, out val);
                 updateQuery.Add(new DatabaseQuery(column, val));
@@ -427,7 +477,7 @@ public class CustomTableService : System.Web.Services.WebService {
 
             foreach (DataColumn dc in dt.Columns) {
                 if (!temp.Columns.Contains(dc.ColumnName)) {
-                    if ((dc.ColumnName.ToLower() != "columnid") && (dc.ColumnName.ToLower() != "timestamp"))
+                    if ((dc.ColumnName.ToLower() != "entryid") && (dc.ColumnName.ToLower() != "timestamp"))
                         temp.Columns.Add(new DataColumn(dc.ColumnName));
                 }
             }
@@ -494,7 +544,7 @@ public class CustomTableService : System.Web.Services.WebService {
         int count = t.Columns.Count - 1;
         for (int i = 0; i < t.Columns.Count; i++) {
             DataColumn c = t.Columns[i];
-            if ((c.ColumnName.ToLower() != "columnid") && (c.ColumnName.ToLower() != "timestamp")) {
+            if ((c.ColumnName.ToLower() != "entryid") && (c.ColumnName.ToLower() != "timestamp")) {
                 columns.Append(c.ColumnName + "=@" + c.ColumnName);
                 if (i < count) {
                     columns.Append(", ");
@@ -512,5 +562,39 @@ public class CustomTableService : System.Web.Services.WebService {
         }
 
         return list;
+    }
+
+    private void AddNotification(CustomTable_Coll tableInfo, string changeMade, string type) {
+        if (tableInfo.NotifyUsers) {
+            string tableName = tableInfo.TableName;
+
+            MailMessage mailTo = new MailMessage();
+            var messagebody = new StringBuilder();
+            string userChanged = HelperMethods.MergeFMLNames(new MemberDatabase(_userId.Name));
+            string message = "<b>" + userChanged + "</b> has {0} an item {1} the table {2}";
+            if (type == "add") {
+                message = string.Format(message, "created", "for", tableName + ":<div class='clear-space-two'></div>");
+            }
+            else if (type == "delete") {
+                message = string.Format(message, "deleted", "from", tableName);
+            }
+            else {
+                message = string.Format(message, "edited", "for", tableName + ":<div class='clear-space-two'></div>");
+            }
+
+            messagebody.Append(message + changeMade + "<div class='clear-space'></div>");
+
+            MembershipUserCollection coll = Membership.GetAllUsers();
+            foreach (MembershipUser u in coll) {
+                if (u.UserName.ToLower() != ServerSettings.AdminUserName.ToLower() && u.UserName.ToLower() != _userId.Name.ToLower()) {
+                    var un = new UserNotificationMessages(u.UserName);
+                    string email = un.attemptAdd("707ecc6c-2480-4080-bad6-fb135bb5cf13", messagebody.ToString(), true);
+                    if (!string.IsNullOrEmpty(email))
+                        mailTo.To.Add(email);
+                }
+            }
+
+            UserNotificationMessages.finishAdd(mailTo, "707ecc6c-2480-4080-bad6-fb135bb5cf13", messagebody.ToString());
+        }
     }
 }

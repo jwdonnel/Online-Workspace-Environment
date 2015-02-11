@@ -383,22 +383,3 @@ public class FTPActions {
     }
 
 }
-
-[Serializable]
-public class FileContentUpload {
-    private string _fileName;
-    private byte[] _fileBytes;
-
-    public FileContentUpload(string fileName, byte[] fileBytes) {
-        _fileName = fileName;
-        _fileBytes = fileBytes;
-    }
-
-    public string FileName {
-        get { return _fileName; }
-    }
-
-    public byte[] FileBytes {
-        get { return _fileBytes; }
-    }
-}

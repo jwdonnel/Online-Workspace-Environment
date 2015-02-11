@@ -161,7 +161,8 @@ public class SideBarItems : Page {
         var categories = new List<string>();
         var apps = new App();
         apps.GetAllApps();
-        int count = 0;
+
+        List<string> appListCount = new List<string>();
 
         app_List.Append("<div class='clear-space'></div><div id='app-editor-holder' style='display:none'>");
         app_List.Append("<div id='Category-Back' style='display:none'>");
@@ -207,44 +208,53 @@ public class SideBarItems : Page {
                         string id = dr.AppId;
                         string iconname = dr.Icon;
                         string categoryid = dr.Category;
-                        string categoryname = app_category.GetCategoryName(dr.Category);
-                        if (categoryname == "Uncategorized") {
-                            categoryid = "Uncategorized";
-                        }
+                        string[] categorySplit = categoryid.Split(ServerSettings.StringDelimiter_Array, StringSplitOptions.RemoveEmptyEntries);
 
-
-                        if (string.IsNullOrEmpty(categoryid))
-                            categoryid = categoryname;
-
-                        if (!string.IsNullOrEmpty(dr.filename)) {
-                            var fi = new FileInfo(dr.filename);
-
-                            count++;
-
-                            string iconImg = "<img alt='' src='" + _sitePath + "Standard_Images/App_Icons/" + iconname + "' />";
-                            if (_ss.HideAllAppIcons)
-                                iconImg = string.Empty;
-
-                            if (appparms) {
-                                app_script.Append("<div class='app-icon rbbuttons' title=\"View " + w + "'s parameters\" onclick=\"appchange('" + dr.AppId + "')\">");
-                                app_script.Append(iconImg + "<span class='app-icon-font'>" + w + "</span></div>");
+                        foreach (string c in categorySplit) {
+                            string cId = c;
+                            string categoryname = app_category.GetCategoryName(cId);
+                            if (categoryname == "Uncategorized") {
+                                cId = "Uncategorized";
                             }
-                            else {
-                                if (!categories.Contains(categoryname)) {
-                                    app_List.Append(BuildCategory(categoryid, categoryname));
-                                    categories.Add(categoryname);
+
+
+                            if (string.IsNullOrEmpty(cId))
+                                cId = categoryname;
+
+                            if (!string.IsNullOrEmpty(dr.filename)) {
+                                var fi = new FileInfo(dr.filename);
+
+                                if (!appListCount.Contains(dr.ID)) {
+                                    appListCount.Add(dr.ID);
                                 }
 
-                                app_script.Append("<div class='" + categoryid + " app-category-div' style='display: none'>");
-                                app_script.Append("<div class='app-icon' title=\"View " + w + "'s properites\" onclick=\"appchange('" + dr.AppId + "')\">");
-                                app_script.Append(iconImg + "<span class='app-icon-font'>" + w + "</span></div>");
-                                app_script.Append("</div>");
+                                string iconImg = "<img alt='' src='" + _sitePath + "Standard_Images/App_Icons/" + iconname + "' />";
+                                if (_ss.HideAllAppIcons)
+                                    iconImg = string.Empty;
+
+                                if (appparms) {
+                                    app_script.Append("<div class='app-icon rbbuttons' title=\"View " + w + "'s parameters\" onclick=\"appchange('" + dr.AppId + "')\">");
+                                    app_script.Append(iconImg + "<span class='app-icon-font'>" + w + "</span></div>");
+                                }
+                                else {
+                                    if (!categories.Contains(categoryname)) {
+                                        app_List.Append(BuildCategory(cId, categoryname));
+                                        categories.Add(categoryname);
+                                    }
+
+                                    app_script.Append("<div class='" + cId + " app-category-div' style='display: none'>");
+                                    app_script.Append("<div class='app-icon' title=\"View " + w + "'s properites\" onclick=\"appchange('" + dr.AppId + "')\">");
+                                    app_script.Append(iconImg + "<span class='app-icon-font'>" + w + "</span></div>");
+                                    app_script.Append("</div>");
+                                }
                             }
                         }
                     }
                 }
             }
         }
+
+        int count = appListCount.Count;
 
         if (!string.IsNullOrEmpty(app_script.ToString())) {
             app_script.Append("</div>");
@@ -291,7 +301,7 @@ public class SideBarItems : Page {
             count = " (" + GetAppCount_Category(id) + ")";
         }
 
-        str.Append("<div id='" + id + "-pnl-icons' class='app-icon-category-list' runat='server' onclick=\"CategoryClick('" + id + "', '" + category + "')\">");
+        str.Append("<div data-appid='" + id + "' class='app-icon-category-list' runat='server' onclick=\"CategoryClick('" + id + "', '" + category + "')\">");
         str.Append("<span class='app-icon-font'>" + category + count + "</span>");
         str.Append("<img alt='forward' src='" + _sitePath + "App_Themes/" + _sitetheme + "/Icons/nextpage.png' /></div>");
 

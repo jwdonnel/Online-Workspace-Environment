@@ -38,14 +38,12 @@ public class Apps_Coll {
     private readonly string _popOutLoc;
     private readonly string _overlayID;
     private readonly string _notificationID;
-    private readonly bool _displayNav;
-    private readonly bool _allowStats;
     private readonly bool _autoOpen;
     private readonly string _defaultWorkspace;
     private readonly bool _isPrivate;
 
     public Apps_Coll() { }
-    public Apps_Coll(string id, string appId, string name, string filename, string icon, string allowResize, string allowMaximize, string about, string description, string cssClass, string autoLoad, string autoFullScreen, string category, string minHeight, string minWidth, string createdBy, string allowParams, string allowPopOut, string popOutLoc, string overlayID, string notificationID, string displayNav, string allowStats, string autoOpen, string defaultWorkspace, string isPrivate) {
+    public Apps_Coll(string id, string appId, string name, string filename, string icon, string allowResize, string allowMaximize, string about, string description, string cssClass, string autoLoad, string autoFullScreen, string category, string minHeight, string minWidth, string createdBy, string allowParams, string allowPopOut, string popOutLoc, string overlayID, string notificationID, string autoOpen, string defaultWorkspace, string isPrivate) {
         _id = id;
         _appId = appId;
         _name = name;
@@ -67,8 +65,6 @@ public class Apps_Coll {
         _popOutLoc = popOutLoc;
         _overlayID = overlayID;
         _notificationID = notificationID;
-        _displayNav = HelperMethods.ConvertBitToBoolean(displayNav);
-        _allowStats = HelperMethods.ConvertBitToBoolean(allowStats);
         _autoOpen = HelperMethods.ConvertBitToBoolean(autoOpen);
         _defaultWorkspace = defaultWorkspace;
         _isPrivate = HelperMethods.ConvertBitToBoolean(isPrivate);
@@ -156,14 +152,6 @@ public class Apps_Coll {
 
     public string NotificationID {
         get { return _notificationID; }
-    }
-
-    public bool DisplayNav {
-        get { return _displayNav; }
-    }
-
-    public bool AllowStats {
-        get { return _allowStats; }
     }
 
     public bool AutoOpen {
@@ -289,7 +277,7 @@ public class App {
     public void CreateItem(string appid, string name, string filename, string icon, string ar, string am,
                            string about, string description, string css, string category, string height, string width,
                            bool allowparams, bool allowpopout, string popoutloc, string overlayId, string notificationId,
-                           bool displayNav, bool allowStats, bool autoOpen, string defaultWorkspace, bool isPrivate) {
+                           bool autoOpen, string defaultWorkspace, bool isPrivate) {
         int h = 0;
         int w = 0;
         int.TryParse(height, out h);
@@ -303,16 +291,6 @@ public class App {
         int _allowpopout = 0;
         if (allowpopout) {
             _allowpopout = 1;
-        }
-
-        int _displayNav = 0;
-        if (displayNav) {
-            _displayNav = 1;
-        }
-
-        int _allowStats = 0;
-        if (allowStats) {
-            _allowStats = 1;
         }
 
         int _autoOpen = 0;
@@ -351,8 +329,6 @@ public class App {
         query.Add(new DatabaseQuery("PopOutLoc", popoutloc));
         query.Add(new DatabaseQuery("OverlayID", overlayId));
         query.Add(new DatabaseQuery("NotificationID", notificationId));
-        query.Add(new DatabaseQuery("DisplayNav", _displayNav.ToString()));
-        query.Add(new DatabaseQuery("AllowStats", _allowStats.ToString()));
         query.Add(new DatabaseQuery("AutoOpen", _autoOpen.ToString()));
         query.Add(new DatabaseQuery("DefaultWorkspace", defaultWorkspace));
         query.Add(new DatabaseQuery("IsPrivate", _isPrivate.ToString()));
@@ -661,13 +637,11 @@ public class App {
             string popOutLoc = row["PopOutLoc"];
             string overlayID = row["OverlayID"];
             string notificationID = row["NotificationID"];
-            string displayNav = row["DisplayNav"];
-            string allowStats = row["AllowStats"];
             string autoOpen = row["AutoOpen"];
             string defaultWorkspace = row["DefaultWorkspace"];
             string isPrivate = row["IsPrivate"];
 
-            db = new Apps_Coll(id, appID, appName, filename, icon, allowResize, allowMaximize, about, description, cssClass, autoLoad, autoFullScreen, category, minHeight, minWidth, createdBy, allowParams, allowPopOut, popOutLoc, overlayID, notificationID, displayNav, allowStats, autoOpen, defaultWorkspace, isPrivate);
+            db = new Apps_Coll(id, appID, appName, filename, icon, allowResize, allowMaximize, about, description, cssClass, autoLoad, autoFullScreen, category, minHeight, minWidth, createdBy, allowParams, allowPopOut, popOutLoc, overlayID, notificationID, autoOpen, defaultWorkspace, isPrivate);
             break;
         }
 
@@ -705,11 +679,6 @@ public class App {
 
     public bool AllowMaximize(string appid) {
         DatabaseQuery dbSelect = dbCall.CallSelectSingle("AppList", "AllowMaximize", new List<DatabaseQuery>() { new DatabaseQuery("AppID", appid) });
-        return HelperMethods.ConvertBitToBoolean(dbSelect.Value);
-    }
-
-    public bool AllowStats(string appid) {
-        DatabaseQuery dbSelect = dbCall.CallSelectSingle("AppList", "AllowStats", new List<DatabaseQuery>() { new DatabaseQuery("AppID", appid) });
         return HelperMethods.ConvertBitToBoolean(dbSelect.Value);
     }
 
@@ -997,13 +966,19 @@ public class App {
         return dbSelect.Value;
     }
 
+    public List<string> GetCategoriesForApp(string appId) {
+        List<DatabaseQuery> query = new List<DatabaseQuery>();
+        query.Add(new DatabaseQuery("AppID", appId));
+
+        DatabaseQuery dbSelect = dbCall.CallSelectSingle("AppList", "Category", query);
+        string[] splitCategory = dbSelect.Value.Split(ServerSettings.StringDelimiter_Array, StringSplitOptions.RemoveEmptyEntries);
+
+        return splitCategory.ToList();
+    }
+
     public List<Apps_Coll> GetApps_byCategory(string categoryID) {
         List<Apps_Coll> db = new List<Apps_Coll>();
-
-        List<DatabaseQuery> query = new List<DatabaseQuery>();
-        query.Add(new DatabaseQuery("Category", categoryID));
-
-        List<Dictionary<string, string>> dbSelect = dbCall.CallSelect("AppList", "", query);
+        List<Dictionary<string, string>> dbSelect = dbCall.CallSelect("SELECT * FROM AppList WHERE Category LIKE '%" + categoryID + "%'");
         foreach (Dictionary<string, string> row in dbSelect) {
             BuildAppColl(row, ref db);
         }
@@ -1159,7 +1134,7 @@ public class App {
         return list;
     }
     private void GetExtraAppInfo(string appId, ref List<string> list) {
-        string selectCols = "MinHeight, MinWidth, AllowPopOut, PopOutLoc, AllowMaximize, AllowResize, AllowStats";
+        string selectCols = "MinHeight, MinWidth, AllowPopOut, PopOutLoc, AllowMaximize, AllowResize";
         List<Dictionary<string, string>> dbSelect = dbCall.CallSelect("AppList", selectCols, new List<DatabaseQuery>() { new DatabaseQuery("AppID", appId) });
         foreach (Dictionary<string, string> row in dbSelect) {
             string MinHeight = row["MinHeight"];
@@ -1169,7 +1144,6 @@ public class App {
             string PopOutLoc = row["PopOutLoc"];
             string AllowMaximize = row["AllowMaximize"];
             string AllowResize = row["AllowResize"];
-            string AllowStats = row["AllowStats"];
 
             list.Add(MinHeight);
             list.Add(MinWidth);
@@ -1181,7 +1155,6 @@ public class App {
             list.Add(PopOutLoc);
             list.Add(AllowMaximize);
             list.Add(AllowResize);
-            list.Add(AllowStats);
             break;
         }
     }
@@ -1251,9 +1224,7 @@ public class App {
         dbCall.CallUpdate("AppList", updateQuery, query);
     }
 
-    public void UpdateAppList(string id, string name, string ar, string am, string about, string description,
-                                 string css, string height, string width, bool allowpopout, string popoutloc,
-                                 bool displayNav, bool allowStats, bool autoOpen, string defaultWorkspace, bool isPrivate) {
+    public void UpdateAppList(string id, string name, string ar, string am, string about, string description, string css, string height, string width, bool allowpopout, string popoutloc,bool autoOpen, string defaultWorkspace, bool isPrivate) {
         string _ar = "0";
         string _am = "0";
         if (HelperMethods.ConvertBitToBoolean(ar)) {
@@ -1266,16 +1237,6 @@ public class App {
         string _allowpopout = "0";
         if (allowpopout) {
             _allowpopout = "1";
-        }
-
-        string _displayNav = "0";
-        if (displayNav) {
-            _displayNav = "1";
-        }
-
-        string _allowStats = "0";
-        if (allowStats) {
-            _allowStats = "1";
         }
 
         string _autoOpen = "0";
@@ -1307,8 +1268,6 @@ public class App {
         updateQuery.Add(new DatabaseQuery("MinWidth", w.ToString()));
         updateQuery.Add(new DatabaseQuery("AllowPopOut", _allowpopout));
         updateQuery.Add(new DatabaseQuery("PopOutLoc", popoutloc));
-        updateQuery.Add(new DatabaseQuery("DisplayNav", _displayNav));
-        updateQuery.Add(new DatabaseQuery("AllowStats", _allowStats));
         updateQuery.Add(new DatabaseQuery("AutoOpen", _autoOpen));
         updateQuery.Add(new DatabaseQuery("DefaultWorkspace", defaultWorkspace));
         updateQuery.Add(new DatabaseQuery("IsPrivate", _isPrivate));
@@ -1370,22 +1329,6 @@ public class App {
         return db;
     }
 
-    public List<string> GetAppsThatAllowStats() {
-        List<string> list = new List<string>();
-
-        List<DatabaseQuery> query = new List<DatabaseQuery>();
-        query.Add(new DatabaseQuery("AllowStats", "1"));
-
-        List<Dictionary<string, string>> dbSelect = dbCall.CallSelect("AppList", "", query, "Name ASC");
-        foreach (Dictionary<string, string> row in dbSelect) {
-            string appId = row["AppID"];
-            if (!list.Contains(appId))
-                list.Add(appId);
-        }
-
-        return list;
-    }
-
     public void BuildAboutApp(System.Web.UI.WebControls.Panel wlmd_holder, string appId, string username) {
         wlmd_holder.Controls.Clear();
         var str = new System.Text.StringBuilder();
@@ -1407,7 +1350,6 @@ public class App {
             str.Append("<div class='inline-block'><div>Min-Height:  400px");
             str.Append("<div class='clear-space-two'></div>Maximize on Load:  <span style='color: #1D1D1D;'><i>False</i></span>");
             str.Append("<div class='clear-space-two'></div>Auto Open:  <span style='color: #1D1D1D;'><i>False</i></span>");
-            str.Append("<div class='clear-space-two'></div>Nav Buttons:  <span style='color: #1D1D1D;'><i>False</i></span>");
             str.Append("<div class='clear-space-two'></div>Allow Params:  <span style='color: #1D1D1D;'><i>False</i></span>");
             str.Append("<div class='clear-space-two'></div>");
             str.Append("<div class='clear-space'></div><div class='clear-space'></div></div></div>");
@@ -1422,11 +1364,9 @@ public class App {
                 string canMaximize = "<span style='color: #1D1D1D;'><i>False</i></span>";
                 string autoMax = "<span style='color: #1D1D1D;'><i>False</i></span>";
                 string autoOpen = "<span style='color: #1D1D1D;'><i>False</i></span>";
-                string displayNav = "<span style='color: #1D1D1D;'><i>Off</i></span>";
                 string autoCreate = "<span style='color: #1D1D1D;'><i>False</i></span>";
                 string allowParams = "<span style='color: #1D1D1D;'><i>False</i></span>";
                 string AllowPopout = "<span style='color: #1D1D1D;'><i>False</i></span>";
-                string allowStats = "<span style='color: #1D1D1D;'><i>False</i></span>";
                 string isPrivate = "<span style='color: #1D1D1D;'><i>False</i></span>";
                 string background = "<span style='color: #1D1D1D;'><i>Visible</i></span>";
                 string about = db.About;
@@ -1446,14 +1386,8 @@ public class App {
                 if (db.AutoOpen)
                     autoOpen = "<span style='color: #1D1D1D;'><i>True</i></span>";
 
-                if (db.DisplayNav)
-                    displayNav = "<span style='color: #1D1D1D;'><i>On</i></span>";
-
                 if (db.AllowParams)
                     allowParams = "<span style='color: #1D1D1D;'><i>True</i></span>";
-
-                if (db.AllowStats)
-                    allowStats = "<span style='color: #1D1D1D;'><i>True</i></span>";
 
                 if (db.IsPrivate)
                     isPrivate = "<span style='color: #1D1D1D;'><i>True</i></span>";
@@ -1519,10 +1453,20 @@ public class App {
                 str.Append(imageIcon + "<div class='float-left'><h2 class='float-left pad-top'>" + db.AppName + "</h2>");
 
                 if (allowAppRating) {
-                    str.Append("<div class='float-left pad-left-big pad-top-big'><div class='app-rater'></div></div>");
+                    str.Append("<div class='float-left pad-left-big'><div class='app-rater'></div></div>");
                 }
 
-                str.Append("<div class='clear'></div><b style='color: #1D1D1D; font-size: 11px'>" + _category.GetCategoryName(db.Category) + "</b></div><div class='clear-space'></div><div class='clear-space'></div>");
+                string categoryNames = string.Empty;
+                string[] categoryList = db.Category.Split(ServerSettings.StringDelimiter_Array, StringSplitOptions.RemoveEmptyEntries);
+
+                for (int ii = 0; ii < categoryList.Length; ii++) {
+                    categoryNames += _category.GetCategoryName(categoryList[ii]);
+                    if (ii < categoryList.Length - 1) {
+                        categoryNames += ", ";
+                    }
+                }
+
+                str.Append("<div class='clear'></div><b style='color: #1D1D1D; font-size: 11px'>" + categoryNames + "</b></div><div class='clear-space'></div><div class='clear-space'></div>");
 
                 str.Append("<div class='clear-space'></div><div class='clear-space'></div>");
                 str.Append("<b>Description</b><div class='clear-space-two'></div>" + description + "<div class='clear-space'></div><div class='clear-space'></div>");
@@ -1533,21 +1477,21 @@ public class App {
                 str.Append("Min-Width:  " + width);
                 str.Append("<div class='clear-space-two'></div>Allow Maximize:  " + canMaximize);
                 str.Append("<div class='clear-space-two'></div>Allow Resize:  " + canResize);
-                str.Append("<div class='clear-space-two'></div>Allow Statistics:  " + allowStats);
                 str.Append("<div class='clear-space-two'></div>Allow Params:  " + allowParams);
                 str.Append("<div class='clear-space-two'></div>Default Workspace:  <i>" + defaultWorkspace + "</i>");
-                if (_username.ToLower() == db.CreatedBy.ToLower() || _username.ToLower() == ServerSettings.AdminUserName.ToLower()) {
-                    str.Append("<div class='clear-space-two'></div>Is Private:  " + isPrivate);
-                }
-                str.Append("<div class='clear-space-two'></div>Allow Pop Out:  " + AllowPopout + "<div class='clear-space-two'></div></div>");
+                str.Append("<div class='clear-space-two'></div>Allow Pop Out:  " + AllowPopout);
+                str.Append("<div class='clear-space-two'></div></div>");
 
                 str.Append("<div class='inline-block'>");
                 str.Append("<div>Min-Height:  " + height);
                 str.Append("<div class='clear-space-two'></div>Background:  " + background);
                 str.Append("<div class='clear-space-two'></div>Maximize on Load:  " + autoMax);
                 str.Append("<div class='clear-space-two'></div>Auto Open:  " + autoOpen);
-                str.Append("<div class='clear-space-two'></div>Nav Buttons:  " + displayNav);
                 str.Append("<div class='clear-space-two'></div>Filename:  <i>" + db.filename + "</i>");
+                if (_username.ToLower() == db.CreatedBy.ToLower() || _username.ToLower() == ServerSettings.AdminUserName.ToLower()) {
+                    str.Append("<div class='clear-space-two'></div>Is Private:  " + isPrivate);
+                }
+
                 if (!string.IsNullOrEmpty(username)) {
                     if (!Roles.IsUserInRole(username, ServerSettings.AdminUserName)) {
                         if (db.CreatedBy.ToLower() == username.ToLower()) {
@@ -1632,7 +1576,6 @@ public class App {
             str.Append("<div class='inline-block'><div>Min-Height:  400px");
             str.Append("<div class='clear-space-two'></div>Maximize on Load:  <span style='color: #1D1D1D;'><i>False</i></span>");
             str.Append("<div class='clear-space-two'></div>Auto Open:  <span style='color: #1D1D1D;'><i>False</i></span>");
-            str.Append("<div class='clear-space-two'></div>Nav Buttons:  <span style='color: #1D1D1D;'><i>False</i></span>");
             str.Append("<div class='clear-space-two'></div>Allow Params:  <span style='color: #1D1D1D;'><i>False</i></span>");
             str.Append("<div class='clear-space-two'></div>");
             str.Append("<div class='clear-space'></div><div class='clear-space'></div></div></div>");
@@ -1647,11 +1590,9 @@ public class App {
                 string canMaximize = "<span style='color: #1D1D1D;'><i>False</i></span>";
                 string autoMax = "<span style='color: #1D1D1D;'><i>False</i></span>";
                 string autoOpen = "<span style='color: #1D1D1D;'><i>False</i></span>";
-                string displayNav = "<span style='color: #1D1D1D;'><i>Off</i></span>";
                 string autoCreate = "<span style='color: #1D1D1D;'><i>False</i></span>";
                 string allowParams = "<span style='color: #1D1D1D;'><i>False</i></span>";
                 string AllowPopout = "<span style='color: #1D1D1D;'><i>False</i></span>";
-                string allowStats = "<span style='color: #1D1D1D;'><i>False</i></span>";
                 string isPrivate = "<span style='color: #1D1D1D;'><i>False</i></span>";
                 string background = "<span style='color: #1D1D1D;'><i>Visible</i></span>";
                 string about = db.About;
@@ -1671,14 +1612,8 @@ public class App {
                 if (db.AutoOpen)
                     autoOpen = "<span style='color: #1D1D1D;'><i>True</i></span>";
 
-                if (db.DisplayNav)
-                    displayNav = "<span style='color: #1D1D1D;'><i>On</i></span>";
-
                 if (db.AllowParams)
                     allowParams = "<span style='color: #1D1D1D;'><i>True</i></span>";
-
-                if (db.AllowStats)
-                    allowStats = "<span style='color: #1D1D1D;'><i>True</i></span>";
 
                 if (db.IsPrivate)
                     isPrivate = "<span style='color: #1D1D1D;'><i>True</i></span>";
@@ -1742,10 +1677,20 @@ public class App {
                 str.Append(imageIcon + "<div class='float-left'><h2 class='float-left pad-top'>" + db.AppName + "</h2>");
 
                 if (allowAppRating) {
-                    str.Append("<div class='float-left pad-left-big pad-top-big'><div class='app-rater'></div></div>");
+                    str.Append("<div class='float-left pad-left-big'><div class='app-rater'></div></div>");
                 }
 
-                str.Append("<div class='clear'></div><b style='color: #1D1D1D; font-size: 11px'>" + _category.GetCategoryName(db.Category) + "</b></div><div class='clear-space'></div><div class='clear-space'></div>");
+                string categoryNames = string.Empty;
+                string[] categoryList = db.Category.Split(ServerSettings.StringDelimiter_Array, StringSplitOptions.RemoveEmptyEntries);
+
+                for (int ii = 0; ii < categoryList.Length; ii++) {
+                    categoryNames += _category.GetCategoryName(categoryList[ii]);
+                    if (ii < categoryList.Length - 1) {
+                        categoryNames += ", ";
+                    }
+                }
+
+                str.Append("<div class='clear'></div><b style='color: #1D1D1D; font-size: 11px'>" + categoryNames + "</b></div><div class='clear-space'></div><div class='clear-space'></div>");
 
                 str.Append("<div class='clear-space'></div><div class='clear-space'></div>");
                 str.Append("<b>Description</b><div class='clear-space-two'></div>" + description + "<div class='clear-space'></div><div class='clear-space'></div>");
@@ -1756,21 +1701,21 @@ public class App {
                 str.Append("Min-Width:  " + width);
                 str.Append("<div class='clear-space-two'></div>Allow Maximize:  " + canMaximize);
                 str.Append("<div class='clear-space-two'></div>Allow Resize:  " + canResize);
-                str.Append("<div class='clear-space-two'></div>Allow Statistics:  " + allowStats);
                 str.Append("<div class='clear-space-two'></div>Allow Params:  " + allowParams);
                 str.Append("<div class='clear-space-two'></div>Default Workspace:  " + defaultWorkspace);
-                if (_username.ToLower() == db.CreatedBy.ToLower() || _username.ToLower() == ServerSettings.AdminUserName.ToLower()) {
-                    str.Append("<div class='clear-space-two'></div>Is Private:  " + isPrivate);
-                }
-                str.Append("<div class='clear-space-two'></div>Allow Pop Out:  " + AllowPopout + "<div class='clear-space-two'></div></div>");
+                str.Append("<div class='clear-space-two'></div>Allow Pop Out:  " + AllowPopout);
+                str.Append("<div class='clear-space-two'></div></div>");
 
                 str.Append("<div class='inline-block'>");
                 str.Append("<div>Min-Height:  " + height);
                 str.Append("<div class='clear-space-two'></div>Background:  " + background);
                 str.Append("<div class='clear-space-two'></div>Maximize on Load:  " + autoMax);
                 str.Append("<div class='clear-space-two'></div>Auto Open:  " + autoOpen);
-                str.Append("<div class='clear-space-two'></div>Nav Buttons:  " + displayNav);
                 str.Append("<div class='clear-space-two'></div>Filename:  " + db.filename);
+                if (_username.ToLower() == db.CreatedBy.ToLower() || _username.ToLower() == ServerSettings.AdminUserName.ToLower()) {
+                    str.Append("<div class='clear-space-two'></div>Is Private:  " + isPrivate);
+                }
+
                 if (!string.IsNullOrEmpty(username)) {
                     if (!Roles.IsUserInRole(username, ServerSettings.AdminUserName)) {
                         if (db.CreatedBy.ToLower() == username.ToLower()) {
@@ -1875,137 +1820,6 @@ public class App {
         }
     }
 
-    public void BuildAppStats(System.Web.UI.WebControls.Panel wlmd_holder, string appId, string username) {
-        wlmd_holder.Controls.Clear();
-        var str = new System.Text.StringBuilder();
-
-        ServerSettings _ss = new ServerSettings();
-        List<UserApps_Coll> db = GetUserApps_AllUsers(appId);
-
-        string appName = GetAppName(appId);
-        int numberInstalled = GetTotalInstalledApp(appId);
-        int numberOpened = 0;
-        int numberClosed = 0;
-        int numberMinimized = 0;
-        string modified = "N/A";
-        string appIcon = GetAppIconName(appId);
-
-        if (db != null) {
-            List<string> usersTemp = new List<string>();
-            foreach (UserApps_Coll dr in db) {
-                if (!usersTemp.Contains(dr.Username.ToLower())) {
-                    usersTemp.Add(dr.Username.ToLower());
-                    modified = dr.DateUpdated.ToString();
-                    if (dr.Closed)
-                        numberClosed++;
-                    else
-                        numberOpened++;
-
-                    if (dr.Minimized)
-                        numberMinimized++;
-                }
-            }
-        }
-
-        int[] pieChart = { numberInstalled, numberClosed, numberOpened, numberMinimized };
-
-        MemberDatabase member = new MemberDatabase(_username);
-        string siteTheme = member.SiteTheme;
-        string sitePath = ServerSettings.GetSitePath(HttpContext.Current.Request);
-        string imageIcon = "<img alt='icon' src='" + sitePath + "/Standard_Images/App_Icons/" + appIcon + "' class='pad-right float-left' style='height: 32px;' />";
-        if (_ss.HideAllAppIcons)
-            imageIcon = string.Empty;
-
-        str.Append(imageIcon + "<div class='float-left'><h2 class='float-left pad-top'>" + appName + " Statistics</h2></div><div class='clear-space'></div>");
-        str.Append("<div class='clear-space'></div><div align='center'><img alt='' src='" + GoogleChartBuilder(pieChart, 570, 190) + "' /></div>");
-        str.Append("<div class='clear-space'></div><div class='clear-space'></div>");
-        str.Append("<div class='float-left' style='padding: 4px;'><div class='font-bold pad-right-sml float-left'>Note:</div>These statistics are based on all users current app properties.</div>");
-        str.Append("<div class='float-right font-bold margin-right-sml'><a href='#refresh' onclick='openWSE.AppStats(\"" + appId + "\");return false;' class='sb-links'>Refresh</a></div>");
-        str.Append("<div class='clear'></div><div style='padding: 4px;'><div class='font-bold pad-right-sml float-left'>Last Modified:</div>" + modified + "</div>");
-        wlmd_holder.Controls.Add(new System.Web.UI.LiteralControl(str.ToString()));
-    }
-    public string BuildAppStats(string appId, string username) {
-        var str = new System.Text.StringBuilder();
-
-        ServerSettings _ss = new ServerSettings();
-        List<UserApps_Coll> db = GetUserApps_AllUsers(appId);
-
-        string appName = GetAppName(appId);
-        int numberInstalled = GetTotalInstalledApp(appId);
-        int numberOpened = 0;
-        int numberClosed = 0;
-        int numberMinimized = 0;
-        string modified = "N/A";
-        string appIcon = GetAppIconName(appId);
-
-        if (db != null) {
-            List<string> usersTemp = new List<string>();
-            foreach (UserApps_Coll dr in db) {
-                if (!usersTemp.Contains(dr.Username.ToLower())) {
-                    usersTemp.Add(dr.Username.ToLower());
-                    modified = dr.DateUpdated.ToString();
-                    if (dr.Closed)
-                        numberClosed++;
-                    else
-                        numberOpened++;
-
-                    if (dr.Minimized)
-                        numberMinimized++;
-                }
-            }
-        }
-
-        int[] pieChart = { numberInstalled, numberClosed, numberOpened, numberMinimized };
-
-        MemberDatabase member = new MemberDatabase(_username);
-        string siteTheme = member.SiteTheme;
-        string sitePath = ServerSettings.GetSitePath(HttpContext.Current.Request);
-        string imageIcon = "<img alt='icon' src='" + sitePath + "/Standard_Images/App_Icons/" + appIcon + "' class='pad-right float-left' style='height: 32px;' />";
-        if (_ss.HideAllAppIcons)
-            imageIcon = string.Empty;
-
-        str.Append(imageIcon + "<div class='float-left'><h2 class='float-left pad-top'>" + appName + " Statistics</h2></div><div class='clear-space'></div>");
-        str.Append("<div class='clear-space'></div><div class='app-stats-holder-wr'><img alt='' src='" + GoogleChartBuilder(pieChart, 500, 170) + "' /></div>");
-        str.Append("<div class='clear-space'></div><div class='clear-space'></div>");
-        str.Append("<div class='float-left' style='padding: 4px;'><div class='font-bold pad-right-sml float-left'>Note:</div>These statistics are based on all users current app properties.</div>");
-        str.Append("<div class='float-right font-bold margin-right-sml'><a href='#' onclick='appRemote.AppStats(\"" + appId + "\");return false;' class='sb-links'>Refresh</a></div>");
-        str.Append("<div class='clear'></div><div style='padding: 4px;'><div class='font-bold pad-right-sml float-left'>Last Modified:</div>" + modified + "</div>");
-        return str.ToString();
-    }
-
-    public int GetTotalInstalledApp(string appId) {
-        int numberInstalled = 0;
-
-        MembershipUserCollection coll = Membership.GetAllUsers();
-        foreach (MembershipUser m in coll) {
-            MemberDatabase mem = new MemberDatabase(m.UserName);
-            List<string> apps = mem.EnabledApps;
-            foreach (string w in apps) {
-                if (w == appId) {
-                    numberInstalled++;
-                    break;
-                }
-            }
-        }
-
-        return numberInstalled;
-    }
-
-    public static string GoogleChartBuilder(int[] chartData, int width, int height) {
-        GoogleChartSharp.PieChart pieChart = new GoogleChartSharp.PieChart(width, height, GoogleChartSharp.PieChartType.TwoD);
-
-        string[] xAxis = { "Installed (" + chartData[0] + ")", "Closed (" + chartData[1] + ")", "Opened (" + chartData[2] + ")", "Minimized (" + chartData[3] + ")" };
-
-        pieChart.AddAxis(new GoogleChartSharp.ChartAxis(GoogleChartSharp.ChartAxisType.Bottom, xAxis));
-        pieChart.AddAxis(new GoogleChartSharp.ChartAxis(GoogleChartSharp.ChartAxisType.Left));
-        pieChart.SetData(chartData);
-
-        pieChart.AddSolidFill(new GoogleChartSharp.SolidFill(GoogleChartSharp.ChartFillTarget.Background, "F9F9F9"));
-        pieChart.SetDatasetColors(new string[] { "72BAE4", "D44122", "B2D357", "F4C643" });
-
-        return pieChart.GetUrl();
-    }
-
     private void BuildAppColl(Dictionary<string, string> myReader, ref List<Apps_Coll> _appColl) {
         string id = myReader["ID"];
         string appID = myReader["AppID"];
@@ -2028,13 +1842,11 @@ public class App {
         string popOutLoc = myReader["PopOutLoc"];
         string overlayID = myReader["OverlayID"];
         string notificationID = myReader["NotificationID"];
-        string displayNav = myReader["DisplayNav"];
-        string allowStats = myReader["AllowStats"];
         string autoOpen = myReader["AutoOpen"];
         string defaultWorkspace = myReader["DefaultWorkspace"];
         string isPrivate = myReader["IsPrivate"];
 
-        Apps_Coll coll = new Apps_Coll(id, appID, appName, filename, icon, allowResize, allowMaximize, about, description, cssClass, autoLoad, autoFullScreen, category, minHeight, minWidth, createdBy, allowParams, allowPopOut, popOutLoc, overlayID, notificationID, displayNav, allowStats, autoOpen, defaultWorkspace, isPrivate);
+        Apps_Coll coll = new Apps_Coll(id, appID, appName, filename, icon, allowResize, allowMaximize, about, description, cssClass, autoLoad, autoFullScreen, category, minHeight, minWidth, createdBy, allowParams, allowPopOut, popOutLoc, overlayID, notificationID, autoOpen, defaultWorkspace, isPrivate);
         _appColl.Add(coll);
     }
 

@@ -36,7 +36,7 @@
             position: relative;
         }
 
-        #siteInfo
+        #siteInfo, #changeLog, #forkmeInfo
         {
             margin: 0 auto;
             width: 1000px;
@@ -154,12 +154,14 @@
             </div>
         </div>
         <div class="clear"></div>
-        <div id="siteInfo">
+        <div id="forkmeInfo" class="pad-top-big">
             <a id="forkme_banner" href="https://github.com/jwdonnel/OpenWSE" target="_blank">View on GitHub</a>
             <div id="lbl_currentVer" runat="server" class="float-right pad-right-big">
             </div>
-            <div class="clear-space">
-            </div>
+        </div>
+        <div class="clear-space">
+        </div>
+        <div id="siteInfo">
             <div id="AboutopenWSE">
                 <div class="about-section">
                     <table cellpadding="10" cellspacing="10" border="0" width="100%">
@@ -171,7 +173,7 @@
                                 <td valign="top">
                                     <h2>Introduction</h2>
                                     <div class="clear-space-five"></div>
-                                    The OpenWSE is a Windows desktop like workspace. The goal of this site is to provide a Windows like experience but from your web browser on any computer. Much like your desktop, you can have multiple modal windows (called apps) opened on your workspace. And just like your desktop, if you have apps opened that you dont want to close, but dont want to show, you can simply minimize them in the taskbar at the top. Apps can be based off of UserControls (.ascx), existing webpages, or just custom html pages. Apps can incorporate their own css stylesheets along with javascript files and other code. This allows for any developer to integrate with the OpenWSE code. Each user can register an account (if enabled by the Administrator) that allows you to save your apps position, size, and whats loaded so you can go from any browser or computer and keep the same settings.
+                                    OpenWSE is a Windows desktop like workspace. The goal of this site is to provide a Windows like experience but from your web browser on any computer. Much like your desktop, you can have multiple modal windows (called apps) opened on your workspace. And just like your desktop, if you have apps opened that you dont want to close, but dont want to show, you can simply minimize them in the taskbar at the top. Apps can be based off of UserControls (.ascx), existing webpages, or just custom html pages. Apps can incorporate their own css stylesheets along with javascript files and other code. This allows for any developer to integrate with the OpenWSE code. Each user can register an account (if enabled by the Administrator) that allows you to save your apps position, size, and whats loaded so you can go from any browser or computer and keep the same settings.
                                 </td>
                             </tr>
                         </tbody>
@@ -260,10 +262,9 @@
                         </ul>
                         <ul class="float-left pad-left-big" style="list-style: none;">
                             <li>8.) Google Traffic</li>
-                            <li>9.) Site Monitor</li>
-                            <li>10.) RSS News Feed</li>
-                            <li>11.) Twitter Station</li>
-                            <li>12.) Message Board</li>
+                            <li>9.) RSS News Feed</li>
+                            <li>10.) Twitter Station</li>
+                            <li>11.) Message Board</li>
                         </ul>
                     </div>
                     <div class="clear-space"></div>
@@ -291,6 +292,8 @@
                         <li>There are 20 different site tools to play with.</li>
                         <li>Customize user defaults for new users, create, edit, delete existing users. </li>
                         <li>Create/Import your own database tables which also creates its own app for you to interact with.</li>
+                        <li>Setup notifications that can alert users when a custom table or database import has been updated.</li>
+                        <li>Add data charts to the custom tables and/or database imports.</li>
                         <li>Upload custom projects such as full web sites that can be hosted from this site.</li>
                         <li>Host web services.</li>
                         <li>Create and upload Site Plugins that can give the workspace extra functionality.</li>
@@ -342,6 +345,23 @@
                     An integration guide is available <a href="Integration.html" target="_blank">here.</a>
                     <div class="clear-space"></div>
                     OpenWSE is free for personal use. In order to buy a license, download and run the OpenWSE_Installer.exe which will setup a website on your local machine using IIS. Once you buy the license, you can make any changes you want to the source code. 
+                    <div class="clear-space"></div>
+                    <asp:UpdatePanel ID="updatePnl_download" runat="server">
+                        <ContentTemplate>
+                            <asp:LinkButton ID="lnk_Download1" runat="server" PostBackUrl="~/About.aspx" OnClick="lnk_Download1_Click" CssClass="lnk_Download margin-right-big">
+                                <div class="download-text">Download OpenWSE (exe)</div>
+                            </asp:LinkButton>
+                            <asp:LinkButton ID="lnk_Download2" runat="server" PostBackUrl="~/About.aspx" OnClick="lnk_Download2_Click" CssClass="lnk_Download">
+                                <div class="download-text">Download OpenWSE (zip)</div>
+                            </asp:LinkButton>
+                            <div class="clear-space"></div>
+                            <small><b class="pad-right-sml">Note:</b>This is for machines with IIS 7+</small>
+                        </ContentTemplate>
+                        <Triggers>
+                            <asp:AsyncPostBackTrigger ControlID="lnk_Download1" />
+                            <asp:AsyncPostBackTrigger ControlID="lnk_Download2" />
+                        </Triggers>
+                    </asp:UpdatePanel>
                 </div>
                 <div class="about-section">
                     <h2>Frameworks and Technologies Used</h2>
@@ -353,8 +373,6 @@
                                 <li>JQuery UI<i>(<a href="http://jqueryui.com" target="_blank">www.jqueryui.com</a>)</i></li>
                                 <li>TinyMCE - Javascript WYSIWYG editor<i>(<a href="WebControls/TinyMCE/license.txt"
                                     target="_blank">View License</a>)</i></li>
-                                <li>ASP.Net AJAX Control Toolkit <i>(<a href="http://www.asp.net/ajaxlibrary/AjaxControlToolkitSampleSite"
-                                    target="_blank">www.asp.net</a>)</i></li>
                                 <li>SharpZipLib - The Zip, GZip, BZip2 and Tar Implementation For .NET<i>(<a href="http://www.icsharpcode.net/opensource/sharpziplib"
                                     target="_blank">www.icsharpcode.net</a>)</i></li>
                                 <li>SyntaxHighlighter - JavaScript code syntax highlighter<i>(<a href="http://alexgorbatchev.com/SyntaxHighlighter"
@@ -392,10 +410,13 @@
             </div>
             <div class="clear" style="height: 75px;">
             </div>
-            <img alt="Logo" src="~/Standard_Images/About Logos/openwse.png" runat="server" class="float-left pad-right-big"
-                style="max-height: 50px" />
-            <div class="float-left pad-left" style="padding-top: 8px; max-width: 650px;">
-                Icons on this website (Not including the OpenWSE logo) were downloaded from <a href="http://www.iconfinder.com" target="_blank">www.iconfinder.com</a> using the licensed terms of GPL: <a href="http://www.gnu.org/licenses/gpl.html"
+            <div class="float-left pad-right-big">
+                <img id="Img1" alt="Logo" class="pad-bottom-big" src="~/Standard_Images/About Logos/openwse.png" runat="server" style="max-width: 175px;" />
+                <div class="clear"></div>
+                <img id="Img2" alt="Logo" class="pad-top-big" src="~/Standard_Images/About Logos/onlinewse.png" runat="server" style="max-width: 175px;" />
+            </div>
+            <div class="float-left pad-left" style="padding-top: 40px; max-width: 650px;">
+                Icons on this website (Not including the OpenWSE and OnlineWSE logo) were downloaded from <a href="http://www.iconfinder.com" target="_blank">www.iconfinder.com</a> using the licensed terms of GPL: <a href="http://www.gnu.org/licenses/gpl.html"
                     target="_blank">GNU General Public License</a> Version 2 or later (the "GPL").
             </div>
             <div class="clear" style="height: 30px">

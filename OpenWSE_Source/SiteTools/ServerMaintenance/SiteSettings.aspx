@@ -1,7 +1,6 @@
 ﻿<%@ Page Title="Site Settings" Language="C#" MasterPageFile="~/Site.master"
     AutoEventWireup="true" CodeFile="SiteSettings.aspx.cs" Inherits="SiteTools_SiteSettings" %>
 
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
         .ajax__slider_h_rail
@@ -150,7 +149,7 @@
                                                     BorderColor="#D9D9D9" BorderStyle="Solid" BorderWidth="1px" Style="padding: 4px;"
                                                     ForeColor="#353535"></asp:TextBox>
                                             </td>
-                                            <td class="td-settings-ctrl">
+                                            <td class="td-settings-ctrl" valign="top">
                                                 <asp:Button ID="btn_updateadminnote" runat="server" CssClass="no-margin RandomActionBtns input-buttons"
                                                     Text="Update" OnClick="btn_updateadminnote_Click" />
                                                 <div class="clear-space-five">
@@ -182,7 +181,7 @@
                                                         BorderColor="#D9D9D9" BorderStyle="Solid" BorderWidth="1px" Style="padding: 4px;"
                                                         ForeColor="#353535"></asp:TextBox>
                                                 </td>
-                                                <td class="td-settings-ctrl">
+                                                <td class="td-settings-ctrl" valign="top">
                                                     <asp:Button ID="btn_loginPageMessage" runat="server" CssClass="no-margin RandomActionBtns input-buttons"
                                                         Text="Update" OnClick="btn_loginPageMessage_Click" />
                                                     <div class="clear-space-five">
@@ -211,12 +210,13 @@
                                                 <span class="pad-right font-bold">FileDrive Folder</span>
                                             </td>
                                             <td>
-                                                <asp:TextBox ID="tb_updateFolder" runat="server" CssClass="textEntry" Width="361px"></asp:TextBox><br />
-                                                <asp:LinkButton ID="btn_usedefaultloc" runat="server" CssClass="sb-links RandomActionBtns margin-top-sml"
-                                                    OnClick="btn_usedefaultloc_Click">Use default path</asp:LinkButton>
+                                                <asp:TextBox ID="tb_updateFolder" runat="server" CssClass="textEntry" Width="361px"></asp:TextBox>
+                                                <div class="clear-space-five"></div>
+                                                <asp:LinkButton ID="btn_usedefaultloc" runat="server" CssClass="RandomActionBtns margin-top-sml"
+                                                    OnClick="btn_usedefaultloc_Click" Font-Size="Small">Use default path</asp:LinkButton>
                                             </td>
-                                            <td class="td-settings-ctrl">
-                                                <asp:Button ID="btn_updateFolder" runat="server" CssClass="margin-left RandomActionBtns input-buttons"
+                                            <td class="td-settings-ctrl" valign="top">
+                                                <asp:Button ID="btn_updateFolder" runat="server" CssClass="no-margin RandomActionBtns input-buttons"
                                                     Text="Update" OnClick="btn_updateFolder_Click" />
                                             </td>
                                             <td>
@@ -250,7 +250,7 @@
                                         </td>
                                         <td class="td-settings-desc">
                                             <small>Disable this feature if you dont want the website to track
-                                                user logins and log offs.</small>
+                                                user sign ins and sign offs.</small>
                                         </td>
                                     </tr>
                                 </table>
@@ -277,6 +277,28 @@
                                 </table>
                                 <div class="clear-space">
                                 </div>
+                                <asp:Panel ID="pnl_RecordLogFile" runat="server">
+                                    <table cellpadding="10" cellspacing="10">
+                                        <tr>
+                                            <td class="td-settings-title">
+                                                <span class="pad-right font-bold">Record To Log File</span>
+                                            </td>
+                                            <td class="td-settings-ctrl">
+                                                <div class="field switch inline-block">
+                                                    <asp:RadioButton ID="rb_recordLogFile_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                                        OnCheckedChanged="rb_recordLogFile_on_CheckedChanged" AutoPostBack="True" />
+                                                    <asp:RadioButton ID="rb_recordLogFile_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                                        OnCheckedChanged="rb_recordLogFile_off_CheckedChanged" AutoPostBack="True" />
+                                                </div>
+                                            </td>
+                                            <td class="td-settings-desc">
+                                                <small>Disable this feature if you dont want to save a physical log file to the Logging folder.</small>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="clear-space">
+                                    </div>
+                                </asp:Panel>
                                 <table id="tableEmailAct" runat="server" cellpadding="10" cellspacing="10">
                                     <tr>
                                         <td class="td-settings-title">
@@ -502,6 +524,47 @@
                                         </td>
                                     </tr>
                                 </table>
+                                <div class="clear-space">
+                                </div>
+                                <table cellpadding="10" cellspacing="10">
+                                    <tr>
+                                        <td class="td-settings-title">
+                                            <span class="pad-right font-bold">Custom Error Page</span>
+                                        </td>
+                                        <td class="td-settings-ctrl">
+                                            <div class="field switch inline-block">
+                                                <asp:RadioButton ID="rb_CustomErrorPage_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                                    OnCheckedChanged="rb_CustomErrorPage_on_CheckedChanged" AutoPostBack="True" />
+                                                <asp:RadioButton ID="rb_CustomErrorPage_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                                    OnCheckedChanged="rb_CustomErrorPage_off_CheckedChanged" AutoPostBack="True" />
+                                            </div>
+                                        </td>
+                                        <td class="td-settings-desc">
+                                            <small>Turn this on to direct users to a custom error page instead of showing the issue.</small>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <asp:Panel ID="pnl_ErrorPageRedirect" runat="server" Enabled="false" Visible="false" DefaultButton="btnCustomErrorPageRedirect">
+                                    <div class="clear-space">
+                                    </div>
+                                    <table cellpadding="10" cellspacing="10">
+                                        <tr>
+                                            <td class="td-settings-title">
+                                                <span class="pad-right font-bold">Error Page Redirect</span>
+                                            </td>
+                                            <td class="td-settings-ctrl">
+                                                <asp:TextBox ID="tbCustomErrorPageRedirect" runat="server" CssClass="textEntry margin-right"></asp:TextBox>
+                                                <asp:Button ID="btnCustomErrorPageRedirect" runat="server" CssClass="input-buttons RandomActionBtns" Text="Update" OnClick="btnCustomErrorPageRedirect_Click" />
+                                                <div class="clear-space-five"></div>
+                                                <asp:LinkButton ID="lbtn_UserDefaultRedirectPage" runat="server" CssClass="RandomActionBtns margin-top-sml"
+                                                    OnClick="lbtn_UserDefaultRedirectPage_Click" Font-Size="Small">Use default page</asp:LinkButton>
+                                            </td>
+                                            <td class="td-settings-desc">
+                                                <small>Set the redirect page when an error occurs.</small>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </asp:Panel>
                                 <div class="clear-space">
                                 </div>
                                 <table cellpadding="10" cellspacing="10">
@@ -1366,14 +1429,14 @@
                                                 <span class="pad-right font-bold font-color-black">Site Description</span>
                                             </td>
                                             <td>
-                                                <asp:TextBox ID="tb_descriptionMetaTage" runat="server" CssClass="textEntry float-left"
-                                                    Width="500px" AutoPostBack="False" TextMode="MultiLine" Font-Names='"Arial"'
+                                                <asp:TextBox ID="tb_descriptionMetaTag" runat="server" CssClass="textEntry float-left"
+                                                    Width="500px" AutoPostBack="False" TextMode="MultiLine" Font-Names='"Arial"' MaxLength="4000"
                                                     BorderColor="#D9D9D9" BorderStyle="Solid" BorderWidth="1px" Height="75px" Style="padding: 4px;"
                                                     ForeColor="#353535"></asp:TextBox>
                                             </td>
                                             <td class="td-settings-ctrl">
-                                                <asp:Button ID="btn_descriptionMetaTage" runat="server" CssClass="no-margin RandomActionBtns input-buttons"
-                                                    Text="Update" OnClick="btn_descriptionMetaTage_Click" />
+                                                <asp:Button ID="btn_descriptionMetaTag" runat="server" CssClass="no-margin RandomActionBtns input-buttons"
+                                                    Text="Update" OnClick="btn_descriptionMetaTag_Click" />
                                                 <div class="clear-space-five"></div>
                                                 <asp:LinkButton ID="lbtn_clearDescriptionMeta" runat="server" CssClass="RandomActionBtns sb-links"
                                                     OnClick="lbtn_clearDescriptionMeta_Click" Style="color: #467DB7!important">Clear</asp:LinkButton>

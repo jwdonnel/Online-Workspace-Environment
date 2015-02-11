@@ -273,7 +273,7 @@ public class RegisterPostbackScripts {
             if (!string.IsNullOrEmpty(search)) {
                 string id = _apps.GetAppID(search);
                 if (!string.IsNullOrEmpty(id)) {
-                    returnVal = "openWSE.OpenAppNoti(\"" + id + "-pnl-icons\");";
+                    returnVal = "openWSE.OpenAppNoti(\"" + id + "\");";
                 }
                 else {
                     List<string> pages = ServerSettings.AdminPages();
@@ -342,7 +342,7 @@ public class RegisterPostbackScripts {
                                     UserControl uc = (UserControl)_page.LoadControl("~/Apps/" + fileName);
                                     PlaceHolder1.Controls.Add(uc);
 
-                                    appScript.Append("openWSE.LoadUserControl('" + appId.Replace("-", "_") + "');");
+                                    appScript.Append("openWSE.LoadUserControl('" + appId + "');");
                                 }
                             }
 
@@ -381,7 +381,7 @@ public class RegisterPostbackScripts {
                                             uc.ID = "UC" + appId.Replace("-", "_");
                                             PlaceHolder1.Controls.Add(uc);
 
-                                            appScript.Append("openWSE.LoadUserControl('" + appId.Replace("-", "_") + "');");
+                                            appScript.Append("openWSE.LoadUserControl('" + appId + "');");
                                         }
                                     }
                                     catch (Exception ex) {
@@ -452,10 +452,6 @@ public class RegisterPostbackScripts {
                             _member.RemoveEnabledApp(appId);
                             _apps.DeleteAppLocal(appId, _username);
                             _page.Response.Redirect("~/Workspace.aspx?wi=" + DateTime.Now.Ticks.ToString());
-                        }
-                        else if (type == "stats") {
-                            title = "'App Statistics'";
-                            _apps.BuildAppStats(pnl_aboutHolder, appId, _username);
                         }
 
                         updatepnl_aboutHolder.Update();
@@ -638,8 +634,7 @@ public class RegisterPostbackScripts {
                 AppBuilder wb = new AppBuilder((ContentPlaceHolder)_page.Master.FindControl("MainContent"), member);
                 wb.AppDivGenerator(id, w, image, ar, am, css, workspace, filename, fi.Extension.ToLower() == ".ascx",
                                    dr.MinHeight, dr.MinWidth, dr.AllowPopOut,
-                                   dr.PopOutLoc, dr.DisplayNav, dr.AllowStats,
-                                   dr.AutoFullScreen, dr.AutoLoad, dr.AutoOpen);
+                                   dr.PopOutLoc, dr.AutoFullScreen, dr.AutoLoad, dr.AutoOpen);
 
                 _strScriptreg.Append(wb.StrScriptreg);
             }
@@ -685,8 +680,7 @@ public class RegisterPostbackScripts {
                 AppBuilder wb = new AppBuilder((ContentPlaceHolder)_page.Master.FindControl("MainContent"), _demoMemberDatabase);
                 wb.AppDivGenerator_NoLogin(id, w, image, ar, am, css, workspace, filename, fi.Extension.ToLower() == ".ascx",
                                             dr.MinHeight, dr.MinWidth, dr.AllowPopOut,
-                                            dr.PopOutLoc, dr.DisplayNav, dr.AllowStats,
-                                            dr.AutoFullScreen, dr.AutoLoad, dr.AutoOpen);
+                                            dr.PopOutLoc, dr.AutoFullScreen, dr.AutoLoad, dr.AutoOpen);
 
                 _strScriptreg.Append(wb.StrScriptreg);
             }

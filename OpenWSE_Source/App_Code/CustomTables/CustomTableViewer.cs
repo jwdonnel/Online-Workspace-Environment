@@ -9,7 +9,6 @@ using System.Data;
 using System.Data.SqlServerCe;
 
 
-
 [Serializable]
 public class CustomTable_Coll {
     private string _id;
@@ -18,19 +17,37 @@ public class CustomTable_Coll {
     private string _tableID;
     private string _appID;
     private bool _sideBar = false;
+    private bool _notifyUsers = false;
+    private ChartType _chartType;
+    private string _chartTitle;
+    private List<string> _usersAllowedToEdit;
     private DateTime _dateCreated = new DateTime();
 
     public CustomTable_Coll() { }
 
-    public CustomTable_Coll(string id, string tableName, string createdBy, string tableID, string appID, string sidebar, string dateCreated) {
+    public CustomTable_Coll(string id, string tableName, string createdBy, string tableID, string appID, string sidebar, string notifyUsers, string chartType, string chartTitle, string usersAllowedToEdit, string dateCreated) {
         _id = id;
         _tableName = tableName;
         _createdBy = createdBy;
         _tableID = tableID;
         _appID = appID;
-        if (HelperMethods.ConvertBitToBoolean(sidebar))
+        if (HelperMethods.ConvertBitToBoolean(sidebar)) {
             _sideBar = true;
+        }
 
+        if (HelperMethods.ConvertBitToBoolean(notifyUsers)) {
+            _notifyUsers = true;
+        }
+
+        try {
+            _chartType = (ChartType)Enum.Parse(typeof(ChartType), chartType);
+        }
+        catch {
+            _chartType = ChartType.None;
+        }
+
+        _chartTitle = chartTitle;
+        _usersAllowedToEdit = usersAllowedToEdit.Split(ServerSettings.StringDelimiter_Array, StringSplitOptions.RemoveEmptyEntries).ToList();
         DateTime.TryParse(dateCreated, out _dateCreated);
     }
 
@@ -58,6 +75,22 @@ public class CustomTable_Coll {
         get { return _sideBar; }
     }
 
+    public bool NotifyUsers {
+        get { return _notifyUsers; }
+    }
+
+    public ChartType Chart_Type {
+        get { return _chartType; }
+    }
+
+    public string ChartTitle {
+        get { return _chartTitle; }
+    }
+
+    public List<string> UsersAllowedToEdit {
+        get { return _usersAllowedToEdit; }
+    }
+
     public DateTime DateCreated {
         get { return _dateCreated; }
     }
@@ -75,10 +108,14 @@ public class CustomTableViewer {
         _userName = userName;
     }
 
-    public void AddItem(string tableName, string createdBy, string tableID, string appId, string dateCreated, bool sidebar) {
+    public void AddItem(string tableName, string createdBy, string tableID, string appId, string dateCreated, bool sidebar, bool notifyUsers, string chartType, string chartTitle, string usersAllowToEdit) {
         string _sb = "0";
         if (sidebar)
             _sb = "1";
+
+        string _nu = "0";
+        if (notifyUsers)
+            _nu = "1";
 
         List<DatabaseQuery> query = new List<DatabaseQuery>();
         query.Add(new DatabaseQuery("ID", Guid.NewGuid().ToString()));
@@ -87,6 +124,10 @@ public class CustomTableViewer {
         query.Add(new DatabaseQuery("TableID", tableID));
         query.Add(new DatabaseQuery("AppID", appId));
         query.Add(new DatabaseQuery("Sidebar", _sb));
+        query.Add(new DatabaseQuery("NotifyUsers", _nu));
+        query.Add(new DatabaseQuery("ChartType", chartType));
+        query.Add(new DatabaseQuery("ChartTitle", chartTitle));
+        query.Add(new DatabaseQuery("UsersAllowedToEdit", usersAllowToEdit));
         query.Add(new DatabaseQuery("DateCreated", dateCreated));
         dbCall.CallInsert("CustomTables", query);
     }
@@ -121,6 +162,27 @@ public class CustomTableViewer {
         return dbSelect.Value;
     }
 
+    public CustomTable_Coll GetTableInfoByAppId(string AppID) {
+        CustomTable_Coll cInfo = new CustomTable_Coll();
+        List<Dictionary<string, string>> dbSelect = dbCall.CallSelect("CustomTables", "", new List<DatabaseQuery>() { new DatabaseQuery("AppID", AppID) });
+        foreach (Dictionary<string, string> row in dbSelect) {
+            string id = row["ID"];
+            string tableName = row["TableName"];
+            string createdBy = row["CreatedBy"];
+            string tableID = row["TableID"];
+            string appID = row["AppID"];
+            string sidebar = row["Sidebar"];
+            string notifyUsers = row["NotifyUsers"];
+            string chartType = row["ChartType"];
+            string chartTitle = row["ChartTitle"];
+            string usersAllowedToEdit = row["UsersAllowedToEdit"];
+            string dateCreated = row["DateCreated"];
+            cInfo = new CustomTable_Coll(id, tableName, createdBy, tableID, appID, sidebar, notifyUsers, chartType, chartTitle, usersAllowedToEdit, dateCreated);
+            break;
+        }
+        return cInfo;
+    }
+
     public CustomTable_Coll GetTableInfo(string TableID) {
         CustomTable_Coll cInfo = new CustomTable_Coll();
         List<Dictionary<string, string>> dbSelect = dbCall.CallSelect("CustomTables", "", new List<DatabaseQuery>() { new DatabaseQuery("TableID", TableID) });
@@ -131,8 +193,12 @@ public class CustomTableViewer {
             string tableID = row["TableID"];
             string appID = row["AppID"];
             string sidebar = row["Sidebar"];
+            string notifyUsers = row["NotifyUsers"];
+            string chartType = row["ChartType"];
+            string chartTitle = row["ChartTitle"];
+            string usersAllowedToEdit = row["UsersAllowedToEdit"];
             string dateCreated = row["DateCreated"];
-            cInfo = new CustomTable_Coll(id, tableName, createdBy, tableID, appID, sidebar, dateCreated);
+            cInfo = new CustomTable_Coll(id, tableName, createdBy, tableID, appID, sidebar, notifyUsers, chartType, chartTitle, usersAllowedToEdit, dateCreated);
             break;
         }
         return cInfo;
@@ -174,8 +240,12 @@ public class CustomTableViewer {
             string tableID = row["TableID"];
             string appID = row["AppID"];
             string sidebar = row["Sidebar"];
+            string notifyUsers = row["NotifyUsers"];
+            string chartType = row["ChartType"];
+            string chartTitle = row["ChartTitle"];
+            string usersAllowedToEdit = row["UsersAllowedToEdit"];
             string dateCreated = row["DateCreated"];
-            var coll = new CustomTable_Coll(id, tableName, createdBy, tableID, appID, sidebar, dateCreated);
+            var coll = new CustomTable_Coll(id, tableName, createdBy, tableID, appID, sidebar, notifyUsers, chartType, chartTitle, usersAllowedToEdit, dateCreated);
             _coll.Add(coll);
         }
     }
@@ -201,8 +271,12 @@ public class CustomTableViewer {
             string tableID = row["TableID"];
             string appID = row["AppID"];
             string sidebar = row["Sidebar"];
+            string notifyUsers = row["NotifyUsers"];
+            string chartType = row["ChartType"];
+            string chartTitle = row["ChartTitle"];
+            string usersAllowedToEdit = row["UsersAllowedToEdit"];
             string dateCreated = row["DateCreated"];
-            var coll = new CustomTable_Coll(id, tableName, createdBy, tableID, appID, sidebar, dateCreated);
+            var coll = new CustomTable_Coll(id, tableName, createdBy, tableID, appID, sidebar, notifyUsers, chartType, chartTitle, usersAllowedToEdit, dateCreated);
             _coll.Add(coll);
         }
     }
@@ -219,26 +293,43 @@ public class CustomTableViewer {
         dbCall.CallUpdate("CustomTables", updateQuery, query);
     }
 
-    public void UpdateTableName(string tableID, string tableName) {
+    public void UpdateTableNameAndChartTitle(string tableID, string tableName, string chartTitle) {
         List<DatabaseQuery> query = new List<DatabaseQuery>();
         query.Add(new DatabaseQuery("TableID", tableID));
 
         List<DatabaseQuery> updateQuery = new List<DatabaseQuery>();
         updateQuery.Add(new DatabaseQuery("TableName", tableName));
+        updateQuery.Add(new DatabaseQuery("ChartTitle", chartTitle));
 
         dbCall.CallUpdate("CustomTables", updateQuery, query);
     }
 
-    public void UpdateSidebarActive(string id, bool sidebar) {
+    public void UpdateSidebarActiveAndChartTypeAndNotifyUsers(string id, bool sidebar, bool notifyUsers, string chartType) {
         string _sb = "0";
         if (sidebar)
             _sb = "1";
+
+        string _nu = "0";
+        if (notifyUsers)
+            _nu = "1";
 
         List<DatabaseQuery> query = new List<DatabaseQuery>();
         query.Add(new DatabaseQuery("ID", id));
 
         List<DatabaseQuery> updateQuery = new List<DatabaseQuery>();
         updateQuery.Add(new DatabaseQuery("Sidebar", _sb));
+        updateQuery.Add(new DatabaseQuery("NotifyUsers", _nu));
+        updateQuery.Add(new DatabaseQuery("ChartType", chartType));
+
+        dbCall.CallUpdate("CustomTables", updateQuery, query);
+    }
+
+    public void UpdateUsersAllowedToEdit(string id, string usersAllowedToEdit) {
+        List<DatabaseQuery> query = new List<DatabaseQuery>();
+        query.Add(new DatabaseQuery("ID", id));
+
+        List<DatabaseQuery> updateQuery = new List<DatabaseQuery>();
+        updateQuery.Add(new DatabaseQuery("UsersAllowedToEdit", usersAllowedToEdit));
 
         dbCall.CallUpdate("CustomTables", updateQuery, query);
     }
@@ -262,4 +353,40 @@ public class CustomTableViewer {
     public List<CustomTable_Coll> CustomTableList {
         get { return _coll; }
     }
+
+    public static string BuildChangeText(object[] vals) {
+        string changeMade = "<table cellpadding='0' cellspacing='0'><tr>";
+        int count = 0;
+
+        foreach (object obj in vals) {
+            object[] objArray = obj as object[];
+            if (count == 0) {
+                changeMade += "<td style='border-right: 1px solid #CCC; border-left: 1px solid #CCC; border-bottom: 1px solid #CCC; border-top: 1px solid #CCC; background: #EFEFEF; padding: 5px 8px;'>";
+            }
+            else {
+                changeMade += "<td style='border-right: 1px solid #CCC; border-bottom: 1px solid #CCC; border-top: 1px solid #CCC; background: #EFEFEF; padding: 5px 8px;'>";
+            }
+            changeMade += objArray[0].ToString().Trim() + "</td>";
+            count++;
+        }
+
+        count = 0;
+        changeMade += "</tr><tr>";
+
+        foreach (object obj in vals) {
+            object[] objArray = obj as object[];
+            if (count == 0) {
+                changeMade += "<td style='border-right: 1px solid #CCC; border-left: 1px solid #CCC; border-bottom: 1px solid #CCC; padding: 5px 8px;'>";
+            }
+            else {
+                changeMade += "<td style='border-right: 1px solid #CCC; border-bottom: 1px solid #CCC; padding: 5px 8px;'>";
+            }
+            changeMade += objArray[1].ToString().Trim() + "</td>";
+            count++;
+        }
+
+        changeMade += "</tr></table>";
+        return changeMade;
+    }
+
 }

@@ -693,6 +693,30 @@ public class DatabaseCall {
 
         return dataTable;
     }
+    public DataTable CallGetDataTableBySelectStatement(string commandText) {
+        DataTable dataTable = new DataTable();
+        try {
+            if (CheckConnectionFirst()) {
+                _command.CommandText = commandText;
+
+                DbDataReader reader = _command.ExecuteReader();
+                dataTable.Load(reader);
+
+                reader.Close();
+                reader.Dispose();
+            }
+        }
+        catch (Exception e) {
+            if (NeedToLogErrors) {
+                new AppLog(false).AddError(e);
+            }
+        }
+        finally {
+            CloseConnection();
+        }
+
+        return dataTable;
+    }
 
     #endregion
 

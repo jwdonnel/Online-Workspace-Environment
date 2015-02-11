@@ -21,6 +21,7 @@ using OpenWSE_Tools.Notifications;
 using OpenWSE_Tools.GroupOrganizer;
 using SocialSignInApis;
 using OpenWSE.Core.Licensing;
+using System.Web.UI.HtmlControls;
 
 #endregion
 
@@ -43,6 +44,18 @@ public partial class Default : Page {
     protected void Page_Load(object sender, EventArgs e) {
         if (!IsPostBack && !ServerSettings.CheckWebConfigFile()) {
             return;
+        }
+
+        if (!IsPostBack) {
+            this.Page.MetaDescription = _ss.MetaTagDescription;
+            this.Page.MetaKeywords = _ss.MetaTagKeywords;
+
+            if (!string.IsNullOrEmpty(ServerSettings.RobotsMetaTag)) {
+                HtmlMeta meta = new HtmlMeta();
+                meta.Name = "robots";
+                meta.Content = ServerSettings.RobotsMetaTag;
+                this.Page.Header.Controls.Add(meta);
+            }
         }
 
         // Check to see if social sign in is valid

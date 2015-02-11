@@ -1,7 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="ProjectExplorer.aspx.cs" Inherits="SiteTools_ProjectExplorer" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Project Explorer</title>
@@ -87,7 +86,8 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <ajaxToolkit:ToolkitScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" AsyncPostBackTimeout="360000"></ajaxToolkit:ToolkitScriptManager>
+        <asp:ScriptManager ID="ScriptManager_deliverypickups" runat="server" AsyncPostBackTimeout="360000">
+        </asp:ScriptManager>
         <div id="app_title_bg" runat="server" class="app-Settings-title-bg-color-main">
             <div class="pad-all">
                 <div class="app-Settings-title-user-info">
@@ -147,7 +147,6 @@
                                     <asp:HiddenField ID="hf_updateFolderName" runat="server" OnValueChanged="hf_updateFolderName_ValueChanged" />
                                     <asp:HiddenField ID="hf_moveFile" runat="server" OnValueChanged="hf_moveFile_ValueChanged" />
                                     <asp:HiddenField ID="hf_moveFolder" runat="server" OnValueChanged="hf_moveFolder_ValueChanged" />
-                                    <asp:HiddenField ID="hfRefreshAllFilesAfterUpload" runat="server" OnValueChanged="hfRefreshAllFilesAfterUpload_ValueChanged" />
                                 </div>
                             </asp:Panel>
                             <asp:Panel ID="pnl_nosavedproject" runat="server" Visible="false" Enabled="false" CssClass="pad-all" Style="overflow: auto;">
@@ -174,33 +173,40 @@
                 </td>
             </tr>
         </table>
-        <div id="MessageActivationPopup" style="display: none;">
-            <div class="message-element-align">
-                <div class="message">
-                    <h4 class="title"></h4>
-                    <div class="clear-space"></div>
-                    <div class="clear-space"></div>
-                    <div class="inline-block" style="margin: auto 0; text-align: left;">
-                        <asp:UpdatePanel ID="updatepnl_FtpLogin" runat="server" UpdateMode="Conditional">
-                            <ContentTemplate>
-                                <asp:Panel ID="pnl_ftpLogin" runat="server" DefaultButton="btn_ftpLogin">
-                                    <span class="font-bold">Username</span><br />
-                                    <asp:TextBox ID="tb_ftpUsername" runat="server" CssClass="textEntry" Style="width: 200px;" />
-                                    <div class="clear-space"></div>
-                                    <span class="font-bold">Password</span><br />
-                                    <asp:TextBox ID="tb_ftpPassword" runat="server" TextMode="Password" CssClass="textEntry" Style="width: 200px;" />
-                                    <div class="clear-space"></div>
-                                    <asp:Button ID="btn_ftpLogin" runat="server" CssClass="input-buttons RandomActionBtns" OnClick="btn_ftpLogin_Click" Text="Ok" Style="width: 65px;" />
-                                    <input type="button" class="input-buttons" value="Cancel" onclick="CancelLogin();" style="width: 65px;" />
-                                    <asp:Literal ID="ltl_ftpLogin" runat="server"></asp:Literal>
-                                </asp:Panel>
-                            </ContentTemplate>
-                            <Triggers>
-                                <asp:AsyncPostBackTrigger ControlID="btn_ftpLogin" />
-                            </Triggers>
-                        </asp:UpdatePanel>
+        <div id="FtpProject-element" class="Modal-element" style="display: none;">
+            <div class="Modal-overlay">
+                <div class="Modal-element-align">
+                    <div class='Modal-element-modal' style='width: 350px; min-width: 350px;'>
+                        <div class='ModalHeader'>
+                            <div><span class='Modal-title'></span></div>
+                        </div>
+                        <div class="ModalPadContent">
+                            <h4 class="title"></h4>
+                            <div class="clear-space"></div>
+                            <div class="clear-space"></div>
+                            <div class="inline-block" style="margin: auto 0; text-align: left;">
+                                <asp:UpdatePanel ID="updatepnl_FtpLogin" runat="server" UpdateMode="Conditional">
+                                    <ContentTemplate>
+                                        <asp:Panel ID="pnl_ftpLogin" runat="server" DefaultButton="btn_ftpLogin">
+                                            <span class="font-bold">Username</span><br />
+                                            <asp:TextBox ID="tb_ftpUsername" runat="server" CssClass="textEntry margin-right" Style="width: 200px;" />
+                                            <asp:Button ID="btn_ftpLogin" runat="server" CssClass="input-buttons RandomActionBtns" OnClick="btn_ftpLogin_Click" Text="Ok" Style="width: 65px;" />
+                                            <div class="clear-space"></div>
+                                            <span class="font-bold">Password</span><br />
+                                            <asp:TextBox ID="tb_ftpPassword" runat="server" TextMode="Password" CssClass="textEntry margin-right" Style="width: 200px;" />
+                                            <input type="button" class="input-buttons" value="Cancel" onclick="CancelLogin();" style="width: 65px;" />
+                                            <div class="clear-space"></div>
+                                            <asp:Literal ID="ltl_ftpLogin" runat="server"></asp:Literal>
+                                        </asp:Panel>
+                                    </ContentTemplate>
+                                    <Triggers>
+                                        <asp:AsyncPostBackTrigger ControlID="btn_ftpLogin" />
+                                    </Triggers>
+                                </asp:UpdatePanel>
+                            </div>
+                            <div class="clear-space"></div>
+                        </div>
                     </div>
-                    <div class="clear-space"></div>
                 </div>
             </div>
         </div>
@@ -218,21 +224,13 @@
                     </div>
                     <div class="ModalPadContent">
                         <div id="fileuploader" class="clear-margin">
-                            <asp:Label runat="server" ID="myThrobber" Style="display: none;"><img align="absmiddle" alt="" src="uploading.gif"/></asp:Label>
-                            <ajaxToolkit:AjaxFileUpload ID="AjaxFileUpload1" runat="server" padding-bottom="4"
-                                padding-left="2" padding-right="1" padding-top="4" ThrobberID="myThrobber" OnClientUploadComplete="onClientUploadComplete"
-                                OnUploadComplete="AjaxFileUpload1_OnUploadComplete" MaximumNumberOfFiles="100"
-                                AzureContainerName="" OnClientUploadCompleteAll="onClientUploadCompleteAll" OnUploadCompleteAll="AjaxFileUpload1_UploadCompleteAll" OnUploadStart="AjaxFileUpload1_UploadStart" OnClientUploadStart="onClientUploadStart" />
-                            <div id="uploadCompleteInfo"></div>
-                            <div class="clear-space"></div>
-                            <div id="testuploaded" style="display: none; padding: 4px; border: gray 1px solid;">
-                                <h4>list of uploaded files:</h4>
-                                <hr />
-                                <div id="fileList" style="overflow: auto; max-height: 200px;">
-                                </div>
-                            </div>
+                            Select file(s) and press the Upload Files button. Your uploaded files will be<br />
+                            placed into the currently selected folder.
+                                <div class="clear-space-five"></div>
+                            <asp:FileUpload ID="FileUploadControl" runat="server" AllowMultiple="true" />
                             <div class="clear-space"></div>
                             <div align="right">
+                                <asp:Button ID="btnFileUpload" runat="server" Text="Upload Files" CssClass="RandomActionBtns input-buttons float-left" OnClick="btnFileUpload_OnClick" />
                                 <input type="button" id="btn_close_uploader" class="input-buttons" value="Close"
                                     onclick="openWSE.LoadModalWindow(false, 'FileUpload-element', '');"
                                     style="margin-right: 0px" />
@@ -249,68 +247,6 @@
             $(document).ready(function () {
                 openWSE_Config.siteRootFolder = "<%=ResolveUrl("~/").Replace("/", "") %>";
             });
-
-            function onClientUploadComplete(sender, e) {
-                onImageValidated("FALSE", e);
-            }
-            function onImageValidated(arg, context) {
-
-                var test = document.getElementById("testuploaded");
-                test.style.display = 'block';
-
-                var fileList = document.getElementById("fileList");
-                var item = document.createElement('div');
-                item.style.padding = '4px';
-
-                if (openWSE.ConvertBitToBoolean(arg)) {
-                    var url = context.get_postedUrl();
-                    url = url.replace('&amp;', '&');
-                    item.appendChild(createThumbnail(context, url));
-                } else {
-                    item.appendChild(createFileInfo(context));
-                }
-
-                fileList.appendChild(item);
-            }
-            function createFileInfo(e) {
-                var holder = document.createElement('div');
-                holder.appendChild(document.createTextNode(e.get_fileName() + ' with size ' + e.get_fileSize() + ' bytes'));
-
-                return holder;
-            }
-            function createThumbnail(e, url) {
-                var holder = document.createElement('div');
-                var img = document.createElement("img");
-                img.style.width = '80px';
-                img.style.height = '80px';
-                img.setAttribute("src", url);
-
-                holder.appendChild(createFileInfo(e));
-                holder.appendChild(img);
-
-                return holder;
-            }
-            function onClientUploadStart(sender, e) {
-                document.getElementById('uploadCompleteInfo').innerHTML = 'Please wait while uploading ' + e.get_filesInQueue() + ' files...';
-            }
-            function onClientUploadCompleteAll(sender, e) {
-                var args = JSON.parse(e.get_serverArguments()),
-                    unit = args.duration > 60 ? 'minutes' : 'seconds',
-                    duration = (args.duration / (args.duration > 60 ? 60 : 1)).toFixed(2);
-
-                var info = 'At <b>' + args.time + '</b> server time <b>'
-                    + e.get_filesUploaded() + '</b> of <b>' + e.get_filesInQueue()
-                    + '</b> files were uploaded with status code <b>"' + e.get_reason()
-                    + '"</b> in <b>' + duration + ' ' + unit + '</b>';
-
-                document.getElementById('uploadCompleteInfo').innerHTML = info;
-
-                openWSE.LoadingMessage1("Updating...");
-
-                $("#hf_currFolder").val(currFolderSel);
-                $("#hfRefreshAllFilesAfterUpload").val(new Date().toString());
-                __doPostBack("hfRefreshAllFilesAfterUpload", "");
-            }
         </script>
     </form>
 </body>

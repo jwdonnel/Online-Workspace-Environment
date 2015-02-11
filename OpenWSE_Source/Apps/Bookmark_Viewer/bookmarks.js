@@ -175,6 +175,7 @@ function AddBookmark() {
     var name = escape(document.getElementById("tb_addbookmarkname_bookmarkviewer").value);
     var url = escape(document.getElementById("tb_addbookmarkhtml_bookmarkviewer").value);
     if ($.trim(url) != "") {
+        loading_bookmarkviewer();
         $.ajax({
             url: openWSE.siteRoot() + "Apps/Bookmark_Viewer/BookmarkViewer.ashx?action=add&sortby=" + $("#sortby_bookmarkviewer").val() + "&name=" + name + "&url=" + url,
             type: "POST",
@@ -267,6 +268,7 @@ function edit_in_iFrame(id) {
             if (response != "") {
                 $("#pnl_share_bookmarkviewer").html(response);
                 openWSE.LoadModalWindow(true, 'bookmark-share-edit-element', 'Edit Bookmark');
+                $("#editBookmarkHtml").focus();
             }
             openWSE.RemoveUpdateModal();
         }
@@ -323,11 +325,15 @@ function share_click(id) {
     });
 
     if (users != "") {
+        loading_bookmarkviewer();
         $.ajax({
             url: openWSE.siteRoot() + "Apps/Bookmark_Viewer/BookmarkViewer.ashx?action=finishShare&sortby=" + $("#sortby_bookmarkviewer").val() + "&id=" + id + "&listusers=" + users,
             type: "POST",
             beforeSend: function (xhr) {
                 xhr.overrideMimeType("text/plain; charset=x-user-defined");
+            },
+            complete: function (data) {
+                openWSE.RemoveUpdateModal();
             }
         });
     }
@@ -392,36 +398,27 @@ function SearchBookmarks() {
     }
 }
 
-function embedded_video_bookmark(html, id) {
-    $(".bm-yt-body").remove();
-    var x = "<object width='100%' height='350'>";
-    x += "<param name='movie' value='https://www.youtube.com/v/" + html + "?version=3&amp;autoplay=1'></param>";
-    x += "<param name='allowScriptAccess' value='always'></param>";
-    x += "<embed src='https://www.youtube.com/v/" + html + "?version=3&amp;autoplay=1' ";
-    x += "type='application/x-shockwave-flash' ";
-    x += "allowscriptaccess='always' ";
-    x += "width='100%' height='450px'></embed> ";
-    x += "</object>";
+function CloseBookmark_YouTube() {
+    openWSE.LoadModalWindow(false, "youtube-player-element", "");
+    $("#bm-yt-body").html("");
+}
 
-    var iframe = document.createElement("iframe");
-    iframe.setAttribute("id", "ytFrame_view");
-    iframe.setAttribute("width", "100%");
-    iframe.setAttribute("height", "490px");
-    iframe.setAttribute("frameborder", "0");
-    iframe.setAttribute("scrolling", "no");
+function embedded_video_bookmark(html, name) {
+    CloseBookmark_YouTube();
+    name = unescape(name);
 
-    var closeBtn = "<a href='#' class='td-cancel-btn margin-top-sml' onclick=\"$('.bm-yt-body').remove();return false;\" title='Close Video'></a>";
-    $("#" + id).find("tbody").append("<tr class='bm-yt-body'><td></td><td></td><td valign='top'>" + closeBtn + "</td></tr>");
-    $("#" + id).find(".bm-yt-body td").eq(1).html(iframe);
-
-
-    var doc = iframe.document;
-    if (iframe.contentDocument) {
-        doc = iframe.contentDocument; // For NS6
-    } else if (iframe.contentWindow) {
-        doc = iframe.contentWindow.document; // For IE5.5 and IE6
+    if (name.length > 70) {
+        name = name.substr(0, 70) + "...";
     }
-    doc.open();
-    doc.writeln(x);
-    doc.close();
+
+    var x = "<iframe width='587px' height='355px' src='http://www.youtube.com/embed/" + html + "?version=3&autoplay=1' border='0'></iframe>";
+    $("#bm-yt-body").html(x);
+
+    var inframeName = $("#" + name).find(".bookmark-html-link").html();
+    if (inframeName.length > 70) {
+        inframeName = inframeName.substr(0, 70);
+    }
+
+    name = "<img alt='favicon' src='http://www.youtube.com/favicon.ico' class='float-left pad-right' />" + inframeName;
+    openWSE.LoadModalWindow(true, "youtube-player-element", name);
 }

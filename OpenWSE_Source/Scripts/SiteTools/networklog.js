@@ -5,9 +5,12 @@ var _isAreaGraph = false;
 var _lineWidth = 2;
 var _curveType = 'none'; /*'function'*/
 
-
 var timeOut1, timeOut2;
 $(document).ready(function () {
+    $.getScript("//www.google.com/jsapi").done(function (script, textStatus) {
+        google.load("visualization", "1", { callback: function () { }, packages: ["corechart"] });
+    });
+
     var url = location.hash;
 
     startGraphTimer1();
@@ -303,9 +306,6 @@ function ResetStatus(_this) {
         });
     }
 }
-
-google.load("visualization", "1", { packages: ["corechart"] });
-google.load("visualization", "1", { packages: ["geochart"] });
 
 $(window).resize(function () {
     graphWidth = $("#maincontent_overflow").outerWidth();

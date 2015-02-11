@@ -11,7 +11,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using AjaxControlToolkit;
 using HtmlAgilityPack;
 
 public class HelperMethods
@@ -257,77 +256,6 @@ public class HelperMethods
 
     public static IpCityState GetCityStateFromIP(string ip) {
         return new IpMethods().GetCityStateFromIp(ip);
-    }
-
-    public static string GetMetaTagContent(string fileName, string tagName) {
-        if (File.Exists(fileName)) {
-            try {
-                HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
-
-                htmlDoc.OptionFixNestedTags = true;
-                htmlDoc.OptionWriteEmptyNodes = true;
-                htmlDoc.OptionOutputOriginalCase = true;
-
-                htmlDoc.Load(fileName);
-
-                if (htmlDoc.DocumentNode != null) {
-                    HtmlAgilityPack.HtmlNode tag = htmlDoc.DocumentNode.SelectSingleNode("//head/meta[@name='" + tagName + "']");
-                    if (tag != null && tag.Attributes["content"] != null) {
-                        return HttpUtility.HtmlDecode(tag.Attributes["content"].Value.Trim());
-                    }
-                }
-            }
-            catch { }
-        }
-
-        return string.Empty;
-    }
-    public static void UpdateMetaTags(string fileName, string tagName, string content) {
-        if (File.Exists(fileName)) {
-            try {
-                string newMetaTag = "<meta name=\"" + tagName + "\" content=\"" + HttpUtility.HtmlEncode(content) + "\" />";
-                string orginalMetaTag = GetOriginalMetaTag(fileName, tagName);
-
-                List<string> newFileLines = new List<string>();
-                string[] fileLines = File.ReadAllLines(fileName);
-
-                for (int i = 0; i < fileLines.Length; i++) {
-                    if (fileLines[i].Contains(orginalMetaTag)) {
-                        string newLine = fileLines[i].Replace(orginalMetaTag, newMetaTag);
-                        newFileLines.Add(newLine);
-                    }
-                    else {
-                        newFileLines.Add(fileLines[i]);
-                    }
-                }
-
-                File.WriteAllLines(fileName, newFileLines.ToArray());
-            }
-            catch { }
-        }
-    }
-    private static string GetOriginalMetaTag(string fileName, string tagName) {
-        if (File.Exists(fileName)) {
-            try {
-                HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
-
-                htmlDoc.OptionFixNestedTags = true;
-                htmlDoc.OptionWriteEmptyNodes = true;
-                htmlDoc.OptionOutputOriginalCase = true;
-
-                htmlDoc.Load(fileName);
-
-                if (htmlDoc.DocumentNode != null) {
-                    HtmlAgilityPack.HtmlNode tag = htmlDoc.DocumentNode.SelectSingleNode("//head/meta[@name='" + tagName + "']");
-                    if (tag != null) {
-                        return tag.OuterHtml;
-                    }
-                }
-            }
-            catch { }
-        }
-
-        return string.Empty;
     }
 
     public static bool IsValidCustomProjectFormat(string fileExt) {

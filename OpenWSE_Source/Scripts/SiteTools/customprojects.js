@@ -87,19 +87,8 @@ function AddFTPConnection() {
     }
 }
 
-$(window).resize(function () {
-    var $this = $(".loaderApp-overlay").find(".loaderApp-element-modal");
-    var mLeft = -($this.width() / 2);
-    var mTop = -($this.height() / 2);
-    $(".loaderApp-overlay").find(".loaderApp-element-align").css({
-        marginLeft: mLeft,
-        marginTop: mTop
-    });
-});
-
 function LoadDefaultPageSelector() {
-    $(".loaderApp-overlay").show();
-    $(window).resize();
+    openWSE.LoadModalWindow(true, "LoaderApp-element", "Set Default Page");
 }
 
 function DownloadCP(id) {

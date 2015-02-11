@@ -60,15 +60,14 @@ var chatClient = function () {
     });
     $(document.body).on("click", ".chat-modal", function () {
         var user = $(this).attr("chat-username");
-        var userId = $(this).attr("id");
-        userId = userId.replace("app-ChatClient-", "");
-        userId = userId.replace("-min-bar", "");
+        var userId = $(this).attr("data-appid");
+        
         RemoveIsNew(user, userId);
     });
     $(document.body).on("click", ".ChatUserNotSelected, .ChatUserSelected", function () {
         var fullName = $(this).find("span").html();
         var user = $(this).attr("chat-username");
-        var userId = $(this).find("span").attr("chat-userId");
+        var userId = $(this).find("span").attr("chat-userid");
 
         try {
             if ($("#workspace_holder").length > 0 && openWSE.IsComplexWorkspaceMode()) {
@@ -129,32 +128,32 @@ var chatClient = function () {
     function BuildChatWindow(user, userId, fullName) {
         var workspace = openWSE.Getworkspace();
         var id = "app-ChatClient-" + userId;
-        if ($("#" + id).length == 0) {
+        if ($(".app-main-holder[data-appid='" + id + "']").length == 0) {
             var currStatus = $(".ChatUserNotSelected[chat-username='" + user + "']").find(".statusUserDiv").attr("class");
             if ((currStatus != "") && (currStatus != null) && (currStatus != undefined)) {
                 currStatus = currStatus.replace("statusUserDiv ", "");
             }
 
-            var modal = "<div id='" + id + "' chat-username='" + user + "' class='app-main chat-modal' style='display: none; min-height: 425px; min-width: 315px;'>";
+            var modal = "<div data-appid='" + id + "' chat-username='" + user + "' class='app-main-holder app-main chat-modal' style='display: none; min-height: 425px; min-width: 315px;'>";
             modal += "<div class='app-head-button-holder'>";
             modal += "<a href='#" + id + "' class='options-button-app' title='View app options'></a>";
             modal += "<div class='app-popup-inner-app'>";
-            modal += "<table><tbody><tr><td valign='top'><b>Options</b><div class='clear-space-five'></div><ul>";
+            modal += "<table><tbody><tr><td valign='top'><h3>App Options</h3><div class='clear-space-five'></div><ul>";
             modal += "<li onclick='openWSE.ReloadApp(this)' title='Refresh'><a href='#" + id + "' class='reload-button-app'></a>Refresh</li>";
-            modal += "<li onclick=\"openWSE.PopOutFrame(this,'ChatClient/ChatWindow.html?user=" + user + "')" + "\" title='Pop Out'><a href='#" + id + "' class='popout-button-app'></a>Pop out</li>";
-            modal += "<li onclick='openWSE.AboutApp(this)' title='About App'><div class='about-app'></div>About</li></ul></td>";
+            modal += "<li onclick=\"openWSE.PopOutFrame(this,'ExternalAppHolder.aspx?chatuser=" + user + "')" + "\" title='Pop Out'><a href='#" + id + "' class='popout-button-app'></a>Pop out</li>";
+            modal += "<li onclick='openWSE.AboutApp(this)' title='About App'><div class='about-app'></div>About</li></ul></td></tr>";
 
             if ($("#ddl_WorkspaceSelector").length > 0) {
-                modal += "<td valign='top'><div class='pad-left'><b>Workspace</b><div class='clear-space-five'></div>";
+                modal += "<tr><td><div class='clear-space'></div><span class='workspace-selector-app-option'>Workspace</span>";
                 modal += "<select class='app-options-workspace-switch'>";
                 var totalWorkspaces = $("#ddl_WorkspaceSelector").find(".dropdown-db-selector").find(".workspace-selection-item").length;
                 for (var ii = 0; ii < totalWorkspaces; ii++) {
                     modal += "<option value='" + (ii + 1).toString() + "'>" + (ii + 1).toString() + "</option>";
                 }
-                modal += "</select></div></td>";
+                modal += "</select></td></tr>";
             }
 
-            modal += "</tr></tbody></table></div>";
+            modal += "</tbody></table></div>";
             modal += "<a href='#" + id + "' class='exit-button-app' title='Close'></a>";
             modal += "<a href='#" + id + "' class='maximize-button-app' title='Maximize'></a>";
             modal += "<a href='#" + id + "' class='minimize-button-app' title='Minimize'></a></div>";
@@ -165,10 +164,10 @@ var chatClient = function () {
             $("#MainContent_" + workspace).append(modal);
         }
 
-        if ($("#" + id).length > 0) {
+        if ($(".app-main-holder[data-appid='" + id + "']").length > 0) {
             openWSE.ApplyAppDragResize();
 
-            var $this = $("#" + id);
+            var $this = $(".app-main-holder[data-appid='" + id + "']");
             openWSE.LoadApp($this, workspace);
             if ($this.hasClass("active") == false) {
                 $this.addClass("active");
@@ -243,12 +242,15 @@ var chatClient = function () {
         var chatuserlist = document.getElementById("chatuserlist").innerHTML;
 
         // Remove Selected User Styles
-        chatuserlist = chatuserlist.replace(/"/gi, "'");
-        chatuserlist = chatuserlist.replace(/ ChatUserSelected/gi, "");
-        chatuserlist = chatuserlist.replace(/ chatisNew/gi, "");
-        chatuserlist = chatuserlist.replace(/;/gi, "");
+        chatuserlist = chatuserlist.replace(/"/g, "'");
+        chatuserlist = chatuserlist.replace(/ ChatUserSelected/g, "");
+        chatuserlist = chatuserlist.replace(/ChatUserSelected /g, "");
+        chatuserlist = chatuserlist.replace(/ chatisNew/g, "");
+        chatuserlist = chatuserlist.replace(/chatisNew/g, "");
+        chatuserlist = chatuserlist.replace(/;/g, "");
+        chatuserlist = chatuserlist.replace(/%2F/g, "");
 
-        if ((data != "") && (data != chatuserlist)) {
+        if ((data != "") && (data.toLowerCase() != chatuserlist.toLowerCase())) {
             $('#chatuserlist').html(data);
 
             var totalusers = $('.listofusers li').size();
@@ -267,17 +269,16 @@ var chatClient = function () {
                 $("#header-total-online").html(totalonline);
 
                 $(".chat-modal").each(function () {
-                    var thisId = $(this).attr("id");
+                    var thisId = $(this).attr("data-appid");
                     thisId = thisId.replace("app-ChatClient-", "");
-                    thisId = thisId.replace("-min-bar", "");
-                    var currStatus = $(".ChatUserNotSelected").find("span[chat-userId='" + thisId + "']").parent().find(".statusUserDiv").attr("class");
+                    var currStatus = $(".ChatUserNotSelected").find("span[chat-userid='" + thisId + "']").parent().find(".statusUserDiv").attr("class");
                     if ((currStatus != "") && (currStatus != null)) {
                         var n = currStatus.replace("statusUserDiv ", "");
                         $(this).find(".app-header-icon").attr("class", "app-header-icon statusUserDiv2 margin-right-sml " + n);
                     }
 
                     if ($(this).css("display") == "block") {
-                        openWSE.SetAppIconActive($(this).attr("id"));
+                        openWSE.SetAppIconActive(this);
                     }
                 });
             }
@@ -295,8 +296,8 @@ var chatClient = function () {
             if (splitData.length == 2) {
                 var user = splitData[0];
                 var fullName = splitData[1];
-                var $chatSession = $("#app-ChatClient-" + user);
-                var $chatSessionMin = $("#app-ChatClient-" + user + "-min-bar");
+                var $chatSession = $(".app-main-holder[data-appid='app-ChatClient-" + user + "']");
+                var $chatSessionMin = $(".app-min-bar[data-appid='app-ChatClient-" + user + "']");
                 var appworkspace = "";
                 if ($chatSession.closest(".workspace-holder").length > 0) {
                     appworkspace = $chatSession.closest(".workspace-holder").attr("id").replace("MainContent_", "");
@@ -305,8 +306,8 @@ var chatClient = function () {
                 if ($chatSessionMin.length > 0) {
                     if (!$chatSessionMin.hasClass("chatisNew")) {
                         $chatSessionMin.addClass("chatisNew");
-                        if ((!$(".ChatUserNotSelected").find("span[chat-userId='" + user + "']").parent().hasClass("chatisNew")) && (!tabSelected)) {
-                            $(".ChatUserNotSelected").find("span[chat-userId='" + user + "']").parent().addClass("chatisNew");
+                        if ((!$(".ChatUserNotSelected").find("span[chat-userid='" + user + "']").parent().hasClass("chatisNew")) && (!tabSelected)) {
+                            $(".ChatUserNotSelected").find("span[chat-userid='" + user + "']").parent().addClass("chatisNew");
                         }
                         flashTitle(fullName);
                     }
@@ -314,8 +315,8 @@ var chatClient = function () {
                 else if (($chatSession.length > 0) && ($chatSession.css("display") == "block")) {
                     if ((!$chatSession.find(".app-head").hasClass("chatisNew")) && ((!$chatSession.hasClass("selected")) || (current != appworkspace))) {
                         $chatSession.find(".app-head").addClass("chatisNew");
-                        if ((!$(".ChatUserNotSelected").find("span[chat-userId='" + user + "']").parent().hasClass("chatisNew")) && ((!tabSelected) || (current != appworkspace))) {
-                            $(".ChatUserNotSelected").find("span[chat-userId='" + user + "']").parent().addClass("chatisNew");
+                        if ((!$(".ChatUserNotSelected").find("span[chat-userid='" + user + "']").parent().hasClass("chatisNew")) && ((!tabSelected) || (current != appworkspace))) {
+                            $(".ChatUserNotSelected").find("span[chat-userid='" + user + "']").parent().addClass("chatisNew");
                         }
                         flashTitle(fullName);
                     }
@@ -327,8 +328,8 @@ var chatClient = function () {
                     }
 
                     if (canFlash) {
-                        if (!$(".ChatUserNotSelected").find("span[chat-userId='" + user + "']").parent().hasClass("chatisNew")) {
-                            $(".ChatUserNotSelected").find("span[chat-userId='" + user + "']").parent().addClass("chatisNew");
+                        if (!$(".ChatUserNotSelected").find("span[chat-userid='" + user + "']").parent().hasClass("chatisNew")) {
+                            $(".ChatUserNotSelected").find("span[chat-userid='" + user + "']").parent().addClass("chatisNew");
                             flashTitle(fullName);
                         }
                     }

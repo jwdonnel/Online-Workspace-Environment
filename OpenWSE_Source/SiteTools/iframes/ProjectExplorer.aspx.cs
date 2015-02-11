@@ -10,7 +10,6 @@ using System.Web.Script.Serialization;
 using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using AjaxControlToolkit;
 
 public partial class SiteTools_ProjectExplorer : System.Web.UI.Page {
 
@@ -116,49 +115,9 @@ public partial class SiteTools_ProjectExplorer : System.Web.UI.Page {
             StartUpPage(userID);
             BuildSavedPages();
 
-            #region AjaxUpload
-
-            if (AjaxFileUpload1.IsInFileUploadPostBack) {
-                // do for ajax file upload partial postback request
+            if (!string.IsNullOrEmpty(Request.QueryString["currFolder"])) {
+                RegisterPostbackScripts.RegisterStartupScript(this, "SetCurrFolder('" + Request.QueryString["currFolder"] + "');SetFolders();");
             }
-            else {
-                // do for normal page request
-
-                if (HelperMethods.ConvertBitToBoolean(Request.QueryString["preview"]) && !string.IsNullOrEmpty(Request.QueryString["fileId"])) {
-                    var fileId = Request.QueryString["fileId"];
-                    string fileContentType = null;
-                    byte[] fileContents = null;
-
-                    if (AjaxFileUpload1.StoreToAzure) {
-
-                    #if NET45 || NET40
-                    using (var stream = new MemoryStream())
-                    {
-                        AjaxFileUploadBlobInfo blobInfo;
-                        AjaxFileUploadAzureHelper.DownloadStream(Request.QueryString["uri"], stream, out blobInfo);
-
-                        fileContentType = blobInfo.Extension;
-                        fileContents = stream.ToArray();
-                    }
-                    #endif
-
-                    }
-                    else {
-                        fileContents = (byte[])Session["fileContents_" + fileId];
-                        fileContentType = (string)Session["fileContentType_" + fileId];
-                    }
-
-                    if (fileContents != null) {
-                        Response.Clear();
-                        Response.ContentType = fileContentType;
-                        Response.BinaryWrite(fileContents);
-                        Response.End();
-                    }
-
-                }
-            }
-
-            #endregion
         }
         else
             Page.Response.Redirect("~/ErrorPages/Blocked.html");
@@ -420,7 +379,7 @@ public partial class SiteTools_ProjectExplorer : System.Web.UI.Page {
         if (FtpActions.TryConnect(out errorMessage)) {
             BuildFileList(DefaultDir);
             BuildSavedPages();
-            RegisterPostbackScripts.RegisterStartupScript(this, "$('#MessageActivationPopup').hide();");
+            RegisterPostbackScripts.RegisterStartupScript(this, "openWSE.LoadModalWindow(false, 'FtpProject-element', '');");
         }
         else {
             ltl_ftpLogin.Text = "<div class='clear-space'></div><span style='color: Red;'>Invalid Username/Password</span>";
@@ -980,63 +939,6 @@ public partial class SiteTools_ProjectExplorer : System.Web.UI.Page {
         BuildSavedPages();
     }
 
-    protected void hfRefreshAllFilesAfterUpload_ValueChanged(object sender, EventArgs e) {
-        hfRefreshAllFilesAfterUpload.Value = string.Empty;
-        if (!string.IsNullOrEmpty(DefaultDir)) {
-            if (Session[_username + "_" + CustomProjects.SessionName + "_FileUpload"] != null) {
-                List<FileContentUpload> files = Session[_username + "_" + CustomProjects.SessionName + "_FileUpload"] as List<FileContentUpload>;
-                foreach (FileContentUpload file in files) {
-                    string currFolder = GetCurrentDirectory();
-
-                    List<string> fileList = new List<string>();
-                    if (!CustomProjects.IsFtpFolder(DefaultDir)) {
-                        fileList = Directory.GetFiles(DefaultDir + currFolder).ToList();
-                    }
-                    else {
-                        fileList = FtpActions.GetDirList(DefaultDir + currFolder);
-                    }
-
-                    int fileCount = 0;
-                    for (int i = 0; i < fileList.Count; i++) {
-                        FileInfo tempFi = new FileInfo(fileList[i]);
-                        if (!string.IsNullOrEmpty(tempFi.Extension)) {
-                            if (tempFi.Name.ToLower() == file.FileName || tempFi.Name.ToLower() == file.FileName.Replace(tempFi.Extension, "") + "(" + fileCount.ToString() + ")" + tempFi.Extension) {
-                                fileCount++;
-                            }
-                        }
-                    }
-
-                    string uploadFileName = file.FileName;
-                    if (fileCount > 0) {
-                        FileInfo tempInfo = new FileInfo(file.FileName);
-                        uploadFileName = file.FileName.Replace(tempInfo.Extension, "") + "(" + fileCount.ToString() + ")" + tempInfo.Extension;
-                    }
-
-                    string filename = DefaultDir + currFolder + uploadFileName;
-                    try {
-                        if (!CustomProjects.IsFtpFolder(DefaultDir)) {
-                            File.WriteAllBytes(filename, file.FileBytes);
-                        }
-                        else {
-                            if (!FtpActions.UploadFiles(filename, file.FileBytes)) {
-                                if (!FtpActions.TryConnect(out errorMessage)) {
-                                    RegisterPostbackScripts.RegisterStartupScript(this, "PromptFTPCredentials('" + DefaultDir + "');");
-                                }
-                            }
-                        }
-                    }
-                    catch { }
-                }
-            }
-
-            PageList.Clear();
-            BuildFileList(DefaultDir);
-            BuildSavedPages();
-        }
-
-        Session[_username + "_" + CustomProjects.SessionName + "_FileUpload"] = null;
-    }
-
     #endregion
 
 
@@ -1184,38 +1086,60 @@ public partial class SiteTools_ProjectExplorer : System.Web.UI.Page {
 
     #region FileUpload
 
-    protected void AjaxFileUpload1_OnUploadComplete(object sender, AjaxFileUploadEventArgs file) {
-        try {
-            FileInfo fi = new FileInfo(file.FileName);
-            if (HelperMethods.IsValidCustomProjectFormat(fi.Extension) || HelperMethods.IsImageFileType(fi.Extension)) {
-                if (Session[_username + "_" + CustomProjects.SessionName + "_FileUpload"] == null) {
-                    Session[_username + "_" + CustomProjects.SessionName + "_FileUpload"] = new List<FileContentUpload>();
-                }
+    protected void btnFileUpload_OnClick(object sender, EventArgs e) {
+        string currFolder = GetCurrentDirectory();
 
-                FileContentUpload fileContents = new FileContentUpload(file.FileName, file.GetContents());
-                (Session[_username + "_" + CustomProjects.SessionName + "_FileUpload"] as List<FileContentUpload>).Add(fileContents);
+        #region Save file contents
+        foreach (HttpPostedFile file in FileUploadControl.PostedFiles) {
+            List<string> fileList = new List<string>();
+            if (!CustomProjects.IsFtpFolder(DefaultDir)) {
+                fileList = Directory.GetFiles(DefaultDir + currFolder).ToList();
             }
-        }
-        catch (Exception e) {
-            AppLog applog = new AppLog(false);
-            applog.AddError(e);
-        }
-    }
-    protected void AjaxFileUpload1_UploadCompleteAll(object sender, AjaxFileUploadCompleteAllEventArgs e) {
-        var startedAt = (DateTime)Session["uploadTime"];
-        var now = DateTime.Now;
-        e.ServerArguments = new JavaScriptSerializer()
-            .Serialize(new {
-                duration = (now - startedAt).Seconds,
-                time = DateTime.Now.ToShortTimeString()
-            });
-    }
-    protected void AjaxFileUpload1_UploadStart(object sender, AjaxFileUploadStartEventArgs e) {
-        var now = DateTime.Now;
-        e.ServerArguments = now.ToShortTimeString();
-        Session["uploadTime"] = now;
+            else {
+                fileList = FtpActions.GetDirList(DefaultDir + currFolder);
+            }
 
-        Session[_username + "_" + CustomProjects.SessionName + "_FileUpload"] = new List<FileContentUpload>();
+            int fileCount = 0;
+            for (int i = 0; i < fileList.Count; i++) {
+                FileInfo tempFi = new FileInfo(fileList[i]);
+                if (!string.IsNullOrEmpty(tempFi.Extension)) {
+                    if (tempFi.Name.ToLower() == file.FileName || tempFi.Name.ToLower() == file.FileName.Replace(tempFi.Extension, "") + "(" + fileCount.ToString() + ")" + tempFi.Extension) {
+                        fileCount++;
+                    }
+                }
+            }
+
+            string uploadFileName = file.FileName;
+            if (fileCount > 0) {
+                FileInfo tempInfo = new FileInfo(file.FileName);
+                uploadFileName = file.FileName.Replace(tempInfo.Extension, "") + "(" + fileCount.ToString() + ")" + tempInfo.Extension;
+            }
+
+            string filename = DefaultDir + currFolder + uploadFileName;
+
+            byte[] fileData = null;
+            using (var binaryReader = new BinaryReader(file.InputStream)) {
+                fileData = binaryReader.ReadBytes(file.ContentLength);
+            }
+
+            try {
+                if (!CustomProjects.IsFtpFolder(DefaultDir)) {
+                    File.WriteAllBytes(filename, fileData);
+                }
+                else {
+                    FtpActions.UploadFiles(filename, fileData);
+                }
+            }
+            catch { }
+        }
+        #endregion
+
+        string requestQuery = "?currFolder=" + currFolder;
+        if (Request.QueryString.Count > 0) {
+            requestQuery = "&currFolder=" + currFolder;
+        }
+
+        Response.Redirect(Request.RawUrl + HttpUtility.UrlEncode(requestQuery));
     }
 
     #endregion

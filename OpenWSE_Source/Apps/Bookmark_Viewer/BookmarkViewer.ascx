@@ -137,3 +137,23 @@
         </div>
     </div>
 </div>
+<div id="youtube-player-element" class="Modal-element outside-main-app-div">
+    <div class="Modal-overlay">
+        <div class="Modal-element-align">
+            <div class="Modal-element-modal" style="min-height: 200px; width: 592px;">
+                <div class="ModalHeader">
+                    <div>
+                        <div class="app-head-button-holder-admin">
+                            <a href="#" onclick="CloseBookmark_YouTube();return false;" class="ModalExitButton"></a>
+                        </div>
+                        <span class="Modal-title"></span>
+                    </div>
+                </div>
+                <div class="ModalPadContent" style="padding: 0!important">
+                    <div id="bm-yt-body" style="padding-left: 1px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

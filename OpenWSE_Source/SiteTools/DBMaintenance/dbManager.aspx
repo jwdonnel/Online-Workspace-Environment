@@ -188,13 +188,17 @@
                                 <div class="pad-left">
                                     <asp:Panel ID="pnl_databaseChecker" runat="server">
                                     </asp:Panel>
-                                    <div class="clear-space"></div>
-                                    <div class="clear-space"></div>
-                                    <asp:Button ID="btn_checkDatabase" runat="server" CssClass="input-buttons" Text="Scan" Width="75px" OnClick="btn_checkDatabase_Click" />
-                                    <asp:Button ID="btn_UpdateDatabase" runat="server" CssClass="input-buttons" Text="Fix" Width="75px" OnClick="btn_UpdateDatabase_Click" Visible="false" Enabled="false" />
-                                    <div class="clear-space"></div>
-                                    <asp:Label ID="lbl_updatedbHint" runat="server" Font-Size="Small" Visible="false" Enabled="false" Text="You may have to update the database more than once to completely update it."></asp:Label>
-                                    <div class="clear-space-five"></div>
+                                    <div class="pad-left">
+                                        <div class="clear-space"></div>
+                                        <div class="clear-space"></div>
+                                        <asp:Button ID="btn_checkDatabase" runat="server" CssClass="input-buttons" Text="Scan" Width="75px" OnClick="btn_checkDatabase_Click" />
+                                        <asp:Button ID="btn_UpdateDatabase" runat="server" CssClass="input-buttons" Text="Fix" Width="75px" OnClick="btn_UpdateDatabase_Click" Visible="false" Enabled="false" />
+                                        <div class="clear-space"></div>
+                                        <asp:CheckBox ID="cbAutoFixDB" ClientIDMode="Static" runat="server" Text="&nbsp;Automatically fix any database issues" Visible="false" Enabled="false" OnCheckedChanged="cbAutoFixDB_CheckedChanged" AutoPostBack="true" />
+                                        <div class="clear-space"></div>
+                                        <asp:Label ID="lbl_updatedbHint" runat="server" Font-Size="Small" Visible="false" Enabled="false" Text="You may have to update the database more than once to completely update it."></asp:Label>
+                                        <div class="clear-space-five"></div>
+                                    </div>
                                 </div>
                             </div>
                         </ContentTemplate>
@@ -337,7 +341,8 @@
                             <div class="ModalPadContent">
                                 <div class="clear-margin">
                                     <p>
-                                        <small>Compatible Tables shown below are from this backup file.<br />Select the table(s) you wish to restore.</small>
+                                        <small>Compatible Tables shown below are from this backup file.<br />
+                                            Select the table(s) you wish to restore.</small>
                                     </p>
                                     <div class="clear-space">
                                     </div>
@@ -355,10 +360,10 @@
                                             </asp:Panel>
                                             <div class="clear" style="height: 20px;">
                                             </div>
-                                            <asp:Button ID="btn_finish_addtables" runat="server" Text="Restore" CssClass="input-buttons float-left margin-left"
-                                                OnClick="btn_finish_addtables_Click" OnClientClick="StartBackingUp()" CausesValidation="false" />
                                             <asp:Button ID="btn_canceltables" runat="server" Text="Cancel" CssClass="input-buttons float-right RandomActionBtns"
                                                 OnClick="btn_canceltables_Click" CausesValidation="false" />
+                                            <asp:Button ID="btn_finish_addtables" runat="server" Text="Restore" CssClass="input-buttons float-right margin-left"
+                                                OnClick="btn_finish_addtables_Click" OnClientClick="StartBackingUp()" CausesValidation="false" />
                                             <asp:HiddenField ID="hf_filename_tablesrestore" runat="server" />
                                             <div class="clear-space-five">
                                             </div>

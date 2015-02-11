@@ -3,10 +3,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head runat="server">
-    <title></title>
+    <title>OnlineWSE - Online Workspace Environment</title>
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
     <link id="Link1" runat="server" rel="shortcut icon" href="~/Standard_Images/favicon.ico"
         type="image/x-icon" />
     <link id="Link2" runat="server" rel="icon" href="~/Standard_Images/favicon.ico" type="image/ico" />
@@ -49,9 +47,9 @@
                                             </div>
                                         </div>
                                         <div id="profile_tab_Buttons">
-                                            <a id="aGroupLogin" runat="server" href="#" onclick="openWSE.GroupLoginModal();return false;"><span class="img-group"></span>Group Login</a>
-                                            <asp:LinkButton ID="aGroupLogoff" runat="server" OnClick="aGroupLogoff_Click" Enabled="false" Visible="false"><span class="img-grouplogoff"></span>Logout of Group</asp:LinkButton>
-                                            <asp:LinkButton ID="lbtn_signoff" runat="server" OnClick="lbtn_signoff_Click"><span class="img-signoff"></span>Log Off</asp:LinkButton>
+                                            <a id="aGroupLogin" runat="server" href="#" onclick="openWSE.GroupLoginModal();return false;" class="float-left margin-left">Group Login</a>
+                                            <asp:LinkButton ID="aGroupLogoff" runat="server" OnClick="aGroupLogoff_Click" CssClass="float-left margin-left" Enabled="false" Visible="false">Logout of Group</asp:LinkButton>
+                                            <asp:LinkButton ID="lbtn_signoff" runat="server" OnClick="lbtn_signoff_Click" CssClass="float-right margin-right">Sign Off</asp:LinkButton>
                                         </div>
                                     </li>
                                 </ul>
@@ -124,7 +122,7 @@
                                             <div id="Login-holder">
                                                 <table border="0" cellpadding="0" cellspacing="0">
                                                     <tr>
-                                                        <td valign="top">
+                                                        <td valign="middle">
                                                             <div id="SocialLogin_borderSep">
                                                                 <asp:Login ID="Login1" runat="server" FailureText="<div class='clear-space'></div><div style='color: #D80000;'>Invalid Username or Password.</div>"
                                                                     LoginButtonText="Login" TitleText="" Width="100%" DestinationPageUrl="Workspace.aspx"
@@ -175,10 +173,8 @@
                                                                                                 <asp:AsyncPostBackTrigger ControlID="lbtn_signinwith_Facebook" />
                                                                                             </Triggers>
                                                                                         </asp:UpdatePanel>
-                                                                                        <div class="clear-space"></div>
-                                                                                        <a href="#" id="lnk_forgotpassword" onclick="openWSE.LoadRecoveryPassword();return false;">Forgot your Password?</a>
-                                                                                        <div class="clear-space"></div>
-                                                                                        <a href="#" id="login_register_link" onclick="openWSE.LoadCreateAccountHolder();return false;">Create a new account</a>
+                                                                                        <a href="#" id="lnk_forgotpassword" class="clear margin-bottom" onclick="openWSE.LoadRecoveryPassword();return false;">Forgot your Password?</a>
+                                                                                        <a href="#" id="login_register_link" class="clear margin-bottom" onclick="openWSE.LoadCreateAccountHolder();return false;">Create a new account</a>
                                                                                     </td>
                                                                                 </tr>
                                                                             </table>
@@ -286,7 +282,7 @@
                                     </asp:Panel>
                                 </li>
                                 <li id="links_tab_body" runat="server" class="a-body">
-                                    <div class="menu-title" title="Collapse Menu"><span class="img-settings menu-img"></span>Settings / Tools</div>
+                                    <div class="menu-title" title="Collapse Menu"><span class="img-settings menu-img"></span>Site Tools</div>
                                     <div class="sidebar-divider"></div>
                                     <asp:Panel ID="pnl_settingLinks" runat="server" CssClass="li-pnl-tab">
                                     </asp:Panel>
@@ -381,7 +377,8 @@
                 <div id="footer-signdate" class="float-right pad-left pad-right">
                     John Donnelly | OpenWSE 2015 |
                     <a href="#" title="Open Mobile Workspace" class="my-app-remote-link" onclick="return openWSE.OpenMobileWorkspace();">Mobile</a> | 
-                    <a href="#iframecontent" onclick="openWSE.LoadIFrameContent('About.aspx', this);return false;">About</a>
+                    <a href="#iframecontent" onclick="openWSE.LoadIFrameContent('About.aspx', this);return false;" class="margin-right">About</a>-
+                    <a id="iwantthis" href="~/About.aspx#IWantThis" runat="server" title="Find out more" class="float-right margin-left" style="font-size: 14px;"><span class="img-present float-left margin-right-sml"></span>I want this</a>
                 </div>
             </div>
         </div>

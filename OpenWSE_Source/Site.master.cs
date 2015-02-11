@@ -58,6 +58,16 @@ public partial class SiteMaster : MasterPage {
     protected void Page_Load(object sender, EventArgs e) {
         if (!IsPostBack) {
             GetSiteRequests.AddHitCount();
+
+            this.Page.MetaDescription = _ss.MetaTagDescription;
+            this.Page.MetaKeywords = _ss.MetaTagKeywords;
+
+            if (!string.IsNullOrEmpty(ServerSettings.RobotsMetaTag)) {
+                HtmlMeta meta = new HtmlMeta();
+                meta.Name = "robots";
+                meta.Content = ServerSettings.RobotsMetaTag;
+                this.Page.Header.Controls.Add(meta);
+            }
         }
     }
     protected void Page_PreRender(object sender, EventArgs e) {
@@ -67,6 +77,9 @@ public partial class SiteMaster : MasterPage {
         if (!IsPostBack && !ServerSettings.CheckWebConfigFile()) {
             return;
         }
+
+        // Check to see if the database can be auto fixed if needed
+        _ss.AutoUpdateDatabaseCheck();
 
         // Check to see if social sign in is valid
         SocialSignIn.CheckSocialSignIn();
@@ -208,6 +221,7 @@ public partial class SiteMaster : MasterPage {
 
         SetMainLogo();
         SetLoginGroup();
+        CheckUpdatesPopup();
         SetCurrentPageTitle();
         LoadUserCustomizations();
 
@@ -426,10 +440,6 @@ public partial class SiteMaster : MasterPage {
                 lbl_UserFullName.Attributes["target"] = "_self";
             }
 
-            if (Page.ToString().ToLower().Contains("sitesettings")) {
-                loadLinksToNewPage = false;
-                lbl_UserFullName.Attributes["target"] = "_self";
-            }
             pnl_settingLinks.Controls.Add(new LiteralControl(string.Format("{0}", sidebar.BuildAdminPages(loadLinksToNewPage))));
             #endregion
 
@@ -677,7 +687,23 @@ public partial class SiteMaster : MasterPage {
                     title = SiteMap.CurrentNode.ParentNode.Title;
                 }
 
-                _strScriptreg.Append("$('#app_title_bg').find('.page-title').html('" + title + "');");
+                if (string.IsNullOrEmpty(appToOpen)) {
+                    _strScriptreg.Append("$('#app_title_bg').find('.page-title').html('" + title + "');");
+                }
+                else {
+                    Apps_Coll appInformation = _apps.GetAppInformation(appToOpen);
+
+                    string description = appInformation.Description;
+                    if (!string.IsNullOrEmpty(description)) {
+                        description += " - " + appInformation.About;
+                    }
+                    else {
+                        description = appInformation.About;
+                    }
+
+                    string pageTitle = "<div id='workspace-opened-paged-app'><span class='workspace-app-title'>" + appInformation.AppName + "</span><div class='clear-space-two'></div><span class='workspace-app-description'>" + description + "</span></div>";
+                    _strScriptreg.Append("$('#app_title_bg').find('.page-title').html(\"" + pageTitle + "\");");
+                }
             }
 
             _strScriptreg.Append("openWSE_Config.workspaceMode='" + _workspaceMode + "';openWSE.PagedWorkspace('" + appToOpen + "');");
@@ -1292,18 +1318,23 @@ public partial class SiteMaster : MasterPage {
 
                         if (groupIcons) {
                             string categoryId = dt.Category;
-                            string categoryname = appCategory.GetCategoryName(categoryId);
-                            if (categoryname == "Uncategorized") {
-                                categoryId = categoryname;
-                            }
+                            string[] categorySplit = categoryId.Split(ServerSettings.StringDelimiter_Array, StringSplitOptions.RemoveEmptyEntries);
 
-                            if (!categories.Contains(categoryname)) {
-                                appCategoryScript.Append(BuildCategory(categoryId, categoryname));
-                                categories.Add(categoryname);
+                            foreach (string c in categorySplit) {
+                                string cId = c;
+                                string categoryname = appCategory.GetCategoryName(c);
+                                if (categoryname == "Uncategorized") {
+                                    cId = categoryname;
+                                }
+
+                                if (!categories.Contains(categoryname)) {
+                                    appCategoryScript.Append(BuildCategory(cId, categoryname));
+                                    categories.Add(categoryname);
+                                }
+                                appScript.Append("<div class='" + cId + " app-category-div' style='display: none'>");
+                                appScript.Append(BuildIcon(dt.AppId, fi, dt.Icon, cId, dt, dt.AppName, hideAllIcons));
+                                appScript.Append("</div>");
                             }
-                            appScript.Append("<div class='" + categoryId + " app-category-div' style='display: none'>");
-                            appScript.Append(BuildIcon(dt.AppId, fi, dt.Icon, categoryId, dt, dt.AppName, hideAllIcons));
-                            appScript.Append("</div>");
                         }
                         else {
                             appScript.Append(BuildIcon(dt.AppId, fi, dt.Icon, dt.Category, dt, dt.AppName, hideAllIcons));
@@ -1329,8 +1360,7 @@ public partial class SiteMaster : MasterPage {
                             if (canBuild) {
                                 _wb.AppDivGenerator(dt.AppId, dt.AppName, dt.Icon, ar, am, css, workspace, dt.filename, fi.Extension.ToLower() == ".ascx",
                                                    dt.MinHeight, dt.MinWidth, dt.AllowPopOut,
-                                                   dt.PopOutLoc, dt.DisplayNav, dt.AllowStats,
-                                                   dt.AutoFullScreen, dt.AutoLoad, dt.AutoOpen);
+                                                   dt.PopOutLoc, dt.AutoFullScreen, dt.AutoLoad, dt.AutoOpen);
                             }
                         }
                         _totalApps++;
@@ -1401,18 +1431,23 @@ public partial class SiteMaster : MasterPage {
                 if ((fi.Extension.ToLower() != ".exe") && (fi.Extension.ToLower() != ".com") && (fi.Extension.ToLower() != ".pif") && (fi.Extension.ToLower() != ".bat") && (fi.Extension.ToLower() != ".scr")) {
                     if (groupIcons) {
                         string categoryId = dt.Category;
-                        string categoryname = appCategory.GetCategoryName(categoryId);
-                        if (categoryname == "Uncategorized") {
-                            categoryId = categoryname;
-                        }
+                        string[] categorySplit = categoryId.Split(ServerSettings.StringDelimiter_Array, StringSplitOptions.RemoveEmptyEntries);
 
-                        if (!categories.Contains(categoryname)) {
-                            appCategoryScript.Append(BuildCategory(categoryId, categoryname));
-                            categories.Add(categoryname);
+                        foreach (string c in categorySplit) {
+                            string cId = c;
+                            string categoryname = appCategory.GetCategoryName(cId);
+                            if (categoryname == "Uncategorized") {
+                                cId = categoryname;
+                            }
+
+                            if (!categories.Contains(categoryname)) {
+                                appCategoryScript.Append(BuildCategory(cId, categoryname));
+                                categories.Add(categoryname);
+                            }
+                            appScript.Append("<div class='" + cId + " app-category-div' style='display: none'>");
+                            appScript.Append(BuildIcon(dt.AppId, fi, dt.Icon, cId, dt, dt.AppName, hideAllIcons));
+                            appScript.Append("</div>");
                         }
-                        appScript.Append("<div class='" + categoryId + " app-category-div' style='display: none'>");
-                        appScript.Append(BuildIcon(dt.AppId, fi, dt.Icon, categoryId, dt, dt.AppName, hideAllIcons));
-                        appScript.Append("</div>");
                     }
                     else {
                         appScript.Append(BuildIcon(dt.AppId, fi, dt.Icon, dt.Category, dt, dt.AppName, hideAllIcons));
@@ -1433,8 +1468,7 @@ public partial class SiteMaster : MasterPage {
                         if (canBuild) {
                             _wb.AppDivGenerator_NoLogin(dt.AppId, dt.AppName, dt.Icon, ar, am, css, workspace, dt.filename, fi.Extension.ToLower() == ".ascx",
                                                dt.MinHeight, dt.MinWidth, dt.AllowPopOut,
-                                               dt.PopOutLoc, dt.DisplayNav, dt.AllowStats,
-                                               dt.AutoFullScreen, dt.AutoLoad, dt.AutoOpen);
+                                               dt.PopOutLoc, dt.AutoFullScreen, dt.AutoLoad, dt.AutoOpen);
                         }
                     }
 
@@ -1502,14 +1536,14 @@ public partial class SiteMaster : MasterPage {
                 needtoload = "0";
                 appScript.Append("<input type='hidden' id='hf_" + id + "' />");
             }
-            appScript.Append("<div id='" + id + "-pnl-icons'" + canPopoutAttr + currWorkspace + " class='app-icon' runat='server'" + tooltip + " onclick=\"openWSE.DetermineNeedPostBack('" + id + "', " + needtoload + ")\">");
+            appScript.Append("<div" + canPopoutAttr + currWorkspace + " data-appId='" + id + "' class='app-icon' runat='server'" + tooltip + " onclick=\"openWSE.DetermineNeedPostBack(this, " + needtoload + ")\">");
             if (_totalWorkspaces > 1) {
                 appScript.Append("<span class='app-options' style='visibility: hidden;'>" + popup + "</span>");
             }
             appScript.Append(iconImg + "<span class='app-icon-font'>" + w + "</span></div>");
         }
         else {
-            appScript.Append("<div id='" + id + "-pnl-icons'" + canPopoutAttr + currWorkspace + " class='app-icon'" + tooltip + " onclick=\"openWSE.DetermineNeedPostBack('" + id + "', 0)\">");
+            appScript.Append("<div" + canPopoutAttr + currWorkspace + " data-appId='" + id + "' class='app-icon'" + tooltip + " onclick=\"openWSE.DetermineNeedPostBack(this, 0)\">");
             if (_totalWorkspaces > 1) {
                 appScript.Append("<span class='app-options' style='visibility: hidden;'>" + popup + "</span>");
             }
@@ -1544,7 +1578,7 @@ public partial class SiteMaster : MasterPage {
                     count = " (" + categoryCount + ")";
             }
 
-            str.Append("<div id='" + id + "-pnl-icons' class='app-icon-category-list' runat='server' onclick=\"openWSE.CategoryClick('" + id + "', '" + category + "')\">");
+            str.Append("<div data-appId='" + id + "' class='app-icon-category-list' runat='server' onclick=\"openWSE.CategoryClick('" + id + "', '" + category + "')\">");
             str.Append("<span class='app-icon-font'>" + category + count + "</span>");
             str.Append("<img alt='forward' src='" + ResolveUrl("~/App_Themes/" + _sitetheme + "/Icons/nextpage.png") + "' /></div>");
         }
@@ -1714,5 +1748,18 @@ public partial class SiteMaster : MasterPage {
     }
 
     #endregion
+
+    private void CheckUpdatesPopup() {
+        ShowUpdatePopup sup = new ShowUpdatePopup();
+        if (sup.isUserShowPopup(_username)) {
+            if (string.IsNullOrEmpty(_sitetheme))
+                _sitetheme = "Standard";
+
+            string message = sup.GetNewUpdateMessage(ServerSettings.GetServerMapLocation, _sitetheme);
+            string encodedMessage = HttpUtility.UrlEncode(message, System.Text.Encoding.Default).Replace("+", "%20");
+            sup.UpdateUser(false, _username);
+            _strScriptreg.Append("openWSE.ShowUpdatesPopup('" + encodedMessage + "');");
+        }
+    }
 
 }

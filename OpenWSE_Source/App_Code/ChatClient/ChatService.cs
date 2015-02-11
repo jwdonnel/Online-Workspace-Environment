@@ -519,7 +519,7 @@ public class ChatService : WebService
         string userColor = RgbConverter(ColorTranslator.FromHtml("#" + mdata.UserColor));
         string uc = UserImageColorCreator.CreateImgColorChatList(mdata.AccountImage, userColor, mdata.UserId);
 
-        str.Append("<li><div class='ChatUserNotSelected' chat-username='" + u.UserName + "'><div class='statusUserDiv " + cl + "'></div>" + uc + "<span class='cb-links usersclick' chat-userId='" + mdata.UserId + "'>" + fullName + "</span>");
+        str.Append("<li><div class='ChatUserNotSelected' chat-username='" + u.UserName + "'><div class='statusUserDiv " + cl + "'></div>" + uc + "<span class='cb-links usersclick' chat-userid='" + mdata.UserId + "'>" + fullName + "</span>");
         if (userstatus != "")
             str.Append("</div></li>");
 

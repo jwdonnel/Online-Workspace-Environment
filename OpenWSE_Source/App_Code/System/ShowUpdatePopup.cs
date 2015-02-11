@@ -152,16 +152,15 @@ public class ShowUpdatePopup {
             string date = entry.Key;
             string value = entry.Value;
 
-            str.Append("<h2 class='float-left font-bold'>" + OpenWSE.Core.Licensing.CheckLicense.SiteName + " Updates</h2>");
-            str.Append("<h2 class='float-right'>" + date + " - " + about.CurrentVersion + "</h2>");
-            str.Append("<div class='clear-space'></div>");
+            str.Append("<small class='float-right'>" + date + " - " + about.CurrentVersion + "</small>");
+            str.Append("<div class='clear'></div>");
 
             string[] delim = { "<br />", "<br/>" };
             string[] splitValue = value.Split(delim, StringSplitOptions.RemoveEmptyEntries);
             StringBuilder updateList = new StringBuilder();
 
             if (splitValue.Length > 1)
-                updateList.Append("<ul>");
+                updateList.Append("<ul style='list-style: none;'>");
 
             foreach (string m in splitValue) {
                 string tempM = m.Replace('\n', ' ').Trim();
@@ -179,19 +178,17 @@ public class ShowUpdatePopup {
             str.Append("<div class='pad-all new-update-holder'>" + updateList.ToString() + "</div>");
             str.Append("<div class='clear-space-five'></div>");
 
-            string img = "<img alt='' class='float-left pad-right-sml' src='App_Themes/" + theme + "/App/approve.png' />";
+            string img = "<img alt='' class='float-left pad-right-sml' src='" + ServerSettings.ResolveUrl("~/App_Themes/" + theme + "/App/approve.png") + "' />";
             string text = "<span style='font-size: 18px'>Got it</span>";
             string button = "<a href='#gotit' class='input-buttons no-margin' onclick='openWSE.CloseUpdatesPopup();return false;' ";
             button += "style='text-decoration: none!important;'>" + img + " " + text + "</a>";
 
             string link = string.Empty;
             if (showLink) {
-                link = "<a href='About.aspx?a=changelog' target='_blank' ";
-                link += "style='text-decoration: underline; position: absolute; right: 20px; bottom: 20px;'>View Change Log</a>";
+                link = "<a href='" + ServerSettings.ResolveUrl("~/About.aspx?a=changelog") + "' target='_blank' class='float-right margin-top'>View Change Log</a>";
             }
 
             str.Append("<div class='pad-all'>" + button + link + "</div>");
-            str.Append("<div class='clear-space'></div>");
             break;
         }
 

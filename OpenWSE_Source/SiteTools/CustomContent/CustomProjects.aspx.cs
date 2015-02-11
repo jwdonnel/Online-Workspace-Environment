@@ -51,7 +51,9 @@ public partial class SiteTools_CustomProjects : System.Web.UI.Page {
                             if (string.IsNullOrEmpty(cpColl.DefaultPage)) {
                                 hf_defaultProjectID.Value = cpColl.ProjectID + "~NewEntry";
                                 BuildDefaultPageList(cpColl.DefaultPage, cpColl.Folder);
-                                RegisterPostbackScripts.RegisterStartupScript(this, "LoadDefaultPageSelector();");
+                                if (!IsPostBack) {
+                                    RegisterPostbackScripts.RegisterStartupScript(this, "LoadDefaultPageSelector();");
+                                }
                             }
                         }
                     }
@@ -215,7 +217,6 @@ public partial class SiteTools_CustomProjects : System.Web.UI.Page {
                                 // Might need to check again
                                 if (Directory.Exists(ServerSettings.GetServerMapLocation + CustomProjects.customPageFolder + "\\" + folder)) {
                                     Directory.Delete(ServerSettings.GetServerMapLocation + CustomProjects.customPageFolder + "\\" + folder, true);
-
                                 }
                             }
                         }
@@ -243,7 +244,7 @@ public partial class SiteTools_CustomProjects : System.Web.UI.Page {
                     hf_defaultProjectID.Value = string.Empty;
                 }
             }
-            RegisterPostbackScripts.RegisterStartupScript(this, "$('.loaderApp-overlay').fadeOut(150);");
+            RegisterPostbackScripts.RegisterStartupScript(this, "openWSE.LoadModalWindow(false, 'LoaderApp-element', '');");
         }
     }
 

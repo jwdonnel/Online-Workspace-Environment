@@ -235,11 +235,6 @@
                     </h3>
                     <div class="accordion-content pad-all" align="left" style="display: none;">
                     </div>
-                    <h3 id="load-option-stats" class="accordion-header">
-                        <span class="stats-app" style="float: right!important;"></span>
-                        Stats</h3>
-                    <div class="accordion-content pad-all" align="left" style="display: none;">
-                    </div>
                 </div>
             </div>
         </asp:Panel>
@@ -371,7 +366,7 @@
             <div class="footer-padding" align="center">
                 <div id="footer-signdate">
                     John Donnelly | <a href="Workspace.aspx">OpenWSE</a> 2015 | 
-                    <asp:LinkButton ID="lb_signoff" runat="server" Text="Log Off" CssClass="cursor-pointer"
+                    <asp:LinkButton ID="lb_signoff" runat="server" Text="Sign Off" CssClass="cursor-pointer"
                         OnClick="SignOff_Clicked"></asp:LinkButton><asp:Label ID="lblHomePageLink" runat="server" Text=""></asp:Label>
                 </div>
             </div>

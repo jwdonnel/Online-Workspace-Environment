@@ -18,6 +18,10 @@ function EditSlot(id) {
     __doPostBack("hf_EditSlot", "");
 }
 
+$(document.body).on("change", "#cbAutoFixDB", function () {
+    openWSE.LoadingMessage1("Updating. Please Wait...");
+});
+
 function DeleteSlot(id) {
     openWSE.ConfirmWindow("Are you sure you want to delete this auto backup?",
        function () {

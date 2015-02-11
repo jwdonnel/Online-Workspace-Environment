@@ -47,6 +47,16 @@ public partial class AppRemote : System.Web.UI.Page {
         }
         else if (!IsPostBack) {
             GetSiteRequests.AddHitCount();
+
+            this.Page.MetaDescription = _ss.MetaTagDescription;
+            this.Page.MetaKeywords = _ss.MetaTagKeywords;
+
+            if (!string.IsNullOrEmpty(ServerSettings.RobotsMetaTag)) {
+                HtmlMeta meta = new HtmlMeta();
+                meta.Name = "robots";
+                meta.Content = ServerSettings.RobotsMetaTag;
+                this.Page.Header.Controls.Add(meta);
+            }
         }
 
         // Check to see if social sign in is valid
@@ -487,24 +497,28 @@ public partial class AppRemote : System.Web.UI.Page {
                 string name = dt.AppName;
                 string iconname = dt.Icon;
                 string category = dt.Category;
-                string categoryname = appCategory.GetCategoryName(dt.Category);
+                string[] categorySplit = category.Split(ServerSettings.StringDelimiter_Array, StringSplitOptions.RemoveEmptyEntries);
 
-                if (string.IsNullOrEmpty(category))
-                    category = categoryname;
+                foreach (string c in categorySplit) {
+                    string cId = c;
+                    string categoryname = appCategory.GetCategoryName(cId);
 
-                var fi = new FileInfo(dt.filename);
-                if ((fi.Extension.ToLower() != ".exe") && (fi.Extension.ToLower() != ".com") && (fi.Extension.ToLower() != ".pif")
-                    && (fi.Extension.ToLower() != ".bat") && (fi.Extension.ToLower() != ".scr")) {
-                    var popup = new StringBuilder();
-                    if (!categories.Contains(categoryname)) {
-                        appList.Append(BuildCategory(category, categoryname));
-                        categories.Add(categoryname);
+                    if (string.IsNullOrEmpty(cId))
+                        cId = categoryname;
+
+                    var fi = new FileInfo(dt.filename);
+                    if ((fi.Extension.ToLower() != ".exe") && (fi.Extension.ToLower() != ".com") && (fi.Extension.ToLower() != ".pif")
+                        && (fi.Extension.ToLower() != ".bat") && (fi.Extension.ToLower() != ".scr")) {
+                        var popup = new StringBuilder();
+                        if (!categories.Contains(categoryname)) {
+                            appList.Append(BuildCategory(cId, categoryname));
+                            categories.Add(categoryname);
+                        }
+                        appScript.Append("<div class='" + cId + " app-category-div' style='display: none'>");
+                        appScript.Append(Icons_NoCategory(popup, id, fi, iconname, cId, dt, name, hideAllIcons));
+                        appScript.Append("</div>");
                     }
-                    appScript.Append("<div class='" + category + " app-category-div' style='display: none'>");
-                    appScript.Append(Icons_NoCategory(popup, id, fi, iconname, category, dt, name, hideAllIcons));
-                    appScript.Append("</div>");
                 }
-
                 _totalApps++;
             }
             return appList + appScript.ToString();
@@ -523,12 +537,12 @@ public partial class AppRemote : System.Web.UI.Page {
             iconImg = string.Empty;
 
         if (fi.Extension.ToLower() == ".ascx") {
-            appScript.Append("<div id='" + id + "-pnl-icons' class='app-icon' runat='server'" + tooltip + " onclick=\"appRemote.LoadOptions('" + id + "', '" + w + "', true)\">");
+            appScript.Append("<div data-appid='" + id + "' class='app-icon' runat='server'" + tooltip + " onclick=\"appRemote.LoadOptions('" + id + "', '" + w + "', true)\">");
             appScript.Append(iconImg);
             appScript.Append("<span class='app-icon-font'>" + w + "</span></div>");
         }
         else {
-            appScript.Append("<div id='" + id + "-pnl-icons' class='app-icon'" + tooltip + " onclick=\"appRemote.LoadOptions('" + id + "', '" + w + "', true)\">");
+            appScript.Append("<div data-appid='" + id + "' class='app-icon'" + tooltip + " onclick=\"appRemote.LoadOptions('" + id + "', '" + w + "', true)\">");
             appScript.Append(iconImg + "<span class='app-icon-font'>" + w + "</span></div>");
         }
 
@@ -549,7 +563,7 @@ public partial class AppRemote : System.Web.UI.Page {
             if (_member.ShowCategoryCount)
                 count = " (" + categoryCount + ")";
 
-            str.Append("<div id='" + id + "-pnl-icons' class='app-icon-category-list' runat='server' onclick=\"appRemote.CategoryClick('" + id + "', '" + category + "', true)\">");
+            str.Append("<div id='" + id + "' class='app-icon-category-list' runat='server' onclick=\"appRemote.CategoryClick('" + id + "', '" + category + "', true)\">");
             str.Append("<span class='app-icon-font'>" + category + count + "</span>");
             str.Append("<img alt='forward' src='App_Themes/" + _sitetheme + "/Icons/nextpage.png' /></div>");
         }

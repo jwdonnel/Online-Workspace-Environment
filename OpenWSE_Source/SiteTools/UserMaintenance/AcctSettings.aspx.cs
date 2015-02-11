@@ -530,11 +530,18 @@ public partial class SiteTools_AcctSettings : Page {
         string mergedName = HelperMethods.MergeFMLNames(Member);
         _strScriptreg.Append("$('#lbl_UserName').html(\"" + UserImageColorCreator.CreateImgColorTopBar(acctImg, Member.UserColor, Member.UserId, mergedName, _siteTheme) + "\");");
         if (!string.IsNullOrEmpty(acctImg)) {
-            _strScriptreg.Append("$('#img_Profile').attr('src', '" + ResolveUrl(ServerSettings.AccountImageLoc + Member.UserId + "/" + acctImg) + "');$('#img_Profile').show();");
+            if (acctImg.StartsWith("http://") || acctImg.StartsWith("https://")) {
+                _strScriptreg.Append("$('#img_Profile').attr('src', '" + acctImg + "');");
+            }
+            else {
+                _strScriptreg.Append("$('#img_Profile').attr('src', '" + ResolveUrl(ServerSettings.AccountImageLoc + Member.UserId + "/" + acctImg) + "');");
+            }
         }
         else {
-            _strScriptreg.Append("$('#img_Profile').attr('src', '" + ResolveUrl("~/Standard_Images/EmptyUserImg.png") + "');$('#img_Profile').show();");
+            _strScriptreg.Append("$('#img_Profile').attr('src', '" + ResolveUrl("~/Standard_Images/EmptyUserImg.png") + "');");
         }
+
+        _strScriptreg.Append("$('#img_Profile').show();");
         RegisterPostbackScripts.RegisterStartupScript(this, _strScriptreg.ToString());
     }
     private void BuildAdminPageEditor() {
@@ -1033,6 +1040,12 @@ public partial class SiteTools_AcctSettings : Page {
             Notifications_Coll coll3 = _notifications.GetNotification("1159aca6-2449-4aff-bacb-5f29e479e2d7");
             if (!string.IsNullOrEmpty(coll3.ID))
                 str = AddRow(str, coll3, "1159aca6-2449-4aff-bacb-5f29e479e2d7", emailOn);
+        }
+
+        if (Username != ServerSettings.AdminUserName.ToLower()) {
+            Notifications_Coll coll4 = _notifications.GetNotification("707ecc6c-2480-4080-bad6-fb135bb5cf13");
+            if (!string.IsNullOrEmpty(coll4.ID) && Username.ToLower() != ServerSettings.AdminUserName.ToLower())
+                str = AddRow(str, coll4, "707ecc6c-2480-4080-bad6-fb135bb5cf13", emailOn);
         }
 
         foreach (string w in userApps) {

@@ -34,8 +34,7 @@ public class NetworkLog : System.Web.Services.WebService {
     }
 
     [WebMethod]
-    public object[] GetGraphs(string _dataInt)
-    {
+    public object[] GetGraphs(string _dataInt) {
         int outInt = 20;
         int.TryParse(_dataInt, out outInt);
         nab.dataInt = outInt;
@@ -43,17 +42,53 @@ public class NetworkLog : System.Web.Services.WebService {
         if (HttpContext.Current.User.Identity.IsAuthenticated) {
             try {
                 obj[0] = nab.BuildRequests;
+            }
+            catch (Exception e) {
+                obj[0] = new object[0];
+            }
+
+            try {
                 obj[1] = nab.BuildAppLog;
+            }
+            catch (Exception e) {
+                obj[1] = string.Empty;
+            }
+
+            try {
                 obj[2] = nab.BuildChart2;
+            }
+            catch (Exception e) {
+                obj[2] = new object[0];
+            }
+
+            try {
                 obj[3] = nab.BuildChart3;
+            }
+            catch (Exception e) {
+                obj[3] = new object[0];
+            }
+
+            try {
                 obj[4] = nab.BuildChartLog2;
+            }
+            catch (Exception e) {
+                obj[4] = string.Empty;
+            }
+
+            try {
                 obj[5] = nab.BuildChartLog3;
+            }
+            catch (Exception e) {
+                obj[5] = string.Empty;
+            }
+
+            try {
                 obj[6] = Buildeventlist;
             }
             catch (Exception e) {
-                AppLog applog = new AppLog(false);
-                applog.AddError(e);
+                obj[6] = string.Empty;
             }
+
         }
         return obj;
     }

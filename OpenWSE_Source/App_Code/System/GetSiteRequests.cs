@@ -24,11 +24,16 @@ public static class GetSiteRequests {
 
     public static void AddRequest() {
         if (_getrequests) {
-            ShrinkRequests();
+            try {
+                ShrinkRequests();
 
-            DateTime now = DateTime.Now;
-            if (!Siterequests.Contains(now)) {
-                Siterequests.Add(now);
+                DateTime now = DateTime.Now;
+                if (!Siterequests.Contains(now)) {
+                    Siterequests.Add(now);
+                }
+            }
+            catch {
+                ClearRequests();
             }
         }
         else {

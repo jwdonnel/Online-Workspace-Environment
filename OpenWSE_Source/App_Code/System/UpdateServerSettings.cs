@@ -11,6 +11,8 @@ using System.Text;
 using System.Net.Mail;
 using OpenWSE_Tools.AutoUpdates;
 using OpenWSE_Tools.Notifications;
+using System.Collections.Generic;
+using OpenWSE_Tools.GroupOrganizer;
 
 [WebService(Namespace = "http://tempuri.org/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]

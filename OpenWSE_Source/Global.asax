@@ -9,7 +9,7 @@
     private void Application_End(object sender, EventArgs e) { }
 
     private void Application_BeginRequest(object sender, EventArgs e) {
-        if (Context.Request.PathInfo != "/GetGraphs") {
+        if (!Context.Request.Url.OriginalString.ToLower().Contains("getgraphs")) {
             GetSiteRequests.AddRequest();
         }
     }

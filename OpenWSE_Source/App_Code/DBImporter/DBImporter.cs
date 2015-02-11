@@ -7,11 +7,12 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Web;
 using OpenWSE.Core;
 using OpenWSE.Core.Licensing;
+using System.Linq;
 
 #endregion
 
 /// <summary>
-///     Summary description for DBImporter
+/// Summary description for DBImporter
 /// </summary>
 [Serializable]
 public class DBImporter_Coll
@@ -24,8 +25,12 @@ public class DBImporter_Coll
     private string _sc;
     private string _tn;
     private string _allowEdit;
+    private ChartType _chartType;
+    private string _chartTitle;
+    private List<string> _usersAllowedToEdit;
+    private bool _notifyUsers = false;
 
-    public DBImporter_Coll(string id, string date, string tn, string cs, string sc, string p, string ib, string allowEdit)
+    public DBImporter_Coll(string id, string date, string tn, string cs, string sc, string p, string ib, string allowEdit, string chartType, string chartTitle, string usersAllowedToEdit, string notifyUsers)
     {
         _id = id;
         _date = date;
@@ -35,6 +40,19 @@ public class DBImporter_Coll
         _p = p;
         _ib = ib;
         _allowEdit = allowEdit;
+
+        try {
+            _chartType = (ChartType)Enum.Parse(typeof(ChartType), chartType);
+        }
+        catch {
+            _chartType = ChartType.None;
+        }
+
+        _chartTitle = chartTitle;
+        _usersAllowedToEdit = usersAllowedToEdit.Split(ServerSettings.StringDelimiter_Array, StringSplitOptions.RemoveEmptyEntries).ToList();
+         if (HelperMethods.ConvertBitToBoolean(notifyUsers)) {
+            _notifyUsers = true;
+        }
     }
 
     public string ID
@@ -82,6 +100,27 @@ public class DBImporter_Coll
             return HelperMethods.ConvertBitToBoolean(_allowEdit); 
         }
     }
+
+    public ChartType Chart_Type {
+        set { _chartType = value; }
+        get { return _chartType; }
+    }
+
+    public string ChartTitle {
+        set { _chartTitle = value; }
+        get { return _chartTitle; }
+    }
+
+    public List<string> UsersAllowedToEdit {
+        set { _usersAllowedToEdit = value; }
+        get { return _usersAllowedToEdit; }
+    }
+
+    public bool NotifyUsers {
+        set { _notifyUsers = value; }
+        get { return _notifyUsers; }
+    }
+
 }
 
 
@@ -107,7 +146,6 @@ public class DBImporter
     #region Saved Connections
 
     private readonly string encryptloc_SavedConnections = ServerSettings.GetServerMapLocation + "App_Data\\SavedConnections_Encrypted" + ServerSettings.SavedDataFilesExt;
-
     private readonly string loc_SavedConnections = ServerSettings.GetServerMapLocation + "App_Data\\SavedConnections" + ServerSettings.SavedDataFilesExt;
 
     private List<SavedConnections> _coll_SavedConnections = new List<SavedConnections>();
@@ -209,7 +247,7 @@ public class DBImporter
         }
     }
 
-    public void UpdateEntry(string id, string tablename, string selectcommand, bool allowEdit)
+    public void UpdateEntry(string id, string tablename, string selectcommand, bool allowEdit, ChartType chartType, string chartTitle, bool notifyUsers)
     {
         if (_coll.Count == 0)
         {
@@ -223,11 +261,29 @@ public class DBImporter
                 _coll[i].TableName = tablename;
                 _coll[i].SelectCommand = selectcommand;
                 _coll[i].AllowEdit = allowEdit;
+                _coll[i].Chart_Type = chartType;
+                _coll[i].ChartTitle = chartTitle;
+                _coll[i].NotifyUsers = notifyUsers;
                 BinarySerialize(_coll);
                 break;
             }
         }
     }
+
+    public void UpdateUsersAllowedToEdit(string id, string usersAllowed) {
+        if (_coll.Count == 0) {
+            BinaryDeserialize();
+        }
+
+        for (int i = 0; i < _coll.Count; i++) {
+            if (_coll[i].ID == id) {
+                _coll[i].UsersAllowedToEdit = usersAllowed.Split(ServerSettings.StringDelimiter_Array, StringSplitOptions.RemoveEmptyEntries).ToList();
+                BinarySerialize(_coll);
+                break;
+            }
+        }
+    }
+
 }
 
 

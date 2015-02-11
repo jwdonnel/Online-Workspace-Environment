@@ -2,13 +2,12 @@
 <siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
     <siteMapNode url="/">
         <siteMapNode url="~/SiteTools/UserMaintenance/AcctSettings.aspx" title="Account Settings" icon="SiteLinkIcons/accountsettings.png" />
-        <siteMapNode url="~/SiteTools/AppMaintenance/AppCategory.aspx" title="App Category" icon="SiteLinkIcons/appcategory.png" />
+        <siteMapNode url="~/SiteTools/AppMaintenance/AppCategory.aspx" title="App Categories" icon="SiteLinkIcons/appcategory.png" />
         <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx" title="App Manager" icon="SiteLinkIcons/appmanager.png">
-            <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?c=create" title="Create" />
+            <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?c=create" title="Basic Create" />
             <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?c=easycreate" title="Quick Create" />
-            <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?c=upload" title="Upload" />
-            <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?c=params" title="Parameters" />
-            <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?c=stats" title="Stats/Ratings" />
+            <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?c=upload" title="App Upload" />
+            <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?c=params" title="App Params" />
         </siteMapNode>
         <siteMapNode url="~/SiteTools/AppMaintenance/AppPackages.aspx" title="App Packages" icon="SiteLinkIcons/apppackages.png" />
         <siteMapNode url="~/SiteTools/CustomContent/CustomProjects.aspx" title="Custom Projects" icon="SiteLinkIcons/customprojects.png" />

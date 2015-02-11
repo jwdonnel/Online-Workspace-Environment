@@ -292,7 +292,7 @@ public class BookmarkViewer : IHttpHandler {
 
         str.Append("<table id='" + id + "' class='bookmark-table-styles" + youtubeClass + "'><tbody><tr>");
         str.Append("<td width='30px' align='center'>" + favicon + "</td>");
-        str.Append("<td><div class='pad-top-sml pad-bottom-sml' style='height:32px;overflow:hidden'><span class='pad-left-sml' " + nametitle + "><b>" + view + "</b></span>");
+        str.Append("<td><div class='pad-top-sml pad-bottom-sml' style='overflow:hidden'><span class='pad-left-sml' " + nametitle + "><b>" + view + "</b></span>");
         str.Append("<div class='clear'></div><span class='pad-left-sml' style='font-size:10px;color:#888'><b class='pad-right-sml'>Date Added:</b>" + date + "</span></div></td>");
 
         // Add bm-hidden to the class list to make use of the hover visibility
@@ -300,7 +300,7 @@ public class BookmarkViewer : IHttpHandler {
         string share = "<a href='#Share' class='td-add-btn margin-right float-right' onclick='share_in_iFrame(\"" + id + "\");return false;' title='Share'></a>";
         string edit = "<a href='#Edit' class='td-edit-btn margin-right float-right' onclick='edit_in_iFrame(\"" + id + "\");return false;' title='Edit'></a>";
 
-        str.Append("<td width='185px'>" + remove + share + edit + "</td></tr></tbody></table>");
+        str.Append("<td class='bookmark-edit-btn-holder'>" + remove + share + edit + "</td></tr></tbody></table>");
 
         return str.ToString();
     }
@@ -426,10 +426,12 @@ public class BookmarkViewer : IHttpHandler {
                 str.Append("<h4 class='float-left pad-top-sml font-bold'>Edit '" + bookmarkName + "'</h4>");
                 str.Append("<div class='clear-space'></div>");
                 str.Append("<input type='hidden' id='editBookmarkid' value='" + id + "' />");
-                str.Append("<table cellspacing='5' cellpadding='5' style='width: 100%;'><tr><td style='width: 50px;'><span class='pad-right font-bold'>Name</span></td>");
-                str.Append("<td><input type='text' id='editBookmarkName' class='textEntry margin-right-sml' value='" + dr["BookmarkName"].ToString() + "' style='width:100%' /></td></tr>");
+                str.Append("<table cellspacing='5' cellpadding='5' style='width: 100%;'>");
                 str.Append("<tr><td style='width: 50px;'><span class='pad-right font-bold'>Url</span></td>");
-                str.Append("<td><input type='text' id='editBookmarkHtml' class='textEntry margin-right-sml' value='" + dr["BookmarkHTML"].ToString() + "' style='width:100%' /></td></tr></table>");
+                str.Append("<td><input type='text' id='editBookmarkHtml' class='textEntry margin-right-sml' value='" + dr["BookmarkHTML"].ToString() + "' style='width:100%' /></td></tr>");
+                str.Append("<tr><td style='width: 50px;'><span class='pad-right font-bold'>Name</span></td>");
+                str.Append("<td><input type='text' id='editBookmarkName' class='textEntry margin-right-sml' value='" + dr["BookmarkName"].ToString() + "' style='width:100%' /></td></tr>");
+                str.Append("</table>");
                 break;
             }
         }

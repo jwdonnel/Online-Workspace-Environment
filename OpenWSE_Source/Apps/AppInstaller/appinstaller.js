@@ -1,6 +1,10 @@
 ﻿var currCategory = "";
 var arrBulkInstall = new Array();
 
+$(document).ready(function () {
+    StartAppInstaller();
+});
+
 function LoadingMessage_AppInstaller(message) {
     var x = "<div class='update-element-appinstaller'><div class='update-element-overlay' style='position: absolute!important'><div class='update-element-align' style='position: absolute!important'>";
     x += "<div class='update-element-modal'>" + openWSE.loadingImg + "<h3 class='inline-block'>";

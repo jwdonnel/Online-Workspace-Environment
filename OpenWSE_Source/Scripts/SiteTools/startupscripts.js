@@ -6,23 +6,21 @@
         contentType: "application/json; charset=utf-8",
         success: function (data) {
             if (openWSE.ConvertBitToBoolean(data.d)) {
-                $("#startupscript_postmessage").html("");
                 $("#hf_UpdateStartupScripts").val(new Date().toString());
                 __doPostBack("hf_UpdateStartupScripts", "");
             }
             else if (!openWSE.ConvertBitToBoolean(data.d)) {
-                $("#startupscript_postmessage").html("<small style='color: red'>Script is invalid</small>");
                 openWSE.RemoveUpdateModal();
+                openWSE.AlertWindow("Script is invalid");
             }
             else if (data.d == "duplicate") {
-                $("#startupscript_postmessage").html("<small style='color: red'>Duplicate script</small>");
                 openWSE.RemoveUpdateModal();
+                openWSE.AlertWindow("Duplicate script");
             }
             else {
-                $("#startupscript_postmessage").html("<small style='color: red'>Error trying to add startup script</small>");
                 openWSE.RemoveUpdateModal();
+                openWSE.AlertWindow("Error trying to add startup script");
             }
-            window.setTimeout(function () { $("#startupscript_postmessage").html(""); }, 4000);
         },
         error: function () {
             openWSE.AlertWindow("There was an error adding script. Please try again.");
@@ -41,15 +39,13 @@ function DeleteStartupScript(x) {
                contentType: "application/json; charset=utf-8",
                success: function (data) {
                    if (openWSE.ConvertBitToBoolean(data.d)) {
-                       $("#startupscript_postmessage").html("<small style='color: green'>Startup Script has been deleted</small>");
                        $("#hf_UpdateStartupScripts").val(new Date().toString());
                        __doPostBack("hf_UpdateStartupScripts", "");
                    }
                    else {
-                       $("#startupscript_postmessage").html("<small style='color: red'>Error deleting startup script</small>");
                        openWSE.RemoveUpdateModal();
+                       openWSE.AlertWindow("Error deleting startup script");
                    }
-                   window.setTimeout(function () { $("#startupscript_postmessage").html(""); }, 4000);
                },
                error: function () {
                    openWSE.AlertWindow("There was an error deleting script. Please try again.");
@@ -74,16 +70,14 @@ function DoneEditStartupScript(x) {
         contentType: "application/json; charset=utf-8",
         success: function (data) {
             if (openWSE.ConvertBitToBoolean(data.d)) {
-                $("#startupscript_postmessage").html("<small style='color: green'>Startup Script has been updated</small>");
                 $("#hf_UpdateStartupScripts").val(new Date().toString());
                 __doPostBack("hf_UpdateStartupScripts", "");
             }
             else {
-                $("#startupscript_postmessage").html("<small style='color: red'>Error updating startup script</small>");
+                openWSE.AlertWindow("Error updating startup script");
                 $("#hf_UpdateStartupScripts").val(new Date().toString());
                 __doPostBack("hf_UpdateStartupScripts", "");
             }
-            window.setTimeout(function () { $("#startupscript_postmessage").html(""); }, 4000);
         },
         error: function () {
             openWSE.AlertWindow("There was an error editing script. Please try again.");
@@ -111,23 +105,21 @@ $(document.body).on("click", "#btn_createnew_startupscript_CSS", function () {
         contentType: "application/json; charset=utf-8",
         success: function (data) {
             if (openWSE.ConvertBitToBoolean(data.d)) {
-                $("#startupscript_postmessage_CSS").html("");
                 $("#hf_UpdateStartupScripts_css").val(new Date().toString());
                 __doPostBack("hf_UpdateStartupScripts_css", "");
             }
             else if (!openWSE.ConvertBitToBoolean(data.d)) {
-                $("#startupscript_postmessage_css").html("<small style='color: red'>Script is invalid</small>");
                 openWSE.RemoveUpdateModal();
+                openWSE.AlertWindow("Script is invalid");
             }
             else if (data.d == "duplicate") {
-                $("#startupscript_postmessage_css").html("<small style='color: red'>Duplicate script</small>");
                 openWSE.RemoveUpdateModal();
+                openWSE.AlertWindow("Duplicate script");
             }
             else {
-                $("#startupscript_postmessage_css").html("<small style='color: red'>Error trying to add startup script</small>");
                 openWSE.RemoveUpdateModal();
+                openWSE.AlertWindow("Error trying to add startup script");
             }
-            window.setTimeout(function () { $("#startupscript_postmessage_css").html(""); }, 4000);
         },
         error: function () {
             openWSE.AlertWindow("There was an error adding css script. Please try again.");
@@ -146,15 +138,13 @@ function DeleteStartupScript_CSS(x) {
                contentType: "application/json; charset=utf-8",
                success: function (data) {
                    if (openWSE.ConvertBitToBoolean(data.d)) {
-                       $("#startupscript_postmessage_css").html("<small style='color: green'>Startup Script has been deleted</small>");
                        $("#hf_UpdateStartupScripts_css").val(new Date().toString());
                        __doPostBack("hf_UpdateStartupScripts_css", "");
                    }
                    else {
-                       $("#startupscript_postmessage_css").html("<small style='color: red'>Error deleting startup script</small>");
                        openWSE.RemoveUpdateModal();
+                       openWSE.AlertWindow("Error deleting startup script");
                    }
-                   window.setTimeout(function () { $("#startupscript_postmessage_css").html(""); }, 4000);
                },
                error: function () {
                    openWSE.AlertWindow("There was an error deleting css script. Please try again.");
@@ -171,16 +161,14 @@ function DoneEditStartupScript_CSS(x) {
         contentType: "application/json; charset=utf-8",
         success: function (data) {
             if (openWSE.ConvertBitToBoolean(data.d)) {
-                $("#startupscript_postmessage_css").html("<small style='color: green'>Startup Script has been updated</small>");
                 $("#hf_UpdateStartupScripts_css").val(new Date().toString());
                 __doPostBack("hf_UpdateStartupScripts_css", "");
             }
             else {
-                $("#startupscript_postmessage_css").html("<small style='color: red'>Error updating startup script</small>");
+                openWSE.AlertWindow("Error updating startup script");
                 $("#hf_EditStartupScripts_css").val(new Date().toString());
                 __doPostBack("hf_EditStartupScripts_css", "");
             }
-            window.setTimeout(function () { $("#startupscript_postmessage_css").html(""); }, 4000);
         },
         error: function () {
             openWSE.AlertWindow("There was an error editing css script. Please try again.");

@@ -28,8 +28,10 @@ public class CreateRobotTxt
             List<string> lines = new List<string>();
 
             lines.Add("User-Agent: *");
-            lines.Add("Disallow: ");
-            lines.Add("Allow: /");
+            lines.Add("Disallow: /App_Data/");
+            lines.Add("Disallow: /Backups/");
+            lines.Add("Disallow: /bin/");
+            lines.Add("Disallow: /CloudFiles/");
 
             if (File.Exists(ServerSettings.GetServerMapLocation + CreateSitemap.SiteMapFileName)) {
                 string sitePath = ServerSettings.GetSitePath(_request);
@@ -38,14 +40,6 @@ public class CreateRobotTxt
                 }
 
                 string path = _request.Url.Scheme + ":" + sitePath;
-
-                lines.Add("Allow: /SiteTools/CustomContent/");
-                lines.Add("Allow: /SiteTools/DBMaintenance/");
-                lines.Add("Allow: /SiteTools/ServerMaintenance/");
-                lines.Add("Allow: /SiteTools/UserMaintenance/");
-                lines.Add("Allow: /SiteTools/AppMaintenance/");
-                lines.Add("");
-
                 lines.Add("Sitemap: " + path + CreateSitemap.SiteMapFileName);
             }
 

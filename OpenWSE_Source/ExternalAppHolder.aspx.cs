@@ -29,12 +29,12 @@ public partial class WebControls_ExternalAppHolder : System.Web.UI.Page {
             _member = new MemberDatabase(userId.Name);
         }
 
+        if (!string.IsNullOrEmpty(Request.QueryString["hidetoolbar"]) && HelperMethods.ConvertBitToBoolean(Request.QueryString["hidetoolbar"])) {
+            RegisterPostbackScripts.RegisterStartupScript(this, "$('#always-visible').hide();");
+        }
+
         string appId = Request.QueryString["appId"];
         if (!string.IsNullOrEmpty(appId)) {
-
-            if (!string.IsNullOrEmpty(Request.QueryString["hidetoolbar"]) && HelperMethods.ConvertBitToBoolean(Request.QueryString["hidetoolbar"])) {
-                RegisterPostbackScripts.RegisterStartupScript(this, "$('#always-visible').hide();");
-            }
 
             string appName = _apps.GetAppName(appId);
             if (!string.IsNullOrEmpty(appName)) {
@@ -43,50 +43,22 @@ public partial class WebControls_ExternalAppHolder : System.Web.UI.Page {
                 PlaceHolder1.Controls.Clear();
 
                 try {
-                    StringBuilder _strScriptreg = new StringBuilder();
-
                     Page.Title = appName;
                     string fileName = _apps.GetAppFilename(appId);
                     FileInfo fi = new FileInfo(fileName);
                     if (fi.Extension.ToLower() == ".ascx") {
                         UserControl uc = (UserControl)LoadControl("~/Apps/" + fileName);
-                        PlaceHolder1.Controls.Add(new LiteralControl("<div id='" + appId + "' class='no-resize'><div id='container' class='app-main-external'>"));
+                        PlaceHolder1.Controls.Add(new LiteralControl("<div id='" + appId + "' class='no-resize'><div id='container' class='app-main-holder'>"));
                         PlaceHolder1.Controls.Add(uc);
                         PlaceHolder1.Controls.Add(new LiteralControl("</div></div>"));
                     }
                     else {
-                        PlaceHolder1.Controls.Add(new LiteralControl("<div id='container' class='app-main-external'>"));
+                        PlaceHolder1.Controls.Add(new LiteralControl("<div id='container' class='app-main-holder'>"));
                         PlaceHolder1.Controls.Add(new LiteralControl("</div>"));
-                        _strScriptreg.Append("$('#container').load('" + ResolveUrl("~/Apps/" + fileName) + "', function () { $(window).resize(); });");
+                        RegisterPostbackScripts.RegisterStartupScript(this, "$('#container').load('" + ResolveUrl("~/Apps/" + fileName) + "', function () { $(window).resize(); });");
                     }
 
-                    if (!IsPostBack) {
-                        hf_appId.Value = appId;
-                        if (_member != null) {
-                            _siteTheme = _member.SiteTheme;
-                        }
-                        else {
-                            _siteTheme = "Standard";
-                        }
-
-                        GetStartupScripts_JS();
-                        GetStartupScripts_CSS();
-
-                        if (fi.Extension.ToLower() == ".ascx") {
-                            RegisterAutoScripts();
-
-                            string animationSpeed = "150";
-                            animationSpeed = _member.AnimationSpeed.ToString();
-                            if (!string.IsNullOrEmpty(animationSpeed))
-                                _strScriptreg.Append("openWSE_Config.animationSpeed=" + animationSpeed + ";");
-                        }
-
-                        _strScriptreg.Append("openWSE_Config.siteTheme='" + _siteTheme + "';");
-                        _strScriptreg.Append("openWSE_Config.siteName='" + CheckLicense.SiteName + "';");
-                    }
-
-                    _strScriptreg.Append("$(window).one('load', function () { $(window).resize(); $('.loading-background-holder').hide(); });");
-                    RegisterPostbackScripts.RegisterStartupScript(this, _strScriptreg.ToString());
+                    LoadDefaultSettings(appId, fi.Extension);
                 }
                 catch (Exception ex) {
                     _applog.AddError(ex);
@@ -96,11 +68,57 @@ public partial class WebControls_ExternalAppHolder : System.Web.UI.Page {
                 Page.Response.Redirect("~/ErrorPages/Error.html");
             }
         }
+        else if (!string.IsNullOrEmpty(Request.QueryString["chatuser"])) {
+            MemberDatabase chatUser = new MemberDatabase(Request.QueryString["chatuser"]);
+
+            string loc = ResolveUrl("~/ChatClient/ChatWindow.html?user=" + Request.QueryString["chatuser"]);
+            PlaceHolder1.Controls.Add(new LiteralControl("<div id='container' class='app-main-holder'>"));
+            PlaceHolder1.Controls.Add(new LiteralControl("</div>"));
+            LoadDefaultSettings(string.Empty, ".html");
+
+            hf_appId.Value = "app-ChatClient-" + chatUser.UserId;
+            Page.Title = HelperMethods.MergeFMLNames(chatUser);
+
+            string iframe = "<iframe class='iFrame-apps' frameborder='0' marginheight='0' marginwidth='0' src='" + loc + "' style='border: 0px;' width='100%'></iframe>";
+            RegisterPostbackScripts.RegisterStartupScript(this, "$('#container').html(\"" + iframe + "\");");
+        }
         else {
             Page.Response.Redirect("~/ErrorPages/Error.html");
         }
     }
 
+    private void LoadDefaultSettings(string appId, string fileExt) {
+        if (!IsPostBack) {
+            hf_appId.Value = appId;
+            if (_member != null) {
+                _siteTheme = _member.SiteTheme;
+            }
+            else {
+                _siteTheme = "Standard";
+            }
+
+            StringBuilder _strScriptreg = new StringBuilder();
+            GetStartupScripts_JS();
+            GetStartupScripts_CSS();
+
+            if (fileExt.ToLower() == ".ascx") {
+                RegisterAutoScripts();
+
+                string animationSpeed = "150";
+                if (_member != null) {
+                    animationSpeed = _member.AnimationSpeed.ToString();
+                }
+                if (!string.IsNullOrEmpty(animationSpeed))
+                    _strScriptreg.Append("openWSE_Config.animationSpeed=" + animationSpeed + ";");
+            }
+
+            _strScriptreg.Append("openWSE_Config.siteTheme='" + _siteTheme + "';");
+            _strScriptreg.Append("openWSE_Config.siteName='" + CheckLicense.SiteName + "';");
+            _strScriptreg.Append("openWSE_Config.siteRootFolder='" + ResolveUrl("~/").Replace("/", "") + "';");
+            _strScriptreg.Append("$(window).one('load', function () { $(window).resize(); $('.loading-background-holder').hide(); });");
+            RegisterPostbackScripts.RegisterStartupScript(this, _strScriptreg.ToString());
+        }
+    }
 
     #region Dynamically Load Scripts
 
@@ -203,10 +221,5 @@ public partial class WebControls_ExternalAppHolder : System.Web.UI.Page {
     }
 
     #endregion
-
-
-    protected void btn_refresh_Click(object sender, EventArgs e) {
-        Response.Redirect(Request.RawUrl);
-    }
 
 }

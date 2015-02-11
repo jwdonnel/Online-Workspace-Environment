@@ -60,12 +60,6 @@
                     <div class="clear-margin">
                         <asp:Panel ID="pnl_startupscripts_css" runat="server">
                         </asp:Panel>
-                        <div class="clear-space-two">
-                        </div>
-                        <div id="startupscript_postmessage_css" class="float-right">
-                        </div>
-                        <div class="clear-space">
-                        </div>
                         <div class="clear-space">
                         </div>
                     </div>
@@ -82,12 +76,6 @@
                     <div class="clear-margin">
                         <asp:Panel ID="pnl_startupscripts" runat="server">
                         </asp:Panel>
-                        <div class="clear-space-two">
-                        </div>
-                        <div id="startupscript_postmessage" class="float-right">
-                        </div>
-                        <div class="clear-space">
-                        </div>
                         <div class="clear-space">
                         </div>
                     </div>

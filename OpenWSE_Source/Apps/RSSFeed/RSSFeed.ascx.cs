@@ -10,7 +10,6 @@ using OpenWSE_Tools.Apps;
 
 public partial class Apps_RSSFeed_RSSFeed : System.Web.UI.UserControl {
     private ServerSettings _ss = new ServerSettings();
-    private readonly UserUpdateFlags _uuf = new UserUpdateFlags();
     private readonly App _apps = new App();
     private string _ctrlname;
     private MemberDatabase _member;

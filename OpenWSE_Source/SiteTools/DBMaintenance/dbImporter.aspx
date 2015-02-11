@@ -9,6 +9,11 @@
             padding-left: 10px;
             margin-top: -3px;
         }
+
+        .checkbox-new-click, .checkbox-edit-click
+        {
+            cursor: default;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
@@ -20,6 +25,65 @@
         </div>
         <asp:UpdatePanel ID="UpdatePanel8" runat="server">
             <ContentTemplate>
+                <asp:CheckBox ID="cb_InstallAfterLoad" runat="server" Text="&nbsp;Install app for current user after import"
+                    Checked="true" />
+                <div class="clear-space-five">
+                </div>
+                <div id="div_isPrivate">
+                    <asp:CheckBox ID="cb_isPrivate" runat="server" Text="&nbsp;Make this app private (Only for me)" ClientIDMode="Static"
+                        Checked="False" />
+                    <div class="clear-space-five">
+                    </div>
+                </div>
+                <asp:CheckBox ID="cb_AllowEditAdd" runat="server" Text="&nbsp;Allow edit and add for table"
+                    Checked="False" />
+                <div class="clear-space-five">
+                </div>
+                <asp:CheckBox ID="cb_addChart" runat="server" Text="&nbsp;Enable Data Chart"
+                    ClientIDMode="Static" Checked="true" />
+                <div class="clear-space-five">
+                </div>
+                <asp:CheckBox ID="cb_allowNotifi" runat="server" Text="&nbsp;Enable Notifications - Notify users upon change"
+                    ClientIDMode="Static" Checked="true" />
+                <div class="clear-space">
+                </div>
+                <div id="chart_selector">
+                    <table cellpadding="10" cellspacing="10">
+                        <tr>
+                            <td align="right" style="width: 127px;">
+                                <span class="pad-right font-bold">Chart Type</span>
+
+                            </td>
+                            <td>
+                                <asp:DropDownList ID="ddl_ChartType" runat="server" CssClass="margin-left margin-right" ClientIDMode="Static">
+                                </asp:DropDownList>
+                            </td>
+                            <td>
+                                <img id="img_charttype" alt="charttype" src="../../Standard_Images/ChartTypes/area.png" class="margin-left margin-right" style="max-height: 80px;" />
+
+                            </td>
+                            <td>
+                                <small>This chart image will be used as the main App Icon.<br />
+                                    Click <a id="lnk_chartTypeSetup" href="https://google-developers.appspot.com/chart/interactive/docs/gallery/areachart" target="_blank">HERE</a> to see how the data should be setup for this chart type.
+                                </small>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="clear-space-two"></div>
+                    <table id="tr-chart-title" cellpadding="10" cellspacing="10">
+                        <tr>
+                            <td align="right" style="width: 127px;">
+                                <span class="pad-right font-bold">Chart Title</span>
+                            </td>
+                            <td>
+                                <asp:TextBox ID="tb_chartTitle" runat="server" CssClass="textEntry margin-left float-left"
+                                    MaxLength="250" Width="400px" ClientIDMode="Static"></asp:TextBox>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="clear-space-five">
+                    </div>
+                </div>
                 <table cellpadding="10" cellspacing="10" width="900px">
                     <tr>
                         <td align="right" style="width: 127px;">
@@ -39,20 +103,6 @@
                                     manually create the SELECT COMMAND.</small>
                             </div>
                         </td>
-                        <td align="left">
-                            <div class="clear margin-left-big">
-                                <asp:CheckBox ID="cb_InstallAfterLoad" runat="server" Text="&nbsp;Install app for current user after import"
-                                    Checked="true" />
-                            </div>
-                            <div id="div_isPrivate" class="clear margin-left-big">
-                                <asp:CheckBox ID="cb_isPrivate" runat="server" Text="&nbsp;Make this app private (Only for me)" ClientIDMode="Static"
-                                    Checked="False" />
-                            </div>
-                            <div class="clear margin-left-big">
-                                <asp:CheckBox ID="cb_AllowEditAdd" runat="server" Text="&nbsp;Allow edit and add for table"
-                                    Checked="False" />
-                            </div>
-                        </td>
                     </tr>
                 </table>
             </ContentTemplate>
@@ -65,7 +115,7 @@
         </div>
         <table cellpadding="10" cellspacing="10">
             <tr>
-                <td align="right">
+                <td align="right" style="width: 127px;">
                     <span class="pad-right font-bold">App Name</span>
                 </td>
                 <td>
@@ -80,10 +130,44 @@
                     </asp:UpdatePanel>
                 </td>
             </tr>
+            <tr id="tr-usersallowed" style="display: none;">
+                <td align="right" style="width: 127px;">
+                    <span class="pad-right font-bold">Users Allowed&nbsp;&nbsp;<br />
+                        To Edit
+                    </span>
+                </td>
+                <td>
+                    <a href="#" class="margin-left sb-links" onclick="openWSE.LoadModalWindow(true, 'UsersAllowed-element', 'Users Allowed To Edit');return false;"><span class="img-users float-left margin-right-sml"></span>Select Users</a>
+                    <div id="UsersAllowed-element" class="Modal-element">
+                        <div class="Modal-overlay">
+                            <div class="Modal-element-align">
+                                <div class="Modal-element-modal" style="width: 650px;">
+                                    <div class="ModalHeader">
+                                        <div>
+                                            <div class="app-head-button-holder-admin">
+                                                <a href="#" onclick="openWSE.LoadModalWindow(false, 'UsersAllowed-element', '');return false;"
+                                                    class="ModalExitButton"></a>
+                                            </div>
+                                            <span class="Modal-title"></span>
+                                        </div>
+                                    </div>
+                                    <div class="ModalPadContent">
+                                        <asp:Panel ID="pnl_usersAllowedToEdit" runat="server">
+                                        </asp:Panel>
+                                        <div align="right">
+                                            <input type="button" class="input-buttons no-margin" value="Done" onclick="openWSE.LoadModalWindow(false, 'UsersAllowed-element', '');" />
+                                        </div>
+                                        <asp:HiddenField ID="hf_usersAllowedToEdit" runat="server" ClientIDMode="Static" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
             <tr>
-                <td align="right">
+                <td align="right" style="width: 127px;">
                     <span id="lbl_connectionstring" class="pad-right font-bold">Connection String</span>
-                    <span id="lbl_connectionstring_excel" class="pad-right font-bold" style="display: none">Excel File</span>
                 </td>
                 <td>
                     <div id="div_connectionstring">
@@ -111,12 +195,10 @@
                             </Triggers>
                         </asp:UpdatePanel>
                     </div>
-                    <div id="div_connectionstring_excel" style="display: none">
-                    </div>
                 </td>
             </tr>
             <tr>
-                <td align="right">
+                <td align="right" style="width: 127px;">
                     <asp:UpdatePanel ID="UpdatePanel9" runat="server">
                         <ContentTemplate>
                             <asp:Panel ID="pnl_lbl" runat="server">
@@ -181,19 +263,18 @@
                 </td>
             </tr>
             <tr>
-                <td align="right">
+                <td align="right" style="width: 127px;">
                     <span class="pad-right font-bold">Database Provider</span>
                 </td>
                 <td>
                     <asp:UpdatePanel ID="UpdatePanel5" runat="server">
                         <ContentTemplate>
                             <asp:DropDownList ID="dd_provider" CssClass="margin-left" runat="server" Width="200px">
-                                <asp:ListItem Text="System.Data.SqlServerCe.4.0" Value="System.Data.SqlServerCe.4.0"></asp:ListItem>
                                 <asp:ListItem Text="System.Data.SqlClient" Value="System.Data.SqlClient"></asp:ListItem>
+                                <asp:ListItem Text="System.Data.SqlServerCe.4.0" Value="System.Data.SqlServerCe.4.0"></asp:ListItem>
                                 <asp:ListItem Text="System.Data.Odbc" Value="System.Data.Odbc"></asp:ListItem>
                                 <asp:ListItem Text="System.Data.OracleClient" Value="System.Data.OracleClient"></asp:ListItem>
                                 <asp:ListItem Text="System.Data.OleDb" Value="System.Data.OleDb"></asp:ListItem>
-                                <%--<asp:ListItem Text="Excel Spreadsheet" Value="excel"></asp:ListItem>--%>
                             </asp:DropDownList>
                             <div class="float-right" style="padding-right: 38px">
                                 <asp:LinkButton ID="btn_test" runat="server" Text="Test Connection" CssClass="sb-links TestConnection"
@@ -204,10 +285,10 @@
                 </td>
             </tr>
             <tr>
-                <td align="center">
+                <td align="right" style="width: 127px;">
                     <asp:UpdatePanel ID="UpdatePanel6" runat="server">
                         <ContentTemplate>
-                            <asp:LinkButton ID="btn_clear" runat="server" CssClass="sb-links RandomActionBtns"
+                            <asp:LinkButton ID="btn_clear" runat="server" CssClass="sb-links RandomActionBtns margin-right"
                                 OnClick="btn_clear_Click">Clear Entries</asp:LinkButton>
                         </ContentTemplate>
                     </asp:UpdatePanel>
@@ -219,7 +300,7 @@
                                 Enabled="False" Visible="False" Style="max-width: 610px;"></asp:Label>
                             <div class="float-right" style="padding-right: 38px">
                                 <asp:Button ID="btn_import" runat="server" Text="Import Database" CssClass="input-buttons RandomActionBtns"
-                                    OnClick="btn_import_Click" Style="margin-right: 0 !important;" />
+                                    OnClick="btn_import_Click" ClientIDMode="Static" Style="margin-right: 0 !important;" />
                             </div>
                         </ContentTemplate>
                     </asp:UpdatePanel>
@@ -266,7 +347,6 @@
                             <asp:ListItem Text="System.Data.Odbc" Value="System.Data.Odbc"></asp:ListItem>
                             <asp:ListItem Text="System.Data.OracleClient" Value="System.Data.OracleClient"></asp:ListItem>
                             <asp:ListItem Text="System.Data.OleDb" Value="System.Data.OleDb"></asp:ListItem>
-                            <%--<asp:ListItem Text="Excel Spreadsheet" Value="excel"></asp:ListItem>--%>
                         </asp:DropDownList>
                         <asp:Button ID="btn_addconnectionstring" runat="server" Text="Add" CssClass="input-buttons"
                             OnClick="btn_addconnectionstring_Click" />
@@ -332,11 +412,15 @@
                                                 </td>
                                                 <td style="width: 125px;">App Name
                                                 </td>
-                                                <td style="width: 150px;">Data Source
+                                                <td style="width: 85px;">Chart Type
+                                                </td>
+                                                <td style="width: 150px;">Chart Title
                                                 </td>
                                                 <td style="min-width: 250px;">Select Command
                                                 </td>
                                                 <td style="width: 155px;">Database Provider
+                                                </td>
+                                                <td style="width: 60px;">Notify
                                                 </td>
                                                 <td style="width: 125px;">Imported By
                                                 </td>
@@ -360,8 +444,11 @@
                                                         <%#Eval("tablename") %>
                                                         <asp:HiddenField ID="hf_appID" runat="server" Value='<%#Eval("ID") %>' />
                                                     </td>
-                                                    <td class="border-right" style="width: 150px;">
-                                                        <%#Eval("connstring") %>
+                                                    <td class="border-right" style="width: 85px;">
+                                                        <%#Eval("chartType") %>
+                                                    </td>
+                                                    <td class="border-right" style="width: 200px;">
+                                                        <%#Eval("chartTitle") %>
                                                     </td>
                                                     <td class="border-right" style="min-width: 252px;">
                                                         <%#Eval("selectcomm") %>
@@ -371,6 +458,9 @@
                                                     </td>
                                                     <td class="border-right" style="width: 155px;">
                                                         <%#Eval("provider") %>
+                                                    </td>
+                                                    <td class="border-right" align="center" style="width: 60px;">
+                                                        <%#Eval("notify") %>
                                                     </td>
                                                     <td class="border-right" style="width: 125px;">
                                                         <%#Eval("importedby") %>
@@ -403,19 +493,28 @@
                                                     <asp:TextBox CssClass="textEntry" runat="server" ID="tb_editName" Text='<%#Eval("tablename") %>'
                                                         Width="98%" MaxLength="150"></asp:TextBox>
                                                 </td>
-                                                <td class="border-right" style="width: 150px;">
-                                                    <%#Eval("connstring") %>
+                                                <td class="border-right" style="width: 85px;">
+                                                    <asp:DropDownList ID="ddl_chartType_edit" runat="server"></asp:DropDownList>
+                                                </td>
+                                                <td class="border-right" style="width: 200px;">
+                                                    <asp:TextBox CssClass="textEntry" runat="server" ID="tb_chartTitle_edit" Text='<%#Eval("chartTitle") %>'
+                                                        Width="98%" MaxLength="250"></asp:TextBox>
                                                 </td>
                                                 <td class="border-right" style="min-width: 252px;">
                                                     <asp:TextBox CssClass="textEntry pad-all-sml" runat="server" ID="tb_editCommand"
                                                         Text='<%#Eval("selectcomm") %>' Width="98%" Font-Names="Arial" Height="65px"
                                                         TextMode="MultiLine"></asp:TextBox>
                                                     <div class="clear-margin">
-                                                        <asp:CheckBox ID="cb_AllowEditAdd_edit" runat="server" Text="&nbsp;Allow edit and add for table" />
+                                                        <asp:CheckBox ID="cb_AllowEditAdd_edit" runat="server" Text="&nbsp;Allow edit and add for table" CssClass="cb-allowedit-edit" />
+                                                        <div class="clear-space-two"></div>
+                                                        <a href="#" class="sb-links edit-usersallowed-btn" onclick="EditUsersAllowedToEditEdit('<%#Eval("ID") %>');return false;"><span class="img-users float-left margin-right-sml"></span>Select Users Allowed To Edit</a>
                                                     </div>
                                                 </td>
                                                 <td class="border-right" style="width: 155px;">
                                                     <%#Eval("provider") %>
+                                                </td>
+                                                <td class="border-right" align="center" style="width: 60px;">
+                                                    <asp:CheckBox ID="cb_NotifyUsers_Edit" runat="server" ToolTip="Notify users upon table changes" />
                                                 </td>
                                                 <td class="border-right" style="width: 125px;">
                                                     <%#Eval("importedby") %>
@@ -474,6 +573,24 @@
                 </div>
             </div>
         </div>
+        <div id="UsersAllowedEdit-element" class="Modal-element">
+            <div class="Modal-overlay">
+                <div class="Modal-element-align">
+                    <div class="Modal-element-modal" style="width: 650px;">
+                        <div class="ModalHeader">
+                            <div>
+                                <span class="Modal-title"></span>
+                            </div>
+                        </div>
+                        <div class="ModalPadContent">
+                            <input type="hidden" id="hf_usersAllowedToEdit_Edit" />
+                            <asp:Panel ID="pnl_usersAllowedToEdit_Edit" runat="server" ClientIDMode="Static">
+                            </asp:Panel>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <script type="text/javascript" src='<%=ResolveUrl("~/Scripts/SiteTools/dbImport.js")%>'></script>
         <script type="text/javascript">
             $(document.body).on("change", "#<%=dd_ddtables.ClientID %>", function () {
@@ -494,38 +611,38 @@
                        openWSE.LoadingMessage1("Updating...");
                        __doPostBack("<%=hf_deletestring.ClientID %>", "");
                    }, null);
-            }
+               }
 
-            function EditConnectionString(x) {
-                $("#<%=hf_editstring.ClientID %>").val(x);
-                openWSE.LoadingMessage1("Loading...");
-                __doPostBack("<%=hf_editstring.ClientID %>", "");
-            }
+               function EditConnectionString(x) {
+                   $("#<%=hf_editstring.ClientID %>").val(x);
+                   openWSE.LoadingMessage1("Loading...");
+                   __doPostBack("<%=hf_editstring.ClientID %>", "");
+               }
 
-            function UpdateConnectionString(x) {
-                $("#<%=hf_updatestring.ClientID %>").val(x);
-                $("#<%=hf_connectionNameEdit.ClientID %>").val(escape($("#tb_connNameedit").val()));
-                $("#<%=hf_connectionStringEdit.ClientID %>").val(escape($("#tb_connStringedit").val()));
-                $("#<%=hf_databaseProviderEdit.ClientID %>").val(escape($("#edit-databaseProvider").val()));
-                openWSE.LoadingMessage1("Updating...");
-                __doPostBack("<%=hf_updatestring.ClientID %>", "");
-            }
+               function UpdateConnectionString(x) {
+                   $("#<%=hf_updatestring.ClientID %>").val(x);
+                   $("#<%=hf_connectionNameEdit.ClientID %>").val(escape($("#tb_connNameedit").val()));
+                   $("#<%=hf_connectionStringEdit.ClientID %>").val(escape($("#tb_connStringedit").val()));
+                   $("#<%=hf_databaseProviderEdit.ClientID %>").val(escape($("#edit-databaseProvider").val()));
+                   openWSE.LoadingMessage1("Updating...");
+                   __doPostBack("<%=hf_updatestring.ClientID %>", "");
+               }
 
-            function KeyPressEdit_Connection(event, x) {
-                try {
-                    if (event.which == 13) {
-                        event.preventDefault();
-                        UpdateConnectionString(x);
-                    }
-                }
-                catch (evt) {
-                    if (event.keyCode == 13) {
-                        event.preventDefault();
-                        UpdateConnectionString(x);
-                    }
-                    delete evt;
-                }
-            }
+               function KeyPressEdit_Connection(event, x) {
+                   try {
+                       if (event.which == 13) {
+                           event.preventDefault();
+                           UpdateConnectionString(x);
+                       }
+                   }
+                   catch (evt) {
+                       if (event.keyCode == 13) {
+                           event.preventDefault();
+                           UpdateConnectionString(x);
+                       }
+                       delete evt;
+                   }
+               }
         </script>
     </div>
 </asp:Content>

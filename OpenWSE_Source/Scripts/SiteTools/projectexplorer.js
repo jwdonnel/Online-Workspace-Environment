@@ -21,10 +21,9 @@ var ftpLocation = "";
 function PromptFTPCredentials(folder) {
     ftpLocation = folder;
 
-    var title = "Please provide your credentials for " + folder;
-    $("#MessageActivationPopup").find(".title").html(title);
-    $("#MessageActivationPopup").show();
-
+    var title = "Please provide your credentials for<br />" + folder;
+    $("#FtpProject-element").find(".title").html(title);
+    openWSE.LoadModalWindow(true, "FtpProject-element", "FTP Credentials");
     $("#tb_ftpUsername").focus();
 }
 function TryLogin() {
@@ -41,7 +40,7 @@ function TryLogin() {
             success: function (data) {
                 openWSE.RemoveUpdateModal();
                 if (openWSE.ConvertBitToBoolean(data.d)) {
-                    $("#MessageActivationPopup").hide();
+                    openWSE.LoadModalWindow(false, "FtpProject-element", "");
                 }
                 else {
                     openWSE.AlertWindow("Failed to connect to the FTP address. Please make sure the FTP address is correct and that the username and password reflect that FTP location.");
@@ -114,6 +113,8 @@ function LoadSavedPageFolder(_this) {
         }
     }
     AddEditControlsToPageList();
+
+    $("#hf_currFolder").val(currFolderSel);
 }
 
 function Reload_Cancel() {
@@ -385,6 +386,10 @@ function AddEditControlsToPageList() {
         $(this).find(".td-edit-btn").hide();
         $(this).find(".td-delete-btn").hide();
     });
+}
+
+function SetCurrFolder(encodedFolder) {
+    currFolderSel = unescape(encodedFolder);
 }
 
 var currFolderSel = "";

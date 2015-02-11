@@ -2,7 +2,7 @@
 //
 //	openWSE v3.5
 //	by John Donnelly
-//	Last Modification: 1/5/2015
+//	Last Modification: 1/19/2015
 //
 //	Licensed under the Creative Commons Attribution 2.5 License - http://creativecommons.org/licenses/by/2.5/
 //  	- Free for use in both personal and commercial projects
@@ -76,6 +76,7 @@ var openWSE = function () {
     var currWinMode = "";
     var widgtIconOptionsOn = false;
     var pagedIconClicked = false;
+    var outsideAppModal = "-outside-modal-window";
 
     function init() {
         console.log(openWSE_Config);
@@ -165,11 +166,14 @@ var openWSE = function () {
         // Move Search Dropdown
         // CreateNewPagedSearchBox();
 
-        if (appId != "" && $("#" + appId + "-pnl-icons").length != 0) {
-            pagedIconClicked = true;
-            $("#" + appId).addClass("auto-full-page");
-            $("#" + appId).find(".app-head, .app-head-button-holder").hide();
-            $("#" + appId + "-pnl-icons").trigger("click");
+        if (appId != "") {
+            if ($(".app-icon[data-appid='" + appId + "']").length != 0) {
+                pagedIconClicked = true;
+                var $this = $($(".app-icon[data-appid='" + appId + "']")[0]);
+                $(".app-main-holder[data-appid='" + appId + "']").addClass("auto-full-page");
+                $(".app-main-holder[data-appid='" + appId + "']").find(".app-head, .app-head-button-holder").hide();
+                $this.trigger("click");
+            }
         }
     }
     function GetPagedAddOverlayAndModel() {
@@ -440,8 +444,8 @@ var openWSE = function () {
     $(document.body).on("click", ".app-icon", function () {
         var $this = $(this);
 
-        if (!openWSE.IsComplexWorkspaceMode() && !pagedIconClicked) {
-            window.location.href = openWSE.siteRoot() + "Workspace.aspx?AppPage=" + $this.attr("id").replace("-pnl-icons", "");
+        if (!openWSE.IsComplexWorkspaceMode() && !pagedIconClicked && window.location.href.toLowerCase().indexOf("appmanager.aspx") == -1) {
+            window.location.href = openWSE.siteRoot() + "Workspace.aspx?AppPage=" + $this.attr("data-appId");
         }
         else if ($("#workspace_holder").length > 0) {
             var workspace = Getworkspace();
@@ -496,8 +500,8 @@ var openWSE = function () {
     $(document.body).on("click", ".minimize-button-app", function () {
         if (!minBtn_InProgress) {
             minBtn_InProgress = true;
-            var id = $(this).attr("href");
-            var $_id = $(id);
+            var id = $(this).attr("href").replace("#", "");
+            var $_id = $(".app-main-holder[data-appid='" + id + "']");
 
             var name = $_id.find(".app-title").text();
             var _leftPos = $_id.css("left");
@@ -506,16 +510,16 @@ var openWSE = function () {
             var _height = $_id.height();
             var workspace = Getworkspace();
 
-            if ($("#" + id.replace("#", "") + "-min-bar").length == 0) {
+            if ($(".app-min-bar[data-appid='" + id + "']").length == 0) {
                 $_id.animate({ opacity: 0.0, left: $("#minimized-app-bar").css("width"), top: 0 }, openWSE_Config.animationSpeed, function () {
-                    BuildAppMinIcon(id.replace(/#/gi, ""), name, _leftPos, _topPos);
-                    MoveOffScreen(id);
+                    BuildAppMinIcon($_id, name, _leftPos, _topPos);
+                    MoveOffScreen($_id);
                     SetContainerTopPos(true);
 
                     $.ajax({
                         url: saveHandler + "/App_Minimize",
                         type: "POST",
-                        data: '{ "appId": "' + id.replace(/#/gi, "") + '","name": "' + name + '","x": "' + _leftPos + '","y": "' + _topPos + '","width": "' + _width + '","height": "' + _height + '","workspace": "' + workspace + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
+                        data: '{ "appId": "' + id + '","name": "' + name + '","x": "' + _leftPos + '","y": "' + _topPos + '","width": "' + _width + '","height": "' + _height + '","workspace": "' + workspace + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
                         contentType: "application/json; charset=utf-8",
                         success: function (data) {
                             minBtn_InProgress = false;
@@ -532,35 +536,25 @@ var openWSE = function () {
     $(document.body).on("dblclick", ".app-head-dblclick", function () {
         if (!maxBtn_InProgress) {
             maxBtn_InProgress = true;
-            var id = $(this).parent().attr("id");
-            id = "#" + id;
-            MaximizeApp(id);
+            MaximizeApp($(this).closest(".app-main-holder"));
         }
         return false;
     });
     $(document.body).on("click", ".maximize-button-app", function () {
         if (!maxBtn_InProgress) {
             maxBtn_InProgress = true;
-            var id = $(this).attr("href");
-            MaximizeApp(id);
+            MaximizeApp($(this).closest(".app-main-holder"));
         }
         return false;
     });
     $(document.body).on("click", ".exit-button-app, .exit-button-app-min", function () {
         if (!exitBtn_InProgress) {
             exitBtn_InProgress = true;
-            var id = $(this).attr("href");
-            if (id.indexOf("#") == -1) {
-                id = "#" + id;
-            }
-            var $_id = $(id);
+            var id = $(this).attr("href").replace("#", "");
+            var $_id = $(".app-main-holder[data-appid='" + id + "']");
 
-            if (id == "#app-appinstaller") {
-                $("#app-installer-icon").removeClass("active");
-            }
-
-            if ($(id + "-min-bar").length > 0) {
-                $(id + "-min-bar").remove();
+            if ($(".app-min-bar[data-appid='" + id + "']").length > 0) {
+                $(".app-min-bar[data-appid='" + id + "']").remove();
                 SetContainerTopPos(true);
             }
 
@@ -577,15 +571,15 @@ var openWSE = function () {
                 SetAppMinToMax(id);
             }
 
-            RemoveworkspaceAppNum(id);
-            RemoveAppIconActive(id);
+            RemoveworkspaceAppNum($_id);
+            RemoveAppIconActive($_id);
 
             $_id.fadeOut(openWSE_Config.animationSpeed, function () {
                 if ($_id.hasClass("app-maximized")) {
                     $_id.removeClass("app-maximized");
                 }
 
-                if ($_id.attr("id").indexOf("app-ChatClient-") != -1) {
+                if ($_id.attr("data-appid").indexOf("app-ChatClient-") != -1) {
                     $_id.remove();
                 }
 
@@ -616,17 +610,26 @@ var openWSE = function () {
                     height: ""
                 });
 
-                $_id.find(".app-body").css("height", "");
+
+                $_id.find(".app-body").css({
+                    height: "",
+                    width: ""
+                });
 
                 if ($_id.find(".options-button-app").length > 0) {
                     $_id.find(".options-button-app").removeClass("active");
                     $_id.find(".app-popup-inner-app").hide();
                 }
 
+                var modalClasses = $_id.attr("data-appid") + outsideAppModal;
+                $("." + modalClasses).each(function () {
+                    $(this).remove();
+                });
+
                 $.ajax({
                     url: saveHandler + "/App_Close",
                     type: "POST",
-                    data: '{ "appId": "' + id.replace(/#/gi, "") + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
+                    data: '{ "appId": "' + id + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
                     contentType: "application/json; charset=utf-8",
                     success: function (data) {
                         exitBtn_InProgress = false;
@@ -642,130 +645,129 @@ var openWSE = function () {
     $(document.body).on("click", ".app-min-bar", function () {
         var name = $(this).find("span").text();
         var workspace = Getworkspace();
-        var _appId = $(this).attr("id");
-        if (_appId.indexOf("-min-bar") != -1) {
-            _appId = _appId.replace("-min-bar", "");
-        }
+        var _appId = $(this).attr("data-appid");
 
-        if ($("#" + _appId).hasClass("app-min-bar-preview")) {
-            $("#" + _appId).css("opacity", "0.0");
-            $("#" + _appId).css("filter", "alpha(opacity=0)");
-            $("#" + _appId).removeClass("app-min-bar-preview");
+        var $thisApp = $(".app-main-holder[data-appid='" + _appId + "']");
+        if ($thisApp.hasClass("app-min-bar-preview")) {
+            $thisApp.css("opacity", "0.0");
+            $thisApp.css("filter", "alpha(opacity=0)");
+            $thisApp.removeClass("app-min-bar-preview");
             previewxVal = "";
             previewyVal = "";
         }
 
+        var appWidth = $thisApp.width();
+        var appHeight = $thisApp.height();
+
         $.ajax({
             url: saveHandler + "/App_Open",
             type: "POST",
-            data: '{ "appId": "' + _appId + '","name": "' + name + '","workspace": "' + workspace + '","width": "' + $("#" + _appId).width() + '","height": "' + $("#" + _appId).height() + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
+            data: '{ "appId": "' + _appId + '","name": "' + name + '","workspace": "' + workspace + '","width": "' + appWidth + '","height": "' + appHeight + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
             contentType: "application/json; charset=utf-8",
             success: function (data) {
                 var content = data.d;
                 if (content != "") {
-                    $_id = $("#" + _appId);
                     MoveToCurrworkspace(workspace, _appId);
                     AddworkspaceAppNum(workspace, _appId);
 
-                    var appWidth = $_id.width();
-                    var appHeight = $_id.height();
-
-                    if (($_id.css("display") != "block") || ($_id.css("visibility") != "visible")) {
+                    if (($thisApp.css("display") != "block") || ($thisApp.css("visibility") != "visible")) {
                         var body = "";
-                        if ($_id.find(".app-body").find("div").html() == null) {
-                            body = $_id.find(".app-body").html().trim();
+                        if ($thisApp.find(".app-body").find("div").html() == null) {
+                            body = $thisApp.find(".app-body").html().trim();
                         }
                         else {
-                            body = $_id.find(".app-body").find("div").html().trim();
+                            body = $thisApp.find(".app-body").find("div").html().trim();
                         }
 
                         var maxApp = "0";
-                        if ($_id.hasClass("app-maximized")) {
+                        if ($thisApp.hasClass("app-maximized")) {
                             maxApp = "1";
                         }
 
                         if (body == "") {
                             if (_appId.indexOf("app-ChatClient-") != -1) {
-                                var chatUser = $_id.attr("chat-username");
+                                var chatUser = $thisApp.attr("chat-username");
                                 content = "ChatClient/ChatWindow.html?user=" + chatUser + "&displayVersion=workspace";
                             }
 
-                            if ((($_id.css("left") == null) && ($_id.css("top") == null)) || (($_id.css("left") == "auto") && ($_id.css("top") == "auto"))) {
+                            if ((($thisApp.css("left") == null) && ($thisApp.css("top") == null)) || (($thisApp.css("left") == "auto") && ($thisApp.css("top") == "auto"))) {
                                 CreateSOApp(_appId, name, content, "50px", "50px", appWidth, appHeight, "1", maxApp);
                             }
                             else {
-                                if (parseInt($_id.css("top")) < 0) {
-                                    $_id.css("top", "50px");
+                                if (parseInt($thisApp.css("top")) < 0) {
+                                    $thisApp.css("top", "50px");
                                 }
-                                if (parseInt($_id.css("left")) < 0) {
-                                    $_id.css("left", "50px");
+                                if (parseInt($thisApp.css("left")) < 0) {
+                                    $thisApp.css("left", "50px");
                                 }
-                                CreateSOApp(_appId, name, content, $_id.css("left"), $_id.css("top"), appWidth, appHeight, "1", maxApp);
+                                CreateSOApp(_appId, name, content, $thisApp.css("left"), $thisApp.css("top"), appWidth, appHeight, "1", maxApp);
                             }
                         }
 
-                        if ($("#" + _appId + "-min-bar").length != 0) {
-                            if ((!$_id.hasClass("auto-full-page")) && (!$_id.hasClass("auto-full-page-min")) && (!$_id.hasClass("app-maximized")) && (!$_id.hasClass("app-maximized-min"))) {
-                                $_id.find(".maximize-button-app").removeClass("active");
-                                $_id.css("width", appWidth);
-                                $_id.css("height", appHeight);
-                                $_id.css("top", topBarHt);
+                        if ($(".app-min-bar[data-appid='" + _appId + "']").length != 0) {
+                            if ((!$thisApp.hasClass("auto-full-page")) && (!$thisApp.hasClass("auto-full-page-min")) && (!$thisApp.hasClass("app-maximized")) && (!$thisApp.hasClass("app-maximized-min"))) {
+                                $thisApp.find(".maximize-button-app").removeClass("active");
+                                $thisApp.css("width", appWidth);
+                                $thisApp.css("height", appHeight);
+                                $thisApp.css("top", topBarHt);
                             }
                             else {
-                                $_id.find(".maximize-button-app").addClass("active");
-                                $_id.css("top", "0px");
+                                $thisApp.find(".maximize-button-app").addClass("active");
+                                $thisApp.css("top", "0px");
 
-                                if ($_id.hasClass("app-maximized-min")) {
-                                    $_id.removeClass("app-maximized-min");
-                                    $_id.addClass("app-maximized");
+                                if ($thisApp.hasClass("app-maximized-min")) {
+                                    $thisApp.removeClass("app-maximized-min");
+                                    $thisApp.addClass("app-maximized");
                                 }
 
-                                if ($_id.hasClass("auto-full-page-min")) {
-                                    $_id.removeClass("auto-full-page-min");
-                                    $_id.addClass("auto-full-page");
+                                if ($thisApp.hasClass("auto-full-page-min")) {
+                                    $thisApp.removeClass("auto-full-page-min");
+                                    $thisApp.addClass("auto-full-page");
                                 }
                             }
 
+                            var xData = $(".app-min-bar[data-appid='" + _appId + "']").attr("data-x");
+                            var yData = $(".app-min-bar[data-appid='" + _appId + "']").attr("data-y");
+
                             if (previewHover && previewAppID == _appId) {
-                                $_id.css({
+                                $thisApp.css({
                                     visibility: "visible",
                                     display: "block",
                                     opacity: 1.0,
-                                    left: $("#" + _appId + "-min-bar-x").val(),
-                                    top: $("#" + _appId + "-min-bar-y").val()
+                                    left: xData,
+                                    top: yData
                                 });
                             }
                             else {
-                                $_id.css({
+                                $thisApp.css({
                                     visibility: "visible",
                                     display: "block"
                                 }).animate({
                                     opacity: 1.0,
-                                    left: $("#" + _appId + "-min-bar-x").val(),
-                                    top: $("#" + _appId + "-min-bar-y").val()
+                                    left: xData,
+                                    top: yData
                                 }, openWSE_Config.animationSpeed);
                             }
 
                             $.ajax({
                                 url: saveHandler + "/App_Move",
                                 type: "POST",
-                                data: '{ "appId": "' + _appId + '","name": "' + name + '","x": "' + $("#" + _appId + "-min-bar-x").val() + '","y": "' + $("#" + _appId + "-min-bar-y").val() + '","width": "' + appWidth + '","height": "' + appHeight + '","workspace": "' + workspace + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
+                                data: '{ "appId": "' + _appId + '","name": "' + name + '","x": "' + xData + '","y": "' + yData + '","width": "' + appWidth + '","height": "' + appHeight + '","workspace": "' + workspace + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
                                 contentType: "application/json; charset=utf-8"
                             });
                         }
                         else {
-                            $_id.css({
+                            $thisApp.css({
                                 top: topBarHt,
                                 visibility: "visible",
                                 display: "block"
                             }).fadeIn(openWSE_Config.animationSpeed);
                         }
 
-                        var id = $_id.attr("id");
-                        SetActiveApp(id);
+                        SetActiveApp($thisApp);
 
-                        if ($("#" + _appId + "-min-bar").length > 0) {
-                            $("#" + _appId + "-min-bar").remove();
+                        if ($(".app-min-bar[data-appid='" + _appId + "']").length > 0) {
+                            $(".app-min-bar[data-appid='" + _appId + "']").remove();
                         }
                     }
 
@@ -773,22 +775,20 @@ var openWSE = function () {
                     previewAppID = "";
 
                     SetContainerTopPos(true);
-
-                    ResizeAppBody("#" + $_id.attr("id"));
+                    ResizeAppBody($thisApp);
                 }
             }
         });
         return false;
     });
-    $(document.body).on("click", ".app-main, .app-main-nobg", function (e) {
-        var id = $(this).attr("id");
-        SetActiveApp(id);
+    $(document.body).on("click", ".app-main-holder", function (e) {
+        SetActiveApp(this);
         appMainClicked = 1;
     });
     $(document.body).on("click", ".workspace-holder", function () {
         if (openWSE.IsComplexWorkspaceMode()) {
             if (appMainClicked == 0) {
-                $(".app-main, .app-main-nobg").removeClass("selected");
+                $(".app-main-holder").removeClass("selected");
                 SetDeactiveAll();
             }
         }
@@ -811,7 +811,7 @@ var openWSE = function () {
             }
 
             $_parent.find(".app-popup-inner-app").slideDown(openWSE_Config.animationSpeed);
-            SetActiveApp($_parent.parent().attr("id"));
+            SetActiveApp($_parent.parent());
         }
 
         return false;
@@ -829,45 +829,7 @@ var openWSE = function () {
             }
             else {
                 var $this = $(this).closest(".app-icon");
-                var x = "<div id='MessageActivationPopup' style='display: none;'>";
-                x += "<div class='message-element-align'>";
-                x += "<div class='message'>";
-
-                var name = $this.find(".app-icon-font").text();
-                if (name == "") {
-                    name = $this.find(".app-title").text();
-                    if (name == "") {
-                        name = $this.find("span").text();
-                    }
-                }
-
-                var _appId = $this.attr("id");
-                if ((_appId == undefined) || (_appId == null) || (_appId == "")) {
-                    _appId = $this.parent().attr("id");
-                }
-
-                var popOutBtn = "";
-                if ($this.attr("popoutloc") != "" && $this.attr("popoutloc") != undefined && $this.attr("popoutloc") != null) {
-                    var popoutloc = $this.attr("popoutloc");
-                    popOutBtn = "<div class='clear-space'></div><a href='#' class='sb-links' onclick='openWSE.PopOutFrameFromSiteTools(\"" + name + "\", \"" + popoutloc + "\");return false;'>Open in new window</a>";
-                }
-
-                var currDB = "1";
-                if ($this.attr("currentworkspace") != "" && $this.attr("currentworkspace") != undefined && $this.attr("currentworkspace") != null) {
-                    currDB = $this.attr("currentworkspace");
-                }
-
-                var buttonYes = "<input type='button' class='input-buttons' value='Yes' style='width: 50px;' onclick='openWSE.LoadAppFromSiteTools(\"" + _appId + "\", \"" + name + "\", \"workspace_" + $(this).val() + "\");' />";
-                var buttonNo = "<input type='button' class='input-buttons no-margin' value='No' style='width: 50px; margin-left: 10px!important;' onclick='$(\"#MessageActivationPopup\").hide();$(\"#MessageActivationPopup\").remove();return false;' />";
-
-                x += "<h4 class='font-bold'>" + name + "</h4><div class='clear-space'></div>";
-                x += "You must be on the workspace to load this app. Would you like to go back to your workspace?<div class='clear' style='height: 20px;'></div>" + buttonYes + buttonNo + popOutBtn;
-                x += "</div></div></div>";
-                $("body").append(x);
-                $("#MessageActivationPopup").show();
-
-                var heightMargin = $("#MessageActivationPopup").find(".page-load-message").height() / 2;
-                $("#MessageActivationPopup").find(".page-load-message").css("margin-top", "-" + heightMargin + "px");
+                BuildOpenAppPopup($this);
             }
         }
     });
@@ -983,7 +945,9 @@ var openWSE = function () {
 
         $("body").append(ele);
         LoadModalWindow(true, "AlertWindow-element", "Message");
-        $("#AlertWindow-element").find(".confirm-ok-button").focus();
+        setTimeout(function () {
+            $("#AlertWindow-element").find(".confirm-ok-button").focus();
+        }, 250);
     }
     function CloseAlertWindow() {
         if ($("#AlertWindow-element").length > 0) {
@@ -1044,7 +1008,9 @@ var openWSE = function () {
         });
 
         LoadModalWindow(true, "ConfirmWindow-element", "Confirmation");
-        $("#ConfirmWindow-element").find(".confirm-ok-button").focus();
+        setTimeout(function () {
+            $("#ConfirmWindow-element").find(".confirm-ok-button").focus();
+        }, 250);
     }
     function CloseConfirmWindow() {
         if ($("#ConfirmWindow-element").length > 0) {
@@ -1297,13 +1263,8 @@ var openWSE = function () {
             success: function (data) {
                 $("#AppRating-element").remove();
 
-                if ($("#MainContent_btn_refreshStats").length > 0) {
-                    __doPostBack('ctl00$MainContent$btn_refreshStats', '');
-                }
-                else {
-                    openWSE.RemoveUpdateModal();
-                    openWSE.ResetRating(div, rating, disabled, appId, useLargeStars);
-                }
+                openWSE.RemoveUpdateModal();
+                openWSE.ResetRating(div, rating, disabled, appId, useLargeStars);
             }
         });
     }
@@ -1315,24 +1276,19 @@ var openWSE = function () {
 
     /* App Open */
     function OpenAppNoti(id) {
-        var _id = id.replace("-pnl-icons", "");
-
         $(".top-options li.a").removeClass("active");
         $(".top-options li.b").hide();
 
         if (openWSE.IsComplexWorkspaceMode()) {
             if ($("#workspace_holder").length > 0) {
-                if ($('#' + _id).css('display') == 'none') {
+                if ($('#' + id).css('display') == 'none') {
                     needpostback = 1;
                     var workspace = Getworkspace();
-                    LoadApp($('#' + id), workspace);
-                    if ($('#' + id).find('span').hasClass('active') == false) {
-                        $('#' + id).find('span').addClass('active');
-                    }
+                    LoadApp($(".app-main-holder[data-appid='" + id + "']"), workspace);
                 }
             }
             else {
-                BuildOpenAppPopup($("#" + id));
+                BuildOpenAppPopup($(".app-icon[data-appid='" + id + "']"));
             }
         }
         else {
@@ -1366,9 +1322,12 @@ var openWSE = function () {
     function BuildOpenAppPopup(_this) {
         var $this = $(_this);
 
-        var x = "<div id='MessageActivationPopup' style='display: none;'>";
-        x += "<div class='message-element-align'>";
-        x += "<div class='message'>";
+        var x = "<div id='ConfirmApp-element' class='Modal-element' style='display: none;'>";
+        x += "<div class='Modal-overlay'>";
+        x += "<div class='Modal-element-align'>";
+        x += "<div class='Modal-element-modal' style='width: 400px; min-width: 400px;'>";
+        x += "<div class='ModalHeader'><div><span class='Modal-title'></span></div></div>";
+
 
         var name = $this.find(".app-icon-font").text();
         if (name == "") {
@@ -1378,15 +1337,12 @@ var openWSE = function () {
             }
         }
 
-        var _appId = $this.attr("id");
-        if ((_appId == undefined) || (_appId == null) || (_appId == "")) {
-            _appId = $this.parent().attr("id");
-        }
+        var _appId = $this.attr("data-appid");
 
         var popOutBtn = "";
         if ($this.attr("popoutloc") != "" && $this.attr("popoutloc") != undefined && $this.attr("popoutloc") != null) {
             var popoutloc = $this.attr("popoutloc");
-            popOutBtn = "<div class='clear-space'></div><a href='#' class='sb-links' onclick='openWSE.PopOutFrameFromSiteTools(\"" + name + "\", \"" + popoutloc + "\");return false;'>Open in new window</a>";
+            popOutBtn = "<a href='#' class='sb-links float-right' onclick='openWSE.PopOutFrameFromSiteTools(\"" + name + "\", \"" + popoutloc + "\");return false;'>Open in new window</a>";
         }
 
         var currDB = "1";
@@ -1395,32 +1351,35 @@ var openWSE = function () {
         }
 
         var buttonYes = "<input type='button' class='input-buttons' value='Yes' style='width: 50px;' onclick='openWSE.LoadAppFromSiteTools(\"" + _appId + "\", \"" + name + "\", \"workspace_" + currDB + "\");' />";
-        var buttonNo = "<input type='button' class='input-buttons no-margin' value='No' style='width: 50px; margin-left: 10px!important;' onclick='$(\"#MessageActivationPopup\").hide();$(\"#MessageActivationPopup\").remove();return false;' />";
+        var buttonNo = "<input type='button' class='input-buttons no-margin' value='No' style='width: 50px; margin-left: 10px!important;' onclick=\"$('#ConfirmApp-element').remove();return false;\" />";
         var messageStr = "You must be on the workspace to load this app. Would you like to go back to your workspace?";
 
         if (!openWSE.CheckIfWorkspaceLinkAvailable()) {
             buttonYes = "";
-            var buttonNo = "<input type='button' class='input-buttons no-margin' value='Close' onclick='$(\"#MessageActivationPopup\").hide();$(\"#MessageActivationPopup\").remove();return false;' />";
+            var buttonNo = "<input type='button' class='input-buttons no-margin' value='Close' onclick=\"$('#ConfirmApp-element').remove();return false;\" />";
             messageStr = "You are not authorized to use the workspace. ";
             if (popOutBtn != "") {
                 messageStr += "However, you can open this app in a seperate window.";
             }
         }
 
-        x += "<h4 class='font-bold'>" + name + "</h4><div class='clear-space'></div>";
+        x += "<div class='ModalPadContent'>";
         x += messageStr + "<div class='clear' style='height: 20px;'></div>" + buttonYes + buttonNo + popOutBtn;
-        x += "</div></div></div>";
-        $("body").append(x);
-        $("#MessageActivationPopup").show();
+        x += "<div class='clear-space'></div></div>";
+        x += "</div></div></div></div>";
 
-        var heightMargin = $("#MessageActivationPopup").find(".page-load-message").height() / 2;
-        $("#MessageActivationPopup").find(".page-load-message").css("margin-top", "-" + heightMargin + "px");
+        $("body").append(x);
+        openWSE.LoadModalWindow(true, "ConfirmApp-element", "Open " + name);
     }
 
 
     /* Modal Loader */
     function LoadModalWindow(open, element, title) {
-        var $thisElement = $("#" + element);
+        if (element.indexOf("#") != 0) {
+            element = "#" + element;
+        }
+
+        var $thisElement = $(element);
         if (open) {
             $thisElement.show();
 
@@ -1490,6 +1449,19 @@ var openWSE = function () {
             $thisElement.css("visibility", "hidden");
             $thisElement.find(".Modal-title").html("");
             $thisElement.find(".Modal-element-modal").find(".ModalPadContent").css("overflow", "");
+
+            setTimeout(function () {
+                if ($thisElement.hasClass('outside-main-app-div')) {
+                    var _classList = GetElementClassList($thisElement[0]);
+                    for (var i = 0; i < _classList.length; i++) {
+                        if (_classList[i].indexOf(outsideAppModal) > 0) {
+                            var appId = _classList[i].replace(outsideAppModal, "");
+                            SetActiveApp($(".app-main-holder[data-appid='" + appId + "']"));
+                            break;
+                        }
+                    }
+                }
+            }, 25);
         }
     }
     function SaveInnerModalContent(args) {
@@ -1917,55 +1889,41 @@ var openWSE = function () {
     function ShowUpdatesPopup(message) {
         $(window).load(function () {
             var decodedMessage = unescape(message);
-            var x = "<div id='MessageUpdatePopup' style='display: none;'>";
-            x += "<div class='message-element-align'>";
-            x += "<div id='MessageUpdatePopup-Text' class='message'>";
-            x += decodedMessage;
-            x += "</div></div></div>";
-            $("body").append(x);
-            $("#MessageUpdatePopup").show();
-            var maxHeight = $(window).height() / 2;
-            $(".new-update-holder").css("max-height", maxHeight);
-            var heightMargin = $("#MessageUpdatePopup-Text").height() / 2;
-            $("#MessageUpdatePopup-Text").css("margin-top", "-" + heightMargin + "px");
+            var x = "<div id='OpenWSEUpdates-element' class='Modal-element' style='display: none;'>";
+            x += "<div class='Modal-overlay'>";
+            x += "<div class='Modal-element-align'>";
+            x += "<div class='Modal-element-modal'>";
+            x += "<div class='ModalHeader'><div><span class='Modal-title'></span></div></div>";
+            x += "<div class='ModalPadContent'>" + decodedMessage + "</div>";
+            x += "</div></div></div></div></div>";
 
-            $(window).resize(function () {
-                var maxHeight = $(window).height() / 2;
-                $(".new-update-holder").css("max-height", maxHeight);
-                var heightMargin = $("#MessageUpdatePopup-Text").height() / 2;
-                $("#MessageUpdatePopup-Text").css("margin-top", "-" + heightMargin + "px");
-            });
+            $("body").append(x);
+            openWSE.LoadModalWindow(true, "OpenWSEUpdates-element", "Site Updates");
         });
     }
     function ShowActivationPopup(message) {
         $(window).load(function () {
             var decodedMessage = unescape(message);
-            var x = "<div id='MessageActivationPopup' style='display: none;'>";
-            x += "<div class='message-element-align'>";
-            x += "<div class='message'>";
+            var x = "<div id='Activation-element' class='Modal-element' style='display: none;'>";
+            x += "<div class='Modal-overlay'>";
+            x += "<div class='Modal-element-align'>";
+            x += "<div class='Modal-element-modal'>";
+            x += "<div class='ModalHeader'><div><span class='Modal-title'></span></div></div>";
 
             var img = "<img alt='' class='float-left pad-right-sml' src='" + openWSE.siteRoot() + "App_Themes/" + openWSE_Config.siteTheme + "/App/approve.png' />";
             var text = "<span style='font-size: 18px'>Got it</span>";
             var button = "<a href='" + openWSE.siteRoot() + "Workspace.aspx' class='input-buttons no-margin' style='text-decoration: none!important;'>" + img + " " + text + "</a>";
 
-            x += decodedMessage + "<div class='clear' style='height: 20px;'></div>" + button;
-            x += "</div></div></div>";
+            x += "<div class='ModalPadContent'>" + decodedMessage + "<div class='clear-space'></div><div align='center'>" + button + "</div>";
+            x += "</div></div></div></div></div></div>";
+
             $("body").append(x);
-            $("#MessageActivationPopup").show();
 
-            var heightMargin = $("#MessageActivationPopup").find(".page-load-message").height() / 2;
-            $("#MessageActivationPopup").find(".page-load-message").css("margin-top", "-" + heightMargin + "px");
-
-            $(window).resize(function () {
-                var heightMargin = $("#MessageActivationPopup").find(".page-load-message").height() / 2;
-                $("#MessageActivationPopup").find(".page-load-message").css("margin-top", "-" + heightMargin + "px");
-            });
+            openWSE.LoadModalWindow(true, "Activation-element", "Activation");
         });
     }
     function CloseUpdatesPopup() {
-        $("#MessageUpdatePopup").fadeOut(openWSE_Config.animationSpeed, function () {
-            $("#MessageUpdatePopup").remove();
-        });
+        $("#OpenWSEUpdates-element").remove();
     }
 
 
@@ -2457,13 +2415,12 @@ var openWSE = function () {
             }
 
             if (openWSE.ConvertBitToBoolean(hasNewNoti)) {
-                $("#noti-update-element").fadeIn(openWSE_Config.animationSpeed, function () {
-                    setTimeout(function () {
-                        $("#noti-update-element").fadeOut(openWSE_Config.animationSpeed, function () {
-                            $("#hf_noti_update_hiddenField").val("false");
-                        });
-                    }, 2500);
-                });
+                $("#noti-update-element").show();
+                setTimeout(function () {
+                    $("#noti-update-element").fadeOut(openWSE_Config.animationSpeed, function () {
+                        $("#hf_noti_update_hiddenField").val("false");
+                    });
+                }, 2500);
             }
         }
         catch (evt) { }
@@ -2844,24 +2801,22 @@ var openWSE = function () {
 
 
     /* Workspace Selector Functions */
-    function HideTasks(item) {
-        $(item).find(".app-main, .app-main-nobg").each(function (index) {
-            var id = $(this).attr("id");
-
-            if ($("#minimized-app-bar").find("#" + id + "-min-bar").length != 0) {
-                if ($("#minimized-app-bar").find("#" + id + "-min-bar").css("display") != "none") {
-                    $("#minimized-app-bar").find("#" + id + "-min-bar").hide();
+    function HideTasks(_this) {
+        $(_this).find(".app-main-holder").each(function (index) {
+            var id = $(this).attr("data-appid");
+            if ($("#minimized-app-bar").find(".app-min-bar[data-appid='" + id + "']").length != 0) {
+                if ($("#minimized-app-bar").find(".app-min-bar[data-appid='" + id + "']").css("display") != "none") {
+                    $("#minimized-app-bar").find(".app-min-bar[data-appid='" + id + "']").hide();
                 }
             }
         });
     }
-    function ShowTasks(item) {
-        $(item).find(".app-main, .app-main-nobg").each(function (index) {
-            var id = $(this).attr("id");
-
-            if ($("#minimized-app-bar").find("#" + id + "-min-bar").length != 0) {
-                if ($("#minimized-app-bar").find("#" + id + "-min-bar").css("display") == "none") {
-                    $("#minimized-app-bar").find("#" + id + "-min-bar").show();
+    function ShowTasks(_this) {
+        $(_this).find(".app-main-holder").each(function (index) {
+            var id = $(this).attr("data-appid");
+            if ($("#minimized-app-bar").find(".app-min-bar[data-appid='" + id + "']").length != 0) {
+                if ($("#minimized-app-bar").find(".app-min-bar[data-appid='" + id + "']").css("display") == "none") {
+                    $("#minimized-app-bar").find(".app-min-bar[data-appid='" + id + "']").show();
                 }
             }
         });
@@ -2870,7 +2825,7 @@ var openWSE = function () {
     function LoadCurrentWorkspace(workspace) {
         SetWorkspaceNumber(workspace);
         id = "#MainContent_workspace_" + workspace;
-        ResizeAllAppBody(id);
+        ResizeAllAppBody($(id));
 
         $(id).css({
             visibility: "visible",
@@ -2880,8 +2835,7 @@ var openWSE = function () {
 
         $('#workspace_holder .workspace-holder').each(function (index) {
             if ($(this).css("visibility") != "visible") {
-                var id = $(this).attr("id");
-                MoveOffScreen("#" + id);
+                MoveOffScreen(this);
             }
         });
     }
@@ -2969,12 +2923,12 @@ var openWSE = function () {
         }
     });
     function HoverWorkspacePreview(oldid, newid) {
-        MoveOffScreen(oldid);
-        MoveOnScreen_WorkspaceOnly(newid);
+        MoveOffScreen($(oldid));
+        MoveOnScreen_WorkspaceOnly($(newid));
 
         if (!openWSE_Config.taskBarShowAll) {
-            HideTasks(oldid);
-            ShowTasks(newid);
+            HideTasks($(oldid));
+            ShowTasks($(newid));
         }
 
         $(oldid).css({
@@ -2992,7 +2946,7 @@ var openWSE = function () {
             });
         }
 
-        ResizeAllAppBody(newid);
+        ResizeAllAppBody($(newid));
     }
     function SetWorkspaceNumber(num) {
         $("#ddl_WorkspaceSelector").find(".selected-workspace").html("Workspace " + num);
@@ -3028,23 +2982,22 @@ var openWSE = function () {
                             isOn_fadeOut = true;
 
                             // Move off screen
-                            var oldid = $(this).attr("id");
-                            MoveOffScreen("#" + oldid);
+                            MoveOffScreen(this);
 
                             // Move onto screen
-                            MoveOnScreen_WorkspaceOnly(id);
+                            MoveOnScreen_WorkspaceOnly($(id));
                             if (!openWSE_Config.taskBarShowAll) {
-                                HideTasks("#" + oldid);
-                                ShowTasks(id);
+                                HideTasks(this);
+                                ShowTasks($(id));
                             }
 
-                            $(id).find(".app-main, .app-main-nobg").each(function (index) {
+                            $(id).find(".app-main-holder").each(function (index) {
                                 if (autoRefresh) {
                                     AutoUpdateOnRotate(this);
                                 }
                             });
 
-                            ResizeAllAppBody(id);
+                            ResizeAllAppBody($(id));
 
                             $(id).fadeTo(openWSE_Config.animationSpeed, 1.0, function () {
                                 if (!isOn_fadeIn) {
@@ -3064,11 +3017,11 @@ var openWSE = function () {
     function AutoUpdateOnRotate(_this) {
         var name = $(_this).find(".app-title").text();
         var $_id = $(_this);
-        var id = $_id.attr("id");
+        var id = $_id.attr("data-appid");
 
         if ($_id.css("display") == "block") {
-            ResizeAppBody("#" + id);
-            $(".app-main, .app-main-nobg").css("z-index", "1000");
+            ResizeAppBody($(".app-main-holder[data-appid='" + id + "']"));
+            $(".app-main-holder").css("z-index", "1000");
             $_id.css("z-index", "3000");
 
             if ($_id.find(".iFrame-apps").length > 0) {
@@ -3106,7 +3059,7 @@ var openWSE = function () {
             stop: function (event, ui) {
                 var listorder = '';
                 $('.app-icon').each(function () {
-                    var temp = $(this).attr('id').replace("-pnl-icons", "");
+                    var temp = $(this).attr('data-appid');
                     if (temp != '') {
                         listorder += (temp + ',');
                     }
@@ -3126,7 +3079,7 @@ var openWSE = function () {
         $('#pnl_icons').disableSelection();
     }
     function CreateSOApp(id, title, content, x, y, width, height, min, max) {
-        var $_id = $("#" + id);
+        var $_id = $(".app-main-holder[data-appid='" + id + "']");
         if ((content != null) && (content != "")) {
             $_id.find(".app-title").text(title);
             if (openWSE.ConvertBitToBoolean(max)) {
@@ -3134,15 +3087,16 @@ var openWSE = function () {
                 $_id.find(".maximize-button-app").addClass("active");
             }
 
+            if (width != "") {
+                $_id.css("width", width);
+            }
+            if (height != "") {
+                $_id.css("height", height);
+            }
+
             if (openWSE.ConvertBitToBoolean(min)) {
-                BuildAppMinIcon(id, title, x, y);
-                MoveOffScreen("#" + id);
-                if (width != "") {
-                    $_id.css("width", width);
-                }
-                if (height != "") {
-                    $_id.css("height", height);
-                }
+                BuildAppMinIcon($_id, title, x, y);
+                MoveOffScreen($_id);
             }
             else {
                 $_id.css({
@@ -3154,12 +3108,6 @@ var openWSE = function () {
                 if (!openWSE.ConvertBitToBoolean(max)) {
                     $_id.removeClass("app-maximized");
                     $_id.find(".maximize-button-app").removeClass("active");
-                    if (width != "") {
-                        $_id.css("width", width);
-                    }
-                    if (height != "") {
-                        $_id.css("height", height);
-                    }
                     if (parseInt(y) < 0) {
                         y = "0";
                     }
@@ -3176,24 +3124,24 @@ var openWSE = function () {
             if (content.indexOf(".ascx") == -1) {
                 if (content.indexOf("ChatClient/ChatWindow.html") != -1) {
                     $_id.find(".app-body").html("<iframe class='iFrame-apps' src='" + openWSE.siteRoot() + content + "' width='100%' frameborder='0'></iframe>");
+                    ResizeAppBody($_id);
                     $_id.find("iframe").one('load', (function () {
+                        ResizeAppBody($_id);
                         $_id.find(".loading-background-holder").each(function () {
                             $(this).remove();
                         });
                     }));
-
-                    ResizeAppBody("#" + id);
                 }
                 else {
                     $_id.find(".app-body").load(openWSE.siteRoot() + "Apps/" + content, function () {
-                        ResizeAppBody("#" + id);
-
                         if ($_id.find(".app-body").find("iframe").length > 0) {
                             if ($_id.find(".app-body").find(".loading-background-holder").length <= 0) {
                                 $_id.find(".app-body").append(loadingMessage);
                             }
 
+                            ResizeAppBody($_id);
                             $_id.find(".app-body").find("iframe").one('load', (function () {
+                                ResizeAppBody($_id);
                                 $_id.find(".app-body").find(".loading-background-holder").each(function () {
                                     $(this).remove();
                                 });
@@ -3203,16 +3151,17 @@ var openWSE = function () {
                 }
             }
 
-            SetAppIconActive(id);
+            SetAppIconActive($_id);
             var workspaceId = $_id.parent().attr("id");
             if ((workspaceId != undefined) && (workspaceId != null) && (workspaceId != "")) {
                 AddworkspaceAppNum(workspaceId, id);
             }
         }
     }
-    function BuildAppMinIcon(id, title, x, y) {
-        var $_id = $("#" + id);
+    function BuildAppMinIcon(_this, title, x, y) {
+        var $_id = $(_this);
         if ($_id.length > 0) {
+            var id = $_id.attr("data-appid");
             var $imgsrc = $_id.find(".app-header-icon");
             var $titlesrc = $_id.find(".app-title");
             var needIconOn = false;
@@ -3225,8 +3174,7 @@ var openWSE = function () {
                 chatUsername = " chat-username='" + $_id.attr("chat-username") + "'";
             }
 
-            var str = "<div id='" + id + "-min-bar' class='" + classMinBar + "'" + chatUsername + "><input type='hidden' id='" + id + "-min-bar-x' value='" + x + "' />";
-            str += "<input type='hidden' id='" + id + "-min-bar-y' value='" + y + "' />";
+            var str = "<div data-appid='" + id + "' class='" + classMinBar + "'" + chatUsername + " data-x='" + x + "' data-y='" + y + "'>";
 
             if (((!$imgsrc.hasClass("display-none")) && ($imgsrc.length != 0)) && (!$titlesrc.hasClass("display-none"))) {
                 str += $imgsrc.outerHTML();
@@ -3235,11 +3183,11 @@ var openWSE = function () {
                 }
 
                 str += "<span class='app-title pad-right'>" + title + "</span>";
-                str += "<a href='" + id + "' class='exit-button-app-min'></a></div>";
+                str += "<a href='#" + id + "' class='exit-button-app-min'></a></div>";
             }
             else if ((($imgsrc.hasClass("display-none")) || ($imgsrc.length == 0)) && ($titlesrc.hasClass("display-none"))) {
                 str += "<span class='app-title pad-right'>" + title + "</span>";
-                str += "<a href='" + id + "' class='exit-button-app-min'></a></div>";
+                str += "<a href='#" + id + "' class='exit-button-app-min'></a></div>";
             }
             else {
                 var imgIsOn = false;
@@ -3266,19 +3214,19 @@ var openWSE = function () {
                     marginLeft_iconOnly = " style='margin-left: 5px;'";
                 }
 
-                str += "<a href='" + id + "' class='exit-button-app-min'" + marginLeft_iconOnly + "></a></div>";
+                str += "<a href='#" + id + "' class='exit-button-app-min'" + marginLeft_iconOnly + "></a></div>";
             }
 
-            if ($("#" + id + "-min-bar").length == 0) {
+            if ($(".app-min-bar[data-appid='" + id + "']").length == 0) {
                 $("#minimized-app-bar").append(str);
             }
 
             if (needIconOn) {
-                $("#" + id + "-min-bar").find(".app-header-icon").show();
+                $(".app-min-bar[data-appid='" + id + "']").find(".app-header-icon").show();
             }
 
             if (needToolTip) {
-                $("#" + id + "-min-bar").attr("title", title);
+                $(".app-min-bar[data-appid='" + id + "']").attr("title", title);
             }
 
             $_id.css({
@@ -3296,27 +3244,19 @@ var openWSE = function () {
             }
         }
 
-        var _appId = $(_this).attr("id");
-        if ((_appId == undefined) || (_appId == null) || (_appId == "")) {
-            _appId = $(_this).parent().attr("id");
-        }
-
+        var _appId = $(_this).attr("data-appid");
         if ((_appId != undefined) && (_appId != null) && (_appId != "")) {
-            if (_appId.indexOf("-pnl-icons") != -1) {
-                _appId = _appId.replace("-pnl-icons", "");
-            }
+            var $_id = $(".app-main-holder[data-appid='" + _appId + "']");
 
             $.ajax({
                 url: saveHandler + "/App_Open",
                 type: "POST",
-                data: '{ "appId": "' + _appId + '","name": "' + name + '","workspace": "' + workspace + '","width": "' + $("#" + _appId).width() + '","height": "' + $("#" + _appId).height() + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
+                data: '{ "appId": "' + _appId + '","name": "' + name + '","workspace": "' + workspace + '","width": "' + $_id.width() + '","height": "' + $_id.height() + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     var content = data.d;
                     if (content != "") {
-                        var $_id = $("#" + _appId);
-
-                        SetActiveApp(_appId);
+                        SetActiveApp($_id);
                         MoveToCurrworkspace(workspace, _appId);
                         AddworkspaceAppNum(workspace, _appId);
 
@@ -3346,7 +3286,7 @@ var openWSE = function () {
                             $_id.css("visibility", "visible");
                             $_id.css("z-index", "3000");
 
-                            if ($("#" + _appId + "-min-bar-x").length != 0) {
+                            if ($(".app-min-bar[data-appid='" + _appId + "']").length != 0) {
                                 if ($_id.find(".loading-background-holder").length <= 0) {
                                     $_id.find(".app-body").append(loadingMessage);
                                 }
@@ -3357,10 +3297,13 @@ var openWSE = function () {
                                     $_id.css("top", topBarHt);
                                 }
                                 else {
-                                    SetAppMinToMax("#" + _appId);
+                                    SetAppMinToMax($_id);
                                     $_id.find(".maximize-button-app").addClass("active");
                                     $_id.css("top", "0px");
                                 }
+
+                                var xData = $(".app-min-bar[data-appid='" + _appId + "']").attr("data-x");
+                                var yData = $(".app-min-bar[data-appid='" + _appId + "']").attr("data-y");
 
                                 $_id.css({
                                     visibility: "visible",
@@ -3368,19 +3311,17 @@ var openWSE = function () {
                                 }).animate({
                                     opacity: 1.0,
                                     filter: "alpha(opacity=100)",
-                                    left: $("#" + _appId + "-min-bar-x").val(),
-                                    top: $("#" + _appId + "-min-bar-y").val()
+                                    left: xData,
+                                    top: yData
                                 }, openWSE_Config.animationSpeed);
 
                                 $.ajax({
                                     url: saveHandler + "/App_Move",
                                     type: "POST",
-                                    data: '{ "appId": "' + _appId + '","name": "' + name + '","x": "' + $("#" + _appId + "-min-bar-x").val() + '","y": "' + $("#" + _appId + "-min-bar-y").val() + '","width": "' + appWidth + '","height": "' + appHeight + '","workspace": "' + workspace + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
+                                    data: '{ "appId": "' + _appId + '","name": "' + name + '","x": "' + xData + '","y": "' + yData + '","width": "' + appWidth + '","height": "' + appHeight + '","workspace": "' + workspace + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
                                     contentType: "application/json; charset=utf-8"
                                 });
-
-                                $("#" + _appId + "-min-bar").remove();
-                                ResizeAllAppBody("#" + $_id.attr("id"));
+                                ResizeAllAppBody($_id);
                             }
                             else {
                                 $_id.css({
@@ -3390,9 +3331,7 @@ var openWSE = function () {
                                 }).fadeIn(openWSE_Config.animationSpeed);
                             }
 
-                            if ($("#" + _appId + "-min-bar").length > 0) {
-                                $("#" + _appId + "-min-bar").remove();
-                            }
+                                $(".app-min-bar[data-appid='" + _appId + "']").remove();
 
                             if (needpostback == 1) {
                                 var hf_loadApp1 = document.getElementById("hf_loadApp1");
@@ -3418,20 +3357,18 @@ var openWSE = function () {
     }
     function LoadAppFromSiteTools(appId, name, workspace) {
         if ((appId != undefined) && (appId != null) && (appId != "")) {
-            if (appId.indexOf("-pnl-icons") != -1) {
-                appId = appId.replace("-pnl-icons", "");
-            }
-
-            $("#MessageActivationPopup").hide();
-            $("#MessageActivationPopup").remove();
+            $('#ConfirmApp-element').remove();
 
             LoadingMessage1("Loading. Please Wait...");
             cookie.set("active_app", appId, 30);
 
+            var appWidth = $(".app-main-holder[data-appid='" + appId + "']").width();
+            var appHeight = $(".app-main-holder[data-appid='" + appId + "']").height();
+
             $.ajax({
                 url: saveHandler + "/App_Open_ChangeWorkspace",
                 type: "POST",
-                data: '{ "appId": "' + appId + '","name": "' + name + '","workspace": "' + workspace + '","width": "' + $("#" + appId).width() + '","height": "' + $("#" + appId).height() + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
+                data: '{ "appId": "' + appId + '","name": "' + name + '","workspace": "' + workspace + '","width": "' + appWidth + '","height": "' + appHeight + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     window.location = openWSE.siteRoot() + "Workspace.aspx";
@@ -3439,13 +3376,13 @@ var openWSE = function () {
             });
         }
     }
-    function DetermineNeedPostBack(id, npb) {
-        if ($('#' + id).css('display') == 'none') {
+    function DetermineNeedPostBack(_this, npb) {
+        if ($(".app-main-holder[data-appid='" + $(_this).attr("data-appid") + "']").css('display') == 'none') {
             needpostback = npb;
         }
     }
     function WatchForLoad(app) {
-        var $app = $('#' + app);
+        var $app = $(".app-main-holder[data-appid='" + app + "']");
         $app.find("iframe").one('load', (function () {
             $app.find(".loading-background-holder").each(function () {
                 $(this).remove();
@@ -3463,16 +3400,20 @@ var openWSE = function () {
         var a = "#MainContent_" + id.replace(/-/gi, "_") + "_advPanel";
         $(a).html("");
         if ($('.move-holder').find('.main-div-app-bg').length > 0) {
-            $(a).hide().append($('.move-holder').find('.main-div-app-bg')).fadeIn(openWSE_Config.animationSpeed);
+            $(a).hide().append($('.move-holder').find('.main-div-app-bg')).show();
         }
 
-        if ($('.move-holder').find('.outside-main-app-div').length > 0) {
+        var $workspace = $(a).closest(".app-body").parent().parent();
+        if ($workspace.length > 0) {
             $('.move-holder').find('.outside-main-app-div').each(function () {
-                $(a).hide().append($(this)).show();
+                if ($(".app-main-holder[data-appid='" + id + "']").length == 1) {
+                    $(this).addClass(id + outsideAppModal);
+                    $workspace.append($(this));
+                }
             });
         }
 
-        var $app = $('#' + id.replace("_", "-"));
+        var $app = $(".app-main-holder[data-appid='" + id + "']");
 
         $app.find(".loading-background-holder").each(function () {
             $(this).remove();
@@ -3485,17 +3426,35 @@ var openWSE = function () {
 
         needpostback = 0;
     }
+    function MoveOutsideModalWindows() {
+        $('.outside-main-app-div').each(function () {
+            var $workspace = $(this).closest(".app-body").parent().parent();
+            if ($workspace.length > 0 && $("#" + $(this).attr("id")).length == 1) {
+                var modalClass = $(this).closest(".app-body").parent().attr("data-appid");
+                $(this).addClass(modalClass + outsideAppModal);
+                $workspace.append($(this));
+            }
+        });
+    }
+    function MoveOutSideModalWindowToWorkspace(appId) {
+        var $workspace = $(".app-main-holder[data-appid='" + appId + "']").parent();
+        $("." + appId + outsideAppModal).each(function () {
+            if ($workspace.length > 0 && $("#" + $(this).attr("id")).length == 1) {
+                $workspace.append($(this));
+            }
+        });
+    }
 
 
     /* Fixes, Customizations, and Position */
-    function ResizeAllAppBody(ele) {
-        $(ele).find(".app-main, .app-main-nobg, .app-main-external").each(function (index) {
+    function ResizeAllAppBody(_this) {
+        $(_this).find(".app-main-holder").each(function (index) {
             ResizeAppBody(this);
         });
     }
     function ResizeAppBody(ele) {
         var $this = $(ele);
-        if ($this.length > 0) {
+        if ($this.length > 0 && $this.hasClass("app-main-holder")) {
             var appHt = $this.outerHeight();
 
             var $appHead = $this.find(".app-head");
@@ -3505,7 +3464,10 @@ var openWSE = function () {
             }
 
             var bodyHt = appHt - headerHt;
-            $this.find(".app-body").css("height", bodyHt)
+            $this.find(".app-body").css({
+                height: bodyHt,
+                width: $this.width()
+            });
 
             if ($this.find(".iFrame-apps").length > 0) {
                 var adjustmentHt = 2;
@@ -3513,17 +3475,19 @@ var openWSE = function () {
                     adjustmentHt = $this.find(".app-title-bg-color").outerHeight() + (adjustmentHt + 1);
                 }
 
-                $this.find(".iFrame-apps").css("height", bodyHt - adjustmentHt);
+                $this.find(".iFrame-apps").css("height", bodyHt - (adjustmentHt + 1));
             }
         }
     }
-    function ApplyOverlayFix(id) {
-        var $_id = $(id);
-        $wo = $_id.find(".app-overlay-fix");
-        if ($wo.length == 0) {
-            $wb = $_id.find(".app-body");
-            if ($wb.length == 1) {
-                $wb.append("<div class='app-overlay-fix'></div>");
+    function ApplyOverlayFix(_this) {
+        var $_id = $(_this);
+        if ($_id.length > 0) {
+            $wo = $_id.find(".app-overlay-fix");
+            if ($wo.length == 0) {
+                $wb = $_id.find(".app-body");
+                if ($wb.length == 1) {
+                    $wb.append("<div class='app-overlay-fix'></div>");
+                }
             }
         }
     }
@@ -3533,8 +3497,8 @@ var openWSE = function () {
             $wo.remove();
         }
     }
-    function MoveOffScreen(id) {
-        var $_id = $(id);
+    function MoveOffScreen(_this) {
+        var $_id = $(_this);
 
         var appHt = $_id.height();
         var bottomPos = $(window).height();
@@ -3546,21 +3510,21 @@ var openWSE = function () {
             zIndex: -1
         });
 
-        SetAppMaxToMin(id);
+        SetAppMaxToMin(_this);
     }
-    function MoveOnScreen_WorkspaceOnly(id) {
-        var $_id = $(id);
+    function MoveOnScreen_WorkspaceOnly(_this) {
+        var $_id = $(_this);
         $_id.css({
             visibility: "visible",
             top: 0,
             bottom: 0,
             zIndex: ""
         });
-        SetAppMinToMax(id);
+        SetAppMinToMax($_id);
     }
     function MoveToCurrworkspace(workspace, app) {
-        var $app = $('#' + app);
-        SetAppMinToMax('#' + app);
+        var $app = $(".app-main-holder[data-appid='" + app + "']");
+        SetAppMinToMax($app);
         var currentworkspace = $app.parent().attr("id");
         var newworkspace = 'MainContent_' + workspace;
         if (currentworkspace != newworkspace) {
@@ -3574,50 +3538,47 @@ var openWSE = function () {
             }
             $('#' + newworkspace).prepend($app);
             AddworkspaceAppNum(workspace, app);
+            MoveOutSideModalWindowToWorkspace(app);
         }
     }
-    function SetAppMaxToMin(id) {
-        if (id.indexOf("app-") != -1) {
-            var $app = $(id);
-            if ($app.hasClass("app-maximized")) {
-                $app.removeClass("app-maximized");
-                $app.addClass("app-maximized-min");
-            }
+    function SetAppMaxToMin(_this) {
+        var $app = $(_this);
+        if ($app.hasClass("app-maximized")) {
+            $app.removeClass("app-maximized");
+            $app.addClass("app-maximized-min");
+        }
 
-            if ($app.hasClass("auto-full-page")) {
-                $app.removeClass("auto-full-page");
-                $app.addClass("auto-full-page-min");
-            }
+        if ($app.hasClass("auto-full-page")) {
+            $app.removeClass("auto-full-page");
+            $app.addClass("auto-full-page-min");
         }
     }
-    function SetAppMinToMax(id) {
-        if (id.indexOf("app-") != -1) {
-            var $app = $(id);
-            if ($app.hasClass("app-maximized-min")) {
-                $app.removeClass("app-maximized-min");
-                $app.addClass("app-maximized");
-            }
-
-            if ($app.hasClass("auto-full-page-min")) {
-                $app.removeClass("auto-full-page-min");
-                $app.addClass("auto-full-page");
-            }
-
-            ResizeAppBody(id);
+    function SetAppMinToMax(_this) {
+        var $app = $(_this);
+        if ($app.hasClass("app-maximized-min")) {
+            $app.removeClass("app-maximized-min");
+            $app.addClass("app-maximized");
         }
+
+        if ($app.hasClass("auto-full-page-min")) {
+            $app.removeClass("auto-full-page-min");
+            $app.addClass("auto-full-page");
+        }
+
+        ResizeAppBody(_this);
     }
     function HoverOverAppMin(_this) {
         if (!previewHover) {
             previewHover = true;
-            previewAppID = $(_this).attr('id').replace('-min-bar', '');
+            previewAppID = $(_this).attr('data-appid');
             var workspace = Getworkspace();
-            var $this = $('#MainContent_' + workspace).find('#' + previewAppID);
+            var $this = $('#MainContent_' + workspace).find(".app-main-holder[data-appid='" + previewAppID + "']");
             if ($this.length > 0) {
                 previewxVal = $("#" + previewAppID).css("left");
                 previewyVal = $("#" + previewAppID).css("top");
 
-                var xVal = $("#" + previewAppID + "-min-bar-x").val();
-                var yVal = $("#" + previewAppID + "-min-bar-y").val();
+                var xVal = $(".app-min-bar[data-appid='" + previewAppID + "']").attr("data-x");
+                var yVal = $(".app-min-bar[data-appid='" + previewAppID + "']").attr("data-y");
 
                 if (xVal == null || xVal == "") {
                     xVal = p.left - $('#workspace-selector').width();
@@ -3626,7 +3587,7 @@ var openWSE = function () {
                     yVal = 0;
                 }
 
-                SetAppMinToMax('#' + previewAppID);
+                SetAppMinToMax($this);
                 $this.css('left', xVal);
                 $this.css('top', yVal);
                 $this.addClass('app-min-bar-preview');
@@ -3635,12 +3596,12 @@ var openWSE = function () {
         }
     }
     function HoverOutAppMin() {
-        var $this = $('#' + previewAppID);
+        var $this = $(".app-main-holder[data-appid='" + previewAppID + "']");
         if ($this.hasClass('app-min-bar-preview')) {
             $this.css("opacity", "0.0");
             $this.css("filter", "alpha(opacity=0)");
             $this.removeClass('app-min-bar-preview');
-            SetAppMaxToMin('#' + previewAppID);
+            SetAppMaxToMin($this);
             $this.css('left', previewxVal);
             $this.css('top', previewyVal);
             previewAppID = '';
@@ -3650,7 +3611,7 @@ var openWSE = function () {
         }
         else {
             var workspace = Getworkspace();
-            var $this = $('#MainContent_' + workspace).find('#' + previewAppID);
+            var $this = $('#MainContent_' + workspace).find(".app-main-holder[data-appid='" + previewAppID + "']");
             if ($this.length == 0) {
                 previewAppID = '';
                 previewxVal = '';
@@ -3660,28 +3621,33 @@ var openWSE = function () {
         }
 
     }
-    function SetActiveApp(id) {
+    function SetActiveApp(_this) {
         if (openWSE.IsComplexWorkspaceMode()) {
-            SetDeactiveApps(id);
-            var $_id = $("#" + id);
-            $_id.addClass("selected");
-            $_id.css("z-index", "3000");
-            cookie.set("active_app", id, "30");
+            var $_id = $(_this);
+
+            SetDeactiveApps($_id);
+
+            if ($_id.length > 0) {
+                $_id.addClass("selected");
+                $_id.css("z-index", "3000");
+                var id = $_id.attr("data-appid");
+                cookie.set("active_app", id, "30");
+            }
         }
     }
-    function SetDeactiveApps(id) {
+    function SetDeactiveApps(_this) {
         if (openWSE.IsComplexWorkspaceMode()) {
-            $(".app-main, .app-main-nobg").css("z-index", "1000");
-            $(".app-main, .app-main-nobg").removeClass("selected");
-            $(".app-main, .app-main-nobg").each(function (index) {
-                var $this = $(this);
-                var _id = $this.attr("id");
-                if ($this.css("display") == "block") {
-                    if (_id != id) {
-                        ApplyOverlayFix("#" + _id);
+            var id = $(_this).attr("data-appid");
+            $(".app-main-holder").css("z-index", "1000");
+            $(".app-main-holder").removeClass("selected");
+            $(".app-main-holder").each(function (index) {
+                var tempId = $(this).attr("data-appid");
+                if ($(this).css("display") == "block") {
+                    if (tempId != id) {
+                        ApplyOverlayFix(this);
                     }
-                    else if (_id == id) {
-                        $this.find(".app-overlay-fix").remove();
+                    else if (tempId == id) {
+                        $(this).find(".app-overlay-fix").remove();
                     }
                 }
             });
@@ -3689,10 +3655,9 @@ var openWSE = function () {
     }
     function SetDeactiveAll() {
         cookie.del("active_app");
-        $(".app-main, .app-main-nobg").each(function (index) {
-            var $this = $(this);
-            if ($this.css("display") == "block") {
-                ApplyOverlayFix("#" + $this.attr("id"));
+        $(".app-main-holder").each(function (index) {
+            if ($(this).css("display") == "block") {
+                ApplyOverlayFix(this);
             }
         });
     }
@@ -3703,7 +3668,7 @@ var openWSE = function () {
         if (openWSE.IsComplexWorkspaceMode()) {
             var id = cookie.get('active_app');
             if ((id != null) && (id != "") && (id != undefined)) {
-                SetActiveApp(id);
+                SetActiveApp($(".app-main-holder[data-appid='" + id + "']"));
             }
             else {
                 SetDeactiveAll();
@@ -3749,7 +3714,7 @@ var openWSE = function () {
     }
     function LoadRemotely(appId, options, npb) {
         if (options == "close") {
-            var $this = $("#" + appId);
+            var $this = $(".app-main-holder[data-appid='" + appId + "']");
             if ($this.css("display") == "block") {
                 if ($this.find(".exit-button-app").length > 0) {
                     $this.find(".exit-button-app").click();
@@ -3783,7 +3748,24 @@ var openWSE = function () {
                 needpostback = 0;
             }
 
-            var $this = $("#" + appId + "-pnl-icons");
+            if (appId.indexOf("app-ChatClient-") != -1) {
+                var userId = appId.replace("app-ChatClient-", "");
+                for (var j = 0; j < $(".ChatUserNotSelected").length; j++) {
+                    var $userSelect = $(".ChatUserNotSelected").eq(j);
+                    if ($userSelect.length == 1 && $userSelect.find(".usersclick[chat-userid='" + userId + "']").length == 1) {
+                        var fullName = $.trim($userSelect.find(".usersclick[chat-userid='" + userId + "']").html());
+                        var user = $userSelect.attr("chat-username");
+                        chatClient.BuildChatWindow(user, userId, fullName);
+                        return;
+                    }
+                }
+            }
+
+            var $this = $(".app-icon[data-appid='" + appId + "']");
+
+            if ($this.length == 0) {
+                return;
+            }
 
             var _posY = optArray[2].replace("px", "");
             var _posX = optArray[3].replace("px", "");
@@ -3805,28 +3787,28 @@ var openWSE = function () {
                 }
             }
 
-            if ($("#" + appId).css("display") == "block") {
-                $("#" + appId).css({
+            if ($(".app-main-holder[data-appid='" + appId + "']").css("display") == "block") {
+                $(".app-main-holder[data-appid='" + appId + "']").css({
                     top: _posY + "px",
                     left: _posX + "px"
                 });
             }
             else {
-                $("#" + appId).css({
+                $(".app-main-holder[data-appid='" + appId + "']").css({
                     top: "auto",
                     left: "auto"
                 });
             }
 
-            if ($("#" + appId).hasClass("ui-resizable")) {
-                $("#" + appId).css({
+            if ($(".app-main-holder[data-appid='" + appId + "']").hasClass("ui-resizable")) {
+                $(".app-main-holder[data-appid='" + appId + "']").css({
                     width: _width + "px",
                     height: _height + "px"
                 });
             }
 
-            if ($("#" + appId).css("display") == "block") {
-                var _this = $("#" + appId).find(".reload-button-app").parent();
+            if ($(".app-main-holder[data-appid='" + appId + "']").css("display") == "block") {
+                var _this = $(".app-main-holder[data-appid='" + appId + "']").find(".reload-button-app").parent();
                 ReloadApp(_this);
             }
 
@@ -3839,7 +3821,7 @@ var openWSE = function () {
         }
     }
     function SetRemoteLoadingOptions(appId, option1, option2) {
-        var $this = $("#" + appId);
+        var $this = $(".app-main-holder[data-appid='" + appId + "']");
         if ($this.css("display") == "block") {
             option1 = option1.substring(option1.lastIndexOf("_") + 1);
 
@@ -3859,7 +3841,7 @@ var openWSE = function () {
                 var propSaved = false;
                 switch (option2) {
                     case "minimize":
-                        if ($("#" + appId + "-min-bar").length == 0) {
+                        if ($(".app-min-bar[data-appid='" + appId + "']").length == 0) {
                             if ($this.find(".minimize-button-app").length > 0) {
                                 $this.find(".minimize-button-app").click();
                                 propSaved = true;
@@ -3896,7 +3878,7 @@ var openWSE = function () {
                         $.ajax({
                             url: saveHandler + "/App_Position",
                             type: "POST",
-                            data: '{ "appId": "' + $this.attr("id") + '","posX": "' + $this.css("left") + '","posY": "' + $this.css("top") + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
+                            data: '{ "appId": "' + $this.attr("data-appid") + '","posX": "' + $this.css("left") + '","posY": "' + $this.css("top") + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
                             contentType: "application/json; charset=utf-8"
                         });
                     }, openWSE_Config.animationSpeed);
@@ -3912,29 +3894,31 @@ var openWSE = function () {
 
 
     /* App Functions */
-    function MaximizeApp(id) {
+    function MaximizeApp(_this) {
         var workspace = Getworkspace();
-        var name = $(this).find(".app-title").text();
-        var $_id = $(id);
 
-        var _leftPos = $_id.css("left");
-        var _topPos = $_id.css("top");
+        var $_id = $(_this);
+
+        var name = $_id.find(".app-title").text();
+        var _leftPos = $_id.css("left").replace("px", "");
+        var _topPos = $_id.css("top").replace("px", "");
         var _width = $_id.width();
         var _height = $_id.height();
 
-        SetActiveApp($_id.attr("id"));
+        SetActiveApp(_this);
+        ResizeAppBody(_this);
+
         if ($_id.hasClass("app-maximized")) {
             $_id.removeClass("app-maximized")
             $_id.find(".maximize-button-app").removeClass("active");
-            ResizeAppBody(id);
             $.ajax({
                 url: saveHandler + "/App_Maximize",
                 type: "POST",
-                data: '{ "appId": "' + id.replace(/#/gi, "") + '","name": "' + name + '","x": "' + _leftPos + '","y": "' + _topPos + '","width": "' + _width + '","height": "' + _height + '","workspace": "' + workspace + '","ismax": "0","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
+                data: '{ "appId": "' + $_id.attr("data-appid") + '","name": "' + name + '","x": "' + _leftPos + '","y": "' + _topPos + '","width": "' + _width + '","height": "' + _height + '","workspace": "' + workspace + '","ismax": "0","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     maxBtn_InProgress = false;
-                    ResizeAppBody(id);
+                    ResizeAppBody(_this);
                 },
                 error: function (data) {
                     maxBtn_InProgress = false;
@@ -3944,15 +3928,14 @@ var openWSE = function () {
         else {
             $_id.addClass("app-maximized");
             $_id.find(".maximize-button-app").addClass("active");
-            ResizeAppBody(id);
             $.ajax({
                 url: saveHandler + "/App_Maximize",
                 type: "POST",
-                data: '{ "appId": "' + id.replace(/#/gi, "") + '","name": "' + name + '","x": "' + _leftPos + '","y": "' + _topPos + '","width": "' + _width + '","height": "' + _height + '","workspace": "' + workspace + '","ismax": "1","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
+                data: '{ "appId": "' + $_id.attr("data-appid") + '","name": "' + name + '","x": "' + _leftPos + '","y": "' + _topPos + '","width": "' + _width + '","height": "' + _height + '","workspace": "' + workspace + '","ismax": "1","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     maxBtn_InProgress = false;
-                    ResizeAppBody(id);
+                    ResizeAppBody(_this);
                 },
                 error: function (data) {
                     maxBtn_InProgress = false;
@@ -3960,13 +3943,14 @@ var openWSE = function () {
             });
         }
     }
-    function SetAppIconActive(id) {
+    function SetAppIconActive(_this) {
+        var id = $(_this).attr("data-appid");
         if ((id != null) && (id != undefined)) {
             if (id.indexOf("app-ChatClient-") == -1) {
                 var spanactive = $(".app-icon").find("span").length;
                 for (var index = 0; index < spanactive; index++) {
-                    var temp = $(".app-icon").eq(index).attr("id");
-                    if (temp == (id + "-pnl-icons")) {
+                    var temp = $(".app-icon").eq(index).attr("data-appid");
+                    if (temp == id) {
                         if ($(".app-icon").eq(index).hasClass("active") == false) {
                             $(".app-icon").eq(index).addClass("active");
                             break;
@@ -3975,21 +3959,17 @@ var openWSE = function () {
                 }
             }
             else {
-                var chatUserName = $("#" + id).attr("chat-username");
+                var chatUserName = $(".app-main-holder[data-appid='" + id + "']").attr("chat-username");
                 $(".ChatUserNotSelected[chat-username='" + chatUserName + "']").addClass("ChatUserSelected");
             }
         }
     }
     function AddworkspaceAppNum(workspace, app) {
         if (openWSE_Config.ShowWorkspaceNumApp && openWSE.IsComplexWorkspaceMode()) {
-            if (app.indexOf("#") == -1) {
-                app = "#" + app;
-            }
-
-            var $appIcon = $(app + "-pnl-icons");
+            var $appIcon = $(".app-icon[data-appid='" + app + "']");
             if ($appIcon.length > 0) {
                 var numberworkspace = "";
-                var ndID = app.replace("#", "") + "-pnl-icons-workspace-reminder";
+                var ndID = app + "-workspace-reminder";
                 var ndClasses = "workspace-reminder font-no-bold " + ndID;
                 var style = "display:block;";
 
@@ -4013,37 +3993,34 @@ var openWSE = function () {
             }
         }
     }
-    function RemoveworkspaceAppNum(app) {
+    function RemoveworkspaceAppNum(_this) {
         if (openWSE.IsComplexWorkspaceMode()) {
-            if (app.indexOf("#") == -1) {
-                app = "#" + app;
-            }
-
-            var $appIcon = $(app + "-pnl-icons");
+            var id = $(_this).attr("data-appid");
+            var $appIcon = $(".app-icon[data-appid='" + id + "']");
             if ($appIcon.length > 0) {
-                var ndID = app.replace("#", "") + "-pnl-icons-workspace-reminder";
+                var ndID = id + "-workspace-reminder";
                 if ($("." + ndID).length > 0) {
                     $("." + ndID).remove();
                 }
             }
         }
     }
-    function RemoveAppIconActive(id) {
-        $(id).find(".maximize-button-app").removeClass("active");
+    function RemoveAppIconActive(_this) {
+        var id = $(_this).attr("data-appid")
+        $(".app-main-holder[data-appid='" + id + "']").find(".maximize-button-app").removeClass("active");
         if (id.indexOf("app-ChatClient-") == -1) {
             var spanactive = $(".app-icon").find("span").length;
             for (var index = 0; index < spanactive; index++) {
-                var temp = "#" + $(".app-icon").eq(index).attr("id");
-                if (temp == (id + "-pnl-icons")) {
+                var temp = $(".app-icon").eq(index).attr("data-appid");
+                if (temp == id) {
                     if ($(".app-icon").eq(index).hasClass("active") == true) {
                         $(".app-icon").eq(index).removeClass("active");
-                        break;
                     }
                 }
             }
         }
         else {
-            var chatUserName = $("#" + id.replace("#", "")).attr("chat-username");
+            var chatUserName = $(".app-main-holder[data-appid='" + id + "']").attr("chat-username");
             chatClient.displayMessageNoti(chatUserName);
 
             var $userIcon = $(".ChatUserNotSelected[chat-username='" + chatUserName + "']");
@@ -4077,23 +4054,22 @@ var openWSE = function () {
     }
     function ApplyAppDragResize() {
         if (openWSE.IsComplexWorkspaceMode()) {
-            $(".app-main, .app-main-nobg").draggable({
+            $(".app-main-holder").draggable({
                 scroll: true,
                 cancel: '.app-body, .exit-button-app, .minimize-button-app, .maximize-button-app, .options-button-app, .app-head-button-holder, .app-maximized, .auto-full-page',
                 start: function (event, ui) {
                     var $this = $(this);
 
-                    SetActiveApp($this.attr("id"));
+                    SetActiveApp($this);
 
                     $this.css("opacity", "0.6");
                     $this.css("filter", "alpha(opacity=60)");
 
                     // Apply an overlay over app
                     // This fixes the issues when dragging iframes
-                    $(".app-main, .app-main-nobg").each(function (index) {
-                        var $this = $(this);
-                        if ($this.css("display") == "block") {
-                            ApplyOverlayFix("#" + $this.attr("id"));
+                    $(".app-main-holder").each(function (index) {
+                        if ($(this).css("display") == "block") {
+                            ApplyOverlayFix(this);
                         }
                     });
                     event.stopPropagation();
@@ -4106,24 +4082,22 @@ var openWSE = function () {
                     var $this = $(this);
 
                     if ($this.hasClass('no-resize')) {
-                        var idr = $this.attr("id");
-
                         if (($this.hasClass('app-main')) && (!$this.hasClass('auto-full-page')) && (!$this.hasClass('auto-full-page-min'))) {
-                            $get(idr).className = "app-main ui-draggable";
+                            $this.className = "app-main-holder app-main ui-draggable";
                         }
                         else if (($this.hasClass('app-main')) && (($this.hasClass('auto-full-page')) || ($this.hasClass('auto-full-page-min')))) {
                             if ($this.hasClass('auto-full-page-min')) {
-                                $get(idr).className = "app-main auto-full-page-min ui-draggable";
+                                $this.className = "app-main-holder app-main auto-full-page-min ui-draggable";
                             }
                             else {
-                                $get(idr).className = "app-main auto-full-page ui-draggable";
+                                $this.className = "app-main-holder app-main auto-full-page ui-draggable";
                             }
                         }
                         else if (($this.hasClass('app-main-nobg')) && (!$this.hasClass('auto-full-page')) && (!$this.hasClass('auto-full-page-min'))) {
-                            $get(idr).className = "app-main-nobg ui-draggable";
+                            $this.className = "app-main-holder app-main-nobg ui-draggable";
                         }
                         else {
-                            $get(idr).className = "app-main-nobg auto-full-page ui-draggable";
+                            $this.className = "app-main-holder app-main-nobg auto-full-page ui-draggable";
                         }
                         $this.find(".ui-resizable-handle").remove();
                     }
@@ -4131,11 +4105,11 @@ var openWSE = function () {
             });
 
             if ($("#hf_appContainer").val() != "") {
-                $(".app-main, .app-main-nobg").draggable("option", "containment", $("#hf_appContainer").val());
-                $(".app-main, .app-main-nobg").resizable("option", "containment", "parent");
+                $(".app-main-holder").draggable("option", "containment", $("#hf_appContainer").val());
+                $(".app-main-holder").resizable("option", "containment", "parent");
             }
 
-            $(".app-main, .app-main-nobg").on("dragstop", function (event, ui) {
+            $(".app-main-holder").on("dragstop", function (event, ui) {
                 var $this = $(this);
 
                 $this.css("opacity", "1.0");
@@ -4161,12 +4135,12 @@ var openWSE = function () {
                 $.ajax({
                     url: saveHandler + "/App_Move",
                     type: "POST",
-                    data: '{ "appId": "' + $this.attr("id") + '","name": "' + name + '","x": "' + $this.css("left") + '","y": "' + $this.css("top") + '","width": "' + width + '","height": "' + height + '","workspace": "' + workspace + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
+                    data: '{ "appId": "' + $this.attr("data-appid") + '","name": "' + name + '","x": "' + $this.css("left") + '","y": "' + $this.css("top") + '","width": "' + width + '","height": "' + height + '","workspace": "' + workspace + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
                     contentType: "application/json; charset=utf-8"
                 });
             });
 
-            $(".app-main, .app-main-nobg").on("resizestart", function (event, ui) {
+            $(".app-main-holder").on("resizestart", function (event, ui) {
                 if ($(this).hasClass("app-maximized")) {
                     $(this).removeClass("app-maximized");
                     var $maxBtn = $(this).find(".maximize-button-app");
@@ -4175,21 +4149,20 @@ var openWSE = function () {
                     }
                 }
 
-                SetActiveApp($(this).attr("id"));
+                SetActiveApp(this);
 
                 // Apply an overlay over app
                 // This fixes the issues when dragging iframes
-                $(".app-main, .app-main-nobg").each(function (index) {
-                    var $this = $(this);
-                    if ($this.css("display") == "block") {
-                        ApplyOverlayFix("#" + $this.attr("id"));
+                $(".app-main-holder").each(function (index) {
+                    if ($(this).css("display") == "block") {
+                        ApplyOverlayFix(this);
                     }
                 });
 
                 event.stopPropagation();
             });
 
-            $(".app-main, .app-main-nobg").on("resize", function (event, ui) {
+            $(".app-main-holder").on("resize", function (event, ui) {
                 if (ui != null) {
                     var $this = $(this);
 
@@ -4213,25 +4186,22 @@ var openWSE = function () {
                         });
 
 
-                        ResizeAppBody("#" + $this.attr("id"));
+                        ResizeAppBody(this);
                         previousWidth = $this.height();
                     }
                 }
             });
 
-            $(".app-main, .app-main-nobg").on("resizestop", function (event, ui) {
-                var $this = $(this);
-
-                if (!$this.hasClass('no-resize')) {
-                    ResizeAppBody("#" + $this.attr("id"));
+            $(".app-main-holder").on("resizestop", function (event, ui) {
+                if (!$(this).hasClass('no-resize')) {
+                    ResizeAppBody(this);
                     previousWidth = 0;
-
                     RemoveOverlayFix(this);
 
                     $.ajax({
                         url: saveHandler + "/App_Resize",
                         type: "POST",
-                        data: '{ "appId": "' + $this.attr("id") + '","width": "' + ui.size.width + '","height": "' + ui.size.height + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
+                        data: '{ "appId": "' + $(this).attr("data-appid") + '","width": "' + ui.size.width + '","height": "' + ui.size.height + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
                         contentType: "application/json; charset=utf-8"
                     });
                 }
@@ -4241,10 +4211,10 @@ var openWSE = function () {
     function ReloadApp(_this) {
         var name = $(_this).closest(".app-head-button-holder").parent().find(".app-title").text();
         var $_id = $(_this).closest(".app-head-button-holder").parent();
-        var id = $_id.attr("id");
+        var id = $_id.attr("data-appid");
 
-        ResizeAppBody("#" + id);
-        $(".app-main, .app-main-nobg").css("z-index", "1000");
+        ResizeAppBody($_id);
+        $(".app-main-holder").css("z-index", "1000");
         $_id.css("z-index", "3000");
 
         var $_idOptions = $_id.find(".options-button-app");
@@ -4252,8 +4222,13 @@ var openWSE = function () {
         $_idOptions.removeClass("active");
         $_parent.find(".app-popup-inner-app").hide();
 
+        var modalClasses = id + outsideAppModal;
+        $("." + modalClasses).each(function () {
+            $(this).remove();
+        });
+
         if ($_id.find(".iFrame-apps").length > 0) {
-            var _content = $get(id + " .iFrame-apps");
+            var _content = $_id.find(".iFrame-apps")[0];
             if (_content.src != null) {
                 if ($_id.find(".app-body").find("div").html() == null) {
                     if ($_id.find(".app-body").find(".loading-background-holder").length <= 0) {
@@ -4290,7 +4265,7 @@ var openWSE = function () {
     }
     function AboutApp(_this) {
         var $_id = $(_this).closest(".app-head-button-holder").parent();
-        var appId = $_id.attr("id");
+        var appId = $_id.attr("data-appid");
         $("#hf_aboutstatsapp").val("about;" + appId);
 
         var $_idOptions = $_id.find(".options-button-app");
@@ -4311,42 +4286,6 @@ var openWSE = function () {
               __doPostBack("hf_aboutstatsapp", "");
           }, null);
     }
-    function AppStats(_this) {
-        var $_id = $(_this).closest(".app-head-button-holder").parent();
-        var appId = $_id.attr("id");
-        if ((appId == "") || (appId == null) || (appId == undefined)) {
-            appId = _this;
-        }
-
-        $("#hf_aboutstatsapp").val("stats;" + appId);
-
-        var $_idOptions = $_id.find(".options-button-app");
-        var $_parent = $_idOptions.parent();
-        $_idOptions.removeClass("active");
-        $_parent.find(".app-popup-inner-app").hide();
-
-        LoadingMessage1("Loading. Please Wait...");
-        __doPostBack("hf_aboutstatsapp", "");
-    }
-    function NavigationBtns(_this, mode) {
-        var $_id = $(_this).closest(".app-head-button-holder").parent();
-        var $_iframe = $_id.find("iframe");
-        if ($_iframe.length > 0) {
-            var iframe = $_iframe[0];
-            var iframewindow = iframe.contentWindow ? iframe.contentWindow : iframe.contentDocument.defaultView;
-            try {
-                if (iframewindow.history.length > 0) {
-                    if (mode == "back") {
-                        iframewindow.history.back();
-                    }
-                    else {
-                        iframewindow.history.forward();
-                    }
-                }
-            }
-            catch (evt) { }
-        }
-    }
     function PopOutFrame(_this, url) {
         var $_id = $(_this).closest(".app-head-button-holder").parent();
 
@@ -4355,11 +4294,6 @@ var openWSE = function () {
 
         if ($_id.length > 0) {
             var name = $_id.find(".app-title").text();
-
-            if ($_id.attr("id") == "app-appinstaller") {
-                $("#app-installer-icon").removeClass("active");
-            }
-
             _width = $_id.width();
             _height = $_id.height();
         }
@@ -4369,8 +4303,8 @@ var openWSE = function () {
                 $_id.removeClass("app-maximized");
             }
 
-            RemoveworkspaceAppNum("#" + $_id.attr("id"));
-            RemoveAppIconActive("#" + $_id.attr("id"));
+            RemoveworkspaceAppNum($_id);
+            RemoveAppIconActive($_id);
 
             var canclose = 1;
             var hfcanclose = document.getElementById("hf_" + $_id.attr("id"));
@@ -4381,13 +4315,11 @@ var openWSE = function () {
             if ($_id.find(".app-body").find("div").html() == null) {
                 if (canclose == 1) {
                     $_id.find(".app-body").html("");
-                    // $_id.find(".app-body").html(loadingMessage);
                 }
             }
             else {
                 if (canclose == 1) {
                     $_id.find(".app-body").find("div").html("");
-                    // $_id.find(".app-body").find("div").html(loadingMessage);
                 }
             }
 
@@ -4407,7 +4339,7 @@ var openWSE = function () {
             $.ajax({
                 url: saveHandler + "/App_Close",
                 type: "POST",
-                data: '{ "appId": "' + $_id.attr("id") + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
+                data: '{ "appId": "' + $_id.attr("data-appid") + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
                 contentType: "application/json; charset=utf-8"
             });
         });
@@ -4421,8 +4353,7 @@ var openWSE = function () {
         myWindow = window.open(url, name, specs);
         myWindow.focus();
 
-        $("#MessageActivationPopup").hide();
-        $("#MessageActivationPopup").remove();
+        openWSE.LoadModalWindow(false, "ConfirmApp-element", "");
     }
     function PopOutTool(name, url) {
         if (openWSE.IsComplexWorkspaceMode()) {
@@ -4467,9 +4398,8 @@ var openWSE = function () {
         }
 
         var isOn = 0;
-        var tempId = $_name.attr('id');
+        var tempId = $_name.attr('data-appid');
         if ((tempId != "") && (tempId != undefined) && (tempId != null)) {
-            tempId = $_name.attr('id').replace('-pnl-icons', '');
             AddworkspaceAppNum(d, tempId);
             if ($('#' + tempId).css('display') == 'block') {
                 isOn = 1;
@@ -4494,11 +4424,10 @@ var openWSE = function () {
                         }
                         $(this).fadeTo(openWSE_Config.animationSpeed, 0.0, function () {
                             // Move off screen
-                            var oldid = $(this).attr("id");
-                            MoveOffScreen("#" + oldid);
+                            MoveOffScreen(this);
 
                             if (!openWSE_Config.taskBarShowAll) {
-                                HideTasks("#" + oldid);
+                                HideTasks(this);
                                 ShowTasks(_id);
                             }
                         });
@@ -4508,8 +4437,10 @@ var openWSE = function () {
                 $(_id).fadeTo(openWSE_Config.animationSpeed, 1.0);
 
                 // Move selected onto screen
-                MoveOnScreen_WorkspaceOnly(_id);
-                ResizeAllAppBody(_id);
+                MoveOnScreen_WorkspaceOnly($(_id));
+                ResizeAllAppBody($(_id));
+
+                MoveOutSideModalWindowToWorkspace(tempId);
 
                 $(".app-options").css("visibility", "hidden");
                 setTimeout(function () {
@@ -4781,8 +4712,8 @@ var openWSE = function () {
             $("#container, #iframe-container-helper").addClass("container-presentation");
             $("body").addClass("body-presentation-bg");
             $(".app-maximized").addClass("app-max-border-presentation");
-            $(".app-main, .app-main-nobg, .app-main.selected, .app-main-nobg.selected, .workspace-overlays").addClass("body-presentation-bg app-max-border-presentation");
-            $(".app-main, .app-main-nobg, .app-main.selected, .app-main-nobg.selected").addClass("no-shadow-presentation");
+            $(".app-main-holder, .app-main-holder.selected, .workspace-overlays").addClass("body-presentation-bg app-max-border-presentation");
+            $(".app-main-holder, .app-main-holder.selected").addClass("no-shadow-presentation");
             $(".app-min-bar, .app-min-bar-alt, .ui-icon-gripsmall-diagonal-se").css("background-image", "none");
             $(".sidebar-padding-menulinks").hide();
             $(".app-head, .app-head-button-holder, .overlay-header").hide();
@@ -4811,8 +4742,8 @@ var openWSE = function () {
             $("#container, .pnl-overlaysAll, #iframe-container-helper").removeClass("container-presentation");
             $("body").removeClass("body-presentation-bg");
             $(".app-maximized").removeClass("app-max-border-presentation");
-            $(".app-main, .app-main-nobg, .app-main.selected, .app-main-nobg.selected, .workspace-overlays").removeClass("body-presentation-bg app-max-border-presentation");
-            $(".app-main, .app-main-nobg, .app-main.selected, .app-main-nobg.selected").removeClass("no-shadow-presentation");
+            $(".app-main-holder, .app-main-holder.selected, .workspace-overlays").removeClass("body-presentation-bg app-max-border-presentation");
+            $(".app-main-holder, .app-main-holder.selected").removeClass("no-shadow-presentation");
             $(".app-min-bar, .app-min-bar-alt, .ui-icon-gripsmall-diagonal-se").css("background-image", "");
             $(".sidebar-padding-menulinks").show();
             $(".app-head, .app-head-button-holder, .overlay-header").show();
@@ -5348,6 +5279,7 @@ var openWSE = function () {
         DetermineNeedPostBack: DetermineNeedPostBack,
         WatchForLoad: WatchForLoad,
         LoadUserControl: LoadUserControl,
+        MoveOutsideModalWindows: MoveOutsideModalWindows,
         ResizeAllAppBody: ResizeAllAppBody,
         ResizeAppBody: ResizeAppBody,
         ApplyOverlayFix: ApplyOverlayFix,
@@ -5378,8 +5310,6 @@ var openWSE = function () {
         ReloadApp: ReloadApp,
         AboutApp: AboutApp,
         UninstallApp: UninstallApp,
-        AppStats: AppStats,
-        NavigationBtns: NavigationBtns,
         PopOutFrame: PopOutFrame,
         PopOutFrameFromSiteTools: PopOutFrameFromSiteTools,
         PopOutTool: PopOutTool,
@@ -5405,10 +5335,10 @@ $(window).resize(function () {
     openWSE.ResizeContainer();
     var current = openWSE.Getworkspace();
     if ($("#MainContent_" + current).length > 0) {
-        openWSE.ResizeAllAppBody("#MainContent_" + current);
+        openWSE.ResizeAllAppBody($("#MainContent_" + current));
     }
     else {
-        openWSE.ResizeAllAppBody("body");
+        openWSE.ResizeAllAppBody($("body"));
     }
 });
 
@@ -5421,6 +5351,9 @@ $(document).ready(function () {
     openWSE.GetUserNotifications(true);
     openWSE.HashChange();
     openWSE.ResizeContainer();
+
+    var current = openWSE.Getworkspace();
+    openWSE.ResizeAllAppBody($("#MainContent_" + current));
 
     // Auto complete for app searching
     if ($("#searchbox-app-search").length > 0) {
@@ -5459,13 +5392,15 @@ $(function () {
     if (openWSE_Config.displayLoadingOnRedirect) {
         $("#lnk_BackToWorkspace, .app-icon-links, .title-dd-name").click("click", function (e) {
             if (e.target.className != "img-expand-sml" && e.target.className != "img-collapse-sml") {
-                openWSE.LoadingMessage1("Loading...");
+                if ($(this).attr("target") != "_blank") {
+                    openWSE.LoadingMessage1("Loading...");
+                }
             }
         });
 
         if (!openWSE.IsComplexWorkspaceMode()) {
             $(".app-icon").click("click", function (e) {
-                if (e.target.className != "app-options") {
+                if (e.target.className != "app-options" && $(this).attr("target") != "_blank") {
                     openWSE.LoadingMessage1("Loading...");
                 }
             });
@@ -5492,7 +5427,7 @@ window.onerror = function (errorMsg, url) {
 $(window).load(function () {
     openWSE.ApplyAppDragResize();
     var current = openWSE.Getworkspace();
-    openWSE.ResizeAllAppBody("#MainContent_" + current);
+    openWSE.ResizeAllAppBody($("#MainContent_" + current));
     openWSE.AdjustContainerLogo();
 
     if ($("#container_logo").length > 0) {
@@ -5504,16 +5439,17 @@ $(window).load(function () {
     openWSE.LoadActiveAppCookie();
     if (!openWSE_Config.taskBarShowAll) {
         $(".app-min-bar").hide();
-        $("#MainContent_" + current).find(".app-main, .app-main-nobg").each(function (index) {
-            var id = $(this).attr("id");
-
-            if ($("#minimized-app-bar").find("#" + id + "-min-bar").length != 0) {
-                if ($("#minimized-app-bar").find("#" + id + "-min-bar").css("display") == "none") {
-                    $("#minimized-app-bar").find("#" + id + "-min-bar").show();
+        $("#MainContent_" + current).find(".app-main-holder").each(function (index) {
+            var id = $(this).attr("data-appid");
+            if ($("#minimized-app-bar").find(".app-min-bar[data-appid='" + id + "']").length != 0) {
+                if ($("#minimized-app-bar").find(".app-min-bar[data-appid='" + id + "']").css("display") == "none") {
+                    $("#minimized-app-bar").find(".app-min-bar[data-appid='" + id + "']").show();
                 }
             }
         });
     }
+
+    openWSE.MoveOutsideModalWindows();
 });
 
 $.extend({

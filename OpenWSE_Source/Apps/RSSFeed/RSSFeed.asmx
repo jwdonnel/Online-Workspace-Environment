@@ -292,50 +292,56 @@ public class RSSFeed : System.Web.Services.WebService {
         List<string> list2 = new List<string>();
         List<string> list3 = new List<string>();
         List<string> list4 = new List<string>();
-        foreach (RSSFeeds_Coll feed in feedColl) {
-            string feedUrl = feed.URL;
-            if ((!feedUrl.StartsWith("http://")) && (!feedUrl.StartsWith("https://"))) {
-                feedUrl = "http:" + feedUrl;
-            }
 
-            if (feed.IsCustomFeed) {
-                try {
-                    bool pageExists = true;
-                    HttpWebResponse response = null;
-
-                    var request = (HttpWebRequest)WebRequest.Create(feedUrl);
-                    request.Method = "HEAD";
-
-                    try {
-                        response = (HttpWebResponse)request.GetResponse();
-                    }
-                    catch (WebException ex) {
-                        pageExists = false;
-                    }
-                    finally {
-                        // Don't forget to close your response.
-                        if (response != null)
-                            response.Close();
-                    }
-
-                    if (!pageExists) {
-                        if (feeds != null) {
-                            feeds.DeleteRowByID(feed.ID);
-                        }
-                    }
-
+        try {
+            foreach (RSSFeeds_Coll feed in feedColl) {
+                string feedUrl = feed.URL;
+                if ((!feedUrl.StartsWith("http://")) && (!feedUrl.StartsWith("https://"))) {
+                    feedUrl = "http:" + feedUrl;
                 }
-                catch { }
-            }
 
-            if (!list1.Contains(feed.Title)) {
-                list1.Add(feed.Title);
-                list2.Add(feedUrl);
-                list3.Add(feed.IsCustomFeed.ToString().ToLower());
-                list4.Add(feed.RSSID);
+                if (feed.IsCustomFeed) {
+                    try {
+                        bool pageExists = true;
+                        HttpWebResponse response = null;
+
+                        var request = (HttpWebRequest)WebRequest.Create(feedUrl);
+                        request.Method = "HEAD";
+
+                        try {
+                            response = (HttpWebResponse)request.GetResponse();
+                        }
+                        catch (WebException ex) {
+                            pageExists = false;
+                        }
+                        finally {
+                            // Don't forget to close your response.
+                            if (response != null)
+                                response.Close();
+                        }
+
+                        if (!pageExists) {
+                            if (feeds != null) {
+                                feeds.DeleteRowByID(feed.ID);
+                            }
+                        }
+
+                    }
+                    catch { }
+                }
+
+                if (!list1.Contains(feed.Title)) {
+                    list1.Add(feed.Title);
+                    list2.Add(feedUrl);
+                    list3.Add(feed.IsCustomFeed.ToString().ToLower());
+                    list4.Add(feed.RSSID);
+                }
             }
         }
-
+        catch (Exception e) {
+            new AppLog(false).AddError(e);
+        }
+        
         obj[0] = list1.ToArray();
         obj[1] = list2.ToArray();
         obj[2] = list3.ToArray();

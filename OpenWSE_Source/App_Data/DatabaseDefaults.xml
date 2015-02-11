@@ -94,6 +94,7 @@
             <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="DocumentsFolder" type="nvarchar" length="4000" nullable="true"></Column>
             <Column id="RecordActivity" type="bit" nullable="true"></Column>
+            <Column id="RecordActivityToLogFile" type="bit" nullable="true"></Column>
             <Column id="AutoUpdates" type="bit" nullable="true"></Column>
             <Column id="LastCacheDate" type="datetime" nullable="true"></Column>
             <Column id="Override1" type="bit" nullable="true"></Column>
@@ -154,6 +155,9 @@
             <Column id="GoogleClientSecret" type="nvarchar" length="1000" nullable="true"></Column>
             <Column id="FacebookAppId" type="nvarchar" length="1000" nullable="true"></Column>
             <Column id="FacebookAppSecret" type="nvarchar" length="1000" nullable="true"></Column>
+            <Column id="MetaTagDescription" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="MetaTagKeywords" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="AutoFixDBIssues" type="bit" nullable="true"></Column>
         </Columns>
     </Table>
     <Table name="aspnet_ShowUpdates">
@@ -284,16 +288,23 @@
             <Column id="DateAdded" type="datetime" nullable="false"></Column>
         </Columns>
     </Table>
+    <Table name="aspnet_UserCustomTableOpenedCharts">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="AppID" type="nvarchar" length="250" nullable="false"></Column>
+        </Columns>
+    </Table>
     <Table name="aspnet_WebEvent_Events" primaryKey="EventId">
         <Columns>
             <Column id="EventId" type="uniqueidentifier" nullable="false"></Column>
-            <Column id="EventName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="EventName" type="nvarchar" length="500" nullable="false"></Column>
             <Column id="EventComment" type="nvarchar" length="4000" nullable="false"></Column>
             <Column id="DatePosted" type="datetime" nullable="false"></Column>
-            <Column id="ApplicationPath" type="nvarchar" length="256" nullable="true"></Column>
-            <Column id="MachineName" type="nvarchar" length="256" nullable="true"></Column>
-            <Column id="RequestUrl" type="nvarchar" length="1024" nullable="true"></Column>
-            <Column id="ExceptionType" type="nvarchar" length="256" nullable="true"></Column>
+            <Column id="ApplicationPath" type="nvarchar" length="2000" nullable="true"></Column>
+            <Column id="MachineName" type="nvarchar" length="2000" nullable="true"></Column>
+            <Column id="RequestUrl" type="nvarchar" length="2000" nullable="true"></Column>
+            <Column id="ExceptionType" type="nvarchar" length="2000" nullable="true"></Column>
             <Column id="StackTrace" type="nvarchar" length="4000" nullable="true"></Column>
             <Column id="UserName" type="nvarchar" length="256" nullable="true"></Column>
         </Columns>
@@ -340,6 +351,10 @@
             <Column id="TableID" type="nvarchar" length="50" nullable="false"></Column>
             <Column id="AppID" type="nvarchar" length="500" nullable="true"></Column>
             <Column id="Sidebar" type="bit" nullable="true"></Column>
+            <Column id="NotifyUsers" type="bit" nullable="true"></Column>
+            <Column id="ChartType" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="ChartTitle" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="UsersAllowedToEdit" type="nvarchar" length="4000" nullable="true"></Column>
             <Column id="DateCreated" type="datetime" nullable="false"></Column>
         </Columns>
     </Table>
@@ -651,8 +666,6 @@
             <Column id="PopOutLoc" type="nvarchar" length="2000" nullable="true"></Column>
             <Column id="OverlayID" type="nvarchar" length="500" nullable="true"></Column>
             <Column id="NotificationID" type="nvarchar" length="500" nullable="true"></Column>
-            <Column id="DisplayNav" type="bit" nullable="true"></Column>
-            <Column id="AllowStats" type="bit" nullable="true"></Column>
             <Column id="AutoOpen" type="bit" nullable="true"></Column>
             <Column id="DefaultWorkspace" type="int" nullable="true"></Column>
             <Column id="IsPrivate" type="bit" nullable="true"></Column>

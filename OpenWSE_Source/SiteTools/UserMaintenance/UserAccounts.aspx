@@ -51,7 +51,7 @@
                     <asp:UpdatePanel ID="UpdatePanel3" runat="server">
                         <ContentTemplate>
                             <asp:LinkButton ID="btn_manageRoles" runat="server" CssClass="sb-links margin-right margin-left RandomActionBtns"
-                                OnClick="btn_manageRoles_Click"><span class="td-edit-btn float-left margin-right-sml" style="padding: 0!important;"></span>Manage Roles</asp:LinkButton>
+                                OnClick="btn_manageRoles_Click"><span class="td-edit-btn float-left margin-right-sml" style="padding: 0!important;"></span>Manage Custom Roles</asp:LinkButton>
                             <asp:LinkButton ID="btn_rebuild_uc" runat="server" CssClass="sb-links margin-right margin-left RandomActionBtns"
                                 OnClick="btn_rebuild_uc_Clicked"><span class="img-refresh float-left margin-right-sml"></span>Rebuild User Customizations</asp:LinkButton>
                         </ContentTemplate>
@@ -470,7 +470,7 @@
                                                 <div class="clear-space-five">
                                                 </div>
                                                 <asp:Button ID="ChangePasswordPushButton_accountsettings" runat="server" OnClick="ChangePasswordPushButton_accountsettings_Clicked"
-                                                    Text="Change Password" ValidationGroup="ChangeUserPasswordValidationGroup" CssClass="input-buttons RandomActionBtns" />
+                                                    Text="Change Password" ValidationGroup="ChangeUserPasswordValidationGroup" CssClass="input-buttons" />
                                             </div>
                                         </asp:Panel>
                                     </ChangePasswordTemplate>

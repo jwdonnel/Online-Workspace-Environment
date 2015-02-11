@@ -14,7 +14,6 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using System.Web.Security;
-using AjaxControlToolkit;
 using System.Web.Script.Serialization;
 using System.Text.RegularExpressions;
 using OpenWSE_Tools.GroupOrganizer;
@@ -74,44 +73,6 @@ public partial class Apps_FileDrive : Page {
 
             ScriptManager sm = ScriptManager.GetCurrent(Page);
             string ctlId = sm.AsyncPostBackSourceElementID;
-
-            if (AjaxFileUpload1.IsInFileUploadPostBack) {
-                // do for ajax file upload partial postback request
-            }
-            else {
-                // do for normal page request
-
-                if (HelperMethods.ConvertBitToBoolean(Request.QueryString["preview"]) && !string.IsNullOrEmpty(Request.QueryString["fileId"])) {
-                    var fileId = Request.QueryString["fileId"];
-                    string fileContentType = null;
-                    byte[] fileContents = null;
-
-                    if (AjaxFileUpload1.StoreToAzure) {
-#if NET45 || NET40
-                    using (var stream = new MemoryStream())
-                    {
-                        AjaxFileUploadBlobInfo blobInfo;
-                        AjaxFileUploadAzureHelper.DownloadStream(Request.QueryString["uri"], stream, out blobInfo);
-
-                        fileContentType = blobInfo.Extension;
-                        fileContents = stream.ToArray();
-                    }
-#endif
-                    }
-                    else {
-                        fileContents = (byte[])Session["fileContents_" + fileId];
-                        fileContentType = (string)Session["fileContentType_" + fileId];
-                    }
-
-                    if (fileContents != null) {
-                        Response.Clear();
-                        Response.ContentType = fileContentType;
-                        Response.BinaryWrite(fileContents);
-                        Response.End();
-                    }
-
-                }
-            }
 
             if (!IsPostBack) {
                 // Initialize all the scripts and style sheets
@@ -1351,53 +1312,37 @@ public partial class Apps_FileDrive : Page {
 
     #region FileUpload
 
-    protected void AjaxFileUpload1_OnUploadComplete(object sender, AjaxFileUploadEventArgs file) {
-        // In a real app, you would call SaveAs() to save the uploaded file somewhere
-        // AjaxFileUpload1.SaveAs(MapPath("~/App_Data/" + file.FileName), true);
-        string groupname = hf_ddgroups.Value;
-        IIdentity userID = HttpContext.Current.User.Identity;
-        var filesql = new FileDrive(userID.Name);
-        string pathsql = ss.ResolvedDocumentFolder;
-        string fileName_temp1sql = Path.GetFileName(file.FileName);
-        string fileNamesql = removeRegex(fileName_temp1sql);
-        string tempext = Path.GetExtension(fileNamesql);
-        string fileNameId = Guid.NewGuid().ToString();
+    protected void btnFileUpload_OnClick(object sender, EventArgs e) {
+        if (FileUploadControl.HasFile) {
+            try {
+                IIdentity userID = HttpContext.Current.User.Identity;
+                foreach (HttpPostedFile file in FileUploadControl.PostedFiles) {
+                    string groupname = hf_ddgroups.Value;
+                    var filesql = new FileDrive(userID.Name);
+                    string pathsql = ss.ResolvedDocumentFolder;
+                    string fileName_temp1sql = Path.GetFileName(file.FileName);
+                    string fileNamesql = removeRegex(fileName_temp1sql);
+                    string tempext = Path.GetExtension(fileNamesql);
+                    string fileNameId = Guid.NewGuid().ToString();
 
-        string p = Path.Combine(pathsql, fileNameId + FileDrive.NewFileExt);
-        if (FileDrive.FileExtOk(tempext)) {
-            p = Path.Combine(pathsql, fileNameId + tempext);
-        }
+                    string p = Path.Combine(pathsql, fileNameId + FileDrive.NewFileExt);
+                    if (FileDrive.FileExtOk(tempext)) {
+                        p = Path.Combine(pathsql, fileNameId + tempext);
+                    }
 
-        try {
-            AjaxFileUpload1.SaveAs(p, true);
-            var info = new FileInfo(p);
-            if (info.Exists) {
-                filesql.addFile(fileNameId, fileNamesql, tempext, HelperMethods.FormatBytes(info.Length), pathsql, string.Empty, "-", groupname, false);
+                    file.SaveAs(p);
+                    var info = new FileInfo(p);
+                    if (info.Exists) {
+                        filesql.addFile(fileNameId, fileNamesql, tempext, HelperMethods.FormatBytes(info.Length), pathsql, string.Empty, "-", groupname, false);
+                    }
+                }
+            }
+            catch (Exception ex) {
+                new AppLog(false).AddError(ex);
             }
         }
-        catch (Exception e) {
-            AppLog applog = new AppLog(false);
-            applog.AddError(e);
-        }
-    }
 
-    protected void AjaxFileUpload1_UploadCompleteAll(object sender, AjaxFileUploadCompleteAllEventArgs e) {
-        UserUpdateFlags uuf = new UserUpdateFlags();
-        uuf.addFlag("app-documents", hf_ddgroups.Value);
-
-        var startedAt = (DateTime)Session["uploadTime"];
-        var now = DateTime.Now;
-        e.ServerArguments = new JavaScriptSerializer()
-            .Serialize(new {
-                duration = (now - startedAt).Seconds,
-                time = DateTime.Now.ToShortTimeString()
-            });
-    }
-
-    protected void AjaxFileUpload1_UploadStart(object sender, AjaxFileUploadStartEventArgs e) {
-        var now = DateTime.Now;
-        e.ServerArguments = now.ToShortTimeString();
-        Session["uploadTime"] = now;
+        Response.Redirect(Request.RawUrl);
     }
 
     private string removeRegex(string foldername) {

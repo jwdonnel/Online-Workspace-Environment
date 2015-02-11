@@ -17,6 +17,7 @@ using System.Web.UI;
 using OpenWSE_Tools.Notifications;
 using OpenWSE_Tools.AutoUpdates;
 using System.Data.SqlServerCe;
+using System.IO;
 
 #endregion
 
@@ -160,7 +161,7 @@ public class AppLog {
                         cont = false;
                 }
 
-                string date = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+                string date = DateTime.Now.ToString();
 
                 // If cont == true, Insert new row into AppLog table
                 if (cont) {
@@ -206,6 +207,10 @@ public class AppLog {
                     query.Add(new DatabaseQuery("UserName", currUser));
 
                     tempdbCall.CallInsert("aspnet_WebEvent_Events", query);
+
+                    if (ss.RecordActivityToLogFile) {
+                        CreateLogFile(eventname, eventcomment, date, HttpContext.Current.Request.ApplicationPath, System.Environment.MachineName, HttpContext.Current.Request.Url.OriginalString, type, stackTrace, currUser);
+                    }
                 }
             }
             AddingError = false;
@@ -321,6 +326,65 @@ public class AppLog {
         if (string.IsNullOrEmpty(message)) return;
         addItem("Javascript Error", message);
     }
+
+    #region Log Builder
+
+    private static void CreateLogFile(string eventName, string eventComment, string date, string appPath, string machineName, string url, string type, string stackTrace, string currUser) {
+        try {
+            string logFolder = ServerSettings.GetServerMapLocation + "Logging";
+            if (!Directory.Exists(logFolder)) {
+                Directory.CreateDirectory(logFolder);
+            }
+
+            StringBuilder str = new StringBuilder();
+            str.Append(BuildHeader(date, currUser));
+            str.Append(BuildBody(eventName, url, type, eventComment, stackTrace));
+            str.Append(BuildFooter());
+
+            string fileName = eventName;
+            if (fileName.Length > 15) {
+                fileName = fileName.Substring(0, 15);
+            }
+
+            string timestamp = Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0)).TotalSeconds).ToString();
+            File.WriteAllText(logFolder + "\\" + "EventLog_" + fileName + "_" + timestamp + ".log", str.ToString());
+        }
+        catch { }
+    }
+    private static string BuildHeader(string date, string user) {
+        StringBuilder strHeader = new StringBuilder();
+        strHeader.Append("---------------- START ----------------");
+        strHeader.Append(Environment.NewLine + Environment.NewLine);
+        strHeader.Append("Date Logged: " + date);
+        strHeader.Append(Environment.NewLine);
+        strHeader.Append("User: " + user);
+        strHeader.Append(Environment.NewLine);
+
+        return strHeader.ToString();
+    }
+    private static string BuildBody(string eventName, string requestUrl, string type, string message, string stackTrace) {
+        StringBuilder strBody = new StringBuilder();
+        strBody.Append("EventName: " + eventName);
+        strBody.Append(Environment.NewLine);
+        strBody.Append("EventComment: " + message);
+        strBody.Append(Environment.NewLine);
+        strBody.Append("RequestUrl: " + requestUrl);
+        strBody.Append(Environment.NewLine);
+        strBody.Append("ExceptionType: " + type);
+        strBody.Append(Environment.NewLine);
+        strBody.Append("StackTrace: " + stackTrace);
+
+        return strBody.ToString();
+    }
+    private static string BuildFooter() {
+        StringBuilder strFooter = new StringBuilder();
+        strFooter.Append(Environment.NewLine + Environment.NewLine);
+        strFooter.Append("---------------- END ----------------");
+
+        return strFooter.ToString();
+    }
+
+    #endregion
 
     public string GetEventComment(string id) {
         DatabaseQuery dbSelect = dbCall.CallSelectSingle("aspnet_WebEvent_Events", "EventComment", new List<DatabaseQuery>() { new DatabaseQuery("EventId", id) });

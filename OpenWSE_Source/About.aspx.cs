@@ -8,6 +8,7 @@ using System.Text;
 using System.IO;
 using System.Security.Principal;
 using OpenWSE.Core.Licensing;
+using System.Web.UI.HtmlControls;
 
 public partial class SiteTools_About : System.Web.UI.Page
 {
@@ -49,6 +50,19 @@ public partial class SiteTools_About : System.Web.UI.Page
                 RegisterPostbackScripts.RegisterStartupScript(this, "$('#siteInfo').hide();$('#changeLog').show(); $('#hdl1').removeClass('active'); $('#hdl2').addClass('active');");
             }
         }
+
+        if (!IsPostBack) {
+            ServerSettings _ss = new ServerSettings();
+            this.Page.MetaDescription = _ss.MetaTagDescription;
+            this.Page.MetaKeywords = _ss.MetaTagKeywords;
+
+            if (!string.IsNullOrEmpty(ServerSettings.RobotsMetaTag)) {
+                HtmlMeta meta = new HtmlMeta();
+                meta.Name = "robots";
+                meta.Content = ServerSettings.RobotsMetaTag;
+                this.Page.Header.Controls.Add(meta);
+            }
+        }
     }
 
     private void LoadUserBackground() {
@@ -86,6 +100,31 @@ public partial class SiteTools_About : System.Web.UI.Page
             catch {
                 app_title_bg.Style["background"] = "#EFEFEF url(App_Themes/Standard/Body/default-bg.jpg) repeat top left";
             }
+        }
+    }
+
+    protected void lnk_Download1_Click(object sender, EventArgs e) {
+        ServerSettings _ss = new ServerSettings();
+        string filePath = ServerSettings.GetServerMapLocation + "CloudFiles\\OpenWSE_Installer.exe";
+        if (File.Exists(filePath)) {
+            string strFileName = Path.GetFileName(filePath);
+            Response.ContentType = "application/octet-stream";
+            Response.AddHeader("Content-Disposition", "attachment; filename=" + strFileName);
+            Response.Clear();
+            Response.WriteFile(filePath);
+            Response.End();
+        }
+    }
+    protected void lnk_Download2_Click(object sender, EventArgs e) {
+        ServerSettings _ss = new ServerSettings();
+        string filePath = ServerSettings.GetServerMapLocation + "CloudFiles\\OpenWSE_Published.zip";
+        if (File.Exists(filePath)) {
+            string strFileName = Path.GetFileName(filePath);
+            Response.ContentType = "application/octet-stream";
+            Response.AddHeader("Content-Disposition", "attachment; filename=" + strFileName);
+            Response.Clear();
+            Response.WriteFile(filePath);
+            Response.End();
         }
     }
 }

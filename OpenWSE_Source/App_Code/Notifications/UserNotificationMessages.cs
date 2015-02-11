@@ -85,7 +85,8 @@ namespace OpenWSE_Tools.Notifications {
             }
             else if ((appId == "236a9dc9-c92a-437f-8825-27809af36a3f")
                 || (appId == "1159aca6-2449-4aff-bacb-5f29e479e2d7")
-                || (appId == "adaefeb2-9ef2-4ffa-b6ca-c76fc2815d4f")) // Error Report Notification ID / eRequests 
+                || (appId == "adaefeb2-9ef2-4ffa-b6ca-c76fc2815d4f")
+                || (appId == "707ecc6c-2480-4080-bad6-fb135bb5cf13")) // Error Report Notification ID / eRequests 
         {
                 notifiId = appId;
                 canContinue = true;

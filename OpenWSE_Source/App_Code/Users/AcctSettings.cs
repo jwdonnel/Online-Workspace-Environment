@@ -408,9 +408,6 @@ public class AcctSettings : System.Web.Services.WebService {
                             obj.Add(ratings.GetAppRatings(id));
                         }
                     }
-                    else {
-                        obj.Add(_apps.BuildAppStats(id, userID.Name));
-                    }
                 }
                 else {
                     obj.Add("Not Authenticated");

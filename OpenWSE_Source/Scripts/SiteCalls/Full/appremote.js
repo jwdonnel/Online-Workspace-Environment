@@ -80,7 +80,7 @@ var appRemote = function () {
         $(".loading-background-holder").remove();
         $("#apps_header_btn").show();
         $("#chat_header_btn").show();
-        $("#" + appRemote_Config.remoteId + "-pnl-icons").find(".app-icon-font").removeClass("mobile-open");
+        $("#" + appRemote_Config.remoteId).find(".app-icon-font").removeClass("mobile-open");
         $("#load-option-text").html("<b>" + appRemote_Config.remoteName + "</b> Load Options <span class='img-menudropdown' style='float: right!important; margin-right: 3px!important; margin-top: 2px!important;'></span>");
         $("#pnl_options-minHeight").show();
     });
@@ -553,7 +553,7 @@ var appRemote = function () {
                     $("#options-btn-update").hide();
                     $("#pnl_appMoveResize").hide();
 
-                    if (data.d[0].length == 16) {
+                    if (data.d[0].length == 15) {
                         var closed = data.d[0][0];
                         var min = data.d[0][1];
                         var max = data.d[0][2];
@@ -572,7 +572,6 @@ var appRemote = function () {
                         var popoutLoc = data.d[0][12];
                         var allowMax = data.d[0][13];
                         var allowResize = data.d[0][14];
-                        var allowStats = data.d[0][15];
 
                         if ((width == "0") || (width == "")) {
                             width = minWidth;
@@ -588,16 +587,6 @@ var appRemote = function () {
                         $("#load-option-about").attr("onclick", "appRemote.AccordionClick_About('" + id + "')");
                         $("#load-option-about").next(".accordion-content").html("");
                         $("#load-option-about").next(".accordion-content").hide();
-
-                        $("#load-option-stats").next(".accordion-content").html("");
-                        $("#load-option-stats").next(".accordion-content").hide();
-                        if (appRemote.ConvertBitToBoolean(allowStats)) {
-                            $("#load-option-stats").attr("onclick", "appRemote.AccordionClick_Stats('" + id + "')");
-                            $("#load-option-stats").show();
-                        }
-                        else {
-                            $("#load-option-stats").hide();
-                        }
 
                         $("#load-option-text").addClass("active");
                         $("#load-option-text").attr("onclick", "appRemote.AccordionClick_Options('" + id + "')");
@@ -731,7 +720,7 @@ var appRemote = function () {
                         CloseStartLoadingOverlay();
                         if (data.d != null) {
                             for (var i = 0; i < data.d.length; i++) {
-                                var $this = $("#" + data.d[i][0] + "-pnl-icons");
+                                var $this = $(".app-icon[data-appid='" + data.d[i][0] + "']");
                                 $this.addClass("active");
                                 if (data.d[i][1] != "") {
                                     var db = "<span class='workspace-reminder font-no-bold'>" + GetWorkspaceNumber(data.d[i][1]) + "</span>";
@@ -801,30 +790,6 @@ var appRemote = function () {
                 }
             });
         }
-    }
-    function AccordionClick_Stats(id) {
-        if (!$("#load-option-stats").hasClass("active")) {
-            RemoveActiveAccordion();
-            SetActiveAccordion("load-option-stats");
-            $("#load-option-stats").next(".accordion-content").html("<h4>Loading...</h4>");
-            AppStats(id);
-        }
-    }
-    function AppStats(id) {
-        $.ajax({
-            url: "WebServices/AcctSettings.asmx/GetAppRemoteAboutStats",
-            type: "POST",
-            data: '{ "id": "' + appRemote_Config.remoteId + '","option": "stats" }',
-            contentType: "application/json; charset=utf-8",
-            success: function (data) {
-                $("#load-option-stats").next(".accordion-content").html(data.d);
-                performingAction = false;
-            },
-            error: function () {
-                $("#load-option-stats").next(".accordion-content").html("<h4>Error! Could not load.</h4>");
-                performingAction = false;
-            }
-        });
     }
     function AccordionClick_Options(id) {
         if (!$("#load-option-text").hasClass("active")) {
@@ -946,7 +911,7 @@ var appRemote = function () {
         $("#apps_header_btn").hide();
         $("#chat_header_btn").hide();
 
-        $("#" + appRemote_Config.remoteId + "-pnl-icons").find(".app-icon-font").addClass("mobile-open");
+        $("#" + appRemote_Config.remoteId).find(".app-icon-font").addClass("mobile-open");
 
         $("#pnl_options").append("<div class='loading-background-holder'></div>");
         $("#pnl_options").append("<iframe id='" + appRemote_Config.remoteId + "-loadedapp' src='" + href + "' frameborder='0' class='loaded-app-holder' style='height: " + iframeHt + "px;'></iframe>");
@@ -1017,7 +982,7 @@ var appRemote = function () {
             stop: function (event, ui) {
                 var listorder = '';
                 $('.app-icon').each(function () {
-                    var temp = $(this).attr('id').replace("-pnl-icons", "");
+                    var temp = $(this).attr('data-appid');
                     if (temp != '') {
                         listorder += (temp + ',');
                     }
@@ -1385,8 +1350,6 @@ var appRemote = function () {
         OnWorkspaceClick: OnWorkspaceClick,
         AccordionClick_Options: AccordionClick_Options,
         AccordionClick_About: AccordionClick_About,
-        AccordionClick_Stats: AccordionClick_Stats,
-        AppStats: AppStats,
         OpenApp: OpenApp,
         LoadApp: LoadApp,
         HideApp: HideApp,
@@ -1513,7 +1476,7 @@ $(window).resize(function () {
         var h4 = $("#container-footer").height();
         var h5 = $("#notifications").height();
         var finalHeight = h1 - (h2 + h3 + h4 + h5);
-        $(".iFrame-chat").height(finalHeight);
+        $(".iFrame-chat").height(finalHeight - 3);
     }
     $(".loaded-app-holder").each(function () {
         var iframeHt = Math.abs($(window).height() - ($("#always-visible").outerHeight() + $("#container-footer").outerHeight() + $("#notifications").outerHeight()));

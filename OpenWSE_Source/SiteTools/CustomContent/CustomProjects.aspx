@@ -85,26 +85,34 @@
             </div>
             <asp:Label ID="lbl_Error" runat="server" Text="" ForeColor="Red"></asp:Label>
         </asp:Panel>
-        <div class="loaderApp-overlay">
-            <div class="loaderApp-element-align">
-                <div class="loaderApp-element-modal">
-                    <asp:UpdatePanel ID="updatepnl_DefaultPage" runat="server">
-                        <ContentTemplate>
-                            <h3 class="font-color-light-black float-left">Set Default Page</h3>
-                            <a href="#" class="close-button-dd" onclick="$('.loaderApp-overlay').fadeOut(150);return false;"></a>
-                            <div class="clear-space">
+        <div id="LoaderApp-element" class="Modal-element" style="display: none;">
+            <div class="Modal-overlay">
+                <div class="Modal-element-align">
+                    <div class='Modal-element-modal' style='width: 400px; min-width: 400px;'>
+                        <div class='ModalHeader'>
+                            <div>
+                                <div class="app-head-button-holder-admin">
+                                    <a href="#close" onclick="openWSE.LoadModalWindow(false, 'LoaderApp-element', '');return false;" class="ModalExitButton"></a>
+                                </div>
+                                <span class='Modal-title'></span>
                             </div>
-                            <div style="max-height: 250px; overflow: auto">
-                                <asp:RadioButtonList ID="radioButton_FileList" runat="server">
-                                </asp:RadioButtonList>
-                            </div>
-                            <div class="clear-space">
-                            </div>
-                            <asp:HiddenField ID="hf_defaultProjectID" runat="server" ClientIDMode="Static" />
-                            <asp:Button ID="btn_updateDefaultFile" runat="server" CssClass="input-buttons RandomActionBtns"
-                                Text="Set Page" OnClick="btn_updateDefaultFile_Clicked" />
-                        </ContentTemplate>
-                    </asp:UpdatePanel>
+                        </div>
+                        <div class="ModalPadContent">
+                            <asp:UpdatePanel ID="updatepnl_DefaultPage" runat="server">
+                                <ContentTemplate>
+                                    <div style="max-height: 250px; overflow: auto">
+                                        <asp:RadioButtonList ID="radioButton_FileList" runat="server">
+                                        </asp:RadioButtonList>
+                                    </div>
+                                    <div class="clear-space">
+                                    </div>
+                                    <asp:HiddenField ID="hf_defaultProjectID" runat="server" ClientIDMode="Static" />
+                                    <asp:Button ID="btn_updateDefaultFile" runat="server" CssClass="input-buttons RandomActionBtns"
+                                        Text="Set Page" OnClick="btn_updateDefaultFile_Clicked" />
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -12,14 +12,6 @@
 
 
 
-/* Activation Modal
-----------------------------------*/
-#MessageActivationPopup .message-element-align{position:fixed;text-align:left;z-index:10000;top:50%;left:50%}
-#MessageActivationPopup{height:100%;left:0;position:fixed;text-align:center;top:0;width:100%;z-index:10000}
-#MessageActivationPopup .message{background:#F9F9F9;-moz-box-shadow:0 5px 10px rgba(0,0,0,.4);-webkit-box-shadow:0 5px 10px rgba(0,0,0,.4);box-shadow:0 5px 10px rgba(0,0,0,.4);border:1px solid #CCC;margin:0 auto;text-align:center;z-index:10000;-moz-border-radius:20px;-webkit-border-radius:20px;border-radius:20px;width:350px;margin-left:-191px;margin-top:-100px;position:relative;padding:15px}
-
-
-
 /* Add Event Popup
 ----------------------------------*/
 #addEvent-element{display:none}
@@ -48,6 +40,171 @@
 
 
 
+/* App Container
+----------------------------------*/
+.main-div-app-bg{background:#FFF;position:absolute;right:0;left:0;top:0;bottom:0;z-index:0}
+.content-table{display:block;min-width:1080px}
+.td-sidebar,.td-content,.td-chatinfo,.td-content-inner{vertical-align:top}
+.td-content{min-width:100%;width:100%}
+.td-sidebar{width:260px;position:relative}
+.td-sidebar-bg-color{background:#E0E0E0}
+.sidebar-nobg{width:277px;position:absolute;top:0;bottom:0}
+.sidebar-divider-no-margin{margin-bottom:5px;height:0;width:97%;border-top:1px solid #DDD;position:relative}
+.sidebar-divider{padding:0 0 5px 0;margin:0 10px 5px 10px;border-top:1px solid #DDD;position:relative}
+.sidebar-padding{position:relative;overflow:auto;padding:15px 20px 15px 20px}
+.sidebar-items-fixed{padding-left:10px}
+.content-main{overflow:hidden}
+.content-overflow-app{padding:0 0 25px 0;overflow:auto}
+.iFrameBackground{-moz-box-shadow:inset 0 0 5px 5px #555656;-webkit-box-shadow:inset 0 0 5px 5px #555656;box-shadow:inset 0 0 5px 5px #555656}
+
+
+
+/* App Minimize Bar
+----------------------------------*/
+.app-min-bar,.app-min-bar-alt{padding:9px 8px 1px 12px;margin-right:5px;background-color:#474747;height:24px;border-left:1px solid #353535;border-right:1px solid #353535;cursor:pointer;text-align:center;float:left;-moz-border-radius:20px;-webkit-border-radius:20px;border-radius:20px;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
+.app-min-bar .app-title,.app-min-bar-alt .app-title{color:#FFF;padding-left:5px;float:left;margin-top:1px}
+.app-min-bar:hover .app-title,.app-min-bar-alt:hover .app-title{color:#FFF;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
+.app-min-bar:hover img,.app-min-bar-alt:hover img{opacity:1.0;filter:alpha(opacity=100)}
+.app-min-bar:hover,.app-min-bar-alt:hover{background-color:#404040}
+.app-min-bar:active,.app-min-bar-alt:active{background-color:#1C1C1C}
+.app-min-bar img,.app-min-bar-alt img{float:left;padding-right:5px}
+.app-min-bar img{height:20px;margin-top:-2px}
+.app-min-bar-alt img{height:16px;margin-top:0px}
+.app-min-bar.hover-over .app-title,.app-min-bar-alt.hover-over .app-title{color:#FFF}
+.app-min-bar-preview{opacity:0.0;filter:alpha(opacity=0);z-index:7000!important;visibility:visible!important}
+#minimized-app-bar{height:34px;float:left}
+a.app-min-bar-alt{outline:none!important;text-decoration:none!important}
+
+
+
+/* App Installer
+----------------------------------*/
+.app-panel-description{margin-left:70px;margin-right:25px}
+.plugin-panel-description{margin-left:25px;margin-right:25px}
+.app-panel-description,.plugin-panel-description{border-left:1px solid #CCC;border-bottom:1px solid #CCC}
+.app-panel-description h4,.plugin-panel-description h4{font-size:13px}
+.app-icon-installer{cursor:pointer;min-width:200px;font-size:1.0em;text-align:left;float:left;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
+.app-icon-installer input{float:left;margin-right:10px;margin-top:25px}
+.app-icon-installer span{color:#555656;display:block;font-weight:bold}
+.app-icon-installer img{border:0 solid transparent;height:40px;padding-right:10px;float:left}
+.app-icon-installer:hover{background:#DDD}
+.app-icon-installer:active{background:#b7b7b7}
+
+
+
+/* App Holder
+----------------------------------*/
+.app-main,.app-main-nobg{min-width:100px;min-height:100px;z-index:3000;position:absolute!important}
+.app-main-external{bottom:0;overflow:auto}
+.app-main{background:#FFF;border:1px solid #B7B7B7;border-top:1px solid #DDD;border-right:1px solid #CCC;overflow:hidden;-moz-border-top-right-radius:5px;-webkit-border-top-right-radius:5px;border-top-right-radius:5px;-moz-border-top-left-radius:5px;-webkit-border-top-left-radius:5px;border-top-left-radius:5px}
+.app-head{background:#EDEDED;cursor:move;padding:7px 7px 7px 10px;height:15px;display:block;border-bottom:1px solid #CCC}
+.app-main-nobg .app-head{margin-right:0px!important;margin-left:0px!important;visibility:hidden;opacity:.0;filter:alpha(opacity=0);-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
+.app-main-nobg:hover .app-head,.app-main-nobg .app-head:hover{visibility:visible;opacity:1.0;filter:alpha(opacity=100)}
+.app-main-nobg .app-head-button-holder{visibility:hidden;opacity:0.0;filter:alpha(opacity=0)}
+.app-main-nobg:hover .app-head-button-holder,.app-main-nobg .app-head-button-holder:hover{visibility:visible;opacity:1.0;filter:alpha(opacity=100)}
+.app-main.selected{-moz-box-shadow:0 5px 10px rgba(0,0,0,.4);-o-box-shadow:0 5px 10px rgba(0,0,0,.4);-webkit-box-shadow:0 5px 10px rgba(0,0,0,.4);box-shadow:0 5px 10px rgba(0,0,0,.4)}
+.app-main.selected .app-head,.app-main-nobg.selected .app-head{background:#EDEDED url(Body/app-header.png) repeat-x top}
+.app-main-nobg.selected .app-head,.app-main-nobg.selected .app-head-button-holder{visibility:visible;opacity:1.0;filter:alpha(opacity=100)}
+.app-main-nobg #minimize-controls{display:none}
+.app-main-nobg.selected #minimize-controls,.app-main-nobg:hover #minimize-controls{display:block}
+.iFrame-apps{overflow:auto}
+.title-page{color:#000;font-weight:bold;text-decoration:underline;letter-spacing:.1em;padding:5px 5px 15px 5px}
+.app-title-bg-color{color:#555;background:#ECECEC;border-bottom:1px solid #DDD}
+.app-updating-message{display:none;width:200px;text-align:center;margin-top:20px;padding:15px;font-weight:bold;background-color:#000!important;-moz-border-radius:10px;-webkit-border-radius:10px;border-radius:10px;opacity:.9;filter:alpha(opacity=90);color:#fff}
+.loading-background-holder{background:#FFF url(Body/loading_3.gif) no-repeat center center;position:absolute;right:0px;left:0px;top:0;bottom:0px;z-index:1}
+.app-overlay-fix{background-color:transparent;position:absolute;right:2px;left:2px;top:0;bottom:2px;z-index:2000}
+.app-head .app-title{color:#5F5F5F;font-weight:bold;padding-left:5px;float:left;margin-top:1px}
+.app-body{cursor:default;padding:0;position:relative;width:100%;overflow:auto}
+.app-maximized,.auto-full-page{width:auto!important;height:auto!important;border:1px solid #E5E5E5!important;left:0!important;right:0!important;top:0!important;bottom:0!important;-moz-border-radius:0px!important;-webkit-border-radius:0px!important;border-radius:0px!important;-moz-box-shadow:none!important;-o-box-shadow:none!important;-webkit-box-shadow:none!important;box-shadow:none!important}
+.app-head img{float:left;height:20px;padding-right:5px;margin-top:-2px}
+.app-main-nobg .app-head{-moz-border-radius:7px;-webkit-border-radius:7px;border-radius:7px}
+
+
+
+/* App Buttons
+----------------------------------*/
+.app-head-button-holder{cursor:default;float:right;height:29px;margin-left:5px;margin-right:5px;padding-top:1px}
+.exit-button-app-min{height:12px;width:15px;background:url(App/headerbar-btns.png) no-repeat -109px 0;overflow:hidden;float:right;margin-top:3px}
+.exit-button-app,.minimize-button-app,.maximize-button-app,.options-button-app{float:right;margin-right:1px;margin-top:8px;height:12px;width:22px;overflow:hidden}
+.exit-button-app{background:url(App/headerbar-btns.png) no-repeat -44px 0}
+.minimize-button-app{background:url(App/headerbar-btns.png) no-repeat -86px 0}
+.maximize-button-app{background:url(App/headerbar-btns.png) no-repeat -2px 0}
+.maximize-button-app.active{background:url(App/headerbar-btns.png) no-repeat -25px 0}
+.exit-button-app-min:hover{background:url(App/headerbar-btns.png) no-repeat -109px -13px}
+.exit-button-app:hover{background:url(App/headerbar-btns.png) no-repeat -44px -13px}
+.minimize-button-app:hover{background:url(App/headerbar-btns.png) no-repeat -86px -13px}
+.maximize-button-app:hover{background:url(App/headerbar-btns.png) no-repeat -2px -13px}
+.maximize-button-app.active:hover{background:url(App/headerbar-btns.png) no-repeat -25px -13px}
+.exit-button-app:hover,.minimize-button-app:hover,.close-button-app-min:hover,.maximize-button-app:hover,.exit-button-app-min:hover{outline:0}
+.exit-button-app:active,.minimize-button-app:active,.close-button-app-min:active,.maximize-button-app:active,.exit-button-app-min:active{outline:0}
+.close-button-dd{position:absolute;right:15px;top:12px;height:15px;width:15px;background:url(App/headerbar-btns.png) no-repeat -47px 2px;overflow:hidden}
+.close-button-dd:hover{background:url(App/headerbar-btns.png) no-repeat -47px -11px}
+
+
+
+/* App Icons
+----------------------------------*/
+.app-icon,.app-icon-category-list,.app-icon-admin{padding:0px 7px 6px 8px;margin-bottom:2px;cursor:pointer;clear:both;text-align:left;-webkit-transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;transition:all .2s ease-in-out;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px}
+.app-icon-admin{cursor:default!important}
+.app-icon{position:relative}
+.app-icon-admin span{display:block;padding-top:0;height:22px}
+.app-icon .app-icon-font,.app-icon-category-list .app-icon-font,.app-icon-admin .app-icon-font{color:#555656;display:block;padding-top:7px}
+.app-icon.active,.app-icon:hover,.app-icon-category-list:hover{background-color:#E5E5E5}
+.app-icon img{border:0 solid transparent;height:18px;padding-right:5px;padding-top:5px;float:left}
+.app-icon-admin img{border:0 solid transparent;padding-bottom:2px;float:left}
+.app-icon-admin .img-collapse-sml,.app-icon-admin .img-expand-sml{margin-top:-4px;margin-right:6px}
+.app-icon-category-list img{float:right;height:12px;margin-top:-14px;padding-right:5px}
+.app-icon:active,.app-icon-category-list:active{background-color:#DDD;outline:0}
+#Category-Back,#Category-Back-ChatRemote-Close,#Category-Back-options,#Category-Back-moveresize{cursor:pointer;margin-bottom:2px;padding:8px 14px 4px 5px;height:16px;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px}
+#Category-Back img,#Category-Back-ChatRemote-Close img,#Category-Back-options img,#Category-Back-moveresize img{height:12px;float:left;padding-right:7px;padding-top:1px}
+#Category-Back:hover,#Category-Back-ChatRemote-Close:hover,#Category-Back-options:hover,#Category-Back-moveresize:hover{background-color:#E5E5E5}
+#Category-Back:active,#Category-Back-ChatRemote-Close:active,#Category-Back-options:active,#Category-Back-moveresize:active{background-color:#DDD;outline:0}
+#Category-Back h4,#Category-Back-ChatRemote-Close h4,#Category-Back-options h4,#Category-Back-moveresize h4{font-style:normal}
+.workspace-reminder{position:absolute;top:0;right:0;color:#777;font-size:12px;height:21px;padding:7px 5px 0 4px}
+.app-category-div{margin-bottom:2px}
+
+
+
+/* App Icons - Admin Links
+----------------------------------*/
+.app-icon-links,.app-icon-sub-links{padding:1px 7px 1px 10px;cursor:pointer;clear:both;text-align:left}
+.app-icon-links,.app-icon-sub-links{height:26px}
+.app-icon-links,.app-icon-sub-links{position:relative}
+.app-icon-links .app-icon-font,.app-icon-sub-links .app-icon-font{color:#555656;display:block;padding-top:7px}
+.app-icon-links img,.app-icon-sub-links img{float:left;padding-right:5px;padding-top:5px;height:16px}
+.app-icon-links.active,.app-icon-links:hover,.app-icon-sub-links.active,.app-icon-sub-links:hover{background-color:#E5E5E5}
+.app-icon-links:active,.app-icon-sub-links:active{background-color:#DDD;outline:0}
+.app-icon-links .img-expand-sml,.app-icon-links .img-collapse-sml{float:right;padding:10px 8px;margin-top:-10px;margin-right:-2px}
+
+
+
+/* App Dropdown Options
+----------------------------------*/
+.options-button-app{background:url(App/headerbar-btns.png) no-repeat -65px 0;position:relative;z-index:1}
+.options-button-app:hover,.options-button-app.active{background:url(App/headerbar-btns.png) no-repeat -65px -13px}
+.app-popup-inner-app{display:none;position:absolute;z-index:1000;text-align:center;padding:3px 8px;right:10px;background:#F9F9F9;top:35px;border:1px solid #CCC;-webkit-box-shadow:1px 5px 10px 0px rgba(56,56,56,0.35);-moz-box-shadow:1px 5px 10px 0px rgba(56,56,56,0.35);box-shadow:1px 5px 10px 0px rgba(56,56,56,0.35);-moz-border-radius:7px;-webkit-border-radius:7px;border-radius:7px;color:#777}
+.app-main.selected .app-popup-inner-app,.app-main-nobg.selected .app-popup-inner-app{z-index:7000}
+.app-popup-inner-app ul{list-style:none}
+.app-popup-inner-app li{cursor:pointer;padding:8px 2px 2px 2px;margin-bottom:1px;margin-right:5px;margin-left:5px;float:left}
+.app-popup-inner-app li:hover{text-decoration:underline}
+.app-popup-inner-app .workspace-selector-app-option{padding-right:10px}
+.about-app,.reload-button-app,.popout-button-app,.backHistory-button-app{width:16px;height:16px;float:left;background-repeat:no-repeat}
+.about-app,.reload-button-app,.popout-button-app,.backHistory-button-app{margin-right:5px;margin-top:-2px}
+.about-app{background:url(App/headerbar-btns.png) no-repeat -171px -4px}
+.reload-button-app{background:url(App/headerbar-btns.png) no-repeat -127px -4px}
+.popout-button-app{background:url(App/headerbar-btns.png) no-repeat -149px -4px}
+
+
+
+/* App Icon Options
+----------------------------------*/
+.app-options{float:right;margin-right:-7px;margin-top:0px;width:16px;height:28px;background:#D5D5D5;visibility:hidden}
+.app-options:hover{background:#C5C5C5!important}
+.app-options:active{background:#B5B5B5!important}
+.app-popup{background:#F5F5F5;position:relative;margin-left:-220px;height:26px;padding-top:2px;display:none;z-index:3000;text-align:center}
+
+
+
 /* AutoHide and Presentation
 ----------------------------------*/
 .body-presentation-bg{background:#FFF!important}
@@ -67,9 +224,10 @@
 .bookmark-html-link:hover{text-decoration:underline}
 .bookmark-table-styles{clear:both;width:100%;min-height:60px;border-bottom:1px solid #DDD;-webkit-transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
 .bookmark-table-styles img{padding:10px}
+.bookmark-table-styles .bookmark-edit-btn-holder{display:none;width:185px}
 .bookmark-table-styles:hover{-moz-box-shadow:-1px 1px 1px rgba(0,0,0,.2);-webkit-box-shadow:0 2px 4px rgba(0,0,0,.2);box-shadow:0 2px 4px rgba(0,0,0,.2);background:#F1F1F1;-webkit-transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
 .bookmark-table-styles:hover .bm-hidden{display:inline}
-.bookmark-table-YoutubeLink{background:#EAEAEA}
+.bookmark-table-styles:hover .bookmark-edit-btn-holder{display:table-cell}
 .bookmark-table-YoutubeLink img{cursor:pointer}
 .bookmark-table-styles .td-delete-btn,.bookmark-table-styles .td-add-btn,.bookmark-table-styles .td-edit-btn{opacity:0.4;filter:alpha(opacity=40)}
 .bookmark-table-styles:hover .td-delete-btn,.bookmark-table-styles:hover .td-add-btn,.bookmark-table-styles:hover .td-edit-btn{opacity:1.0;filter:alpha(opacity=100)}
@@ -142,6 +300,7 @@ td.day-picker-alt-hover:hover a{color:#2d2d2d!important}
 #iframe-container-close-btn a{color:#FFF;text-decoration:none!important;padding:10px 15px 0 20px;height:24px;float:left;background-image:url(Icons/back.png);background-position:left center;background-repeat:no-repeat}
 #iframe-container-close-btn a:hover{text-decoration:underline!important}
 #iframe-container-helper .loading-background-holder{right:0px;left:0px;top:0px;bottom:0px}
+.workspace-holder .Modal-overlay{z-index:9000!important}
 
 
 
@@ -178,6 +337,17 @@ td.day-picker-alt-hover:hover a{color:#2d2d2d!important}
 .personalcalendar-overlay-entry{float:left;font-size:12px;padding:10px;margin-bottom:10px;min-width:225px;min-height:65px;margin-right:15px;margin-left:15px;position:relative}
 .personalcalendar-entry-bg{filter:alpha(opacity=35);opacity:0.35;position:absolute;top:0;bottom:0;left:0;right:0;-moz-border-radius:15px;-webkit-border-radius:15px;border-radius:15px}
 .personalcalendar-overlay-entry h4{font-size:1.3em!important;clear:both}
+
+
+/* Custom Tables
+----------------------------------*/
+.custom-table-tableView-holder{min-width:735px}
+.custom-table-timermarker .td-sidebar{width:200px}
+.custom-table-view-chart{height:55px;padding-top:5px;float:left}
+.custom-table-view-chart img{float:left;margin-left:10px;margin-right:10px;height:40px}
+.custom-table-view-chart span{font-size:13px;float:left;padding-top:14px;color:#555}
+.custom-table-view-chart a:hover > span{text-decoration:underline!important}
+.google-chart-holder{text-align:center;clear:both;padding: 0 10px 10px 10px}
 
 
 
@@ -226,33 +396,6 @@ li.updatestatus:hover a,li.updatestatus a:hover{text-decoration:underline}
 .statusUserAway{background:#ff8d42;background:-moz-linear-gradient(top,rgba(255,168,76,1) 23%,rgba(255,123,13,1) 64%);background:-webkit-gradient(linear,left top,left bottom,color-stop(23%,rgba(255,168,76,1)),color-stop(64%,rgba(255,123,13,1)));background:-webkit-linear-gradient(top,rgba(255,168,76,1) 23%,rgba(255,123,13,1) 64%);background:-o-linear-gradient(top,rgba(255,168,76,1) 23%,rgba(255,123,13,1) 64%);background:-ms-linear-gradient(top,rgba(255,168,76,1) 23%,rgba(255,123,13,1) 64%);background:linear-gradient(to bottom,rgba(255,168,76,1) 23%,rgba(255,123,13,1) 64%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffa84c', endColorstr='#ff7b0d', GradientType=0)}
 #chatusers_none{padding-left:10px;padding-bottom:10px;text-align:left}
 .chat-message-image{max-width:200px}
-
-
-
-/* Workspace Selector
-----------------------------------*/
-#workspace-selector{height:34px;overflow:hidden;float:left}
-#workspace-selector #lnk_BackToWorkspace{color:#FFF;text-decoration:none!important;padding:10px 15px 0 20px;height:24px;float:left;background-image:url(Icons/back.png);background-position:left center;background-repeat:no-repeat}
-#workspace-selector #lnk_BackToWorkspace:hover{text-decoration:underline!important}
-#ddl_WorkspaceSelector{float:left;cursor:pointer;padding:10px 14px 3px 10px;margin-right:10px;height:21px;transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out}
-#ddl_WorkspaceSelector.active{background:#F0F0F0}
-#ddl_WorkspaceSelector.active .selected-workspace{color:#3D3D3D}
-#ddl_WorkspaceSelector .li-header{cursor:default;background:#F0F0F0;border-size:border-box;-mox-box-sizing:border-box;padding:10px 10px 5px 10px;position:relative;font-size:12px;font-weight:bold;color:#777}
-#ddl_WorkspaceSelector .selected-workspace{cursor:pointer;color:#FFF;padding-left:22px;background:url('Icons/workspace.png') no-repeat left center}
-#ddl_WorkspaceSelector:hover .selected-workspace{text-decoration:underline!important}
-#ddl_WorkspaceSelector .dropdown-db-selector{display:none;position:absolute;left:0;background-color:#FFF;border-right:1px solid #CCC;border-bottom:1px solid #CCC;-moz-border-radius:2px;border-radius:2px;-webkit-border-radius:2px;-moz-border-top-right-radius:0px!important;border-top-right-radius:0px!important;-webkit-border-top-right-radius:0px!important}
-#ddl_WorkspaceSelector ul{list-style:none;max-height:300px;overflow:auto}
-#ddl_WorkspaceSelector .workspace-selection-item{cursor:pointer;background:#FFF;padding:10px;text-align:center;transition:all .1s ease-in-out;-moz-transition:all .1s ease-in-out;-webkit-transition:all .1s ease-in-out}
-#ddl_WorkspaceSelector .workspace-selection-item:hover{background:#EFEFEF}
-
-
-
-/* workspace Background Overlay
-----------------------------------*/
-.image-selector{cursor:pointer;border:2px solid transparent;-moz-border-radius:10px;-webkit-border-radius:10px;border-radius:10px}
-.image-selector:hover{border:2px solid #CCC;transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out}
-.image-selector-active{border:2px solid #777;border-bottom:2px solid #555656!important}
-.image-selector-current{margin-top:5px;border:2px solid #DDD;border:2px solid transparent;-moz-border-radius:10px;-webkit-border-radius:10px;border-radius:10px}
 
 
 
@@ -372,7 +515,7 @@ html{height:100%;min-height:100%}
 
 /* Image Boxes
 ----------------------------------*/
-.img-administrator,.img-checkmark,.img-folder,.img-file,.img-imgFile,.img-addOverlay,.img-network,.img-share,.img-backup,.img-restore,.img-overlay,.img-download,.img-present,.img-refresh,.img-refresh-alt,.img-popin,.img-close-alt,.img-norefresh,.img-addremove,.img-users,.img-pause,.img-play,.img-allow,.img-ignore,.img-back,.img-customize,.img-upload,.img-document,.img-lock,.img-unlock,.img-about,.img-about-2,.img-group,.img-signoff,.img-app-dark,.img-app-light,.img-colors,.img-view,.img-stats,.img-approve,.img-current-user,.img-menudropdown,.img-menudropdown-light,.img-downright,.img-columns,.img-password,.img-printer,.img-camera,.img-mail,.img-nomail,.img-quote,.img-expand-sml,.img-collapse-sml,.img-expand-lrg,.img-collapse-lrg,.img-grouplogoff,.img-links,.img-chat,.img-settings,.img-replace{width:16px;height:16px;background-repeat:no-repeat;background-position:center center;display:inline-block;zoom:1;*display:inline}
+.img-administrator,.img-checkmark,.img-folder,.img-file,.img-imgFile,.img-addOverlay,.img-network,.img-share,.img-backup,.img-restore,.img-overlay,.img-download,.img-present,.img-refresh,.img-refresh-alt,.img-popin,.img-close-alt,.img-norefresh,.img-addremove,.img-users,.img-pause,.img-play,.img-allow,.img-ignore,.img-back,.img-customize,.img-upload,.img-document,.img-lock,.img-unlock,.img-about,.img-about-2,.img-group,.img-signoff,.img-app-dark,.img-app-light,.img-colors,.img-view,.img-approve,.img-current-user,.img-menudropdown,.img-menudropdown-light,.img-downright,.img-columns,.img-password,.img-printer,.img-camera,.img-mail,.img-nomail,.img-quote,.img-expand-sml,.img-collapse-sml,.img-expand-lrg,.img-collapse-lrg,.img-grouplogoff,.img-links,.img-chat,.img-settings,.img-replace{width:16px;height:16px;background-repeat:no-repeat;background-position:center center;display:inline-block;zoom:1;*display:inline}
 .img-administrator{background-image:url(Icons/administrator.png);height:32px;width:32px}
 .img-checkmark{background-image:url(Icons/check_mark.png)}
 .img-folder{background-image:url(Icons/folder.png);height:24px;width:24px}
@@ -422,7 +565,6 @@ html{height:100%;min-height:100%}
 .img-mail{background-image:url(Icons/mail.png)}
 .img-nomail{background-image:url(Icons/nomail.png)}
 .img-quote{background-image:url(App/quote.png)}
-.img-stats{background-image:url(App/stats.png);width:32px;height:32px}
 .img-approve{background-image:url(App/approve.png);width:22px;height:22px}
 .img-current-user{background-image:url(Icons/user.png);width:32px;height:32px}
 .img-expand-sml{background-image:url(Icons/expand-sml.png);width:12px;height:12px}
@@ -504,10 +646,10 @@ a:hover{text-decoration:underline}
 -------------------------------------------------------*/
 #update-element{display:none}
 .update-element-overlay{height:100%;left:0;position:fixed;text-align:center;top:0;width:100%;z-index:12000}
-.update-element-modal{display:block;text-align:center;position:fixed;background-color:#F5F5F5;padding:11px 10px 6px 10px;left:50%;top:50%;min-height:20px;margin-left:-50px;margin-top:-50px;border:1px solid #DDD;-moz-box-shadow:-3px 3px 3px rgba(0,0,0,.25);-webkit-box-shadow:0 5px 7px rgba(0,0,0,.25);box-shadow:0 5px 7px rgba(0,0,0,.25);z-index:12000;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px}
+.update-element-modal{display:block;text-align:center;position:fixed;background-color:#F5F5F5;padding:12px 15px 7px 15px;left:50%;top:50%;min-height:20px;margin-left:-50px;margin-top:-50px;border:1px solid #CCC;-moz-box-shadow:-3px 3px 3px rgba(0,0,0,.25);-webkit-box-shadow:0 5px 7px rgba(0,0,0,.25);box-shadow:0 5px 7px rgba(0,0,0,.25);z-index:12000;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px}
 .update-element-modal .loading-icon-sml{margin-top:-3px}
-.update-element-modal h3{color:#353535;float:left;margin-left:10px}
-.update-element-modal .progress{width:15px;padding-left:2px;text-align:left;}
+.update-element-modal h3{color:#555;font-weight:bold;float:left;margin-top:1px;margin-left:10px;font-size:13px}
+.update-element-modal .progress{width:15px;padding-left:2px;text-align:left}
 .update-element-align{position:fixed;text-align:left;z-index:5000}
 
 
@@ -574,7 +716,7 @@ ul#ScheduleMenu li.active a,ul.ctlLineLinks li.active a,ul.homedashlinks li.acti
 .Modal-element{display:none;visibility:hidden}
 .Modal-element-modal{background:#F9F9F9;max-width:650px;min-width:500px;border:1px solid #B7B7B7;border-right:1px solid #CCC;border-top:1px solid #DDD;-moz-box-shadow:0 5px 10px rgba(0,0,0,.4);-webkit-box-shadow:0 5px 10px rgba(0,0,0,.4);box-shadow:0 5px 10px rgba(0,0,0,.4);margin:0 auto;z-index:10000;-moz-border-top-left-radius:7px;-webkit-border-top-left-radius:7px;border-top-left-radius:7px;-moz-border-top-right-radius:7px;-webkit-border-top-right-radius:7px;border-top-right-radius:7px}
 .Modal-element-align{position:fixed;text-align:left;z-index:10000;top:50%;left:50%}
-.Modal-overlay{height:100%;left:0;position:fixed;text-align:center;top:0;width:100%;z-index:10000}
+.Modal-overlay{height:100%;left:0;position:fixed;text-align:center;top:0;width:100%;z-index:10000;background:rgba(0,0,0,0.5)}
 .ModalExitButton{margin-top:2px;margin-right:-12px;float:right;height:12px;width:22px;background:url(App/headerbar-btns.png) no-repeat -44px 0;overflow:hidden}
 .ModalExitButton:hover{background:url(App/headerbar-btns.png) no-repeat -44px -13px}
 .app-head-button-holder-admin{float:right;height:16px;margin-top:-7px;margin-right:-10px;width:2px}
@@ -613,21 +755,12 @@ ul#ScheduleMenu li.active a,ul.ctlLineLinks li.active a,ul.homedashlinks li.acti
 
 
 
-/* New Updates Overlay
-----------------------------------*/
-#MessageUpdatePopup .message-element-align{position:fixed;text-align:left;z-index:5000;top:50%;left:50%}
-#MessageUpdatePopup{height:100%;left:0;position:fixed;text-align:center;top:0;width:100%;z-index:10000}
-#MessageUpdatePopup .message{background:#F9F9F9;-moz-box-shadow:-3px 3px 3px rgba(0,0,0,.5);-webkit-box-shadow:0 5px 7px rgba(0,0,0,.5);box-shadow:0 5px 7px rgba(0,0,0,.5);border:1px solid #999;margin:0 auto;text-align:center;z-index:5000;-moz-border-radius:10px;-webkit-border-radius:10px;border-radius:10px;width:590px;margin-left:-315px;position:relative;padding:15px 20px 4px 20px}
-.new-update-holder{text-align:left!important;overflow:auto;border-top:1px solid #DDD;border-bottom:1px solid #DDD}
-
-
-
 /* New Notification Popup
 ----------------------------------*/
 #noti-update-element{display:none}
-.noti-update-element-align{position:fixed;text-align:left;z-index:10000;top:40px;right:10px}
-.noti-update-element-modal{background:#000;background:rgba(0,0,0,0.8);margin:0 auto;text-align:left;z-index:10001;-moz-border-radius:10px;-webkit-border-radius:10px;border-radius:10px}
-.noti-update-element-modal{padding:20px;min-height:55px}
+.noti-update-element-align{position:fixed;text-align:left;z-index:12000;top:40px;right:10px}
+.noti-update-element-modal{background:#000;background:rgba(0,0,0,0.8);margin:0 auto;text-align:left;z-index:12000;-moz-border-radius:10px;-webkit-border-radius:10px;border-radius:10px}
+.noti-update-element-modal{padding:20px;min-height:55px;-moz-box-shadow:-3px 3px 3px rgba(0,0,0,.25);-webkit-box-shadow:0 5px 7px rgba(0, 0, 0, 0.25);box-shadow:0 5px 7px rgba(0, 0, 0, 0.25)}
 .noti-update-element-modal h1,.noti-update-element-modal h2{color:#FFF;padding:5px 5px 5px 25px}
 .noti-update-element-modal h1{font-size:large}
 .noti-update-element-modal h2{font-size: medium}
@@ -663,7 +796,7 @@ ul#ScheduleMenu li.active a,ul.ctlLineLinks li.active a,ul.homedashlinks li.acti
 .workspace-overlays,.workspace-overlays-nobg,.workspace-overlays-custom{position:relative;z-index:0;transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out}
 .workspace-overlays{background:#FFF;text-align:left;border:1px solid #E0E0E0;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px}
 .workspace-overlays-nobg .overlay-header{background:transparent;border-bottom:1px solid transparent;opacity:0.0;filter:alpha(opacity=0);-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
-.workspace-overlays-nobg .overlay-header span,.workspace-overlays-nobg .overlay-header h4{color:#FFF;padding:3px 8px;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px}
+.workspace-overlays-nobg .overlay-header span,.workspace-overlays-nobg .overlay-header h4{color:#FFF!important;padding:3px 8px;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px}
 .workspace-overlays-nobg:hover .overlay-header{opacity:1.0;filter:alpha(opacity=100)}
 .workspace-overlays-custom{border:none;margin:0!important;-moz-border-radius:0!important;-webkit-border-radius:0!important;border-radius:0!important}
 .workspace-overlays-custom .overlay-header{height:auto!important;-moz-border-radius:0!important;-webkit-border-radius:0!important;border-radius:0!important;border-bottom:1px solid transparent!important;background:transparent!important}
@@ -782,7 +915,7 @@ ul.rssFeed p{display:block;clear:both}
 /* Radio Button Switch
 ----------------------------------*/
 .switch-slider{position:absolute;height:28px}
-.cb-enable,.cb-disable{display:block;float:left;font-weight:bold;font-size:11px}
+.cb-enable,.cb-disable{display:block;float:left;font-size:11px}
 .cb-enable label,.cb-disable label{width:45px;line-height:27px;display:block;text-align:center;padding:0 4px;cursor:default!important;margin-top:-3px}
 .cb-enable label{background:#8294B7;color:#fff}
 .cb-disable label{background:#EFEFEF;color:#777}
@@ -840,8 +973,11 @@ ul.rssFeed p{display:block;clear:both}
 .App-Settings-Title-top-bar{background:url(Body/transparent-bgDark.png) repeat;background:rgba(0, 0, 0, .75);padding:7px 15px 0 15px;height:22px;float:right;margin-top:-7px;border-left:1px solid #212222}
 .App-Settings-Title-top-bar .app-title{color:#FFF;font-size:14px}
 .App-Settings-Title-top-bar img{float:left;height:16px;padding-right:5px}
-.app-Settings-title-bg-color-main{height:62px;color:white;overflow:hidden;width:100%;position:relative}
+.app-Settings-title-bg-color-main{height:62px;color:white;overflow:hidden;width:100%;position:relative;z-index:10000}
 .app-Settings-title-bg-color-main .page-title{font-weight:bold;float:left;font-size: 25px;}
+#workspace-opened-paged-app{float:left;margin-top:-10px}
+#workspace-opened-paged-app .workspace-app-title{font-size:18px;float:left}
+#workspace-opened-paged-app .workspace-app-description{font-size:11px;font-weight:normal;float:left}
 .app-Settings-title-bg-color-main .group-logo-holder{float:left;margin-right:20px;padding-right:15px;margin-top:-8px;border-right:1px solid #B7B7B7}
 .group-logo-holder img{max-height:42px}
 #pnl_LoginGroupText{padding:10px 0 5px 15px;clear:both}
@@ -858,10 +994,9 @@ ul.rssFeed p{display:block;clear:both}
 /* Textboxes and Buttons
 ----------------------------------*/
 input[type="text"],input[type="password"],textarea{-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px}
-.input-buttons{border:1px solid lightgrey;text-decoration:none!important;cursor:pointer;text-align:center;padding:4px 9px 5px;color:#5F5F5F;font-weight:bold;font-size:12px;line-height:normal;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;-webkit-box-shadow:inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);-moz-box-shadow:inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);box-shadow:inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);margin-right:16px}
-.input-buttons{background:#efefef;background:-moz-linear-gradient(top,rgba(239,239,239,1) 0,rgba(230,230,230,1) 100%);background:-webkit-gradient(linear,left top,left bottom,color-stop(0,rgba(239,239,239,1)),color-stop(100%,rgba(230,230,230,1)));background:-webkit-linear-gradient(top,rgba(239,239,239,1) 0,rgba(230,230,230,1) 100%);background:-o-linear-gradient(top,rgba(239,239,239,1) 0,rgba(230,230,230,1) 100%);background:-ms-linear-gradient(top,rgba(239,239,239,1) 0,rgba(230,230,230,1) 100%);background:linear-gradient(to bottom,rgba(239,239,239,1) 0,rgba(230,230,230,1) 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#efefef', endColorstr='#e6e6e6', GradientType=0)}
-.input-buttons:hover{background:#DFDFDF;cursor:pointer}
-.input-buttons:active{background:#C5C5C5}
+.input-buttons{color:#333;background:#F8F8F8;border:1px solid #D3D3D3;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;text-decoration:none!important;cursor:pointer;text-align:center;padding:5px 9px;font-size:12px;line-height:normal;margin-right:16px;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
+.input-buttons:hover{background:#EFEFEF;cursor:pointer}
+.input-buttons:active{background:#E0E0E0}
 input.textEntry{background:#FFF;border:1px solid #DFDFDF;border-right:1px solid #CCC;border-bottom:1px solid #CCC;box-sizing:border-box;color:#8e8e8e;font-style:normal;padding:4px 7px;width:250px}
 input.textEntry-noWidth{background:#FFF;border:1px solid #DFDFDF;border-right:1px solid #CCC;border-bottom:1px solid #CCC;box-sizing:border-box;color:#8e8e8e;font-style:normal;padding:4px 7px}
 input.TextBoxEdit{border:1px solid #CCC!important;color:#8e8e8e;font-style:normal;margin:2px 0;padding:4px 7px}
@@ -912,10 +1047,9 @@ input.signintextbox{width:225px;padding:4px 10px;border:1px solid #CCC;backgroun
 .top-options li.a.active{background-color:#F0F0F0;opacity:1.0;filter:alpha(opacity=100)}
 .top-options li.a.active .username-top-info,.top-options li.a.active .signin-text,.top-options li.a.active .notifications-none{color:#3d3d3d}
 #user_profile_tab .a{opacity:1.0;filter:alpha(opacity=100);padding-top:10px;height:24px}
-#profile_tab_Buttons{text-align:center;padding:0 3px;margin-top:2px;display:block;background:#ffffff}
-#profile_tab_Buttons a{display:inline-block;line-height:36px;padding:0 8px;color:#666;text-decoration:none;transition:all .1s ease-in-out;-moz-transition:all .1s ease-in-out;-webkit-transition:all .1s ease-in-out}
-#profile_tab_Buttons a:hover{text-decoration:underline}
-#profile_tab_Buttons span{margin-top:8px;float:left;margin-right:7px}
+#profile_tab_Buttons{min-height:35px;padding:0 3px;margin-top:10px;display:block;background:#ffffff url(Body/transparent-hr.png) top center no-repeat}
+#profile_tab_Buttons a{font-size:12px;text-align:center;display:inline-block;min-width:70px;padding:5px 9px;margin-top:15px;margin-bottom:10px;color:#333;background:#F8F8F8;border:1px solid #D3D3D3;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;text-decoration:none;transition:all .1s ease-in-out;-moz-transition:all .1s ease-in-out;-webkit-transition:all .1s ease-in-out}
+#profile_tab_Buttons a:hover{background:#EFEFEF}
 .top-options .li-header{background:#F0F0F0;width:100%;border-size:border-box;-mox-box-sizing:border-box;padding:10px 10px 5px 10px;position:relative;font-size:12px;font-weight:bold;color:#777}
 .top-options .li-header a{font-weight:normal}
 .li-pnl-tab{overflow:auto}
@@ -960,188 +1094,53 @@ input.signintextbox{width:225px;padding:4px 10px;border:1px solid #CCC;backgroun
 
 
 
+/* Twitter Station
+----------------------------------*/
+#twitterstation-posts{padding-bottom:20px;background:#FFF}
+.twitter-header{padding:10px;min-height:34px;-moz-box-shadow:0 2px 4px rgba(0, 0, 0, .2);-o-box-shadow:0 2px 4px rgba(0, 0, 0, .2);-webkit-box-shadow:0 2px 4px rgba(0, 0, 0, .2);box-shadow:0 2px 4px rgba(0, 0, 0, .2);border-bottom:1px solid #E5E5E5;border-top:1px solid #CCC;background:#EFEFEF}
+.twitter-header img{max-width:34px;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px}
+.twitter-header h3{font-size:18px;padding-right:10px}
+.twitter-header h4{font-size:12px;padding-right:10px}
+.twitter-feed-list{padding:5px}
+.twitter-feed-list ul{width:100%;list-style:none;padding:0;margin:0}
+.twitter-feed-list li{float:left;padding:5px;margin-right:10px;margin-bottom:10px;width:250px;min-height:125px}
+.twitter-feed-list img{float:left;margin-right:5px;max-width:30px;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px}
+.twitter-feed-list .twitter-date{font-size:10px;clear:both;padding-top:3px;color:#555}
+
+
+
 /* User Color Holder
 ----------------------------------*/
 .sch_ColorCode{height:10px;margin-right:5px;position:relative;top:1px;width:10px}
 .sch_ColorCode_chat{color:transparent;float:left;margin-right:5px;margin-top:-5px;height:32px;width:10px}
-.chat-acctImage{float:left;height:36px;margin-left:-5px;margin-right:5px;margin-top:-6px;}
+.chat-acctImage{float:left;height:32px;margin-top:-5px;}
 
 
 
-/* App Loader File Popup
+/* Workspace Selector
 ----------------------------------*/
-#loaderApp-element{display:none}
-.loaderApp-element-modal{background:#F9F9F9;padding:12px 20px;border:1px solid #B7B7B7;border-right:1px solid #CCC;margin:0 auto;z-index:8000;-moz-border-radius:15px;-webkit-border-radius:15px;border-radius:15px;min-width:300px;-moz-box-shadow:0 5px 10px rgba(0,0,0,.4);-webkit-box-shadow:0 5px 10px rgba(0, 0, 0, 0.4);box-shadow:0 5px 10px rgba(0, 0, 0, 0.4)}
-.loaderApp-element-align{position:fixed;text-align:left;z-index:5000;top:50%;left:50%}
-.loaderApp-overlay,.loaderApp-overlay-New,.AppOverlay-overlay{display:none;height:100%;left:0;position:fixed;text-align:center;top:0;width:100%;z-index:10000}
+#workspace-selector{height:34px;overflow:hidden;float:left}
+#workspace-selector #lnk_BackToWorkspace{color:#FFF;text-decoration:none!important;padding:10px 15px 0 20px;height:24px;float:left;background-image:url(Icons/back.png);background-position:left center;background-repeat:no-repeat}
+#workspace-selector #lnk_BackToWorkspace:hover{text-decoration:underline!important}
+#ddl_WorkspaceSelector{float:left;cursor:pointer;padding:10px 14px 3px 10px;margin-right:10px;height:21px;transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out}
+#ddl_WorkspaceSelector.active{background:#F0F0F0}
+#ddl_WorkspaceSelector.active .selected-workspace{color:#3D3D3D}
+#ddl_WorkspaceSelector .li-header{cursor:default;background:#F0F0F0;border-size:border-box;-mox-box-sizing:border-box;padding:10px 10px 5px 10px;position:relative;font-size:12px;font-weight:bold;color:#777}
+#ddl_WorkspaceSelector .selected-workspace{cursor:pointer;color:#FFF;padding-left:22px;background:url('Icons/workspace.png') no-repeat left center}
+#ddl_WorkspaceSelector:hover .selected-workspace{text-decoration:underline!important}
+#ddl_WorkspaceSelector .dropdown-db-selector{display:none;position:absolute;left:0;background-color:#FFF;border-right:1px solid #CCC;border-bottom:1px solid #CCC;-moz-border-radius:2px;border-radius:2px;-webkit-border-radius:2px;-moz-border-top-right-radius:0px!important;border-top-right-radius:0px!important;-webkit-border-top-right-radius:0px!important}
+#ddl_WorkspaceSelector ul{list-style:none;max-height:300px;overflow:auto}
+#ddl_WorkspaceSelector .workspace-selection-item{cursor:pointer;background:#FFF;padding:10px;text-align:center;transition:all .1s ease-in-out;-moz-transition:all .1s ease-in-out;-webkit-transition:all .1s ease-in-out}
+#ddl_WorkspaceSelector .workspace-selection-item:hover{background:#EFEFEF}
 
 
 
-/* App Container
+/* workspace Background Overlay
 ----------------------------------*/
-.main-div-app-bg{background:#FFF;overflow:auto;position:absolute;right:0;left:0;top:0;bottom:0;z-index:0}
-.content-table{display:block;min-width:1080px}
-.td-sidebar,.td-content,.td-chatinfo,.td-content-inner{vertical-align:top}
-.td-content{min-width:100%;width:100%}
-.td-sidebar{width:260px;position:relative}
-.td-sidebar-bg-color{background:#E0E0E0}
-.sidebar-nobg{width:277px;position:absolute;top:0;bottom:0}
-.sidebar-divider-no-margin{margin-bottom:5px;height:0;width:97%;border-top:1px solid #DDD;position:relative}
-.sidebar-divider{padding:0 0 5px 0;margin:0 10px 5px 10px;border-top:1px solid #DDD;position:relative}
-.sidebar-padding{position:relative;overflow:auto;padding:15px 20px 15px 20px}
-.sidebar-items-fixed{padding-left:10px}
-.content-main{overflow:hidden}
-.content-overflow-app{padding:0 0 25px 0;overflow:auto}
-.iFrameBackground{-moz-box-shadow:inset 0 0 5px 5px #555656;-webkit-box-shadow:inset 0 0 5px 5px #555656;box-shadow:inset 0 0 5px 5px #555656}
-
-
-
-/* App Minimize Bar
-----------------------------------*/
-.app-min-bar,.app-min-bar-alt{padding:9px 8px 1px 12px;margin-right:5px;background-color:#474747;height:24px;border-left:1px solid #353535;border-right:1px solid #353535;cursor:pointer;text-align:center;float:left;-moz-border-radius:20px;-webkit-border-radius:20px;border-radius:20px;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
-.app-min-bar .app-title,.app-min-bar-alt .app-title{color:#FFF;padding-left:5px;float:left;margin-top:1px}
-.app-min-bar:hover .app-title,.app-min-bar-alt:hover .app-title{color:#FFF;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
-.app-min-bar:hover img,.app-min-bar-alt:hover img{opacity:1.0;filter:alpha(opacity=100)}
-.app-min-bar:hover,.app-min-bar-alt:hover{background-color:#404040}
-.app-min-bar:active,.app-min-bar-alt:active{background-color:#1C1C1C}
-.app-min-bar img,.app-min-bar-alt img{float:left;padding-right:5px}
-.app-min-bar img{height:20px;margin-top:-2px}
-.app-min-bar-alt img{height:16px;margin-top:0px}
-.app-min-bar.hover-over .app-title,.app-min-bar-alt.hover-over .app-title{color:#FFF}
-.app-min-bar-preview{opacity:0.0;filter:alpha(opacity=0);z-index:7000!important;visibility:visible!important}
-#minimized-app-bar{height:34px;float:left}
-a.app-min-bar-alt{outline:none!important;text-decoration:none!important}
-
-
-
-/* App Installer
-----------------------------------*/
-.app-panel-description{margin-left:70px;margin-right:25px}
-.plugin-panel-description{margin-left:25px;margin-right:25px}
-.app-panel-description,.plugin-panel-description{border-left:1px solid #CCC;border-bottom:1px solid #CCC}
-.app-panel-description h4,.plugin-panel-description h4{font-size:13px}
-.app-icon-installer{cursor:pointer;min-width:200px;font-size:1.0em;text-align:left;float:left;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
-.app-icon-installer input{float:left;margin-right:10px;margin-top:25px}
-.app-icon-installer span{color:#555656;display:block;font-weight:bold}
-.app-icon-installer img{border:0 solid transparent;height:40px;padding-right:10px;float:left}
-.app-icon-installer:hover{background:#DDD}
-.app-icon-installer:active{background:#b7b7b7}
-
-
-
-/* App Holder
-----------------------------------*/
-.app-main,.app-main-nobg{min-width:100px;min-height:100px;z-index:3000;position:absolute!important}
-.app-main-external{bottom:0}
-.app-main{background:#EDEDED;border:1px solid #B7B7B7;border-top:1px solid #DDD;border-right:1px solid #CCC;overflow:hidden;-moz-border-top-right-radius:5px;-webkit-border-top-right-radius:5px;border-top-right-radius:5px;-moz-border-top-left-radius:5px;-webkit-border-top-left-radius:5px;border-top-left-radius:5px}
-.app-head{background:#EDEDED;cursor:move;padding:7px 7px 7px 10px;height:15px;display:block;border-bottom:1px solid #CCC}
-.app-main-nobg .app-head{margin-right:0px!important;margin-left:0px!important;visibility:hidden;opacity:.0;filter:alpha(opacity=0);-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
-.app-main-nobg:hover .app-head,.app-main-nobg .app-head:hover{visibility:visible;opacity:1.0;filter:alpha(opacity=100)}
-.app-main-nobg .app-head-button-holder{visibility:hidden;opacity:0.0;filter:alpha(opacity=0)}
-.app-main-nobg:hover .app-head-button-holder,.app-main-nobg .app-head-button-holder:hover{visibility:visible;opacity:1.0;filter:alpha(opacity=100)}
-.app-main.selected{background:#FFF;-moz-box-shadow:0 5px 10px rgba(0,0,0,.4);-o-box-shadow:0 5px 10px rgba(0,0,0,.4);-webkit-box-shadow:0 5px 10px rgba(0,0,0,.4);box-shadow:0 5px 10px rgba(0,0,0,.4)}
-.app-main.selected .app-head{background:#EDEDED url(Body/app-header.png) repeat-x top}
-.app-main-nobg.selected .app-head,.app-main-nobg.selected .app-head-button-holder{visibility:visible;opacity:1.0;filter:alpha(opacity=100)}
-.app-main-nobg #minimize-controls{display:none}
-.app-main-nobg.selected #minimize-controls,.app-main-nobg:hover #minimize-controls{display:block}
-.iFrame-apps{overflow:auto}
-.title-page{color:#000;font-weight:bold;text-decoration:underline;letter-spacing:.1em;padding:5px 5px 15px 5px}
-.app-title-bg-color{color:#555;background:#ECECEC;border-bottom:1px solid #DDD}
-.app-updating-message{display:none;width:200px;text-align:center;margin-top:20px;padding:15px;font-weight:bold;background-color:#000!important;-moz-border-radius:10px;-webkit-border-radius:10px;border-radius:10px;opacity:.9;filter:alpha(opacity=90);color:#fff}
-.loading-background-holder{background:#FFF url(Body/loading_3.gif) no-repeat center center;position:absolute;right:0px;left:0px;top:0;bottom:0px;z-index:1}
-.app-overlay-fix{background-color:transparent;position:absolute;right:2px;left:2px;top:0;bottom:2px;z-index:2000}
-.app-head .app-title{color:#5F5F5F;font-weight:bold;padding-left:5px;float:left;margin-top:1px}
-.app-body{cursor:default;padding:0;position:relative;width:100%}
-.app-maximized,.auto-full-page{width:auto!important;height:auto!important;border:1px solid #E5E5E5!important;left:0!important;right:0!important;top:0!important;bottom:0!important;-moz-border-radius:0px!important;-webkit-border-radius:0px!important;border-radius:0px!important;-moz-box-shadow:none!important;-o-box-shadow:none!important;-webkit-box-shadow:none!important;box-shadow:none!important}
-.app-head img{float:left;height:20px;padding-right:5px;margin-top:-2px}
-.app-main-nobg .app-head{-moz-border-radius:7px;-webkit-border-radius:7px;border-radius:7px}
-
-
-
-/* App Buttons
-----------------------------------*/
-.app-head-button-holder{cursor:default;float:right;height:29px;margin-left:5px;margin-right:5px;padding-top:1px}
-.exit-button-app-min{height:12px;width:15px;background:url(App/headerbar-btns.png) no-repeat -109px 0;overflow:hidden;float:right;margin-top:3px}
-.exit-button-app,.minimize-button-app,.maximize-button-app,.options-button-app{float:right;margin-right:1px;margin-top:8px;height:12px;width:22px;overflow:hidden}
-.exit-button-app{background:url(App/headerbar-btns.png) no-repeat -44px 0}
-.minimize-button-app{background:url(App/headerbar-btns.png) no-repeat -86px 0}
-.maximize-button-app{background:url(App/headerbar-btns.png) no-repeat -2px 0}
-.maximize-button-app.active{background:url(App/headerbar-btns.png) no-repeat -25px 0}
-.exit-button-app-min:hover{background:url(App/headerbar-btns.png) no-repeat -109px -13px}
-.exit-button-app:hover{background:url(App/headerbar-btns.png) no-repeat -44px -13px}
-.minimize-button-app:hover{background:url(App/headerbar-btns.png) no-repeat -86px -13px}
-.maximize-button-app:hover{background:url(App/headerbar-btns.png) no-repeat -2px -13px}
-.maximize-button-app.active:hover{background:url(App/headerbar-btns.png) no-repeat -25px -13px}
-.exit-button-app:hover,.minimize-button-app:hover,.close-button-app-min:hover,.maximize-button-app:hover,.backHistory-button-app:hover,.forwardHistory-button-app:hover,.exit-button-app-min:hover{outline:0}
-.exit-button-app:active,.minimize-button-app:active,.close-button-app-min:active,.maximize-button-app:active,.backHistory-button-app:active,.forwardHistory-button-app:active,.exit-button-app-min:active{outline:0}
-.close-button-dd{position:absolute;right:15px;top:12px;height:15px;width:15px;background:url(App/headerbar-btns.png) no-repeat -47px 2px;overflow:hidden}
-.close-button-dd:hover{background:url(App/headerbar-btns.png) no-repeat -47px -11px}
-
-
-
-/* App Icons
-----------------------------------*/
-.app-icon,.app-icon-category-list,.app-icon-admin{padding:0px 7px 6px 8px;margin-bottom:2px;cursor:pointer;clear:both;text-align:left;-webkit-transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;transition:all .2s ease-in-out;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px}
-.app-icon-admin{cursor:default!important}
-.app-icon{position:relative}
-.app-icon-admin span{display:block;padding-top:0;height:22px}
-.app-icon .app-icon-font,.app-icon-category-list .app-icon-font,.app-icon-admin .app-icon-font{color:#555656;display:block;padding-top:7px}
-.app-icon.active,.app-icon:hover,.app-icon-category-list:hover{background-color:#E5E5E5}
-.app-icon img{border:0 solid transparent;height:18px;padding-right:5px;padding-top:5px;float:left}
-.app-icon-admin img{border:0 solid transparent;padding-bottom:2px;float:left}
-.app-icon-admin .img-collapse-sml,.app-icon-admin .img-expand-sml{margin-top:-4px;margin-right:6px}
-.app-icon-category-list img{float:right;height:12px;margin-top:-14px;padding-right:5px}
-.app-icon:active,.app-icon-category-list:active{background-color:#DDD;outline:0}
-#Category-Back,#Category-Back-ChatRemote-Close,#Category-Back-options,#Category-Back-moveresize{cursor:pointer;margin-bottom:2px;padding:8px 14px 4px 5px;height:16px;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px}
-#Category-Back img,#Category-Back-ChatRemote-Close img,#Category-Back-options img,#Category-Back-moveresize img{height:12px;float:left;padding-right:7px;padding-top:1px}
-#Category-Back:hover,#Category-Back-ChatRemote-Close:hover,#Category-Back-options:hover,#Category-Back-moveresize:hover{background-color:#E5E5E5}
-#Category-Back:active,#Category-Back-ChatRemote-Close:active,#Category-Back-options:active,#Category-Back-moveresize:active{background-color:#DDD;outline:0}
-#Category-Back h4,#Category-Back-ChatRemote-Close h4,#Category-Back-options h4,#Category-Back-moveresize h4{font-style:normal}
-.workspace-reminder{position:absolute;top:0;right:0;color:#777;font-size:12px;height:21px;padding:7px 5px 0 4px}
-.app-category-div{margin-bottom:2px}
-
-
-
-/* App Icons - Admin Links
-----------------------------------*/
-.app-icon-links,.app-icon-sub-links{padding:1px 7px 1px 10px;cursor:pointer;clear:both;text-align:left}
-.app-icon-links,.app-icon-sub-links{height:26px}
-.app-icon-links,.app-icon-sub-links{position:relative}
-.app-icon-links .app-icon-font,.app-icon-sub-links .app-icon-font{color:#555656;display:block;padding-top:7px}
-.app-icon-links img,.app-icon-sub-links img{float:left;padding-right:5px;padding-top:5px;height:16px}
-.app-icon-links.active,.app-icon-links:hover,.app-icon-sub-links.active,.app-icon-sub-links:hover{background-color:#E5E5E5}
-.app-icon-links:active,.app-icon-sub-links:active{background-color:#DDD;outline:0}
-.app-icon-links .img-expand-sml,.app-icon-links .img-collapse-sml{float:right;padding:10px 8px;margin-top:-10px;margin-right:-2px}
-
-
-
-/* App Dropdown Options
-----------------------------------*/
-.options-button-app{background:url(App/headerbar-btns.png) no-repeat -65px 0;position:relative;z-index:1}
-.options-button-app:hover,.options-button-app.active{background:url(App/headerbar-btns.png) no-repeat -65px -13px}
-.app-popup-inner-app{display:none;position:absolute;z-index:1000;text-align:center;padding:3px 8px;right:10px;background:#F9F9F9;top:35px;border:1px solid #CCC;-webkit-box-shadow:1px 5px 10px 0px rgba(56,56,56,0.35);-moz-box-shadow:1px 5px 10px 0px rgba(56,56,56,0.35);box-shadow:1px 5px 10px 0px rgba(56,56,56,0.35);-moz-border-radius:7px;-webkit-border-radius:7px;border-radius:7px;color:#777}
-.app-main.selected .app-popup-inner-app,.app-main-nobg.selected .app-popup-inner-app{z-index:7000}
-.app-popup-inner-app ul{list-style:none}
-.app-popup-inner-app li{cursor:pointer;padding:8px 2px 2px 2px;margin-bottom:1px}
-.app-popup-inner-app li:hover{text-decoration:underline}
-.app-popup-inner-app b{padding:0 7px}
-.about-app,.reload-button-app,.popout-button-app,.backHistory-button-app,.forwardHistory-button-app,.stats-app{width:16px;height:16px;float:left;background-repeat:no-repeat}
-.about-app,.reload-button-app,.popout-button-app,.backHistory-button-app,.forwardHistory-button-app,.stats-app{margin-right:5px;margin-top:-2px}
-.about-app{background:url(App/headerbar-btns.png) no-repeat -230px -4px}
-.stats-app{background:url(App/headerbar-btns.png) no-repeat -209px -4px}
-.reload-button-app{background:url(App/headerbar-btns.png) no-repeat -165px -4px}
-.popout-button-app{background:url(App/headerbar-btns.png) no-repeat -187px -4px}
-.backHistory-button-app{background:url(App/headerbar-btns.png) no-repeat -130px -4px}
-.forwardHistory-button-app{background:url(App/headerbar-btns.png) no-repeat -153px -4px}
-
-
-
-/* App Icon Options
-----------------------------------*/
-.app-options{float:right;margin-right:-7px;margin-top:0px;width:16px;height:28px;background:#D5D5D5;visibility:hidden}
-.app-options:hover{background:#C5C5C5!important}
-.app-options:active{background:#B5B5B5!important}
-.app-popup{background:#F5F5F5;position:relative;margin-left:-220px;height:26px;padding-top:2px;display:none;z-index:3000;text-align:center}
+.image-selector{cursor:pointer;border:2px solid transparent;-moz-border-radius:10px;-webkit-border-radius:10px;border-radius:10px}
+.image-selector:hover{border:2px solid #CCC;transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out}
+.image-selector-active{border:2px solid #777;border-bottom:2px solid #555656!important}
+.image-selector-current{margin-top:5px;border:2px solid #DDD;border:2px solid transparent;-moz-border-radius:10px;-webkit-border-radius:10px;border-radius:10px}
 
 
 

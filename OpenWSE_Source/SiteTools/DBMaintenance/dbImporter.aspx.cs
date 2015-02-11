@@ -22,6 +22,7 @@ using System.Data.Odbc;
 using System.Data.OleDb;
 using System.Text.RegularExpressions;
 using System.Data.SqlClient;
+using OpenWSE_Tools.GroupOrganizer;
 
 #endregion
 
@@ -62,12 +63,15 @@ public partial class SiteTools_dbImporter : Page {
                     lbtn_uselocaldatasource.Enabled = false;
                 }
 
+                BuildChartTypeList();
+
                 var db = new DBImporter();
                 db.BinaryDeserialize();
                 _coll = db.DBColl;
                 GetConnections();
 
                 if (!IsPostBack) {
+                    BuildUsersAllowedToEdit();
                     rb_adv_disabled.Checked = true;
                     rb_adv_enabled.Checked = false;
                     pnl_lbl.Visible = false;
@@ -80,6 +84,72 @@ public partial class SiteTools_dbImporter : Page {
             else {
                 Page.Response.Redirect("~/ErrorPages/Blocked.html");
             }
+        }
+    }
+
+    private void BuildUsersAllowedToEdit() {
+        pnl_usersAllowedToEdit.Controls.Clear();
+
+        StringBuilder str = new StringBuilder();
+        List<string> groupList = _member.GroupList;
+        string checkboxInput = "<div class='checkbox-new-click float-left pad-right-big pad-bottom-big' style='min-width: 150px;'><input type='checkbox' class='checkbox-usersallowed float-left margin-right-sml' {0} value='{1}' style='margin-top: {2};' />&nbsp;{3}</div>";
+        Groups groups = new Groups(HttpContext.Current.User.Identity.Name);
+
+        foreach (string group in groupList) {
+            List<string> users = groups.GetMembers_of_Group(group);
+            string groupImg = groups.GetGroupImg_byID(group);
+
+            if (groupImg.StartsWith("~/")) {
+                groupImg = ResolveUrl(groupImg);
+            }
+
+            string groupImgHtmlCtrl = "<img alt='' src='" + groupImg + "' class='float-left margin-right' style='max-height: 24px;' />";
+            str.Append("<h3 class='pad-bottom'>" + groupImgHtmlCtrl + groups.GetGroupName_byID(group) + "</h3><div class='clear-space'></div><div class='clear-space'></div>");
+            foreach (string user in users) {
+                string isChecked = string.Empty;
+                if (user.ToLower() == HttpContext.Current.User.Identity.Name.ToLower()) {
+                    isChecked = "checked='checked'";
+                    hf_usersAllowedToEdit.Value += user.ToLower() + ServerSettings.StringDelimiter;
+                }
+                MemberDatabase tempMember = new MemberDatabase(user);
+
+                string un = HelperMethods.MergeFMLNames(tempMember);
+                if ((user.Length > 15) && (!string.IsNullOrEmpty(tempMember.LastName)))
+                    un = tempMember.FirstName + " " + tempMember.LastName[0].ToString() + ".";
+
+                if (un.ToLower() == "n/a")
+                    un = user;
+
+                string marginTop = "3px";
+                string userNameTitle = "<h4>" + un + "</h4>";
+                string acctImage = tempMember.AccountImage;
+                if (!string.IsNullOrEmpty(acctImage)) {
+                    userNameTitle = "<h4 class='float-left pad-top pad-left-sml'>" + un + "</h4>";
+                    marginTop = "8px";
+                }
+
+                string userImageAndName = UserImageColorCreator.CreateImgColor(acctImage, tempMember.UserColor, tempMember.UserId, 30);
+                str.AppendFormat(checkboxInput, isChecked, user, marginTop, userImageAndName + userNameTitle);
+            }
+            str.Append("<div class='clear-space'></div><div class='clear-space'></div><div class='clear-space'></div>");
+        }
+
+        if (string.IsNullOrEmpty(str.ToString())) {
+            str.Append("<h4 class='pad-all'>There are no usrs to select from</h4>");
+        }
+
+        pnl_usersAllowedToEdit.Controls.Add(new LiteralControl(str.ToString()));
+    }
+
+    private void BuildChartTypeList() {
+        ddl_ChartType.Items.Clear();
+        Array chartTypes = Enum.GetValues(typeof(ChartType));
+        foreach (ChartType type in chartTypes) {
+            if (type == ChartType.None) {
+                continue;
+            }
+
+            ddl_ChartType.Items.Add(new ListItem(type.ToString(), type.ToString()));
         }
     }
 
@@ -617,10 +687,17 @@ public partial class SiteTools_dbImporter : Page {
                     else if ((tb_selectcomm.Text.ToLower().Substring(0, 6) == "select") &&
                              (!tb_selectcomm.Text.ToLower().Contains("aspnet_"))) {
                         string randomId = HelperMethods.RandomString(10);
+
+                        string chartTitle = tb_chartTitle.Text.Trim();
+                        if (string.IsNullOrEmpty(chartTitle)) {
+                            chartTitle = tb_Databasename.Text.Trim();
+                        }
+
                         var coll = new DBImporter_Coll(randomId, DateTime.Now.ToString(CultureInfo.InvariantCulture),
                                                        tb_Databasename.Text.Trim(), GetCorrectConnectionString()[0],
                                                        tb_selectcomm.Text.Trim(), GetCorrectConnectionString()[1],
-                                                       HttpContext.Current.User.Identity.Name, cb_AllowEditAdd.Checked.ToString());
+                                                       HttpContext.Current.User.Identity.Name, cb_AllowEditAdd.Checked.ToString(),
+                                                       ddl_ChartType.SelectedValue, chartTitle, hf_usersAllowedToEdit.Value, cb_allowNotifi.Checked.ToString());
                         if (!_coll.Contains(coll)) {
                             _coll.Add(coll);
                             var db = new DBImporter();
@@ -746,10 +823,17 @@ public partial class SiteTools_dbImporter : Page {
 
                     string command = "SELECT " + tbDdselect + " FROM " + dd_ddtables.SelectedValue + conditional +
                                      "ORDER BY " + dd_orderby.SelectedValue + " " + dd_orderdirection.SelectedValue;
+
+                    string chartTitle = tb_chartTitle.Text.Trim();
+                    if (string.IsNullOrEmpty(chartTitle)) {
+                        chartTitle = tb_Databasename.Text.Trim();
+                    }
+
                     var coll = new DBImporter_Coll(randomId, DateTime.Now.ToString(CultureInfo.InvariantCulture),
                                                    tb_Databasename.Text.Trim(),
                                                    GetCorrectConnectionString()[0], command, GetCorrectConnectionString()[1],
-                                                   HttpContext.Current.User.Identity.Name, cb_AllowEditAdd.Checked.ToString());
+                                                   HttpContext.Current.User.Identity.Name, cb_AllowEditAdd.Checked.ToString(),
+                                                   ddl_ChartType.SelectedValue, chartTitle, hf_usersAllowedToEdit.Value, cb_allowNotifi.Checked.ToString());
                     if (!_coll.Contains(coll)) {
                         _coll.Add(coll);
                         var db = new DBImporter();
@@ -1375,12 +1459,31 @@ public partial class SiteTools_dbImporter : Page {
 
         var id = (HiddenField)GV_Imports.Rows[e.NewEditIndex].FindControl("hf_editID");
         var AllowEditAdd = (CheckBox)GV_Imports.Rows[e.NewEditIndex].FindControl("cb_AllowEditAdd_edit");
-        if ((id != null) && (AllowEditAdd != null)) {
+        var NotifyUsers = (CheckBox)GV_Imports.Rows[e.NewEditIndex].FindControl("cb_NotifyUsers_Edit");
+        var ddl_chartType_edit = (DropDownList)GV_Imports.Rows[e.NewEditIndex].FindControl("ddl_chartType_edit");
+        if ((id != null) && (AllowEditAdd != null) && (ddl_chartType_edit != null)) {
             var db = new DBImporter();
             db.BinaryDeserialize();
             foreach (DBImporter_Coll coll in db.DBColl) {
                 if (coll.ID == id.Value) {
                     AllowEditAdd.Checked = coll.AllowEdit;
+                    NotifyUsers.Checked = coll.NotifyUsers;
+
+                    ddl_chartType_edit.Items.Clear();
+                    Array chartTypes = Enum.GetValues(typeof(ChartType));
+
+                    int count = 0;
+                    int selectedIndex = 0;
+                    foreach (ChartType type in chartTypes) {
+                        ddl_chartType_edit.Items.Add(new ListItem(type.ToString(), type.ToString()));
+                        if (coll.Chart_Type == type) {
+                            selectedIndex = count;
+                        }
+
+                        count++;
+                    }
+
+                    ddl_chartType_edit.SelectedIndex = selectedIndex;
                     break;
                 }
             }
@@ -1392,6 +1495,9 @@ public partial class SiteTools_dbImporter : Page {
         var name = (TextBox)GV_Imports.Rows[e.RowIndex].FindControl("tb_editName");
         var command = (TextBox)GV_Imports.Rows[e.RowIndex].FindControl("tb_editCommand");
         var AllowEditAdd = (CheckBox)GV_Imports.Rows[e.RowIndex].FindControl("cb_AllowEditAdd_edit");
+        var NotifyUsers = (CheckBox)GV_Imports.Rows[e.RowIndex].FindControl("cb_NotifyUsers_Edit");
+        var ddl_chartType_edit = (DropDownList)GV_Imports.Rows[e.RowIndex].FindControl("ddl_chartType_edit");
+        var tb_chartTitle_edit = (TextBox)GV_Imports.Rows[e.RowIndex].FindControl("tb_chartTitle_edit");
         var db = new DBImporter();
 
         if ((command.Text.ToLower().Contains("delete ")) ||
@@ -1416,7 +1522,19 @@ public partial class SiteTools_dbImporter : Page {
             lbl_error2.Enabled = false;
             lbl_error2.Visible = false;
             lbl_error2.Text = "";
-            db.UpdateEntry(id.Value, name.Text.Trim(), command.Text.Trim(), AllowEditAdd.Checked);
+
+            string chartTitle = tb_chartTitle_edit.Text.Trim();
+            if (string.IsNullOrEmpty(chartTitle)) {
+                chartTitle = name.Text.Trim();
+            }
+
+            ChartType chartType = ChartType.None;
+            try {
+                chartType = (ChartType)Enum.Parse(typeof(ChartType), ddl_chartType_edit.SelectedValue);
+            }
+            catch { }
+
+            db.UpdateEntry(id.Value, name.Text.Trim(), command.Text.Trim(), AllowEditAdd.Checked, chartType, chartTitle, NotifyUsers.Checked);
 
             App _app = new App();
             _app.UpdateAppName("app-" + id.Value, name.Text.Trim());
@@ -1517,9 +1635,12 @@ public partial class SiteTools_dbImporter : Page {
         dtlist.Columns.Add(new DataColumn("dateLong"));
         dtlist.Columns.Add(new DataColumn("date"));
         dtlist.Columns.Add(new DataColumn("tablename"));
+        dtlist.Columns.Add(new DataColumn("chartType"));
+        dtlist.Columns.Add(new DataColumn("chartTitle"));
         dtlist.Columns.Add(new DataColumn("connstring"));
         dtlist.Columns.Add(new DataColumn("selectcomm"));
         dtlist.Columns.Add(new DataColumn("provider"));
+        dtlist.Columns.Add(new DataColumn("notify"));
         dtlist.Columns.Add(new DataColumn("importedby"));
         dtlist.Columns.Add(new DataColumn("importedby_username"));
         dtlist.Columns.Add(new DataColumn("ID"));
@@ -1546,6 +1667,10 @@ public partial class SiteTools_dbImporter : Page {
             drlist["dateLong"] = Convert.ToDateTime(row.Date).Ticks;
             drlist["date"] = row.Date;
             drlist["tablename"] = row.TableName;
+
+            drlist["chartType"] = row.Chart_Type.ToString();
+            drlist["chartTitle"] = row.ChartTitle;
+
             string datasource = row.ConnString;
             try {
                 DbProviderFactory factory = DbProviderFactories.GetFactory(row.Provider);
@@ -1561,6 +1686,13 @@ public partial class SiteTools_dbImporter : Page {
             if (datasource != null) drlist["connstring"] = datasource.Trim();
             drlist["selectcomm"] = row.SelectCommand;
             drlist["provider"] = row.Provider;
+
+            string _checked = string.Empty;
+            if (row.NotifyUsers) {
+                _checked = "checked='checked'";
+            }
+
+            drlist["notify"] = "<input type='checkbox' disabled='disabled' " + _checked + " />";
             drlist["importedby"] = HelperMethods.MergeFMLNames(member);
             drlist["importedby_username"] = member.Username;
             drlist["ID"] = row.ID;
@@ -1602,4 +1734,5 @@ public partial class SiteTools_dbImporter : Page {
     }
 
     #endregion
+
 }

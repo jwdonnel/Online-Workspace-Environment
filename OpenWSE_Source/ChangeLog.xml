@@ -1,6 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Items>
-    <version>ver. 4.2.2</version>
+    <version>ver. 4.2.5</version>
+    <log name="2/10/2015">
+        Added auto fix feature to the database. If database is every out of date, it can be udpated automatically by anyone.<br />
+        Apps can now be placed into multiple categories.
+    </log>
+    <log name="1/26/2015">
+        Custom Tables and Database Imports now have an alert system to notify users upon a change (Add, Edit, Delete).<br />
+        Site Monitor overlay and app have been removed.<br />
+        Custom Tables and Database Imports can now display the information in Google Charts.<br />
+        Removed settings Allow Stats and Display Nav for all apps. (No longer used)
+    </log>
+    <log name="1/19/2015">
+        Removed AjaxToolKit from source.<br />
+        Bug fixes to the Open Links in new Page feature.<br />
+        Twitter Station is now a user control based app.<br />
+        Added new setting to save a physical log file to the Logging folder.
+    </log>
     <log name="1/8/2015">
         Fixes to the openWSE, appRemote, and UserList javascript files.<br />
         Code base updated from .Net 4.0 to 4.5.

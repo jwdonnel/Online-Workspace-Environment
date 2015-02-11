@@ -1,7 +1,6 @@
 ﻿<%@ Page Title="Network Log" Async="true" Language="C#" MasterPageFile="~/Site.master"
     AutoEventWireup="true" CodeFile="NetworkLog.aspx.cs" Inherits="SiteTools_NetworkLog" %>
 
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <asp:Content ID="HeaderContent" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
         .averagerequests
@@ -616,7 +615,6 @@
                 </div>
             </ContentTemplate>
         </asp:UpdatePanel>
-        <script type="text/javascript" src="//www.google.com/jsapi"></script>
         <script type="text/javascript" src='<%=ResolveUrl("~/Scripts/SiteTools/networklog.js")%>'></script>
     </div>
 </asp:Content>

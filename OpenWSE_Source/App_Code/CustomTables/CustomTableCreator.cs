@@ -11,6 +11,7 @@ using System.Data;
 using System.Text;
 using System.IO;
 using System.Data.SqlServerCe;
+using OpenWSE_Tools.GroupOrganizer;
 
 /// <summary>
 /// Summary description for CustomTableCreator
@@ -36,7 +37,39 @@ public class CustomTableCreator : System.Web.Services.WebService {
     }
 
     [WebMethod]
-    public string Create(object columns, string tableName, string installForUser, string showSidebar, string isPrivate) {
+    public string GetFileUploadContents() {
+        if (HttpContext.Current.Request.Files.Count == 1) {
+            HttpPostedFile postedFile = HttpContext.Current.Request.Files[0];
+            FileInfo fi = new FileInfo(postedFile.FileName);
+            string fileExtension = fi.Extension.ToLower();
+            if (fileExtension != ".xls" && fileExtension != ".xlsx") {
+                return "false";
+            }
+
+            string tempFile = ServerSettings.GetServerMapLocation + "Apps/Custom_Tables/Exports/" + DateTime.Now.Ticks.ToString() + fileExtension;
+
+            try {
+                postedFile.SaveAs(tempFile);
+            }
+            catch (Exception e) {
+                new AppLog(false).AddError(e);
+            }
+
+            try {
+                if (File.Exists(tempFile)) {
+                    File.Delete(tempFile);
+                }
+            }
+            catch { }
+
+            return "true";
+        }
+
+        return "false";
+    }
+
+    [WebMethod]
+    public string Create(object columns, string tableName, string installForUser, string showSidebar, string notifyUsers, string isPrivate, string chartType, string chartTitle, string usersAllowed) {
         if (_canContinue) {
             string tableID = "CT_" + HelperMethods.RandomString(10);
             DBViewer dbViewer = new DBViewer(false);
@@ -68,9 +101,9 @@ public class CustomTableCreator : System.Web.Services.WebService {
                         _isPrivate = false;
                     }
 
-                    string fileName = ctwc.CreateApp(HelperMethods.ConvertBitToBoolean(showSidebar), tableName, categoryId, "", "database.png", true, _isPrivate);
+                    string fileName = ctwc.CreateApp(HelperMethods.ConvertBitToBoolean(showSidebar), tableName, categoryId, "", "database.png", true, _isPrivate, chartType);
                     CustomTableViewer ctv = new CustomTableViewer(_userName);
-                    ctv.AddItem(tableName, _userName, tableID, "app-" + fileName, DateTime.Now.ToString(), HelperMethods.ConvertBitToBoolean(showSidebar));
+                    ctv.AddItem(tableName, _userName, tableID, "app-" + fileName, DateTime.Now.ToString(), HelperMethods.ConvertBitToBoolean(showSidebar), HelperMethods.ConvertBitToBoolean(notifyUsers), chartType, chartTitle, usersAllowed);
 
                     if (HelperMethods.ConvertBitToBoolean(installForUser)) {
                         var member = new MemberDatabase(_userName);
@@ -86,9 +119,13 @@ public class CustomTableCreator : System.Web.Services.WebService {
     }
 
     [WebMethod]
-    public string RecreateApp(string appId, string tableName, string showSidebar) {
+    public string RecreateApp(string appId, string tableName, string showSidebar, string chartType) {
         if (_canContinue) {
             try {
+                if (chartType.ToLower() == "none") {
+                    chartType = string.Empty;
+                }
+
                 string serverpath = ServerSettings.GetServerMapLocation;
                 var fi = new FileInfo(serverpath + "Apps\\Custom_Tables\\" + appId + ".ascx");
                 if (fi.Exists) {
@@ -118,7 +155,7 @@ public class CustomTableCreator : System.Web.Services.WebService {
                     insertIntoAppList = false;
                 }
 
-                ctwc.CreateApp(HelperMethods.ConvertBitToBoolean(showSidebar), tableName, categoryId, "", "database.png", insertIntoAppList, false, appId);
+                ctwc.CreateApp(HelperMethods.ConvertBitToBoolean(showSidebar), tableName, categoryId, "", "database.png", insertIntoAppList, false, chartType, appId);
                 CustomTableViewer ctv = new CustomTableViewer(_userName);
 
                 string id = "";
@@ -129,8 +166,6 @@ public class CustomTableCreator : System.Web.Services.WebService {
                         break;
                     }
                 }
-                if (!string.IsNullOrEmpty(id))
-                    ctv.UpdateSidebarActive(id, HelperMethods.ConvertBitToBoolean(showSidebar));
 
                 return string.Empty;
             }
@@ -141,7 +176,7 @@ public class CustomTableCreator : System.Web.Services.WebService {
     }
 
     [WebMethod]
-    public string Update(object columns, string tableName, string tableID) {
+    public string Update(object columns, string tableName, string tableID, string chartTitle) {
         if (_canContinue) {
             string columnList = CreateColumnList(columns as object[]);
             if (HelperMethods.ConvertBitToBoolean(columnList)) {
@@ -151,7 +186,7 @@ public class CustomTableCreator : System.Web.Services.WebService {
 
                 CustomTableViewer ctv = new CustomTableViewer(_userName);
                 ctv.DropTable(tableID);
-                ctv.UpdateTableName(tableID, tableName);
+                ctv.UpdateTableNameAndChartTitle(tableID, tableName, chartTitle);
 
                 if (CreateCustomTable(tableID, columnList)) {
                     DBViewer dbViewer2 = new DBViewer(false);
@@ -189,14 +224,94 @@ public class CustomTableCreator : System.Web.Services.WebService {
         }
     }
 
+
+    [WebMethod]
+    public string GetEditableUsers(string appId) {
+        CustomTableViewer ctv = new CustomTableViewer(_userName);
+        CustomTable_Coll tempColl = ctv.GetTableInfoByAppId(appId);
+
+        StringBuilder str = new StringBuilder();
+
+        string createdBy = tempColl.CreatedBy;
+
+        if (!string.IsNullOrEmpty(createdBy)) {
+            MemberDatabase createdByMember = new MemberDatabase(createdBy);
+            List<string> groupList = createdByMember.GroupList;
+            string checkboxInput = "<div class='checkbox-click float-left pad-right-big pad-bottom-big' style='min-width: 150px;'><input type='checkbox' class='checkbox-usersallowed float-left margin-right-sml' {0} value='{1}' style='margin-top: {2};' />&nbsp;{3}</div>";
+            Groups groups = new Groups(createdBy);
+
+            foreach (string group in groupList) {
+                List<string> users = groups.GetMembers_of_Group(group);
+                string groupImg = groups.GetGroupImg_byID(group);
+
+                if (groupImg.StartsWith("~/")) {
+                    groupImg = ServerSettings.ResolveUrl(groupImg);
+                }
+
+                string groupImgHtmlCtrl = "<img alt='' src='" + groupImg + "' class='float-left margin-right' style='max-height: 24px;' />";
+                str.Append("<h3 class='pad-bottom'>" + groupImgHtmlCtrl + groups.GetGroupName_byID(group) + "</h3><div class='clear-space'></div><div class='clear-space'></div>");
+                foreach (string user in users) {
+                    string isChecked = string.Empty;
+                    bool foundUser = !string.IsNullOrEmpty(tempColl.UsersAllowedToEdit.Find(_x => _x.ToLower() == user.ToLower()));
+                    if (foundUser) {
+                        isChecked = "checked='checked'";
+                    }
+                    MemberDatabase tempMember = new MemberDatabase(user);
+
+                    string un = HelperMethods.MergeFMLNames(tempMember);
+                    if ((user.Length > 15) && (!string.IsNullOrEmpty(tempMember.LastName)))
+                        un = tempMember.FirstName + " " + tempMember.LastName[0].ToString() + ".";
+
+                    if (un.ToLower() == "n/a")
+                        un = user;
+
+                    string marginTop = "3px";
+                    string userNameTitle = "<h4>" + un + "</h4>";
+                    string acctImage = tempMember.AccountImage;
+                    if (!string.IsNullOrEmpty(acctImage)) {
+                        userNameTitle = "<h4 class='float-left pad-top pad-left-sml'>" + un + "</h4>";
+                        marginTop = "8px";
+                    }
+
+                    string userImageAndName = UserImageColorCreator.CreateImgColor(acctImage, tempMember.UserColor, tempMember.UserId, 30);
+                    str.AppendFormat(checkboxInput, isChecked, user, marginTop, userImageAndName + userNameTitle);
+                }
+                str.Append("<div class='clear-space'></div><div class='clear-space'></div><div class='clear-space'></div>");
+            }
+        }
+
+        if (string.IsNullOrEmpty(str.ToString())) {
+            str.Append("<h4 class='pad-all'>There are no usrs to select from</h4>");
+        }
+
+        return str.ToString();
+    }
+
+
+    [WebMethod]
+    public void UpdateEditableUsers(string id, string usersAllowed) {
+        CustomTableViewer ctv = new CustomTableViewer(_userName);
+        ctv.UpdateUsersAllowedToEdit(id, usersAllowed);
+    }
+
+
     [WebMethod]
     public object[] GetCustomTableList(string table) {
         DBViewer dbViewer = new DBViewer(false);
         dbViewer.GetTableData(table);
         if (dbViewer.dt.Columns.Count > 0) {
             List<object> obj1 = new List<object>();
+
+            CustomTableViewer ctv = new CustomTableViewer(_userName);
+            CustomTable_Coll coll = ctv.GetTableInfo(table);
+
+            List<object> objTemp = new List<object>();
+            objTemp.Add(coll.ID);
+            objTemp.Add(coll.ChartTitle);
+            obj1.Add(objTemp);
+
             foreach (DataColumn dc in dbViewer.dt.Columns) {
-                if ((dc.ColumnName.ToLower() != "columnid") && (dc.ColumnName.ToLower() != "timestamp")) {
+                if ((dc.ColumnName.ToLower() != "entryid") && (dc.ColumnName.ToLower() != "timestamp")) {
                     List<object> obj2 = new List<object>();
                     obj2.Add(dc.ColumnName);
                     obj2.Add(GetReversedDataType(dc.DataType.Name));
@@ -209,6 +324,16 @@ public class CustomTableCreator : System.Web.Services.WebService {
         }
 
         return null;
+    }
+
+    [WebMethod]
+    public string UpdateSidebarChartType(string id, string sidebar, string notifyUsers, string chartType) {
+        if (!string.IsNullOrEmpty(id)) {
+            CustomTableViewer ctv = new CustomTableViewer(_userName);
+            ctv.UpdateSidebarActiveAndChartTypeAndNotifyUsers(id, HelperMethods.ConvertBitToBoolean(sidebar), HelperMethods.ConvertBitToBoolean(notifyUsers), chartType);
+        }
+
+        return string.Empty;
     }
 
 
@@ -239,7 +364,7 @@ public class CustomTableCreator : System.Web.Services.WebService {
     public object[] BuildOriginalColumns(DataTable t) {
         List<object> obj1 = new List<object>();
         foreach (DataColumn col in t.Columns) {
-            if ((col.ColumnName.ToLower() != "columnid") && (col.ColumnName.ToLower() != "timestamp")) {
+            if ((col.ColumnName.ToLower() != "entryid") && (col.ColumnName.ToLower() != "timestamp")) {
                 List<object> obj2 = new List<object>();
                 obj2.Add(col.ColumnName);
                 obj2.Add(GetReversedDataType(col.DataType.Name));
@@ -277,7 +402,7 @@ public class CustomTableCreator : System.Web.Services.WebService {
     public string CreateColumnList(object[] columns) {
         StringBuilder columnText = new StringBuilder();
 
-        columnText.Append("ColumnID uniqueidentifier NOT NULL,");
+        columnText.Append("EntryID uniqueidentifier NOT NULL,");
         columnText.Append("TimeStamp datetime NOT NULL,");
 
         foreach (object row in columns) {
@@ -294,7 +419,7 @@ public class CustomTableCreator : System.Web.Services.WebService {
                 return "false";
         }
 
-        columnText.Append("PRIMARY KEY (ColumnID)");
+        columnText.Append("PRIMARY KEY (EntryID)");
 
         return columnText.ToString();
     }

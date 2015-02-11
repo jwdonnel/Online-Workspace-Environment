@@ -125,7 +125,7 @@
                         <span class="font-bold pad-right">Total Notifications:</span><asp:Label ID="lbl_notifiEnabled"
                             runat="server" Text="0"></asp:Label>
                     </div>
-                    <div class="float-left" style="margin-top: -15px;">
+                    <div class="float-right pad-right-big" style="margin-top: -14px;">
                         <asp:LinkButton ID="lbtn_Refresh" runat="server" Text="Rebuild Notifications" CssClass="sb-links RandomActionBtns"
                             OnClick="lbtn_Refresh_Clicked"></asp:LinkButton>
                     </div>

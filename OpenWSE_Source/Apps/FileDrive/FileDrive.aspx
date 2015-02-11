@@ -1,7 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="FileDrive.aspx.cs" Inherits="Apps_FileDrive" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>File Drive</title>
@@ -27,7 +26,8 @@
 <body style="background: #F5F5F5 !important">
     <div id="mydocuments-load" class="main-div-app-bg">
         <form id="form_mydocuments" runat="server" enctype="multipart/form-data" method="post">
-            <ajaxToolkit:ToolkitScriptManager ID="ScriptManager1" runat="server" AsyncPostBackTimeout="360000"></ajaxToolkit:ToolkitScriptManager>
+            <asp:ScriptManager ID="ScriptManager_deliverypickups" runat="server" AsyncPostBackTimeout="360000">
+            </asp:ScriptManager>
             <input id="hf_editing" type="hidden" value="false" />
             <input id="hf_currexp" type="hidden" value="expand_View_All_Documents" />
             <div class="pad-all app-title-bg-color" style="height: 40px">
@@ -165,7 +165,7 @@
                                                                                     <td id="td_filename" runat="server" align="center" class="td-sort-click" style="min-width: 150px;">
                                                                                         <asp:LinkButton ID="lbtn_filename" runat="server" OnClick="lbtn_filename_Click" CssClass="RandomActionBtns-docs">Filename</asp:LinkButton>
                                                                                     </td>
-                                                                                    <td id="td_ext" runat="server" width="75px" class="td-sort-click" align="center">
+                                                                                    <td id="td_ext" runat="server" width="115px" class="td-sort-click" align="center">
                                                                                         <asp:LinkButton ID="lbtn_ext" runat="server" OnClick="lbtn_ext_Click" CssClass="RandomActionBtns-docs">Ext</asp:LinkButton>
                                                                                     </td>
                                                                                     <td id="td_size" runat="server" width="100px" class="td-sort-click" align="center">
@@ -195,7 +195,7 @@
                                                                                                 <%#Eval("Title") %>
                                                                                             </div>
                                                                                         </td>
-                                                                                        <td width="75px" align="left" class="border-right">
+                                                                                        <td width="115px" align="left" class="border-right">
                                                                                             <%#Eval("Type") %>
                                                                                         </td>
                                                                                         <td width="100px" align="left" class="border-right">
@@ -234,7 +234,7 @@
                                                                                             runat="server" ID="tb_editFileName" Text='<%#Eval("TitleEdit") %>' Width="95%"
                                                                                             MaxLength="100"></asp:TextBox>
                                                                                     </td>
-                                                                                    <td width="75px" align="left" class="border-right">
+                                                                                    <td width="115px" align="left" class="border-right">
                                                                                         <%#Eval("Type") %>
                                                                                     </td>
                                                                                     <td width="100px" align="left" class="border-right">
@@ -285,21 +285,12 @@
                         </div>
                         <div class="ModalPadContent">
                             <div id="fileuploader" class="clear-margin">
-                                <asp:Label runat="server" ID="myThrobber" Style="display: none;"><img align="absmiddle" alt="" src="uploading.gif"/></asp:Label>
-                                <ajaxToolkit:AjaxFileUpload ID="AjaxFileUpload1" runat="server" Padding-Bottom="4"
-                                    Padding-Left="2" Padding-Right="1" Padding-Top="4" ThrobberID="myThrobber" OnClientUploadComplete="onClientUploadComplete"
-                                    OnUploadComplete="AjaxFileUpload1_OnUploadComplete" MaximumNumberOfFiles="100"
-                                    AzureContainerName="" OnClientUploadCompleteAll="onClientUploadCompleteAll" OnUploadCompleteAll="AjaxFileUpload1_UploadCompleteAll" OnUploadStart="AjaxFileUpload1_UploadStart" OnClientUploadStart="onClientUploadStart" />
-                                <div id="uploadCompleteInfo"></div>
-                                <div class="clear-space"></div>
-                                <div id="testuploaded" style="display: none; padding: 4px; border: gray 1px solid;">
-                                    <h4>list of uploaded files:</h4>
-                                    <hr />
-                                    <div id="fileList" style="overflow: auto; max-height: 200px;">
-                                    </div>
-                                </div>
+                                Select file(s) and press the Upload Files button
+                                <div class="clear-space-five"></div>
+                                <asp:FileUpload ID="FileUploadControl" runat="server" AllowMultiple="true" />
                                 <div class="clear-space"></div>
                                 <div align="right">
+                                    <asp:Button ID="btnFileUpload" runat="server" Text="Upload Files" CssClass="RandomActionBtns input-buttons float-left" OnClick="btnFileUpload_OnClick" />
                                     <input type="button" id="btn_close_uploader" class="input-buttons" value="Close"
                                         onclick="openWSE.LoadModalWindow(false, 'FileUpload-element', '');"
                                         style="margin-right: 0px" />
@@ -331,63 +322,6 @@
             document.getElementById('<%=hf_folderchange_documents.ClientID %>').value = x;
             document.getElementById("hf_category_documents").value = "";
             __doPostBack('<%=hf_folderchange_documents.ClientID %>', "");
-        }
-
-        function onClientUploadComplete(sender, e) {
-            onImageValidated("FALSE", e);
-        }
-        function onImageValidated(arg, context) {
-
-            var test = document.getElementById("testuploaded");
-            test.style.display = 'block';
-
-            var fileList = document.getElementById("fileList");
-            var item = document.createElement('div');
-            item.style.padding = '4px';
-
-            if (openWSE.ConvertBitToBoolean(arg)) {
-                var url = context.get_postedUrl();
-                url = url.replace('&amp;', '&');
-                item.appendChild(createThumbnail(context, url));
-            } else {
-                item.appendChild(createFileInfo(context));
-            }
-
-            fileList.appendChild(item);
-        }
-        function createFileInfo(e) {
-            var holder = document.createElement('div');
-            holder.appendChild(document.createTextNode(e.get_fileName() + ' with size ' + e.get_fileSize() + ' bytes'));
-
-            return holder;
-        }
-        function createThumbnail(e, url) {
-            var holder = document.createElement('div');
-            var img = document.createElement("img");
-            img.style.width = '80px';
-            img.style.height = '80px';
-            img.setAttribute("src", url);
-
-            holder.appendChild(createFileInfo(e));
-            holder.appendChild(img);
-
-            return holder;
-        }
-        function onClientUploadStart(sender, e) {
-            document.getElementById('uploadCompleteInfo').innerHTML = 'Please wait while uploading ' + e.get_filesInQueue() + ' files...';
-        }
-        function onClientUploadCompleteAll(sender, e) {
-
-            var args = JSON.parse(e.get_serverArguments()),
-                unit = args.duration > 60 ? 'minutes' : 'seconds',
-                duration = (args.duration / (args.duration > 60 ? 60 : 1)).toFixed(2);
-
-            var info = 'At <b>' + args.time + '</b> server time <b>'
-                + e.get_filesUploaded() + '</b> of <b>' + e.get_filesInQueue()
-                + '</b> files were uploaded with status code <b>"' + e.get_reason()
-                + '"</b> in <b>' + duration + ' ' + unit + '</b>';
-
-            document.getElementById('uploadCompleteInfo').innerHTML = info;
         }
     </script>
 </body>

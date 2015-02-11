@@ -10,19 +10,6 @@ $(window).load(function () {
     catch (evt) { }
 });
 
-$(window).resize(function () {
-    $(".loaderApp-element-modal").each(function () {
-        if ($(this).css("display") == "block") {
-            var mLeft = -($(this).width() / 2);
-            var mTop = -($(this).height() / 2);
-            $(this).closest(".loaderApp-element-align").css({
-                marginLeft: mLeft,
-                marginTop: mTop
-            });
-        }
-    });
-});
-
 function ConfirmLoaderFileCancel(_this) {
     openWSE.ConfirmWindow("Cancelling will delete this app. Are you sure you want to continue?",
         function () {
@@ -35,17 +22,22 @@ function ConfirmLoaderFileCancel(_this) {
 }
 
 function PerformAppCleanUp() {
-    var str = "<div id='MessageActivationPopup'>";
-    str += "<div class='message-element-align'><div class='message'>";
-    str += "<h4 class='font-bold'>Do you want to delete any files found as well?<br />Doing so will permanently delete these app files.</h4>";
-    str += "<div class='clear-space'></div><div class='clear-space'></div>";
-    str += "<input type='button' class='input-buttons' value='Yes' onclick=\"StartAppCleanUp('true');return false;\" style='width: 50px;' />";
-    str += "<input type='button' class='input-buttons no-margin' value='No' onclick=\"StartAppCleanUp('false'); return false;\" style='width: 50px; margin-left: 10px!important;' />";
-    str += "<div class='clear-space'></div>";
-    str += "<a href='#' onclick=\"StartAppCleanUp('cancel'); return false;\">Cancel</a>";
-    str += "</div></div></div>";
+    var x = "<div id='ConfirmCleanup-element' class='Modal-element' style='display: none;'>";
+    x += "<div class='Modal-overlay'>";
+    x += "<div class='Modal-element-align'>";
+    x += "<div class='Modal-element-modal' style='width: 400px; min-width: 400px;'>";
+    x += "<div class='ModalHeader'><div><span class='Modal-title'></span></div></div>";
 
-    $("body").append(str);
+    x += "<div align='center' class='pad-all'>Do you want to delete any files found as well? Doing so will permanently delete these app files.";
+    x += "<div class='clear-space'></div><div class='clear-space-five'></div>";
+    x += "<input type='button' class='input-buttons' value='Yes' onclick=\"StartAppCleanUp('true');return false;\" style='width: 65px;' />";
+    x += "<input type='button' class='input-buttons' value='No' onclick=\"StartAppCleanUp('false'); return false;\" style='width: 65px; margin-left: 10px!important;' />";
+    x += "<input type='button' class='input-buttons no-margin' value='Cancel' onclick=\"StartAppCleanUp('cancel'); return false;\" style='width: 65px; margin-left: 10px!important;' />";
+    x += "<div class='clear-space'></div>";
+    x += "</div></div></div></div></div></div>";
+
+    $("body").append(x);
+    openWSE.LoadModalWindow(true, "ConfirmCleanup-element", "Perform App Clean Up?");
 }
 
 function StartAppCleanUp(deleteFiles) {
@@ -55,22 +47,16 @@ function StartAppCleanUp(deleteFiles) {
         __doPostBack("hf_performCleanup", "");
     }
     else {
-        $("#MessageActivationPopup").remove();
+        $("#ConfirmCleanup-element").remove();
     }
 }
 
 function LoadDefaultPageSelector() {
-    $(".loaderApp-overlay").show();
-    $(window).resize();
-}
-
-function LoadAppOverlayModal() {
-    $(".AppOverlay-overlay").show();
-    $(window).resize();
+    openWSE.LoadModalWindow(true, "LoaderApp-element", "App Loader File");
 }
 
 function LoadNewDefaultPageSelector() {
-    $(".loaderApp-overlay-New").show();
+    openWSE.LoadModalWindow(true, "LoaderAppNew-element", "App Load File")
     $(window).resize();
 }
 
@@ -692,6 +678,7 @@ function OnDelete() {
       function () {
           openWSE.LoadingMessage1("Please Wait...");
           dbType = "delete";
+          Confirm_Delete();
           return true;
       }, function () {
           window.setTimeout(function () {

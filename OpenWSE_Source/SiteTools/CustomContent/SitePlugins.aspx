@@ -96,8 +96,7 @@
             <div class="float-left pad-right-big font-bold" style="width: 135px">
                 Plugin Description
             </div>
-            <asp:TextBox ID="txt_Description" runat="server" ClientIDMode="Static" Width="555px"
-                Height="75px" Font-Names="Arial" TextMode="MultiLine" BorderColor="#DDDDDD" Style="padding: 3px;"></asp:TextBox>
+            <asp:TextBox ID="txt_Description" runat="server" ClientIDMode="Static" Width="565px" CssClass="textEntry"></asp:TextBox>
             <div class="clear-space">
             </div>
             <div class="float-left pad-right-big font-bold" style="width: 135px">

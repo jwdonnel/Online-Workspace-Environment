@@ -189,7 +189,7 @@ public class UserRegistration {
         else
             _member.UpdateAppHeaderIcon(false);
 
-        // Clear Properties on Log Off
+        // Clear Properties on Sign Off
         if (HelperMethods.ConvertBitToBoolean(_drDefaults["ClearPropOnSignOff"]))
             _member.UpdateClearPropOnSignOff(true);
         else

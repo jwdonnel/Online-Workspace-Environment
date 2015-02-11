@@ -221,8 +221,7 @@
                                                 </div>
                                                 <div class="clear-space-five">
                                                 </div>
-                                                <span class="pad-right" style="color: #555;">Is Private</span>
-                                                <asp:CheckBox ID="cb_isprivate" runat="server" />
+                                                <asp:CheckBox ID="cb_isprivate" runat="server" Text="&nbsp;Is Private" Style="color: #555;" />
                                             </div>
                                         </div>
                                     </div>

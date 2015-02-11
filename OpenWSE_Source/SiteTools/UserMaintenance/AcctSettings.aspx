@@ -967,7 +967,7 @@
                             <tr>
                                 <td class="td-settings-title">
                                     <span class="pad-right font-bold font-color-black">Clear Properties&nbsp;&nbsp;<br />
-                                        on Log Off</span>
+                                        on Sign Off</span>
                                 </td>
                                 <td class="td-settings-ctrl">
                                     <div class="field switch inline-block">
@@ -979,7 +979,7 @@
                                 </td>
                                 <td class="td-settings-desc">
                                     <small>Clear current app properties and ALL cookies created by this site everytime
-                                                you Log off. (Set to No by default)</small>
+                                                you sign off. (Set to No by default)</small>
                                 </td>
                             </tr>
                         </table>

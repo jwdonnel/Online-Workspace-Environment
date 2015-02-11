@@ -84,7 +84,7 @@
                         </div>
                         <div id="all_apps_holder" runat="server" clientidmode="Static" style="display: block;">
                         </div>
-                        <div id="apps_holder" style="display: none;">
+                        <div id="apps_holder">
                             <h3 class='pad-left pad-top-big'>Loading Apps...</h3>
                         </div>
                         <div id="plugins_holder" style="display: none;">

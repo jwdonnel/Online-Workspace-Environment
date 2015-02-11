@@ -70,7 +70,7 @@ public partial class Workspace : Page {
                 _strScriptreg.Append("$('#MainContent_workspace_1').css({ visibility:'visible',opacity:1.0,filter:'alpha(opacity=100)' });");
 
                 if ((HelperMethods.ConvertBitToBoolean(Request.QueryString["activation"])) && (!string.IsNullOrEmpty(Request.QueryString["user"]))) {
-                    string message = "<h3>Your account for " + Request.QueryString["user"] + " has been activated.<br />You may now login to your account.</h3>";
+                    string message = "<div align='center'>Your account for " + Request.QueryString["user"] + " has been activated. You may now login to your account.</div>";
                     string encodedMessage = HttpUtility.UrlEncode(message, System.Text.Encoding.Default).Replace("+", "%20");
                     _strScriptreg.Append("openWSE.ShowActivationPopup('" + encodedMessage + "');");
                 }
@@ -108,7 +108,6 @@ public partial class Workspace : Page {
                     }
 
                     LoadUserBackground();
-                    CheckUpdatesPopup();
                     GetAdminNote();
                 }
             }
@@ -470,18 +469,7 @@ public partial class Workspace : Page {
             }
         }
     }
-    private void CheckUpdatesPopup() {
-        ShowUpdatePopup sup = new ShowUpdatePopup();
-        if (sup.isUserShowPopup(_username)) {
-            if (string.IsNullOrEmpty(_sitetheme))
-                _sitetheme = "Standard";
 
-            string message = sup.GetNewUpdateMessage(ServerSettings.GetServerMapLocation, _sitetheme);
-            string encodedMessage = HttpUtility.UrlEncode(message, System.Text.Encoding.Default).Replace("+", "%20");
-            sup.UpdateUser(false, _username);
-            _strScriptreg.Append("openWSE.ShowUpdatesPopup('" + encodedMessage + "');");
-        }
-    }
     private void CheckUpdatesPopup_Demo() {
         ShowUpdatePopup sup = new ShowUpdatePopup();
         string message = sup.GetNewUpdateMessage(ServerSettings.GetServerMapLocation, "Standard", false);

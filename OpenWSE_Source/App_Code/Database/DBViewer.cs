@@ -82,7 +82,8 @@ public class DBViewer {
 
         List<Dictionary<string, string>> dbSelect = dbCall.CallSelect(tablename, "", null, sortCol + " " + sortDir);
         if (dbSelect.Count >= 0) {
-            dataTable = dbCall.CallGetDataTable(tablename);
+            string selectStatement = string.Format("SELECT * FROM {0} ORDER BY {1} {2}", tablename, sortCol, sortDir);
+            dataTable = dbCall.CallGetDataTableBySelectStatement(selectStatement);
         }
         else {
             int count = 0;
@@ -154,9 +155,7 @@ public class DBViewer {
         List<Dictionary<string, string>> dbSelect = temp_dbCall.CallSelect(dbcoll.SelectCommand);
 
         if (dbSelect.Count >= 0) {
-            string table = dbcoll.SelectCommand.Substring(dbcoll.SelectCommand.IndexOf(" FROM ") + (" FROM ").Length);
-            table = table.Replace(dbcoll.SelectCommand.Substring(dbcoll.SelectCommand.ToLower().IndexOf("order by")), "").Trim();
-            dataTable = dbCall.CallGetDataTable(table);
+            dataTable = dbCall.CallGetDataTableBySelectStatement(dbcoll.SelectCommand);
         }
         else {
             int count = 0;

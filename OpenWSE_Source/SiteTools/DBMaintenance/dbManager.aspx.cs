@@ -42,9 +42,15 @@ public partial class SiteTools_DbManager : Page {
 
                 LoadAutoBackupSystem();
 
+                ServerSettings ss = new ServerSettings();
                 if (_username.ToLower() == ServerSettings.AdminUserName.ToLower()) {
-                    btn_checkDatabase.Enabled = true;
-                    btn_checkDatabase.Visible = true;
+                    if (!_ctrlname.Contains("cbAutoFixDB")) {
+                        btn_checkDatabase.Enabled = !ss.AutoFixDBIssues;
+                        btn_checkDatabase.Visible = !ss.AutoFixDBIssues;
+                        cbAutoFixDB.Checked = ss.AutoFixDBIssues;
+                        cbAutoFixDB.Enabled = true;
+                        cbAutoFixDB.Visible = true;
+                    }
                 }
                 else {
                     btn_checkDatabase.Enabled = false;
@@ -621,131 +627,154 @@ public partial class SiteTools_DbManager : Page {
     #region Database Checker
 
     private void BuildDatabaseChecker() {
-        pnl_databaseChecker.Controls.Clear();
+        if (!_ctrlname.Contains("cbAutoFixDB")) {
+            pnl_databaseChecker.Controls.Clear();
 
-        DefaultDBTables.CheckIfDatabaseUpToDate();
-        DatabaseCall dbCall = new DatabaseCall();
+            DefaultDBTables.CheckIfDatabaseUpToDate();
+            DatabaseCall dbCall = new DatabaseCall();
 
-        btn_UpdateDatabase.Enabled = false;
-        btn_UpdateDatabase.Visible = false;
-        lbl_updatedbHint.Enabled = false;
-        lbl_updatedbHint.Visible = false;
+            btn_UpdateDatabase.Enabled = false;
+            btn_UpdateDatabase.Visible = false;
+            lbl_updatedbHint.Enabled = false;
+            lbl_updatedbHint.Visible = false;
 
-        string alignText = "left";
-        string verticalAlign = "top";
+            string alignText = "left";
+            string verticalAlign = "top";
 
-        StringBuilder str = new StringBuilder();
-        str.Append("<table cellpadding='10' cellspacing='10'><tbody>");
+            StringBuilder str = new StringBuilder();
+            str.Append("<table cellpadding='10' cellspacing='10'><tbody>");
 
-        #region Database Provider
+            #region Database Provider
 
-        str.Append("<tr>");
-        str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Provider</b></td>");
-        str.Append("<td valign='" + verticalAlign + "'>" + dbCall.DataProvider + "</td>");
-        str.Append("</tr>");
-
-        #endregion
-
-        #region Up-To-Date
-
-        str.Append("<tr>");
-        str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Up-To-Date</b></td>");
-        string uptoDate = "No";
-        if (DefaultDBTables.DatabaseUpToDate) {
-            uptoDate = "Yes";
-        }
-        str.Append("<td valign='" + verticalAlign + "'>" + uptoDate + "</td");
-        str.Append("</tr>");
-
-        #endregion
-
-        #region Table Count
-
-        str.Append("<tr>");
-        str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Table Count</b></td>");
-        DataTable tables = dbCall.CallGetSchema("Tables");
-        string count = "0";
-        if (tables != null) {
-            count = tables.Rows.Count.ToString();
-        }
-        else {
-            count = "Could not determine number of tables.";
-        }
-        str.Append("<td valign='" + verticalAlign + "'>" + count + "</td>");
-        str.Append("</tr>");
-
-        #endregion
-
-        #region Number of Columns
-
-        str.Append("<tr>");
-        str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Column Count</b></td>");
-        str.Append("<td valign='" + verticalAlign + "'>" + DefaultDBTables.TotalNumberOfColumns.ToString() + "</td>");
-        str.Append("</tr>");
-
-        #endregion
-
-        #region Number of Rows
-
-        str.Append("<tr>");
-        str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Row Count</b></td>");
-        str.Append("<td valign='" + verticalAlign + "'>" + DefaultDBTables.TotalNumberOfRows.ToString() + "</td>");
-        str.Append("</tr>");
-
-        #endregion
-
-        string dbPath = string.Empty;
-        bool dbIsLocal = DefaultDBTables.CheckIfDatabaseIsLocal(dbCall, out dbPath);
-
-        #region Database is Local
-
-        str.Append("<tr>");
-        str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Is Local</b></td>");
-        string isLocal = "No";
-
-
-        if (dbIsLocal) {
-            isLocal = "Yes";
-        }
-        str.Append("<td valign='" + verticalAlign + "'>" + isLocal + "</td>");
-        str.Append("</tr>");
-
-        #endregion
-
-        #region Database File Size
-
-        if (dbIsLocal) {
             str.Append("<tr>");
-            str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Database Size</b></td>");
-            str.Append("<td valign='" + verticalAlign + "'>" + DatabaseSize(dbPath) + "</td>");
+            str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Provider</b></td>");
+            str.Append("<td valign='" + verticalAlign + "'>" + dbCall.DataProvider + "</td>");
             str.Append("</tr>");
-        }
 
-        #endregion
+            #endregion
 
-        str.Append("</tbody></table>");
+            #region Up-To-Date
 
-        if (DefaultDBTables.DefaultTableXmlMissing) {
-            str.Append("<span style='color: red;'>The DatabaseDefaults.xml seems to be missing.<br />In order to properly scan the database, this file must be in the App_Data folder.</span><div class='clear-space-five'></div>");
-        }
-        if (!DefaultDBTables.DatabaseUpToDate) {
-            str.Append("<span style='color: red;'>Your Database seems to be out of date.<br />Press the 'Fix' button to update the database.</span><div class='clear-space-five'></div>");
+            str.Append("<tr>");
+            str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Up-To-Date</b></td>");
+            string uptoDate = "No";
+            if (DefaultDBTables.DatabaseUpToDate) {
+                uptoDate = "Yes";
+            }
+            str.Append("<td valign='" + verticalAlign + "'>" + uptoDate + "</td");
+            str.Append("</tr>");
 
-            if (dbCall.DataProvider != "System.Data.SqlClient" && dbCall.DataProvider != "System.Data.SqlServerCe.4.0") {
-                btn_checkDatabase.Enabled = false;
-                btn_checkDatabase.Visible = false;
+            #endregion
+
+            #region Table Count
+
+            str.Append("<tr>");
+            str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Table Count</b></td>");
+            DataTable tables = dbCall.CallGetSchema("Tables");
+            string count = "0";
+            if (tables != null) {
+                count = tables.Rows.Count.ToString();
             }
             else {
-                if (_username.ToLower() == ServerSettings.AdminUserName.ToLower()) {
-                    btn_UpdateDatabase.Enabled = true;
-                    btn_UpdateDatabase.Visible = true;
-                    lbl_updatedbHint.Enabled = true;
-                    lbl_updatedbHint.Visible = true;
+                count = "Could not determine number of tables.";
+            }
+            str.Append("<td valign='" + verticalAlign + "'>" + count + "</td>");
+            str.Append("</tr>");
+
+            #endregion
+
+            #region Number of Columns
+
+            str.Append("<tr>");
+            str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Column Count</b></td>");
+            str.Append("<td valign='" + verticalAlign + "'>" + DefaultDBTables.TotalNumberOfColumns.ToString() + "</td>");
+            str.Append("</tr>");
+
+            #endregion
+
+            #region Number of Rows
+
+            str.Append("<tr>");
+            str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Row Count</b></td>");
+            str.Append("<td valign='" + verticalAlign + "'>" + DefaultDBTables.TotalNumberOfRows.ToString() + "</td>");
+            str.Append("</tr>");
+
+            #endregion
+
+            string dbPath = string.Empty;
+            bool dbIsLocal = DefaultDBTables.CheckIfDatabaseIsLocal(dbCall, out dbPath);
+
+            #region Database is Local
+
+            str.Append("<tr>");
+            str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Is Local</b></td>");
+            string isLocal = "No";
+
+
+            if (dbIsLocal) {
+                isLocal = "Yes";
+            }
+            str.Append("<td valign='" + verticalAlign + "'>" + isLocal + "</td>");
+            str.Append("</tr>");
+
+            #endregion
+
+            #region Database File Size
+
+            if (dbIsLocal) {
+                str.Append("<tr>");
+                str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Database Size</b></td>");
+                str.Append("<td valign='" + verticalAlign + "'>" + DatabaseSize(dbPath) + "</td>");
+                str.Append("</tr>");
+            }
+
+            #endregion
+
+            str.Append("</tbody></table>");
+            ServerSettings ss = new ServerSettings();
+
+            if (DefaultDBTables.DefaultTableXmlMissing) {
+                str.Append("<div class='pad-left'><span style='color: red;'>The DatabaseDefaults.xml seems to be missing.<br />In order to properly scan the database, this file must be in the App_Data folder.</span><div class='clear-space-five'></div></div>");
+            }
+            if (!DefaultDBTables.DatabaseUpToDate) {
+                if (!ss.AutoFixDBIssues) {
+                    str.Append("<div class='pad-left'><span style='color: red;'>Your Database seems to be out of date.<br />Press the 'Fix' button to update the database.</span><div class='clear-space-five'></div></div>");
+                }
+
+                if (dbCall.DataProvider != "System.Data.SqlClient" && dbCall.DataProvider != "System.Data.SqlServerCe.4.0") {
+                    btn_checkDatabase.Enabled = false;
+                    btn_checkDatabase.Visible = false;
+                }
+                else {
+                    if (_username.ToLower() == ServerSettings.AdminUserName.ToLower()) {
+                        btn_UpdateDatabase.Enabled = !ss.AutoFixDBIssues;
+                        btn_UpdateDatabase.Visible = !ss.AutoFixDBIssues;
+                        lbl_updatedbHint.Enabled = !ss.AutoFixDBIssues;
+                        lbl_updatedbHint.Visible = !ss.AutoFixDBIssues;
+                        btn_checkDatabase.Enabled = !ss.AutoFixDBIssues;
+                        btn_checkDatabase.Visible = !ss.AutoFixDBIssues;
+                        cbAutoFixDB.Checked = ss.AutoFixDBIssues;
+                        cbAutoFixDB.Enabled = true;
+                        cbAutoFixDB.Visible = true;
+                    }
                 }
             }
-        }
 
-        pnl_databaseChecker.Controls.Add(new LiteralControl(str.ToString()));
+            pnl_databaseChecker.Controls.Add(new LiteralControl(str.ToString()));
+        }
+    }
+
+    protected void cbAutoFixDB_CheckedChanged(object sender, EventArgs e) {
+        if (_username.ToLower() == ServerSettings.AdminUserName.ToLower()) {
+            ServerSettings.update_AutoFixDBIssues(cbAutoFixDB.Checked);
+
+            ServerSettings ss = new ServerSettings();
+            btn_checkDatabase.Enabled = !ss.AutoFixDBIssues;
+            btn_checkDatabase.Visible = !ss.AutoFixDBIssues;
+
+            _ctrlname = string.Empty;
+            BuildDatabaseChecker();
+        }
     }
     protected void btn_checkDatabase_Click(object sender, EventArgs e) {
         BuildDatabaseChecker();
@@ -777,4 +806,5 @@ public partial class SiteTools_DbManager : Page {
     }
 
     #endregion
+
 }

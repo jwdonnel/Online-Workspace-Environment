@@ -40,9 +40,7 @@ ul.workspace-sel li:hover{background:#F5F5F5}
 .accordion-header.active span,.accordion-header:hover span,.accordion-header:active span{opacity:1.0;filter:alpha(opacity=100)}
 .accordion-content{border-bottom:1px solid #DDD}
 .accordion-content img{max-width:500px}
-.app-stats-holder-wr{text-align:center}
-.app-stats-holder-wr,.app-rater{background:#F9F9F9;border:1px solid #DDD;padding:4px;-moz-box-shadow:-3px 3px 3px rgba(0,0,0,.25);-webkit-box-shadow:0 5px 7px rgba(0,0,0,.25);box-shadow:0 5px 7px rgba(0,0,0,.25);-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px}
-.app-stats-holder-wr img{width: 100%}
+.app-rater{background:#F9F9F9;border:1px solid #DDD;padding:4px;-moz-box-shadow:-3px 3px 3px rgba(0,0,0,.25);-webkit-box-shadow:0 5px 7px rgba(0,0,0,.25);box-shadow:0 5px 7px rgba(0,0,0,.25);-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px}
 
 #chat_header_btn,#apps_header_btn{display:none}
 .loginwith-api{float:none!important;margin:0 5px}

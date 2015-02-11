@@ -14,7 +14,6 @@ using OpenWSE.Core.Licensing;
 
 public partial class DatabaseSelection : System.Web.UI.Page {
 
-    private string customErrorsMode = "Off";
     private string customErrorsDefaultRedirect = @"ErrorPages\Error.html";
     private string compilationDebug = "false";
 
@@ -45,16 +44,18 @@ public partial class DatabaseSelection : System.Web.UI.Page {
                 string[] allLines = File.ReadAllLines(filePath);
                 for (int i = 0; i < allLines.Length; i++) {
                     switch (allLines[i].Trim()) {
-                        case "<CUSTOMERRORSHERE/>":
-                            allLines[i] = string.Format("<customErrors mode=\"{0}\" defaultRedirect=\"{1}\" />", customErrorsMode, customErrorsDefaultRedirect);
+                        case "<MACHINEKEYHERE/>":
+                            string vKey = CreateKey(64);
+                            string dKey = CreateKey(24);
+                            allLines[i] = string.Format("       <machineKey validationKey=\"{0}\" decryptionKey=\"{1}\" validation=\"SHA1\" />", vKey, dKey);
                             break;
 
                         case "<COMPILATIONHERE>":
-                            allLines[i] = string.Format("<compilation debug=\"{0}\" targetFramework=\"4.5\">", compilationDebug);
+                            allLines[i] = string.Format("       <compilation debug=\"{0}\" targetFramework=\"4.5\">", compilationDebug);
                             break;
 
                         case "</COMPILATIONHERE>":
-                            allLines[i] = "</compilation>";
+                            allLines[i] = "       </compilation>";
                             break;
                     }
                 }
@@ -88,20 +89,22 @@ public partial class DatabaseSelection : System.Web.UI.Page {
                     string[] allLines = File.ReadAllLines(filePath);
                     for (int i = 0; i < allLines.Length; i++) {
                         switch (allLines[i].Trim()) {
-                            case "<CONNECTIONSTRINGHERE/>":
-                                allLines[i] = string.Format("<add name=\"ApplicationServices\" connectionString=\"{0}\" providerName=\"System.Data.SqlClient\" />", txt_connectionstring.Text.Trim());
+                            case "<MACHINEKEYHERE/>":
+                                string vKey = CreateKey(64);
+                                string dKey = CreateKey(24);
+                                allLines[i] = string.Format("       <machineKey validationKey=\"{0}\" decryptionKey=\"{1}\" validation=\"SHA1\" />", vKey, dKey);
                                 break;
 
-                            case "<CUSTOMERRORSHERE/>":
-                                allLines[i] = string.Format("<customErrors mode=\"{0}\" defaultRedirect=\"{1}\" />", customErrorsMode, customErrorsDefaultRedirect);
+                            case "<CONNECTIONSTRINGHERE/>":
+                                allLines[i] = string.Format("       <add name=\"ApplicationServices\" connectionString=\"{0}\" providerName=\"System.Data.SqlClient\" />", txt_connectionstring.Text.Trim());
                                 break;
 
                             case "<COMPILATIONHERE>":
-                                allLines[i] = string.Format("<compilation debug=\"{0}\" targetFramework=\"4.5\">", compilationDebug);
+                                allLines[i] = string.Format("       <compilation debug=\"{0}\" targetFramework=\"4.5\">", compilationDebug);
                                 break;
 
                             case "</COMPILATIONHERE>":
-                                allLines[i] = "</compilation>";
+                                allLines[i] = "       </compilation>";
                                 break;
                         }
                     }
@@ -123,14 +126,7 @@ public partial class DatabaseSelection : System.Web.UI.Page {
         string path = HttpContext.Current.Server.MapPath("~/Web.Config");
         XmlDocument doc = new XmlDocument();
         doc.Load(path);
-        XmlNode node = doc.DocumentElement.FirstChild.SelectSingleNode("customErrors");
-        if (node != null) {
-            if (node.Attributes["mode"] != null && !string.IsNullOrEmpty(node.Attributes["mode"].Value)) {
-                customErrorsMode = node.Attributes["mode"].Value;
-            }
-        }
-
-        node = doc.DocumentElement.FirstChild.SelectSingleNode("compilation");
+        XmlNode node = doc.DocumentElement.FirstChild.SelectSingleNode("compilation");
         if (node != null) {
             if (node.Attributes["debug"] != null && !string.IsNullOrEmpty(node.Attributes["debug"].Value)) {
                 compilationDebug = node.Attributes["debug"].Value;
@@ -163,6 +159,23 @@ public partial class DatabaseSelection : System.Web.UI.Page {
 
     protected void lbtn_clearConnectionString_Click(object sender, EventArgs e) {
         txt_connectionstring.Text = string.Empty;
+    }
+
+    private static String CreateKey(int numBytes) {
+        RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+        byte[] buff = new byte[numBytes];
+
+        rng.GetBytes(buff);
+        return BytesToHexString(buff);
+    }
+
+    private static String BytesToHexString(byte[] bytes) {
+        StringBuilder hexString = new StringBuilder(64);
+
+        for (int counter = 0; counter < bytes.Length; counter++) {
+            hexString.Append(String.Format("{0:X2}", bytes[counter]));
+        }
+        return hexString.ToString();
     }
 
 }

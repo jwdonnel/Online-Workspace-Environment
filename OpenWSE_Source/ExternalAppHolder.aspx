@@ -17,6 +17,11 @@
             border-radius: 0px !important;
         }
 
+        #container
+        {
+            overflow: auto;
+        }
+
         .external-title
         {
             font-size: 15px;
@@ -48,18 +53,18 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <li class="a">
-                                            <a href="#" class="img-popin margin-right-sml margin-left" title="Place on workspace" onclick="OpenApp_External();return false;"></a>
+                                        <li class="a" onclick="OpenApp_External();return false;">
+                                            <a href="#" class="img-popin margin-right-sml margin-left" title="Place on workspace"></a>
                                         </li>
                                     </td>
                                     <td>
-                                        <li class="a">
-                                            <asp:LinkButton ID="btn_refresh" runat="server" CssClass="img-refresh-alt margin-right-sml margin-left" ToolTip="Refresh app" OnClick="btn_refresh_Click"></asp:LinkButton>
+                                        <li class="a" onclick="window.location.href=window.location.href;">
+                                            <a href="#" class="img-refresh-alt margin-right-sml margin-left" title="Refresh app" ></a>
                                         </li>
                                     </td>
                                     <td>
-                                        <li class="a">
-                                            <a href="#" class="img-close-alt margin-right margin-left" title="Close" onclick="window.close();return false;"></a>
+                                        <li class="a" onclick="window.close();return false;">
+                                            <a href="#" class="img-close-alt margin-right margin-left" title="Close"></a>
                                         </li>
                                     </td>
                                 </tr>
@@ -76,6 +81,17 @@
         <script type="text/javascript">
             $(document.body).on("click", "#btn_refresh", function () {
                 $(".loading-background-holder").show();
+            });
+
+            $(window).resize(function () {
+                $(".app-main-holder").css({
+                    width: $(window).width(),
+                    height: $(window).height() - $("#always-visible").outerHeight()
+                });
+
+                if ($(".iFrame-apps").length > 0) {
+                    $(".iFrame-apps").height($(".app-main-holder").outerHeight());
+                }
             });
 
             var performingAction = false;
