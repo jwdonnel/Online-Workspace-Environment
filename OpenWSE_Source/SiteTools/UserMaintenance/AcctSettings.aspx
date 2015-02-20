@@ -162,8 +162,8 @@
                             </div>
                         </div>
                     </div>
-                    <asp:Panel ID="pnl_isSocialAccount" runat="server" CssClass="float-left pad-left-big pad-top-big margin-top-big" Enabled="false" Visible="false" Width="400px">
-                        <h3 class="pad-top-big margin-top">This is a Social Network account which means you will not be able to change your password from this site. You must use the same network sign in every time you wish to access your account.
+                    <asp:Panel ID="pnl_isSocialAccount" runat="server" CssClass="pad-bottom-big margin-bottom-big pad-top-big margin-top-big" Enabled="false" Visible="false">
+                        <h3>This is a Social Network account which means you will not be able to change your password from this site. You must use the same network sign in every time you wish to access your account.
                         </h3>
                     </asp:Panel>
                 </ContentTemplate>
