@@ -16,7 +16,6 @@ public partial class WebControls_ExternalAppHolder : System.Web.UI.Page {
     private ServerSettings _ss = new ServerSettings();
     private readonly UserUpdateFlags _uuf = new UserUpdateFlags();
     private readonly App _apps = new App();
-    private readonly AppLog _applog = new AppLog(false);
     private MemberDatabase _member;
     private string _siteTheme = "Standard";
 
@@ -61,7 +60,7 @@ public partial class WebControls_ExternalAppHolder : System.Web.UI.Page {
                     LoadDefaultSettings(appId, fi.Extension);
                 }
                 catch (Exception ex) {
-                    _applog.AddError(ex);
+                    AppLog.AddError(ex);
                 }
             }
             else {

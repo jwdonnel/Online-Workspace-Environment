@@ -23,7 +23,6 @@ public partial class SiteTools_UserAccounts : Page {
 
     #region private variables
 
-    private readonly AppLog _applog = new AppLog(false);
     private ServerSettings _ss = new ServerSettings();
     private readonly AppCategory _appCategory = new AppCategory(false);
     private string _sitetheme;
@@ -141,7 +140,7 @@ public partial class SiteTools_UserAccounts : Page {
                 break;
         }
 
-        lbl_totalUsers.Text = "<b class='pad-right'>Total Users:</b>" + (coll.Count - 1).ToString();
+        lbl_totalUsers.Text = "<b class='pad-right'>Total Users</b>" + (coll.Count - 1).ToString();
 
         if (Request.Cookies["ddl_pageSize_useraccounts"] != null) {
             myCookie = Request.Cookies["ddl_pageSize_useraccounts"];
@@ -217,7 +216,7 @@ public partial class SiteTools_UserAccounts : Page {
                             continue;
                         }
 
-                        strUsers.Append("<div class='contact-card-main contact-card-main-category-packages'>");
+                        strUsers.Append("<div class='table-settings-box contact-card-main'>");
 
                         strUsers.Append("<table style='width: 100%;' cellpadding='5' cellspacing='0'><tbody>");
                         strUsers.Append("<tr>");
@@ -228,7 +227,7 @@ public partial class SiteTools_UserAccounts : Page {
 
                         string userMe = string.Empty;
                         if (u.UserName.ToLower() == _username.ToLower())
-                            userMe = " - <i>You</i>";
+                            userMe = " - <small><i>You</i></small>";
 
                         string adminPages = string.Empty;
                         string userRole = string.Empty;
@@ -245,10 +244,11 @@ public partial class SiteTools_UserAccounts : Page {
                             adminPages = GetAdminPages(member);
                         }
 
-                        strUsers.Append(UserImageColorCreator.CreateImgColor(member.AccountImage, member.UserColor, member.UserId, 40));
-                        strUsers.Append("<div class='float-left pad-left-sml'><h2 class='float-left username'>" + u.UserName + userMe + "</h2>");
-                        strUsers.Append("<div class='clear-space-two'></div>");
-                        strUsers.Append("<h4>" + userRole + " User</h4></div>");
+                        strUsers.Append(UserImageColorCreator.CreateImgColor(member.AccountImage, member.UserColor, member.UserId, 42));
+                        strUsers.Append("<div class='float-left pad-left'><h2 class='float-left username'>" + u.UserName + userMe + "</h2>");
+                        strUsers.Append("<div class='clear-space-five'></div>");
+                        strUsers.Append("<h4>" + HelperMethods.MergeFMLNames(member) + "</h4>");
+                        strUsers.Append("</div>");
 
                         strUsers.Append("</td>");
 
@@ -269,16 +269,23 @@ public partial class SiteTools_UserAccounts : Page {
                             strUsers.Append("<div class='clear-space-five'></div>");
                         }
                         strUsers.Append(receiveAll);
+                        strUsers.Append("<div class='clear-space-five'></div>");
+                        strUsers.Append("<div class='float-left' style='width: 12px; height: 12px;'></div><span>" + userRole + " User</span>");
                         strUsers.Append("</td>");
 
                         #endregion
 
                         #region -- Summary 1 --
 
-                        strUsers.Append("<td valign='top' style='width: 300px;'>");
-                        strUsers.Append("<h4 class='float-left pad-right font-bold'>Full Name:</h4>" + HelperMethods.MergeFMLNames(member) + "<div class='clear-space-two'></div>");
-                        strUsers.Append("<h4 class='float-left pad-right font-bold'>Email:</h4>" + u.Email + "<div class='clear-space-two'></div>");
-                        strUsers.Append("<h4 class='float-left pad-right font-bold'>Workspace Mode:</h4>" + member.WorkspaceMode.ToString());
+                        string ipAddress = member.IpAddress;
+                        if (string.IsNullOrEmpty(ipAddress)) {
+                            ipAddress = "n/a";
+                        }
+
+                        strUsers.Append("<td valign='top' style='width: 350px;'>");
+                        strUsers.Append("<span class='float-left settings-name-column' style='padding-top: 0px!important;'>Date Joined</span>" + u.CreationDate.ToShortDateString() + "<div class='clear-space-five'></div>");
+                        strUsers.Append("<span class='float-left settings-name-column' style='padding-top: 0px!important;'>Last Login</span>" + u.LastLoginDate.ToString() + "<div class='clear-space-five'></div>");
+                        strUsers.Append("<span class='float-left settings-name-column' style='padding-top: 0px!important;'>Ip Address</span>" + ipAddress);
                         strUsers.Append("<div class='clear'></div>");
                         strUsers.Append("</td>");
 
@@ -286,15 +293,9 @@ public partial class SiteTools_UserAccounts : Page {
 
                         #region -- Summary 2 --
 
-                        string ipAddress = member.IpAddress;
-                        if (string.IsNullOrEmpty(ipAddress)) {
-                            ipAddress = "n/a";
-                        }
-
-                        strUsers.Append("<td valign='top' style='width: 300px;'>");
-                        strUsers.Append("<h4 class='float-left pad-right font-bold'>Date Joined:</h4>" + u.CreationDate.ToShortDateString() + "<div class='clear-space-two'></div>");
-                        strUsers.Append("<h4 class='float-left pad-right font-bold'>Last Login:</h4>" + u.LastLoginDate.ToString() + "<div class='clear-space-two'></div>");
-                        strUsers.Append("<h4 class='float-left pad-right font-bold'>Ip Address:</h4>" + ipAddress);
+                        strUsers.Append("<td valign='top' style='width: 325px;'>");
+                        strUsers.Append("<span class='float-left settings-name-column' style='padding-top: 0px!important;'>Email</span>" + u.Email + "<div class='clear-space-five'></div>");
+                        strUsers.Append("<span class='float-left settings-name-column' style='padding-top: 0px!important;'>Workspace Mode</span>" + member.WorkspaceMode.ToString());
                         strUsers.Append("<div class='clear'></div>");
                         strUsers.Append("</td>");
 
@@ -390,11 +391,11 @@ public partial class SiteTools_UserAccounts : Page {
             if (_pageSize != 0) {
                 StringBuilder strPaging = new StringBuilder();
                 if (_pageNm > 1) {
-                    strPaging.Append("<a href='UserAccounts.aspx?page=" + (_pageNm - 1) + "' class='float-left sb-links pad-right' onclick='openWSE.LoadingMessage1(\"Loading. Please Wait...\");'><div class='pg-prev-btn float-left' style='padding: 0px 5px 0px 0px!important;'></div>Previous Page</a>");
+                    strPaging.Append("<a href='UserAccounts.aspx?page=" + (_pageNm - 1) + "' class='float-left pad-right' onclick='openWSE.LoadingMessage1(\"Loading. Please Wait...\");'><div class='pg-prev-btn float-left' style='padding: 0px 5px 0px 0px!important;'></div>Previous Page</a>");
                 }
 
                 if ((_pageNm * _pageSize) < coll.Count - 1) {
-                    strPaging.Append("<a href='UserAccounts.aspx?page=" + (_pageNm + 1) + "' class='float-right sb-links pad-left' onclick='openWSE.LoadingMessage1(\"Loading. Please Wait...\");'><div class='pg-next-btn float-right' style='padding: 0px 0px 0px 5px!important;'></div>Next Page</a>");
+                    strPaging.Append("<a href='UserAccounts.aspx?page=" + (_pageNm + 1) + "' class='float-right pad-left' onclick='openWSE.LoadingMessage1(\"Loading. Please Wait...\");'><div class='pg-next-btn float-right' style='padding: 0px 0px 0px 5px!important;'></div>Next Page</a>");
                 }
 
                 pnl_Users.Controls.Add(new LiteralControl(strPaging.ToString()));
@@ -451,7 +452,6 @@ public partial class SiteTools_UserAccounts : Page {
                     if (msu.ChangePassword(oldPassword, newPassword)) {
                         lbl_passwordReset.Text = "";
                         txt_PasswordFinishedText.Text = "<h3>Password has been changed for <b>" + username + "</b></h3><div class='clear' style='height: 45px'></div>";
-                        btn_closepwreset.Text = "Done";
                         ChangeUserPassword.Enabled = false;
                         ChangeUserPassword.Visible = false;
                     }
@@ -461,7 +461,6 @@ public partial class SiteTools_UserAccounts : Page {
     }
     protected void btn_closepwreset_Click(object sender, EventArgs e) {
         pwreset_overlay.Attributes["style"] = "visibility: hidden; display: none;";
-        pwreset_modal.Attributes["style"] = "display: none; opacity: 0.0; filter: alpha(opacity=0);";
     }
     protected void ddl_pageSize_Changed(object sender, EventArgs e) {
         BuildUsers();
@@ -563,7 +562,7 @@ public partial class SiteTools_UserAccounts : Page {
         BuildUsers();
 
         MembershipUserCollection coll = Membership.GetAllUsers();
-        string messageCount = "<b class='pad-right'>Total Users:</b>" + (coll.Count - 1).ToString();
+        string messageCount = "<b class='pad-right'>Total Users</b>" + (coll.Count - 1).ToString();
         string script = "$('#MainContent_lbl_totalUsers').html(\"" + messageCount + "\");";
 
         RegisterPostbackScripts.RegisterStartupScript(this, script + "$('#NewUser-element').find('.Modal-element-modal').removeClass('add-user-modal');");
@@ -622,7 +621,7 @@ public partial class SiteTools_UserAccounts : Page {
         BuildUsers();
 
         MembershipUserCollection coll = Membership.GetAllUsers();
-        string messageCount = "<b class='pad-right'>Total Users:</b>" + (coll.Count - 1).ToString();
+        string messageCount = "<b class='pad-right'>Total Users</b>" + (coll.Count - 1).ToString();
         string script = "$('#MainContent_lbl_totalUsers').html(\"" + messageCount + "\");";
 
         RegisterPostbackScripts.RegisterStartupScript(this, script);
@@ -637,18 +636,16 @@ public partial class SiteTools_UserAccounts : Page {
             string str = "<div class='clearMargin'><h3>Set new password for <b>" + user + "</b></h3></div>";
             lbl_passwordReset.Text = str;
             txt_PasswordFinishedText.Text = string.Empty;
-            btn_closepwreset.Text = "Cancel";
             ChangeUserPassword.Enabled = true;
             ChangeUserPassword.Visible = true;
             ChangeUserPassword.UserName = user;
             pwreset_overlay.Attributes["style"] = "visibility: visible; display: block;";
-            pwreset_modal.Attributes["style"] = "display: block; opacity: 1.0; filter: alpha(opacity=100);";
             TextBox tb_newPassword = (TextBox)ChangeUserPassword.ChangePasswordTemplateContainer.FindControl("NewPassword");
             if (tb_newPassword != null)
                 tb_newPassword.Focus();
         }
         catch (Exception ex) {
-            _applog.AddError(ex);
+            AppLog.AddError(ex);
         }
 
         BuildUsers();

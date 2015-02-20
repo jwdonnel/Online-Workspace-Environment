@@ -39,7 +39,7 @@ public partial class SiteTools_Overlays : System.Web.UI.Page {
 
                 lbl_uploadMessage.Text = "";
                 CheckQueryString();
-                if ((_username.ToLower() == ServerSettings.AdminUserName.ToLower()) || (!_ss.OverlaysLocked)) {
+                if (!_ss.OverlaysLocked) {
                     ltl_locked.Text = "";
 
                     string _ctrlname = string.Empty;
@@ -277,11 +277,11 @@ public partial class SiteTools_Overlays : System.Web.UI.Page {
         foreach (WorkspaceOverlay_Coll coll in _workspaceOverlays.OverlayList) {
             if (!string.IsNullOrEmpty(coll.OverlayName)) {
                 if (Roles.IsUserInRole(_username, ServerSettings.AdminUserName) || coll.UserName.ToLower() == _username.ToLower()) {
-                    str.Append("<div class='contact-card-main contact-card-main-category-packages'>");
-                    str.Append("<a href='#edit' class='float-right td-edit-btn' onclick='EditAssociation(\"" + coll.ID + "\");return false;' title='Edit'></a>");
-                    str.Append("<div class='float-left'><h2><b class='pad-right'>Overlay:</b><span style='font-weight: normal!important;'>" + coll.OverlayName + "</span></h2></div><div class='clear-space'></div>");
-                    str.Append("<div class='clear'></div>");
-                    str.Append("<div class='clear-margin package-contents pad-top pad-bottom'>" + LoadAppIcons(coll.ID) + "</div>");
+                    str.Append("<div class='table-settings-box contact-card-main'>");
+                    str.Append("<div class='td-settings-title'>" + coll.OverlayName);
+                    str.Append("<a href='#edit' class='float-right td-edit-btn' onclick='EditAssociation(\"" + coll.ID + "\");return false;' title='Edit'></a></div>");
+                    str.Append("<div class='title-line'></div>");
+                    str.Append("<div class='td-settings-ctrl'><div class='clear-space'></div>" + LoadAppIcons(coll.ID) + "<div class='clear-space'></div></div>");
                     str.Append("</div>");
                 }
             }
@@ -297,10 +297,10 @@ public partial class SiteTools_Overlays : System.Web.UI.Page {
         foreach (WorkspaceOverlay_Coll coll in _workspaceOverlays.OverlayList) {
             if (!string.IsNullOrEmpty(coll.OverlayName)) {
                 if (Roles.IsUserInRole(_username, ServerSettings.AdminUserName) || coll.UserName.ToLower() == _username.ToLower()) {
-                    str.Append("<div class='contact-card-main contact-card-main-category-packages'>");
-                    str.Append("<div class='float-left'><h2><b class='pad-right'>Overlay:</b><span style='font-weight: normal!important;'>" + coll.OverlayName + "</span></h2></div><div class='clear-space'></div>");
-                    str.Append("<div class='clear'></div>");
-                    str.Append("<div class='clear-margin package-contents pad-top pad-bottom'>" + LoadAppIcons(coll.ID) + "</div>");
+                    str.Append("<div class='table-settings-box'>");
+                    str.Append("<div class='td-settings-title'>" + coll.OverlayName + "</div>");
+                    str.Append("<div class='title-line'></div>");
+                    str.Append("<div class='td-settings-ctrl'><div class='clear-space'></div>" + LoadAppIcons(coll.ID) + "<div class='clear-space'></div></div>");
                     str.Append("</div>");
                 }
             }
@@ -396,7 +396,7 @@ public partial class SiteTools_Overlays : System.Web.UI.Page {
                             StringBuilder appScript = new StringBuilder();
                             appScript.Append("<div id='app-icon-" + _appId + "' class='app-icon-admin inline-block' style='padding: 0 !important;'>" + image);
                             appScript.Append("<span class='app-span-modify' style='text-align: left; padding: 11px 0 0 0 !important; line-height: 4px !important; font-size: 12px; width: 190px;'>" + dr.AppName);
-                            appScript.Append("<a href='#' onclick=\"AddAssociation(this, '" + _appId + "');return false;\" title='Add " + dr.AppName + "'>");
+                            appScript.Append("<a href='#' onclick=\"AddAssociation(this, '" + _appId + "');return false;\" title='Add " + dr.AppName + "' class='float-left'>");
                             appScript.Append("<div title='Add' class='img-expand-sml cursor-pointer float-left'></div></a></span></div>");
                             removeTemp.Add(_appId, appScript.ToString());
                         }
@@ -408,7 +408,7 @@ public partial class SiteTools_Overlays : System.Web.UI.Page {
                                     StringBuilder appScript = new StringBuilder();
                                     appScript.Append("<div id='app-icon-" + _appId + "' class='app-icon-admin inline-block' style='padding: 0 !important;'>" + image);
                                     appScript.Append("<span class='app-span-modify' style='text-align: left; padding: 11px 0 0 0 !important; line-height: 4px !important; font-size: 12px; width: 190px;'>" + dr.AppName);
-                                    appScript.Append("<a href='#' onclick=\"RemoveAssociation(this, '" + _appId + "');return false;\" title='Remove " + dr.AppName + "'>");
+                                    appScript.Append("<a href='#' onclick=\"RemoveAssociation(this, '" + _appId + "');return false;\" title='Remove " + dr.AppName + "' class='float-left'>");
                                     appScript.Append("<div title='Remove' class='img-collapse-sml cursor-pointer float-left'></div></a></span></div>");
                                     addTemp.Add(_appId, appScript.ToString());
                                 }
@@ -418,7 +418,7 @@ public partial class SiteTools_Overlays : System.Web.UI.Page {
                                     StringBuilder appScript = new StringBuilder();
                                     appScript.Append("<div id='app-icon-" + _appId + "' class='app-icon-admin inline-block' style='padding: 0 !important;'>" + image);
                                     appScript.Append("<span class='app-span-modify' style='text-align: left; padding: 11px 0 0 0 !important; line-height: 4px !important; font-size: 12px; width: 190px;'>" + dr.AppName);
-                                    appScript.Append("<a href='#' onclick=\"AddAssociation(this, '" + _appId + "');return false;\" title='Add " + dr.AppName + "'>");
+                                    appScript.Append("<a href='#' onclick=\"AddAssociation(this, '" + _appId + "');return false;\" title='Add " + dr.AppName + "' class='float-left'>");
                                     appScript.Append("<div title='Add' class='img-expand-sml cursor-pointer float-left'></div></a></span></div>");
                                     removeTemp.Add(_appId, appScript.ToString());
                                 }

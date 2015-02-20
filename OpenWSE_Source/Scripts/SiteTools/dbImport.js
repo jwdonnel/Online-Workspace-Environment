@@ -25,6 +25,22 @@ prm.add_endRequest(function () {
     });
 
     dbType = "";
+
+    if ($(this).prop("checked")) {
+        $("#chart_selector").show();
+        $("#tr-chart-title").show();
+    }
+    else {
+        $("#chart_selector").hide();
+        $("#tr-chart-title").hide();
+    }
+
+    if ($(this).is(":checked")) {
+        $("#div_isPrivate").show();
+    }
+    else {
+        $("#div_isPrivate").hide();
+    }
 });
 
 $(document.body).on("change", "#cb_addChart", function () {
@@ -73,11 +89,7 @@ $(document.body).on("click", ".RandomActionBtns, .td-update-btn", function () {
 /* Password Protected Requests */
 /* --------------------------- */
 function Confirm_Delete() {
-    $("#db_overlay").css("display", "block");
-    $("#db_overlay").css("visibility", "visible");
-    $("#db_modal").css("display", "block");
-    $("#db_modal").css("opacity", "1.0");
-    $("#db_modal").css("filter", "alpha(opacity=100)");
+    openWSE.LoadModalWindow(true, "password-element", "Need Password to Continue");
     $("#MainContent_tb_passwordConfirm").focus();
 }
 
@@ -95,17 +107,13 @@ function OnDelete() {
 }
 
 function CancelRequest() {
-    $("#db_overlay").css("display", "none");
-    $("#db_overlay").css("visibility", "hidden");
-    $("#db_modal").hide();
+    openWSE.LoadModalWindow(false, "password-element", "");
     dbType = "";
     $("#MainContent_tb_passwordConfirm").val("");
 }
 
 function BeginWork() {
-    $("#db_overlay").css("display", "none");
-    $("#db_overlay").css("visibility", "hidden");
-    $("#db_modal").hide();
+    openWSE.LoadModalWindow(false, "password-element", "");
     setTimeout(function () {
         openWSE.LoadingMessage1("Deleting Import. Please Wait...");
     }, 500);

@@ -37,16 +37,21 @@ public class AppInstallerService : System.Web.Services.WebService {
         List<string> tempList = new List<string>();
         StringBuilder app_script = new StringBuilder();
 
-        app_script.Append("<div class='tsdiv tsactive' onclick=\"SetCategory(this, 'All')\"><div class='pad-all-sml'><h4>All Apps</h4></div></div>");
         app_script.Append("<div class='sidebar-divider-no-margin'></div>");
 
+        int count = 0;
         foreach (Dictionary<string, string> dr in _appCategory.category_dt) {
             if (!tempList.Contains(dr["ID"])) {
-                app_script.Append("<div class='tsdiv' onclick=\"SetCategory(this, '" + dr["ID"] + "')\"><div class='pad-all-sml'>");
+                string cssClass = "tsdiv";
+                if (count == 0) {
+                    cssClass += " tsactive";
+                }
+                app_script.Append("<div class='" + cssClass + "' onclick=\"SetCategory(this, '" + dr["ID"] + "')\"><div class='pad-all-sml'>");
                 app_script.Append("<h4 class='font-bold float-left'>" + dr["Category"] + "</h4>");
                 app_script.Append("<span class='float-right' style='font-size: 12px'>(" + GetAppCount_Category(dr["ID"]) + ")</span></div></div>");
                 app_script.Append("<div class='sidebar-divider-no-margin'></div>");
                 tempList.Add(dr["ID"]);
+                count++;
             }
         }
         return app_script.ToString();
@@ -155,12 +160,12 @@ public class AppInstallerService : System.Web.Services.WebService {
                 str.Append("<div class='pad-top-big'>");
 
                 if (!isInstalled)
-                    str.Append("<a href='#' class='sb-links margin-bottom margin-right-big' onclick=\"AddApp('" + dr.AppId + "');return false;\"><span class='float-left td-add-btn margin-right-sml' style='padding: 0px!important;'></span>Install " + dr.AppName + "</a>");
+                    str.Append("<a href='#' class='margin-bottom margin-right-big' onclick=\"AddApp('" + dr.AppId + "');return false;\"><span class='float-left td-add-btn margin-right-sml' style='padding: 0px!important;'></span>Install " + dr.AppName + "</a>");
                 else
-                    str.Append("<a href='#' class='sb-links margin-bottom margin-right-big' onclick=\"RemoveApp('" + dr.AppId + "');return false;\"><span class='float-left td-delete-btn margin-right-sml' style='padding: 0px!important;'></span>Uninstall " + dr.AppName + "</a>");
+                    str.Append("<a href='#' class='margin-bottom margin-right-big' onclick=\"RemoveApp('" + dr.AppId + "');return false;\"><span class='float-left td-delete-btn margin-right-sml' style='padding: 0px!important;'></span>Uninstall " + dr.AppName + "</a>");
 
 
-                str.Append("<a href='#' class='sb-links margin-left' onclick=\"AboutApp_AppInstaller('" + dr.AppName + "','" + dr.AppId + "');return false;\">Learn More</a>");
+                str.Append("<a href='#' class='margin-left' onclick=\"AboutApp_AppInstaller('" + dr.AppName + "','" + dr.AppId + "');return false;\">Learn More</a>");
                 str.Append("</div></div></div>");
                 str.Append("<div class='clear' style='height: 20px'></div>");
                 count++;
@@ -276,12 +281,12 @@ public class AppInstallerService : System.Web.Services.WebService {
                     }
 
                     if (!isInstalled) {
-                        str.Append("<a href='#' class='sb-links' style='margin-bottom: 15px;' onclick=\"AddPlugin('" + coll.ID + "');return false;\"><span class='float-left td-add-btn margin-right-sml' style='padding: 0px!important;'></span>Install " + coll.PluginName + " Plugin</a>");
+                        str.Append("<a href='#' style='margin-bottom: 15px;' onclick=\"AddPlugin('" + coll.ID + "');return false;\"><span class='float-left td-add-btn margin-right-sml' style='padding: 0px!important;'></span>Install " + coll.PluginName + " Plugin</a>");
                     }
                     else {
                         if (!string.IsNullOrEmpty(userPluginID)) {
                             str.Append("<span style='font-size: 14px; color: #436A87'><b>Already installed</b></span><div class='clear-space'></div>");
-                            str.Append("<a href='#' class='sb-links' style='margin-bottom: 15px;' onclick=\"RemovePlugin('" + userPluginID + "');return false;\"><span class='float-left td-delete-btn margin-right-sml' style='padding: 0px!important;'></span>Uninstall " + coll.PluginName + " Plugin</a>");
+                            str.Append("<a href='#' style='margin-bottom: 15px;' onclick=\"RemovePlugin('" + userPluginID + "');return false;\"><span class='float-left td-delete-btn margin-right-sml' style='padding: 0px!important;'></span>Uninstall " + coll.PluginName + " Plugin</a>");
                         }
                     }
                     str.Append("</div></div></div>");

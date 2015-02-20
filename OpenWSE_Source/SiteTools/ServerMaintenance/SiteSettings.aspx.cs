@@ -31,7 +31,6 @@ public partial class SiteTools_SiteSettings : Page {
 
     private readonly Notifications _notifications = new Notifications();
     private ServerSettings _ss = new ServerSettings();
-    private readonly AppLog _applog = new AppLog(false);
     private string _sitetheme = "Standard";
     private string _username;
 
@@ -59,7 +58,7 @@ public partial class SiteTools_SiteSettings : Page {
                 else
                     lbtn_SendTestEmail.Text = "Send test email to " + mUser.Email;
 
-                lbl_lastcacheclear.Text = _ss.LastCacheClearDate.ToString(CultureInfo.InvariantCulture);
+                lbl_lastcacheclear.Text = _ss.LastCacheClearDate.ToString();
                 BuildSettingsList();
                 var scriptManager = ScriptManager.GetCurrent(Page);
                 if (scriptManager != null) {
@@ -189,7 +188,7 @@ public partial class SiteTools_SiteSettings : Page {
                             rb_Lockstartupscripts_off.Checked = true;
                         }
 
-                        if (_ss.LockIPListener) {
+                        if (_ss.LockIPListenerWatchlist) {
                             rb_Lockiplisteneron.Checked = true;
                             rb_Lockiplisteneroff.Checked = false;
                         }
@@ -332,8 +331,17 @@ public partial class SiteTools_SiteSettings : Page {
                             rb_emailonReg_off.Checked = true;
                         }
                     }
+
                     CustomizationOptionsEnabledDisabled(true);
                     LoadCustomizations();
+
+                    if (_ss.CustomizationsLocked) {
+                        pnl_Customizations.Enabled = false;
+                        pnl_Customizations.Visible = false;
+                        pnl_UserRegister.Enabled = false;
+                        pnl_UserRegister.Visible = false;
+                        btn_customizeSMTP.Visible = false;
+                    }
                 }
                 else {
                     CustomizationOptionsEnabledDisabled(false);
@@ -775,6 +783,15 @@ public partial class SiteTools_SiteSettings : Page {
             rb_recordLogFile_off.Checked = true;
         }
 
+        if (_ss.RecordErrorsOnly) {
+            rb_RecordErrorsOnly_on.Checked = true;
+            rb_RecordErrorsOnly_off.Checked = false;
+        }
+        else {
+            rb_RecordErrorsOnly_on.Checked = false;
+            rb_RecordErrorsOnly_off.Checked = true;
+        }
+
         if (_ss.RecordLoginActivity) {
             rb_recordLoginActivity_on.Checked = true;
             rb_recordLoginActivity_off.Checked = false;
@@ -896,7 +913,7 @@ public partial class SiteTools_SiteSettings : Page {
                 }
             }
             catch (Exception e) {
-                new AppLog(false).AddError(e);
+                AppLog.AddError(e);
             }
         }
     }
@@ -923,7 +940,7 @@ public partial class SiteTools_SiteSettings : Page {
                 }
             }
             catch (Exception e) {
-                new AppLog(false).AddError(e);
+                AppLog.AddError(e);
             }
         }
     }
@@ -1071,7 +1088,7 @@ public partial class SiteTools_SiteSettings : Page {
                     img_previewbg.Visible = false;
                 }
                 catch (Exception ex) {
-                    _applog.AddError(ex);
+                    AppLog.AddError(ex);
                 }
             }
         }
@@ -1361,7 +1378,7 @@ public partial class SiteTools_SiteSettings : Page {
         if (_username.ToLower() == ServerSettings.AdminUserName.ToLower()) {
             rb_Lockiplisteneron.Checked = true;
             rb_Lockiplisteneroff.Checked = false;
-            ServerSettings.update_LockIPListener(true);
+            ServerSettings.update_LockIPListenerWatchlist(true);
 
         }
     }
@@ -1370,7 +1387,7 @@ public partial class SiteTools_SiteSettings : Page {
         if (_username.ToLower() == ServerSettings.AdminUserName.ToLower()) {
             rb_Lockiplisteneron.Checked = false;
             rb_Lockiplisteneroff.Checked = true;
-            ServerSettings.update_LockIPListener(false);
+            ServerSettings.update_LockIPListenerWatchlist(false);
 
         }
     }
@@ -1485,7 +1502,7 @@ public partial class SiteTools_SiteSettings : Page {
                     FileUpload2.SaveAs(filename);
                 }
 
-                ServerSettings.PageToolViewRedirect(this.Page, "SiteSettings.aspx?datetime=" + DateTime.Now.Ticks.ToString());
+                ServerSettings.PageToolViewRedirect(Page, "~/SiteTools/ServerMaintenance/SiteSettings.aspx?tab=Customizations");
             }
         }
     }
@@ -1510,7 +1527,7 @@ public partial class SiteTools_SiteSettings : Page {
                     newImage.Save(filename, ImageFormat.Icon);
                 }
 
-                ServerSettings.PageToolViewRedirect(this.Page, "SiteSettings.aspx?datetime=" + DateTime.Now.Ticks.ToString());
+                ServerSettings.PageToolViewRedirect(Page, "~/SiteTools/ServerMaintenance/SiteSettings.aspx?tab=Customizations");
             }
         }
     }
@@ -1523,7 +1540,7 @@ public partial class SiteTools_SiteSettings : Page {
                 string filename = ServerSettings.GetServerMapLocation + "Standard_Images\\Backgrounds\\" + HelperMethods.RandomString(10) + fi.Extension;
 
                 FileUpload5.SaveAs(filename);
-                ServerSettings.PageToolViewRedirect(this.Page, "SiteSettings.aspx?datetime=" + DateTime.Now.Ticks.ToString());
+                ServerSettings.PageToolViewRedirect(Page, "~/SiteTools/ServerMaintenance/SiteSettings.aspx?tab=Customizations");
             }
         }
     }
@@ -1565,6 +1582,20 @@ public partial class SiteTools_SiteSettings : Page {
     }
 
 
+    protected void rb_RecordErrorsOnly_on_CheckedChanged(object sender, EventArgs e) {
+        rb_RecordErrorsOnly_off.Checked = false;
+        rb_RecordErrorsOnly_on.Checked = true;
+        ServerSettings.update_RecordErrorsOnly(true);
+
+    }
+    protected void rb_RecordErrorsOnly_off_CheckedChanged(object sender, EventArgs e) {
+        rb_RecordErrorsOnly_off.Checked = true;
+        rb_RecordErrorsOnly_on.Checked = false;
+        ServerSettings.update_RecordErrorsOnly(false);
+
+    }
+
+
     protected void rb_recordLogFile_on_CheckedChanged(object sender, EventArgs e) {
         rb_recordLogFile_off.Checked = false;
         rb_recordLogFile_on.Checked = true;
@@ -1577,7 +1608,6 @@ public partial class SiteTools_SiteSettings : Page {
         ServerSettings.update_RecordActivityToLogFile(false);
 
     }
-
 
     protected void rb_recordLoginActivity_on_CheckedChanged(object sender, EventArgs e) {
         rb_recordLoginActivity_off.Checked = false;
@@ -1689,11 +1719,23 @@ public partial class SiteTools_SiteSettings : Page {
         rb_siteCustomizations_Off.Checked = false;
         ServerSettings.update_CustomizationsLocked(true);
 
+        pnl_Customizations.Enabled = false;
+        pnl_Customizations.Visible = false;
+        pnl_UserRegister.Enabled = false;
+        pnl_UserRegister.Visible = false;
+        btn_customizeSMTP.Visible = false;
+
     }
     protected void rb_siteCustomizations_Off_CheckedChanged(object sender, EventArgs e) {
         rb_siteCustomizations_Off.Checked = true;
         rb_siteCustomizations_On.Checked = false;
         ServerSettings.update_CustomizationsLocked(false);
+
+        pnl_Customizations.Enabled = true;
+        pnl_Customizations.Visible = true;
+        pnl_UserRegister.Enabled = true;
+        pnl_UserRegister.Visible = true;
+        btn_customizeSMTP.Visible = true;
 
     }
 
@@ -1868,7 +1910,7 @@ public partial class SiteTools_SiteSettings : Page {
                 Cache.Remove(c.Key.ToString());
             }
             catch (Exception ex) {
-                _applog.AddError(ex);
+                AppLog.AddError(ex);
             }
         }
         Session.Clear();

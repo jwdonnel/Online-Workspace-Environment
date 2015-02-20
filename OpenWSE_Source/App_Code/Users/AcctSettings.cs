@@ -338,8 +338,7 @@ public class AcctSettings : System.Web.Services.WebService {
             }
         }
         catch (Exception e) {
-            AppLog appLog = new AppLog(false);
-            appLog.AddError(e);
+            AppLog.AddError(e);
 
             LoginActivity la = new LoginActivity();
             if (!string.IsNullOrEmpty(id)) {

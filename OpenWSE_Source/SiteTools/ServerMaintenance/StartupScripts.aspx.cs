@@ -32,7 +32,7 @@ public partial class SiteTools_StartupScripts : Page {
             if (ServerSettings.AdminPagesCheck(Page.ToString(), userId.Name)) {
                 _username = userId.Name;
 
-                if (((userId.Name.ToLower() == ServerSettings.AdminUserName.ToLower()) || (!_ss.LockStartupScripts)) && (Roles.IsUserInRole(_username, ServerSettings.AdminUserName))) {
+                if ((!_ss.LockStartupScripts) && (Roles.IsUserInRole(_username, ServerSettings.AdminUserName))) {
                     pnl_findreplace.Enabled = true;
                     pnl_findreplace.Visible = true;
                     aFindReplace.Visible = true;
@@ -120,7 +120,7 @@ public partial class SiteTools_StartupScripts : Page {
 
             str.Append("<tr class='myItemStyle GridNormalRow'>");
             str.Append("<td width='55px' align='center' class='GridViewNumRow sorted-js border-bottom' style='cursor:move'>" + count + "<span style='display:none'>" + coll.ID + "</span></td>");
-            str.Append("<td class='non-moveable border-right border-bottom'>" + path + "</td>");
+            str.Append("<td class='non-moveable border-right border-bottom'><div class='float-left' style='height: 22px;'></div>" + path + "</td>");
 
             string applyto = coll.ApplyTo;
             if (applyto.StartsWith("app-")) {
@@ -160,7 +160,7 @@ public partial class SiteTools_StartupScripts : Page {
 
             str.Append("<tr class='myItemStyle GridNormalRow'>");
             str.Append("<td width='40px' class='GridViewNumRow border-bottom' style='font-size: 12px!important'>" + count + "</td>");
-            str.Append("<td class='border-right border-bottom'><span>" + coll.ScriptPath + "</span></td>");
+            str.Append("<td class='border-right border-bottom'><div class='float-left' style='height: 22px;'></div><span>" + coll.ScriptPath + "</span></td>");
 
             string applyto = coll.ApplyTo;
             if (string.IsNullOrEmpty(applyto)) {
@@ -307,7 +307,7 @@ public partial class SiteTools_StartupScripts : Page {
                 str.Append("<td align='center' class='non-moveable border-right border-bottom' width='75px'>" + CreateRadioButtonsEdit_StartupScripts(coll.ID) + "</td>");
             }
             else {
-                str.Append("<td class='non-moveable border-right border-bottom'><span>" + coll.ScriptPath + "</span></td>");
+                str.Append("<td class='non-moveable border-right border-bottom'><div class='float-left' style='height: 22px;'></div><span>" + coll.ScriptPath + "</span></td>");
 
                 string applyto = coll.ApplyTo;
                 if (applyto.StartsWith("app-")) {
@@ -349,7 +349,7 @@ public partial class SiteTools_StartupScripts : Page {
         foreach (StartupScriptsSheets_Coll coll in startupscripts.StartupScriptsSheetsList) {
             str.Append("<tr class='myItemStyle GridNormalRow'>");
             str.Append("<td width='55px' align='center' class='GridViewNumRow sorted-css border-bottom' style='cursor:move'>" + coll.Sequence + "<span style='display:none'>" + coll.ID + "</span></td>");
-            str.Append("<td class='non-moveable border-right border-bottom'><span>" + coll.ScriptPath + "</span></td>");
+            str.Append("<td class='non-moveable border-right border-bottom'><div class='float-left' style='height: 22px;'></div><span>" + coll.ScriptPath + "</span></td>");
 
             string applyto = coll.ApplyTo;
             if (applyto.StartsWith("app-")) {
@@ -392,7 +392,7 @@ public partial class SiteTools_StartupScripts : Page {
 
             str.Append("<tr class='myItemStyle GridNormalRow'>");
             str.Append("<td width='40px' class='GridViewNumRow border-bottom' style='font-size: 12px!important'>" + count + "</td>");
-            str.Append("<td class='border-right border-bottom'><span>" + coll.ScriptPath + "</span></td>");
+            str.Append("<td class='border-right border-bottom'><div class='float-left' style='height: 22px;'></div><span>" + coll.ScriptPath + "</span></td>");
 
             string applyto = coll.ApplyTo;
             if (string.IsNullOrEmpty(applyto))
@@ -605,7 +605,7 @@ public partial class SiteTools_StartupScripts : Page {
                     str.Append("<td align='center' class='non-moveable border-right border-bottom' width='75px'>" + CreateRadioButtonsEdit_StartupScripts_CSS(coll.ID) + "</td>");
                 }
                 else {
-                    str.Append("<td class='non-moveable border-right border-bottom'><span>" + coll.ScriptPath + "</span></td>");
+                    str.Append("<td class='non-moveable border-right border-bottom'><div class='float-left' style='height: 22px;'></div><span>" + coll.ScriptPath + "</span></td>");
 
                     string applyto = coll.ApplyTo;
                     if (applyto.StartsWith("app-")) {
@@ -636,31 +636,27 @@ public partial class SiteTools_StartupScripts : Page {
 
     private void BuildLinks() {
         StringBuilder str = new StringBuilder();
-        Panel pnl_extraitems = (Panel)Master.FindControl("pnl_extraitems");
-        if (pnl_extraitems != null) {
-            pnl_extraitems.Controls.Clear();
+        pnlLinkBtns.Controls.Clear();
 
-            str.Append("<ul class='homedashlinks float-right'>");
+        str.Append("<ul class='sitemenu-selection'>");
+        str.Append("<li id='hdl1'><a href='#?tab=javascripts'>Javascripts</a></li>");
+        str.Append("<li id='hdl2'><a href='#?tab=stylesheets'>Style Sheets</a></li>");
+        str.Append("</ul>");
 
-            str.Append("<li id='hdl1'><a href='#?a=javascripts'>Javascripts</a></li>");
-            str.Append("<li id='hdl2'><a href='#?a=stylesheets'>Style Sheets</a></li>");
-
-            str.Append("</ul>");
-
-            pnl_extraitems.Controls.Add(new LiteralControl(str.ToString()));
-        }
+        pnlLinkBtns.Controls.Add(new LiteralControl(str.ToString()));
     }
 
     private void JsChecked() {
         var str = new StringBuilder();
-        str.Append("load('?a=javascripts');");
+        str.Append("load('?tab=javascripts');");
         RegisterPostbackScripts.RegisterStartupScript(this, str.ToString());
     }
     private void CssChecked() {
         var str = new StringBuilder();
-        str.Append("load('?a=stylesheets');");
+        str.Append("load('?tab=stylesheets');");
         RegisterPostbackScripts.RegisterStartupScript(this, str.ToString());
     }
 
     #endregion
+
 }

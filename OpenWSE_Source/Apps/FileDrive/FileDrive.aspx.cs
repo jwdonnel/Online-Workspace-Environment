@@ -178,7 +178,7 @@ public partial class Apps_FileDrive : Page {
         str.Append("<div class='clear-margin'><b class='pad-right'>Folders</b>" + (docs.folders_coll.Count) + "</div>");
         str.Append("<div class='clear-margin'><input id='tb_newfolderentry' type='text' maxlength='15' value='Create New Folder' class='textEntry margin-right-sml' style='width: 150px;' ");
         str.Append("onfocus=\"if(this.value=='Create New Folder')this.value=''\" onblur=\"if(this.value=='')this.value='Create New Folder'\" />");
-        str.Append("<a href='#newfolder' onclick='createnewfolder();return false;' class='sb-links margin-left'>Create</a><br />");
+        str.Append("<a href='#newfolder' onclick='createnewfolder();return false;' class='margin-left'>Create</a><br />");
         str.Append("<span id='foldermessage'></span></div>");
 
         if (Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
@@ -1338,7 +1338,7 @@ public partial class Apps_FileDrive : Page {
                 }
             }
             catch (Exception ex) {
-                new AppLog(false).AddError(ex);
+                AppLog.AddError(ex);
             }
         }
 

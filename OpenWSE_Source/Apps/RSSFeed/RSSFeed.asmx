@@ -339,7 +339,7 @@ public class RSSFeed : System.Web.Services.WebService {
             }
         }
         catch (Exception e) {
-            new AppLog(false).AddError(e);
+            AppLog.AddError(e);
         }
         
         obj[0] = list1.ToArray();

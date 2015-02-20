@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
+using System.Web;
 using System.Web.Configuration;
 using System.Web.Security;
 using OpenWSE_Tools.AutoUpdates;
@@ -73,7 +74,7 @@ public class AppLogIgnore {
                 else {
                     id = Guid.Parse(row["ID"]);
                 }
-                string ec = row["EventComment"];
+                string ec = HttpUtility.UrlDecode(row["EventComment"]);
                 int timesHit = 0;
                 if (!string.IsNullOrEmpty(row["TimesHit"]))
                     timesHit = Convert.ToInt32(row["TimesHit"]);
@@ -92,7 +93,7 @@ public class AppLogIgnore {
     public void GetEventCommentListOnly() {
         List<Dictionary<string, string>> dbSelect = dbCall.CallSelect("aspnet_WebEvents_Ignored", "", null, "DatePosted DESC");
         foreach (Dictionary<string, string> row in dbSelect) {
-            string ec = row["EventComment"];
+            string ec = HttpUtility.UrlDecode(row["EventComment"]);
             _appColl_eventcomment.Add(ec);
         }
     }
@@ -108,7 +109,7 @@ public class AppLogIgnore {
     public void addItem(string eventcomment) {
         List<DatabaseQuery> query = new List<DatabaseQuery>();
         query.Add(new DatabaseQuery("ID", Guid.NewGuid().ToString()));
-        query.Add(new DatabaseQuery("EventComment", eventcomment));
+        query.Add(new DatabaseQuery("EventComment", HttpUtility.UrlEncode(eventcomment)));
         query.Add(new DatabaseQuery("TimesHit", "0"));
         query.Add(new DatabaseQuery("RefreshOnError", "0"));
         query.Add(new DatabaseQuery("DatePosted", DateTime.Now.ToString()));

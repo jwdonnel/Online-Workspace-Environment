@@ -22,6 +22,7 @@
                 <div>
                     <asp:Literal ID="ltl_locked" runat="server"></asp:Literal>
                     <asp:Panel ID="pnl1" runat="server">
+                        <div class="clear-space"></div>
                         <div class="float-left" style="width: 475px;">
                             <div id="searchwrapper" style="width: 444px;">
                                 <asp:Panel ID="Panel1_FileManager" runat="server" DefaultButton="imgbtn_search">
@@ -36,21 +37,10 @@
                             </div>
                             <div class="clear-space">
                             </div>
-                            <asp:Button ID="btn_All" runat="server" ToolTip="Search All" CssClass="RandomActionBtns input-buttons margin-right"
-                                OnClick="imgbtn_all_Themes_Click" Text="All Files" />
-                            <asp:Button ID="btn_Themes" runat="server" ToolTip="Search Themes" CssClass="RandomActionBtns input-buttons margin-right"
-                                OnClick="imgbtn_search_Themes_Click" Text="Themes" />
-                            <asp:Button ID="LinkButton1" runat="server" ToolTip="Search Themes" CssClass="RandomActionBtns input-buttons rounded-corners-5"
-                                OnClick="imgbtn_search_Scripts_Click" Text="Scripts" />
-                            <asp:Button ID="LinkButton2" runat="server" ToolTip="Search Themes" CssClass="RandomActionBtns input-buttons rounded-corners-5"
-                                OnClick="imgbtn_search_WebControls_Click" Text="Web Controls" />
-                            <asp:Button ID="LinkButton4" runat="server" ToolTip="Search Themes" CssClass="RandomActionBtns input-buttons rounded-corners-5"
-                                OnClick="imgbtn_search_Apps_Click" Text="Apps" />
                         </div>
                         <div class="float-right">
                             <div class="float-right pad-right-sml">
-                                <small><b class="pad-right-sml">Note:</b>The FileManager only loads files with extensions:
-                                .js and .css</small>
+                                The FileManager only loads files with extensions: .js and .css
                             </div>
                             <div class="clear-space">
                             </div>
@@ -80,7 +70,6 @@
                                     <HeaderTemplate>
                                         <table class="myHeaderStyle" cellpadding="5" cellspacing="0">
                                             <tr>
-                                                <td width="45px" align="center"></td>
                                                 <td align="center">Filename
                                                 </td>
                                                 <td width="65px" align="center">Ext
@@ -98,10 +87,7 @@
                                         <asp:Panel ID="pnl_FileMain" class="panelcontainer" runat="server">
                                             <table cellpadding="5" cellspacing="0" class="myItemStyle">
                                                 <tr>
-                                                    <td width="45px" align="center" class="GridViewNumRow">
-                                                        <%#Eval("RowCount") %>
-                                                    </td>
-                                                    <td align="left" class="border-right" title="<%# String.Format("View options for {0}", Eval("Title")) %>">
+                                                    <td align="left" class="border-right border-left" title="<%# String.Format("View options for {0}", Eval("Title")) %>">
                                                         <div style="padding: 3px 0 4px 0;">
                                                             <%#Eval("Title") %>
                                                         </div>
@@ -120,7 +106,7 @@
                                                             ToolTip="Download" CommandName="DownloadScript" CommandArgument='<%#Eval("Title") %>'
                                                             PostBackUrl="FileManager.aspx"></asp:LinkButton>
                                                         <a href='FileManager.aspx?edit=true&file=<%#Eval("Path") %>' class='<%#Eval("EditClass") %>'
-                                                            title="Edit"></a><a href='FileManager.aspx?edit=false&file=<%#Eval("Path") %>' class="img-view pad-all-sml margin-left-sml RandomActionBtns"
+                                                            title="Edit"></a><a href='FileManager.aspx?edit=false&file=<%#Eval("Path") %>' class="<%#Eval("PreviewClass") %>"
                                                                 title="View"></a>
                                                     </td>
                                                 </tr>
@@ -139,22 +125,21 @@
             </Triggers>
         </asp:UpdatePanel>
         <asp:Panel ID="pnl2" runat="server" Enabled="false" Visible="false">
-            <h2 class="float-left">File Editor/Viewer -</h2>
+            <h3 class="float-left pad-top-sml">File Editor/Viewer&nbsp;&nbsp;-</h3>
             <asp:Label ID="lbl_currfile" runat="server" CssClass="float-left pad-top margin-left"
                 Text=""></asp:Label>
             <asp:LinkButton ID="lbtn_save" runat="server" OnClientClick=" return ConfirmSaveFile(this); "
-                CssClass="sb-links float-right" ToolTip="Save">
+                CssClass="float-right input-buttons no-margin" ToolTip="Save" style="margin-left: 16px !important;">
                 <span class="img-backup float-left margin-right-sml"></span>Save</asp:LinkButton>
-            <asp:HyperLink ID="lbtn_close" NavigateUrl="FileManager.aspx" CssClass="sb-links margin-right float-right"
+            <asp:HyperLink ID="lbtn_close" NavigateUrl="FileManager.aspx" CssClass="float-right input-buttons no-margin"
                 runat="server" ToolTip="Back">
                 <span class="pg-prev-btn float-left margin-right-sml" style="padding: 0px!important;"></span>Back
             </asp:HyperLink>
             <div class="clear-space">
             </div>
             <div class="clear-margin">
-                <small>
                     <asp:Label ID="lbl_messageRead" runat="server" CssClass="float-right bold" Text=""></asp:Label>
-                    Do not refresh the browser or press the back button while in the File Editor/Viewer</small>
+                    Do not refresh the browser or press the back button while in the File Editor/Viewer
             </div>
             <div class="clear-space">
             </div>

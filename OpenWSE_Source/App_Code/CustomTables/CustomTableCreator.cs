@@ -52,7 +52,7 @@ public class CustomTableCreator : System.Web.Services.WebService {
                 postedFile.SaveAs(tempFile);
             }
             catch (Exception e) {
-                new AppLog(false).AddError(e);
+                AppLog.AddError(e);
             }
 
             try {

@@ -88,26 +88,21 @@ public struct AppLog_Coll {
     }
 }
 
-
-
 [Serializable]
 public class AppLog {
     public static bool AddingError = false;
     private readonly List<AppLog_Coll> _appColl = new List<AppLog_Coll>();
     private readonly DatabaseCall dbCall = new DatabaseCall();
     private readonly UserUpdateFlags _uuf = new UserUpdateFlags();
-    private HttpContext Context;
 
     public AppLog(bool getvalues) {
-        Context = HttpContext.Current;
-
         if (getvalues) {
             _appColl.Clear();
             List<Dictionary<string, string>> dbSelect = dbCall.CallSelect("aspnet_WebEvent_Events", "", null, "DatePosted DESC");
             foreach (Dictionary<string, string> row in dbSelect) {
                 var id = Guid.Parse(row["EventId"]);
                 string en = row["EventName"];
-                string ec = row["EventComment"];
+                string ec = HttpUtility.UrlDecode(row["EventComment"]);
                 string d = row["DatePosted"];
                 string ap = row["ApplicationPath"];
                 string mn = row["MachineName"];
@@ -115,6 +110,7 @@ public class AppLog {
                 string et = row["ExceptionType"];
                 string st = row["StackTrace"];
                 string un = row["UserName"];
+
                 var coll = new AppLog_Coll(id, en, ec, d, ap, mn, rurl, et, st, un);
                 updateSlots(coll);
             }
@@ -126,6 +122,8 @@ public class AppLog {
     }
 
     private void addItem(string eventname, string eventcomment, Exception e) {
+        HttpContext Context = HttpContext.Current;
+ 
         if (!AddingError) {
             AddingError = true;
             var ss = new ServerSettings();
@@ -182,7 +180,12 @@ public class AppLog {
                         stackTrace = e.StackTrace;
                     }
 
-                    if (ss.EmailActivity) {
+                    if (ss.RecordErrorsOnly && (string.IsNullOrEmpty(type) || type == "N/A")) {
+                        AddingError = false;
+                        return;
+                    }
+
+                    if (ss.EmailActivity && !string.IsNullOrEmpty(type) && type != "N/A") {
                         try {
                             SendErrorMessage(eventname, type, HttpContext.Current.Request.Url.OriginalString, currUser, eventcomment, date);
                         }
@@ -192,12 +195,12 @@ public class AppLog {
                     DeleteTopRecords();
 
                     DatabaseCall tempdbCall = new DatabaseCall();
-                    tempdbCall.NeedToLogErrors = false;
+                    tempdbCall.NeedToLog = false;
 
                     List<DatabaseQuery> query = new List<DatabaseQuery>();
                     query.Add(new DatabaseQuery("EventId", Guid.NewGuid().ToString()));
                     query.Add(new DatabaseQuery("EventName", eventname));
-                    query.Add(new DatabaseQuery("EventComment", eventcomment));
+                    query.Add(new DatabaseQuery("EventComment", HttpUtility.UrlEncode(eventcomment)));
                     query.Add(new DatabaseQuery("DatePosted", date));
                     query.Add(new DatabaseQuery("ApplicationPath", HttpContext.Current.Request.ApplicationPath));
                     query.Add(new DatabaseQuery("MachineName", System.Environment.MachineName));
@@ -206,9 +209,10 @@ public class AppLog {
                     query.Add(new DatabaseQuery("StackTrace", stackTrace));
                     query.Add(new DatabaseQuery("UserName", currUser));
 
+
                     tempdbCall.CallInsert("aspnet_WebEvent_Events", query);
 
-                    if (ss.RecordActivityToLogFile) {
+                    if (ss.RecordActivityToLogFile && !string.IsNullOrEmpty(type) && type != "N/A") {
                         CreateLogFile(eventname, eventcomment, date, HttpContext.Current.Request.ApplicationPath, System.Environment.MachineName, HttpContext.Current.Request.Url.OriginalString, type, stackTrace, currUser);
                     }
                 }
@@ -259,7 +263,12 @@ public class AppLog {
                     string type = "N/A";
                     string stackTrace = "N/A";
 
-                    if (ss.EmailActivity) {
+                    if (ss.RecordErrorsOnly && (string.IsNullOrEmpty(eventname) || eventname != "Javascript Error")) {
+                        AddingError = false;
+                        return;
+                    }
+
+                    if (ss.EmailActivity && eventname == "Javascript Error") {
                         try {
                             SendErrorMessage(eventname, type, HttpContext.Current.Request.Url.OriginalString, currUser, eventcomment, date);
                         }
@@ -269,12 +278,12 @@ public class AppLog {
                     DeleteTopRecords();
 
                     DatabaseCall tempdbCall = new DatabaseCall();
-                    tempdbCall.NeedToLogErrors = false;
+                    tempdbCall.NeedToLog = false;
 
                     List<DatabaseQuery> query = new List<DatabaseQuery>();
                     query.Add(new DatabaseQuery("EventId", Guid.NewGuid().ToString()));
                     query.Add(new DatabaseQuery("EventName", eventname));
-                    query.Add(new DatabaseQuery("EventComment", eventcomment));
+                    query.Add(new DatabaseQuery("EventComment", HttpUtility.UrlEncode(eventcomment)));
                     query.Add(new DatabaseQuery("DatePosted", date));
                     query.Add(new DatabaseQuery("ApplicationPath", HttpContext.Current.Request.ApplicationPath));
                     query.Add(new DatabaseQuery("MachineName", System.Environment.MachineName));
@@ -284,15 +293,22 @@ public class AppLog {
                     query.Add(new DatabaseQuery("UserName", currUser));
 
                     tempdbCall.CallInsert("aspnet_WebEvent_Events", query);
+
+                    if (ss.RecordActivityToLogFile && eventname == "Javascript Error") {
+                        CreateLogFile(eventname, eventcomment, date, HttpContext.Current.Request.ApplicationPath, System.Environment.MachineName, HttpContext.Current.Request.Url.OriginalString, type, stackTrace, currUser);
+                    }
                 }
             }
             AddingError = false;
         }
     }
 
-    public void AddError(Exception e) {
+    public static void AddError(Exception e) {
+        AppLog tempLog = new AppLog(false);
+
         string innerMessage = string.Empty;
 
+        HttpContext Context = HttpContext.Current;
         if ((Context != null) && (Context.Error != null)) {
             if (Context.Error.InnerException != null)
                 innerMessage = Context.Error.InnerException.Message;
@@ -304,7 +320,7 @@ public class AppLog {
                 if (Context.Error.Message == innerMessage)
                     errorMessage = Context.Error.Message;
 
-                addItem(Context.Error.TargetSite.Name, errorMessage, e);
+                tempLog.addItem(Context.Error.TargetSite.Name, errorMessage, e);
             }
         }
         else if (e != null) {
@@ -318,13 +334,22 @@ public class AppLog {
                 if (e.Message == innerMessage)
                     errorMessage = e.Message;
 
-                addItem(e.TargetSite.Name, errorMessage, e);
+                tempLog.addItem(e.TargetSite.Name, errorMessage, e);
             }
         }
     }
-    public void AddError(string message) {
+    public static void AddError(string message) {
         if (string.IsNullOrEmpty(message)) return;
-        addItem("Javascript Error", message);
+
+        AppLog tempLog = new AppLog(false);
+        tempLog.addItem("Javascript Error", message);
+    }
+
+    public static void AddEvent(string title, string message) {
+        if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(message)) return;
+
+        AppLog tempLog = new AppLog(false);
+        tempLog.addItem(title, message);
     }
 
     #region Log Builder
@@ -388,7 +413,7 @@ public class AppLog {
 
     public string GetEventComment(string id) {
         DatabaseQuery dbSelect = dbCall.CallSelectSingle("aspnet_WebEvent_Events", "EventComment", new List<DatabaseQuery>() { new DatabaseQuery("EventId", id) });
-        return dbSelect.Value;
+        return HttpUtility.UrlDecode(dbSelect.Value);
     }
 
     private void DeleteTopRecords() {
@@ -411,7 +436,7 @@ public class AppLog {
         foreach (Dictionary<string, string> row in dbSelect) {
             var id = Guid.Parse(row["EventId"]);
             string en = row["EventName"];
-            string ec = row["EventComment"];
+            string ec = HttpUtility.UrlDecode(row["EventComment"]);
             string d = row["DatePosted"];
             string ap = row["ApplicationPath"];
             string mn = row["MachineName"];

@@ -19,7 +19,7 @@
         <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="True" AsyncPostBackTimeout="360000" />
         <div class="header">
             <a id="header_backbtn" href="#" onclick="QikPages.iframeSetup('','');return false;" style="display: none;">Close</a>
-            <h3 id="header_site_title" runat="server">Login Portal</h3>
+            <h3 id="header_site_title" runat="server"></h3>
         </div>
         <table id="table-container" cellpadding="0" cellspacing="0">
             <tr>
@@ -302,6 +302,7 @@
         <script type="text/javascript" src="Scripts/jquery/combined-scripts.min.js"></script>
         <script type="text/javascript" src="WebControls/jscolor/jscolor.js"></script>
         <script type="text/javascript">
+            var siteName = "";
             var QikPages = function () {
                 var siteTheme = "Standard";
                 var animationSpeed = 200;
@@ -346,7 +347,7 @@
                     $("#pnl_goback, .container-box, #header_backbtn, #iframe-Holder").hide();
                     $("#table-container, #pnl_FooterPasswordRec, #pnl_FooterRegister").show();
                     $("#RegisterUser_CreateUserStepContainer_UserName,#RegisterUser_CreateUserStepContainer_Email,#RegisterUser_CreateUserStepContainer_tb_firstnamereg,#RegisterUser_CreateUserStepContainer_tb_lastnamereg,#RegisterUser_CreateUserStepContainer_Password,#RegisterUser_CreateUserStepContainer_ConfirmPassword,#RegisterUser_CreateUserStepContainer_Color1").val("");
-                    $("#header_site_title").html("Login Portal");
+                    $("#header_site_title").html(siteName + " Login Portal");
                     $("#iframe-Holder").html("");
                     $("#logindiv").fadeIn(animationSpeed, function () {
                         $("#Login1_UserName").focus();
@@ -392,7 +393,7 @@
                 function hideIframe() {
                     if ($("#iframe-Holder").css("display") == "block") {
                         $("#iframe-Holder").fadeOut(animationSpeed, function () {
-                            $("#header_site_title").html("Login Portal");
+                            $("#header_site_title").html(siteName + " Login Portal");
                             $("#header_backbtn").hide();
                             $("#table-container").show();
                             $("#iframe-Holder").html("");

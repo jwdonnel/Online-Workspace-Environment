@@ -72,11 +72,11 @@
                         </div>
                         <div id="select-btns-appinstaller" class="float-left" style="padding: 5px 20px;">
                             <div class="pad-top-sml">
-                                <a href="#" id="hyp_selectedAll_appinstaller" class="sb-links margin-right-big"
+                                <a href="#" id="hyp_selectedAll_appinstaller" class="margin-right-big"
                                     onclick="SelectAll_AppInstaller();return false;">Select All</a> <a href="#" id="hyp_deselectAll_appinstaller"
-                                        class="sb-links margin-right-big" onclick="DeselectAll_AppInstaller();return false;"
+                                        class="margin-right-big" onclick="DeselectAll_AppInstaller();return false;"
                                         style="display: none;">Deselect All</a> <a href="#" id="hyp_installSelected_appinstaller"
-                                            class="sb-links margin-right-left" onclick="InstallSelected_AppInstaller();return false;"
+                                            class="margin-right-left" onclick="InstallSelected_AppInstaller();return false;"
                                             style="display: none;">Install Selected</a>
                             </div>
                         </div>

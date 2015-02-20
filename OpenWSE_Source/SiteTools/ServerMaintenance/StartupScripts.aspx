@@ -4,7 +4,14 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding pad-top-big margin-top">
+    <div class="maincontent-padding margin-top">
+        <asp:Literal ID="ltl_locked" runat="server"></asp:Literal>
+        <div class="clear-space"></div>
+        <a href="#" id="aFindReplace" runat="server" onclick="openWSE.LoadModalWindow(true, 'FindReplace-element', 'Find and Replace');return false;" class="float-right input-buttons no-margin" title="Find and replace all script paths."><span class="float-left img-replace margin-right-sml"></span>Find and Replace</a>
+        <asp:Panel ID="pnlLinkBtns" runat="server">
+        </asp:Panel>
+        <div class="clear-space">
+        </div>
         <div id="FindReplace-element" class="Modal-element">
             <div class="Modal-overlay">
                 <div class="Modal-element-align">
@@ -44,15 +51,7 @@
             </div>
         </div>
         <div class="pad-bottom">
-            <div class="float-left">
-                <small>Add/Update/Edit/Delete the startup scripts. Functionality will depend on the arrangment
-            of the scripts. To edit a script, go to the File Manager page.</small>
-            </div>
-            <div class="clear">
-            </div>
-            <asp:Literal ID="ltl_locked" runat="server"></asp:Literal>
-            <small><b class="pad-right-sml">Note:</b>'Seq.' = Sequence of load.</small>
-            <a href="#" id="aFindReplace" runat="server" onclick="openWSE.LoadModalWindow(true, 'FindReplace-element', 'Find and Replace');return false;" class="sb-links float-right" title="Find and replace all script paths."><span class="float-left img-replace margin-right-sml"></span>Find and Replace</a>
+            Add/Update/Edit/Delete the startup scripts. Functionality will depend on the arrangment of the scripts. To edit a script, go to the File Manager page.
         </div>
         <div id="startupcss" style="display: none">
             <asp:UpdatePanel ID="UpdatePanel3" runat="server">

@@ -52,7 +52,7 @@ public partial class SiteTools_CustomTables : System.Web.UI.Page {
                 BuildChartTypeList();
                 BuildUsersAllowedToEdit();
 
-                if ((_username.ToLower() != ServerSettings.AdminUserName.ToLower()) && (_ss.LockCustomTables)) {
+                if (_ss.LockCustomTables) {
                     ltl_locked.Text = HelperMethods.GetLockedByMessage();
                     pnl_columnEditor.Enabled = false;
                     pnl_columnEditor.Visible = false;
@@ -115,7 +115,7 @@ public partial class SiteTools_CustomTables : System.Web.UI.Page {
                     un = user;
 
                 string marginTop = "3px";
-                string userNameTitle = "<h4>" + un + "</h4>";
+                string userNameTitle = "<h4 class='float-left margin-top-sml'>" + un + "</h4>";
                 string acctImage = tempMember.AccountImage;
                 if (!string.IsNullOrEmpty(acctImage)) {
                     userNameTitle = "<h4 class='float-left pad-top pad-left-sml'>" + un + "</h4>";
@@ -203,7 +203,7 @@ public partial class SiteTools_CustomTables : System.Web.UI.Page {
 
             string recreateAppBtn = "";
             if (!AppExists(coll.AppID))
-                recreateAppBtn = "<div class='clear-space-two'></div><a href='#createapp' onclick='RecreateApp(\"" + coll.AppID.Replace("app-", "") + "\", \"" + coll.TableName + "\", \"" + coll.Sidebar.ToString().ToLower() + "\", \"" + coll.Chart_Type.ToString() + "\");return false;' class='sb-links table-action-btns' title='Create App'>Create</a>";
+                recreateAppBtn = "<div class='clear-space-two'></div><a href='#createapp' onclick='RecreateApp(\"" + coll.AppID.Replace("app-", "") + "\", \"" + coll.TableName + "\", \"" + coll.Sidebar.ToString().ToLower() + "\", \"" + coll.Chart_Type.ToString() + "\");return false;' class='table-action-btns' title='Create App'>Create</a>";
             else {
                 if ((_username.ToLower() != coll.CreatedBy.ToLower()) && (apps.GetIsPrivate(coll.AppID)) && (_username.ToLower() != ServerSettings.AdminUserName.ToLower())) {
                     continue;

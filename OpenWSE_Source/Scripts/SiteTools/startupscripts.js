@@ -198,7 +198,7 @@ var fixHelper = function (e, ui) {
 var prelistorder_js = "";
 var prelistorder_css = "";
 $(document).ready(function () {
-    var url = location.hash;
+    var url = location.href;
     load(url == "" ? "1" : url);
 
     if ($("#startupjs").css("display") == "none") {
@@ -313,9 +313,9 @@ $(document).ready(function () {
 });
 
 $(function () {
-    $(window).hashchange(function () {
-        var url = location.hash;
-        load(url == "" ? "1" : url);
+    $(".sitemenu-selection").find("li").find("a").on("click", function () {
+        load($(this).attr("href"));
+        return false;
     });
 });
 
@@ -454,7 +454,7 @@ function load(num) {
         catch (evt) { }
     }
 
-    arg1 = num.split("?a=");
+    arg1 = num.split("?tab=");
     if (arg1.length > 1) {
         arg2 = arg1[1].split("#");
         if (arg2.length == 1) {

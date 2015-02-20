@@ -19,18 +19,21 @@
         <siteMapNode url="~/SiteTools/UserMaintenance/GroupOrg.aspx" title="Group Organizer" icon="SiteLinkIcons/grouporg.png" />
         <siteMapNode url="~/SiteTools/ServerMaintenance/LicenseManager.aspx" title="License Manager" roles="Administrator" icon="SiteLinkIcons/license.png" />
         <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx" title="Network Log" icon="SiteLinkIcons/networklog.png">
-            <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx#?a=activity" title="Activity" />
-            <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx#?a=errors" title="Errors" />
-            <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx#?a=ignore" title="Ignored Errors" />
-            <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx#?a=loginActivity" title="Logins" />
-            <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx#?a=ipwatchlist" title="IP WatchList" />
-            <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx#?a=iplistener" title="IP Listener" />
+            <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=activity" title="Activity" />
+            <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=log" title="Events" />
+            <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=ignore" title="Ignored" />
+            <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=loginActivity" title="Logins" />
+            <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=ipwatchlist" title="IP WatchList" />
+            <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=iplistener" title="IP Listener" />
         </siteMapNode>
         <siteMapNode url="~/SiteTools/CustomContent/NotifiManager.aspx" title="Notification Manager" icon="SiteLinkIcons/notifications.png" />
         <siteMapNode url="~/SiteTools/CustomContent/Overlays.aspx" title="Overlay Manager" icon="SiteLinkIcons/overlays.png" />
         <siteMapNode url="~/SiteTools/ServerMaintenance/SiteSettings.aspx" title="Site Settings" icon="SiteLinkIcons/sitesettings.png" />
         <siteMapNode url="~/SiteTools/CustomContent/SitePlugins.aspx" title="Plugins" icon="SiteLinkIcons/siteplugins.png" />
-        <siteMapNode url="~/SiteTools/ServerMaintenance/StartupScripts.aspx" title="Startup Scripts" icon="SiteLinkIcons/startupscripts.png" />
+        <siteMapNode url="~/SiteTools/ServerMaintenance/StartupScripts.aspx" title="Startup Scripts" icon="SiteLinkIcons/startupscripts.png">
+            <siteMapNode url="~/SiteTools/ServerMaintenance/StartupScripts.aspx?tab=javascripts" title="Javascript" />
+            <siteMapNode url="~/SiteTools/ServerMaintenance/StartupScripts.aspx?tab=stylesheets" title="Stylesheets" />
+        </siteMapNode>
         <siteMapNode url="~/SiteTools/UserMaintenance/UserAccounts.aspx" title="User Accounts" icon="SiteLinkIcons/useraccounts.png" />
         <siteMapNode url="~/SiteTools/CustomContent/WebServices.aspx" title="Web Services" icon="SiteLinkIcons/webservices.png" />
         <siteMapNode url="~/Workspace.aspx" title="Workspace" icon="SiteLinkIcons/workspace.png" />

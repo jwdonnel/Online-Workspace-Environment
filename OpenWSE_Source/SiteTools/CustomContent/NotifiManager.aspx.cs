@@ -37,7 +37,7 @@ public partial class SiteTools_NotifiManager : System.Web.UI.Page {
 
                 lbl_uploadMessage.Text = "";
 
-                if ((_username.ToLower() == ServerSettings.AdminUserName.ToLower()) || (!_ss.NotificationsLocked)) {
+                if (!_ss.NotificationsLocked) {
                     ltl_locked.Text = "";
 
                     string _ctrlname = string.Empty;
@@ -288,11 +288,11 @@ public partial class SiteTools_NotifiManager : System.Web.UI.Page {
                 }
 
                 if (Roles.IsUserInRole(_username, ServerSettings.AdminUserName) || coll.UserName.ToLower() == _username.ToLower()) {
-                    str.Append("<div class='contact-card-main contact-card-main-category-packages'>");
-                    str.Append("<a href='#edit' class='float-right td-edit-btn' onclick='EditAssociation(\"" + coll.ID + "\");return false;' title='Edit'></a>");
-                    str.Append("<div class='float-left'><h2><b class='pad-right'>Notification:</b><span style='font-weight: normal!important;'>" + coll.NotificationName + "</span></h2></div><div class='clear-space'></div>");
-                    str.Append("<div class='clear'></div>");
-                    str.Append("<div class='clear-margin package-contents pad-top pad-bottom'>" + LoadAppIcons(coll.ID) + "</div>");
+                    str.Append("<div class='table-settings-box contact-card-main'>");
+                    str.Append("<div class='td-settings-title'>" + coll.NotificationName);
+                    str.Append("<a href='#edit' class='float-right td-edit-btn' onclick='EditAssociation(\"" + coll.ID + "\");return false;' title='Edit'></a></div>");
+                    str.Append("<div class='title-line'></div>");
+                    str.Append("<div class='td-settings-ctrl'><div class='clear-space'></div>" + LoadAppIcons(coll.ID) + "<div class='clear-space'></div></div>");
                     str.Append("</div>");
                 }
             }
@@ -307,15 +307,16 @@ public partial class SiteTools_NotifiManager : System.Web.UI.Page {
         _notifications.GetNotifications();
         foreach (Notifications_Coll coll in _notifications.NotificationList) {
             if (!string.IsNullOrEmpty(coll.NotificationName)) {
-                if ((_username.ToLower() != ServerSettings.AdminUserName.ToLower()) && ((coll.ID == "236a9dc9-c92a-437f-8825-27809af36a3f") || (coll.ID == "1159aca6-2449-4aff-bacb-5f29e479e2d7") || (coll.ID == "adaefeb2-9ef2-4ffa-b6ca-c76fc2815d4f"))) {
+                if ((coll.ID == "236a9dc9-c92a-437f-8825-27809af36a3f") || (coll.ID == "1159aca6-2449-4aff-bacb-5f29e479e2d7")
+                    || (coll.ID == "adaefeb2-9ef2-4ffa-b6ca-c76fc2815d4f") || (coll.ID == "707ecc6c-2480-4080-bad6-fb135bb5cf13")) {
                     continue;
                 }
 
                 if (Roles.IsUserInRole(_username, ServerSettings.AdminUserName) || coll.UserName.ToLower() == _username.ToLower()) {
-                    str.Append("<div class='contact-card-main contact-card-main-category-packages'>");
-                    str.Append("<div class='float-left'><h2><b class='pad-right'>Notification:</b><span style='font-weight: normal!important;'>" + coll.NotificationName + "</span></h2></div><div class='clear-space'></div>");
-                    str.Append("<div class='clear'></div>");
-                    str.Append("<div class='clear-margin package-contents pad-top pad-bottom'>" + LoadAppIcons(coll.ID) + "</div>");
+                    str.Append("<div class='table-settings-box'>");
+                    str.Append("<div class='td-settings-title'>" + coll.NotificationName + "</div>");
+                    str.Append("<div class='title-line'></div>");
+                    str.Append("<div class='td-settings-ctrl'><div class='clear-space'></div>" + LoadAppIcons(coll.ID) + "<div class='clear-space'></div></div>");
                     str.Append("</div>");
                 }
             }
@@ -381,7 +382,7 @@ public partial class SiteTools_NotifiManager : System.Web.UI.Page {
             Dictionary<string, string> addTemp = new Dictionary<string, string>();
             Dictionary<string, string> removeTemp = new Dictionary<string, string>();
 
-            lbl_typeEdit_Name.Text = "<h2><b class='pad-right'>Notification:</b><span style='font-weight: normal!important;'>" + tempDob.NotificationName + "</span></h2>";
+            lbl_typeEdit_Name.Text = "<h2><span style='font-weight: normal!important;'>" + tempDob.NotificationName + "</span></h2>";
             foreach (Apps_Coll dr in tempAppColl) {
                 bool cancontinue = false;
                 if (!Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
@@ -412,7 +413,7 @@ public partial class SiteTools_NotifiManager : System.Web.UI.Page {
                             StringBuilder appScript = new StringBuilder();
                             appScript.Append("<div id='app-icon-" + _appId + "' class='app-icon-admin inline-block' style='padding: 0 !important;'>" + image);
                             appScript.Append("<span class='app-span-modify' style='text-align: left; padding: 11px 0 0 0 !important; line-height: 4px !important; font-size: 12px; width: 190px;'>" + dr.AppName);
-                            appScript.Append("<a href='#' onclick=\"AddAssociation(this, '" + _appId + "');return false;\" title='Add " + dr.AppName + "'>");
+                            appScript.Append("<a href='#' onclick=\"AddAssociation(this, '" + _appId + "');return false;\" title='Add " + dr.AppName + "' class='float-left'>");
                             appScript.Append("<div title='Add' class='img-expand-sml cursor-pointer float-left'></div></a></span></div>");
                             removeTemp.Add(_appId, appScript.ToString());
                         }
@@ -424,7 +425,7 @@ public partial class SiteTools_NotifiManager : System.Web.UI.Page {
                                     StringBuilder appScript = new StringBuilder();
                                     appScript.Append("<div id='app-icon-" + _appId + "' class='app-icon-admin inline-block' style='padding: 0 !important;'>" + image);
                                     appScript.Append("<span class='app-span-modify' style='text-align: left; padding: 11px 0 0 0 !important; line-height: 4px !important; font-size: 12px; width: 190px;'>" + dr.AppName);
-                                    appScript.Append("<a href='#' onclick=\"RemoveAssociation(this, '" + _appId + "');return false;\" title='Remove " + dr.AppName + "'>");
+                                    appScript.Append("<a href='#' onclick=\"RemoveAssociation(this, '" + _appId + "');return false;\" title='Remove " + dr.AppName + "' class='float-left'>");
                                     appScript.Append("<div title='Remove' class='img-collapse-sml cursor-pointer float-left'></div></a></span></div>");
                                     addTemp.Add(_appId, appScript.ToString());
                                 }
@@ -434,7 +435,7 @@ public partial class SiteTools_NotifiManager : System.Web.UI.Page {
                                     StringBuilder appScript = new StringBuilder();
                                     appScript.Append("<div id='app-icon-" + _appId + "' class='app-icon-admin inline-block' style='padding: 0 !important;'>" + image);
                                     appScript.Append("<span class='app-span-modify' style='text-align: left; padding: 11px 0 0 0 !important; line-height: 4px !important; font-size: 12px; width: 190px;'>" + dr.AppName);
-                                    appScript.Append("<a href='#' onclick=\"AddAssociation(this, '" + _appId + "');return false;\" title='Add " + dr.AppName + "'>");
+                                    appScript.Append("<a href='#' onclick=\"AddAssociation(this, '" + _appId + "');return false;\" title='Add " + dr.AppName + "' class='float-left'>");
                                     appScript.Append("<div title='Add' class='img-expand-sml cursor-pointer float-left'></div></a></span></div>");
                                     removeTemp.Add(_appId, appScript.ToString());
                                 }

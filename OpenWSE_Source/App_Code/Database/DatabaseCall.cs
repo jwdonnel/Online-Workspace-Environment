@@ -58,7 +58,7 @@ public class DatabaseCall {
 
     #region -- Public Variables --
 
-    public bool NeedToLogErrors = true;
+    public bool NeedToLog = true;
 
     /// <summary>
     /// Gets the current dataprovider
@@ -248,6 +248,7 @@ public class DatabaseCall {
     /// <param name="query"></param>
     /// <returns></returns>
     public bool CallInsert(string table, List<DatabaseQuery> query) {
+        string cmdText = string.Empty;
         bool success = true;
         try {
             if (CheckConnectionFirst()) {
@@ -256,7 +257,8 @@ public class DatabaseCall {
                 }
                 string queryString = BuildInsertQueryString(query);
 
-                _command.CommandText = string.Format("INSERT INTO {0} VALUES({1})", table, queryString);
+                cmdText = string.Format("INSERT INTO {0} ({1}) VALUES({2})", table, queryString.Replace("@", string.Empty), queryString);
+                _command.CommandText = cmdText;
 
                 AddSqlParameters(query, string.Empty);
 
@@ -266,12 +268,16 @@ public class DatabaseCall {
         }
         catch (Exception e) {
             success = false;
-            if (NeedToLogErrors) {
-                new AppLog(false).AddError(e);
+            if (NeedToLog) {
+                AppLog.AddError(e);
             }
         }
         finally {
             CloseConnection();
+        }
+
+        if (success && !string.IsNullOrEmpty(cmdText)) {
+            AddEventLogEntry("Database Insert", cmdText);
         }
 
         return success;
@@ -294,7 +300,8 @@ public class DatabaseCall {
                 }
                 string queryString = BuildQueryString(query);
 
-                _command.CommandText = string.Format("SELECT {0} FROM {1}{2}", selectParms, table, queryString);
+                string cmdText = string.Format("SELECT {0} FROM {1}{2}", selectParms, table, queryString);
+                _command.CommandText = cmdText;
 
                 AddSqlParameters(query, QueryType);
 
@@ -311,8 +318,8 @@ public class DatabaseCall {
             }
         }
         catch (Exception e) {
-            if (NeedToLogErrors) {
-                new AppLog(false).AddError(e);
+            if (NeedToLog) {
+                AppLog.AddError(e);
             }
         }
         finally {
@@ -354,8 +361,8 @@ public class DatabaseCall {
             }
         }
         catch (Exception e) {
-            if (NeedToLogErrors) {
-                new AppLog(false).AddError(e);
+            if (NeedToLog) {
+                AppLog.AddError(e);
             }
         }
         finally {
@@ -386,7 +393,8 @@ public class DatabaseCall {
                     }
                 }
 
-                _command.CommandText = string.Format("SELECT {0} FROM {1}{2}{3}", selectParms, table, queryString, orderBy);
+                string cmdText = string.Format("SELECT {0} FROM {1}{2}{3}", selectParms, table, queryString, orderBy);
+                _command.CommandText = cmdText;
 
                 AddSqlParameters(query, QueryType);
 
@@ -409,8 +417,8 @@ public class DatabaseCall {
             }
         }
         catch (Exception e) {
-            if (NeedToLogErrors) {
-                new AppLog(false).AddError(e);
+            if (NeedToLog) {
+                AppLog.AddError(e);
             }
         }
         finally {
@@ -436,7 +444,8 @@ public class DatabaseCall {
                     queryString = " WHERE " + queryString;
                 }
 
-                _command.CommandText = string.Format("SELECT {0} FROM {1}{2}{3}", selectParms, table, queryString, orderBy);
+                string cmdText = string.Format("SELECT {0} FROM {1}{2}{3}", selectParms, table, queryString, orderBy);
+                _command.CommandText = cmdText;
 
                 AddSqlParameters(query, string.Empty);
 
@@ -461,8 +470,8 @@ public class DatabaseCall {
             }
         }
         catch (Exception e) {
-            if (NeedToLogErrors) {
-                new AppLog(false).AddError(e);
+            if (NeedToLog) {
+                AppLog.AddError(e);
             }
         }
         finally {
@@ -487,16 +496,22 @@ public class DatabaseCall {
         }
         catch (Exception e) {
             success = false;
-            if (NeedToLogErrors) {
-                new AppLog(false).AddError(e);
+            if (NeedToLog) {
+                AppLog.AddError(e);
             }
         }
         finally {
             CloseConnection();
         }
+
+        if (success && !string.IsNullOrEmpty(updateCmd)) {
+            AddEventLogEntry("Database Update", updateCmd);
+        }
+
         return success;
     }
     public bool CallUpdate(string table, List<DatabaseQuery> updateItems, List<DatabaseQuery> query) {
+        string cmdText = string.Empty;
         bool success = true;
         try {
             if (CheckConnectionFirst()) {
@@ -504,7 +519,8 @@ public class DatabaseCall {
                 string queryString = BuildQueryString(query);
                 string updateItemsString = BuildUpdateItemsString(updateItems);
 
-                _command.CommandText = string.Format("UPDATE {0} SET {1}{2}", table, updateItemsString, queryString);
+                cmdText = string.Format("UPDATE {0} SET {1}{2}", table, updateItemsString, queryString);
+                _command.CommandText = cmdText;
 
                 AddSqlParameters(query, QueryType);
                 AddSqlParameters(updateItems, UpdateType);
@@ -515,13 +531,18 @@ public class DatabaseCall {
         }
         catch (Exception e) {
             success = false;
-            if (NeedToLogErrors) {
-                new AppLog(false).AddError(e);
+            if (NeedToLog) {
+                AppLog.AddError(e);
             }
         }
         finally {
             CloseConnection();
         }
+
+        if (success && !string.IsNullOrEmpty(cmdText)) {
+            AddEventLogEntry("Database Update", cmdText);
+        }
+
         return success;
     }
 
@@ -531,13 +552,15 @@ public class DatabaseCall {
     /// </summary>
     /// <param name="cmdText"></param>
     public bool CallDelete(string table, List<DatabaseQuery> query) {
+        string cmdText = string.Empty;
         bool success = true;
         try {
             if (CheckConnectionFirst()) {
                 query = SetNullQuery(query);
                 string queryString = BuildQueryString(query);
 
-                _command.CommandText = string.Format("DELETE FROM {0}{1}", table, queryString);
+                cmdText = string.Format("DELETE FROM {0}{1}", table, queryString);
+                _command.CommandText = cmdText;
 
                 AddSqlParameters(query, QueryType);
 
@@ -547,13 +570,18 @@ public class DatabaseCall {
         }
         catch (Exception e) {
             success = false;
-            if (NeedToLogErrors) {
-                new AppLog(false).AddError(e);
+            if (NeedToLog) {
+                AppLog.AddError(e);
             }
         }
         finally {
             CloseConnection();
         }
+
+        if (success && !string.IsNullOrEmpty(cmdText)) {
+            AddEventLogEntry("Database Delete", cmdText);
+        }
+
         return success;
     }
 
@@ -563,10 +591,12 @@ public class DatabaseCall {
     /// <param name="table"></param>
     /// <returns></returns>
     public bool CallDropTable(string table) {
+        string cmdText = string.Empty;
         bool success = true;
         try {
             if (CheckConnectionFirst()) {
-                _command.CommandText = string.Format("DROP TABLE {0}", table);
+                cmdText = string.Format("DROP TABLE {0}", table);
+                _command.CommandText = cmdText;
 
                 _command.ExecuteNonQuery();
                 _command.Dispose();
@@ -574,13 +604,18 @@ public class DatabaseCall {
         }
         catch (Exception e) {
             success = false;
-            if (NeedToLogErrors) {
-                new AppLog(false).AddError(e);
+            if (NeedToLog) {
+                AppLog.AddError(e);
             }
         }
         finally {
             CloseConnection();
         }
+
+        if (success && !string.IsNullOrEmpty(cmdText)) {
+            AddEventLogEntry("Database Drop Table", cmdText);
+        }
+
         return success;
     }
 
@@ -590,10 +625,12 @@ public class DatabaseCall {
     /// <param name="table"></param>
     /// <returns></returns>
     public bool CallCreateTable(string table, string columnList) {
+        string cmdText = string.Empty;
         bool success = true;
         try {
             if (CheckConnectionFirst()) {
-                _command.CommandText = string.Format("CREATE TABLE {0} ({1})", table, columnList);
+                cmdText = string.Format("CREATE TABLE {0} ({1})", table, columnList);
+                _command.CommandText = cmdText;
 
                 _command.ExecuteNonQuery();
                 _command.Dispose();
@@ -601,13 +638,18 @@ public class DatabaseCall {
         }
         catch (Exception e) {
             success = false;
-            if (NeedToLogErrors) {
-                new AppLog(false).AddError(e);
+            if (NeedToLog) {
+                AppLog.AddError(e);
             }
         }
         finally {
             CloseConnection();
         }
+
+        if (success && !string.IsNullOrEmpty(cmdText)) {
+            AddEventLogEntry("Database Create Table", cmdText);
+        }
+
         return success;
     }
 
@@ -617,10 +659,12 @@ public class DatabaseCall {
     /// <param name="table"></param>
     /// <returns></returns>
     public bool CallAlterTable(string table, string commandTxt) {
+        string cmdText = string.Empty;
         bool success = true;
         try {
             if (CheckConnectionFirst()) {
-                _command.CommandText = string.Format("ALTER TABLE {0} {1}", table, commandTxt);
+                cmdText = string.Format("ALTER TABLE {0} {1}", table, commandTxt);
+                _command.CommandText = cmdText;
 
                 _command.ExecuteNonQuery();
                 _command.Dispose();
@@ -628,13 +672,18 @@ public class DatabaseCall {
         }
         catch (Exception e) {
             success = false;
-            if (NeedToLogErrors) {
-                new AppLog(false).AddError(e);
+            if (NeedToLog) {
+                AppLog.AddError(e);
             }
         }
         finally {
             CloseConnection();
         }
+
+        if (success && !string.IsNullOrEmpty(cmdText)) {
+            AddEventLogEntry("Database Alter Table", cmdText);
+        }
+
         return success;
     }
 
@@ -652,8 +701,8 @@ public class DatabaseCall {
             }
         }
         catch (Exception e) {
-            if (NeedToLogErrors) {
-                new AppLog(false).AddError(e);
+            if (NeedToLog) {
+                AppLog.AddError(e);
             }
         }
         finally {
@@ -673,7 +722,8 @@ public class DatabaseCall {
         DataTable dataTable = new DataTable();
         try {
             if (CheckConnectionFirst()) {
-                _command.CommandText = string.Format("SELECT * FROM {0}", table);
+                string cmdText = string.Format("SELECT * FROM {0}", table);
+                _command.CommandText = cmdText;
 
                 DbDataReader reader = _command.ExecuteReader();
                 dataTable.Load(reader);
@@ -683,8 +733,8 @@ public class DatabaseCall {
             }
         }
         catch (Exception e) {
-            if (NeedToLogErrors) {
-                new AppLog(false).AddError(e);
+            if (NeedToLog) {
+                AppLog.AddError(e);
             }
         }
         finally {
@@ -707,8 +757,8 @@ public class DatabaseCall {
             }
         }
         catch (Exception e) {
-            if (NeedToLogErrors) {
-                new AppLog(false).AddError(e);
+            if (NeedToLog) {
+                AppLog.AddError(e);
             }
         }
         finally {
@@ -716,6 +766,82 @@ public class DatabaseCall {
         }
 
         return dataTable;
+    }
+
+    #endregion
+
+
+    #region -- Add Event Message --
+
+    private void AddEventLogEntry(string title, string message) {
+        if (NeedToLog) {
+            AppLog.AddEvent(title, message + "<div class='clear-space-five'></div>" + HideUsernameAndPassword(_connString));
+        }
+    }
+    private string HideUsernameAndPassword(string connectionstring) {
+        string ds;
+
+        // Change Username
+        int dsIndex1 = connectionstring.ToLower().IndexOf("user id=", StringComparison.Ordinal);
+        int dsIndex2 = connectionstring.ToLower().IndexOf("uid=", StringComparison.Ordinal);
+        if (dsIndex1 != -1) {
+            string tempDs = connectionstring.Substring((dsIndex1 + ("User Id=").Length));
+            string un = string.Empty;
+            foreach (char c in tempDs) {
+                if (c != ServerSettings.StringDelimiter[0])
+                    un += c.ToString();
+                else
+                    break;
+            }
+
+            ds = connectionstring.Replace(un, "*********");
+        }
+        else if (dsIndex2 != -1) {
+            string tempDs = connectionstring.Substring((dsIndex2 + ("Uid=").Length));
+            string un = string.Empty;
+            foreach (char c in tempDs) {
+                if (c != ServerSettings.StringDelimiter[0])
+                    un += c.ToString();
+                else
+                    break;
+            }
+
+            ds = connectionstring.Replace(un, "*********");
+        }
+        else {
+            ds = connectionstring;
+        }
+
+        // Change Password
+        connectionstring = ds;
+        dsIndex1 = connectionstring.ToLower().IndexOf("password=", StringComparison.Ordinal);
+        dsIndex2 = connectionstring.ToLower().IndexOf("pwd=", StringComparison.Ordinal);
+        if (dsIndex1 != -1) {
+            string tempDs = connectionstring.Substring((dsIndex1 + ("Password=").Length));
+            string password = string.Empty;
+            foreach (char c in tempDs) {
+                if (c != ServerSettings.StringDelimiter[0])
+                    password += c.ToString();
+                else
+                    break;
+            }
+
+            ds = ds.Replace(password, "*********");
+        }
+        else if (dsIndex2 != -1) {
+            string tempDs = connectionstring.Substring((dsIndex2 + ("Pwd=").Length));
+            string password = string.Empty;
+            foreach (char c in tempDs) {
+                if (c != ServerSettings.StringDelimiter[0])
+                    password += c.ToString();
+                else
+                    break;
+            }
+
+            ds = ds.Replace(password, "*********");
+        }
+
+        return ds;
     }
 
     #endregion

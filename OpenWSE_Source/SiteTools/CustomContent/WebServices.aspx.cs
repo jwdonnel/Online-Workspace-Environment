@@ -159,7 +159,7 @@ public partial class SiteTools_WebServices : System.Web.UI.Page {
             str.Append("<div class='emptyGridView'>No Web Services Found</div>");
         }
 
-        lbl_TotalWebServices.Text = "<span class='font-bold pad-right-sml'>Total Files:</span>" + fileCount.ToString();
+        lbl_TotalWebServices.Text = "<span class='font-bold pad-right'>Total Files</span>" + fileCount.ToString();
         pnl_WebServiceList.Controls.Add(new LiteralControl(str.ToString()));
     }
 

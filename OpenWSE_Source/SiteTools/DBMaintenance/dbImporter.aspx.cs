@@ -121,7 +121,7 @@ public partial class SiteTools_dbImporter : Page {
                     un = user;
 
                 string marginTop = "3px";
-                string userNameTitle = "<h4>" + un + "</h4>";
+                string userNameTitle = "<h4 class='float-left margin-top-sml'>" + un + "</h4>";
                 string acctImage = tempMember.AccountImage;
                 if (!string.IsNullOrEmpty(acctImage)) {
                     userNameTitle = "<h4 class='float-left pad-top pad-left-sml'>" + un + "</h4>";

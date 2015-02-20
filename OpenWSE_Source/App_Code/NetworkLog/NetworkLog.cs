@@ -121,12 +121,13 @@ public class NetworkLog : System.Web.Services.WebService {
                 if (membershipUser != null && membershipUser.IsOnline) {
                     totalonline = totalonline - 1;
                 }
-                str2.Append("<h5><span class='pad-right'><b>Total Groups:</b></span><span>" + groups.group_dt.Count.ToString() + "</span></h5>");
-                str2.Append("<h5><span class='pad-right'><b>Total Users:</b></span><span>" + (coll.Count - 1).ToString() + "</span></h5>");
-                str2.Append("<h5><span class='pad-right'><b>Users Online:</b></span><span>" + totalonline.ToString() + "</span></h5>");
-                str2.Append("<h5><span class='pad-right'><b>Users Locked:</b></span><span>" + locked.ToString() + "</span></h5>");
-                str2.Append("<div class='clear-space'></div><h5><span class='pad-right'><b>IP's Being Watched:</b></span><span>" + _ipwatch.ipwatchdt.Count + "</span></h5>");
-                str2.Append("<h5><span class='pad-right'><b>IP's Blocked:</b></span><span>" + ServerSettings.getTotalBlockedIP + "</span></h5>");
+                str2.Append("<div style='font-size: 11px;'>");
+                str2.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Total Groups</span>" + groups.group_dt.Count.ToString() + "<div class='clear-space-two'></div>");
+                str2.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Total Users</span>" + (coll.Count - 1).ToString() + "<div class='clear-space-two'></div>");
+                str2.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Users Online</span>" + totalonline.ToString() + "<div class='clear-space-two'></div>");
+                str2.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Users Locked</span>" + locked.ToString() + "<div class='clear-space-two'></div>");
+                str2.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>IP's Being Watched</span>" + _ipwatch.ipwatchdt.Count + "<div class='clear-space-two'></div>");
+                str2.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>IP's Blocked</span>" + ServerSettings.getTotalBlockedIP + "<div class='clear-space-two'></div>");
 
                 string sslRedirect = "Off";
                 if (_ss.SSLRedirect)
@@ -140,16 +141,16 @@ public class NetworkLog : System.Web.Services.WebService {
                 if (ipaddress == "::1")
                     ipaddress = "127.0.0.1";
 
-                str2.Append("<div class='clear-space'></div><h5><span class='pad-right'><b>Email System:</b></span><span>" + emailSystem + "</span></h5>");
-                str2.Append("<h5><span class='pad-right'><b>SSL Redirect:</b></span><span>" + sslRedirect + "</span></h5>");
-                str2.Append("<h5><span class='pad-right'><b>IP Listener Status:</b></span><span>" + ServerSettings.GetIpListener + "</span></h5>");
-                str2.Append("<h5><span class='pad-right'><b>Current IP:</b></span><span>" + ipaddress + "</span></h5>");
-                str2.Append("<h5><span class='pad-right'><b>Site Uptime (D:H:M:):</b></span><span>" + HelperMethods.UpTime.Days + ":" + HelperMethods.UpTime.Hours + ":" + HelperMethods.UpTime.Minutes + "</span></h5>");
-                str2.Append("<h5><span class='pad-right'><b>Memory Allocated:</b></span><span>" + HelperMethods.FormatBytes(GC.GetTotalMemory(true)) + "</span></h5>");
-                str2.Append("<div class='clear-space'></div><h5><span class='pad-right'><b>Total Event Errors:</b></span><span>" + applog.app_coll.Count.ToString() + "</span></h5>");
-                str2.Append("<h5><span class='pad-right'><b>Todays Hit Total:</b></span><span>" + GetSiteRequests.HitCountTotal + "</span></h5>");
+                str2.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Email System</span>" + emailSystem + "<div class='clear-space-two'></div>");
+                str2.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>SSL Redirect</span>" + sslRedirect + "<div class='clear-space-two'></div>");
+                str2.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>IP Listener Status</span>" + ServerSettings.GetIpListener + "<div class='clear-space-two'></div>");
+                str2.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Current IP</span>" + ipaddress + "<div class='clear-space-two'></div>");
+                str2.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Site Uptime (D:H:M)</span>" + HelperMethods.UpTime.Days + ":" + HelperMethods.UpTime.Hours + ":" + HelperMethods.UpTime.Minutes + "<div class='clear-space-two'></div>");
+                str2.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Memory Allocated</span>" + HelperMethods.FormatBytes(GC.GetTotalMemory(true)) + "<div class='clear-space-two'></div>");
+                str2.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Total Events</span>" + applog.app_coll.Count.ToString() + "<div class='clear-space-two'></div>");
+                str2.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Todays Hit Total</span>" + GetSiteRequests.HitCountTotal + "</div>");
             }
-            catch (Exception e) { applog.AddError(e); }
+            catch (Exception e) { AppLog.AddError(e); }
 
             return str2.ToString() + str.ToString();
         }

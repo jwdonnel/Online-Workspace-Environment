@@ -258,7 +258,7 @@ public class SaveControls : System.Web.Services.WebService {
                         Membership.UpdateUser(msu);
                     }
                     catch (Exception e) {
-                        new AppLog(false).AddError(e);
+                        AppLog.AddError(e);
                     }
                 }
             }

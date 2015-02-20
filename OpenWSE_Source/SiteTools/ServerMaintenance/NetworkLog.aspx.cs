@@ -43,6 +43,19 @@ public partial class SiteTools_NetworkLog : Page {
                 if (!IsPostBack) {
                     BuildLinks();
                     LoadIpAddresses(ref GV_WatchList);
+                    if (!_ss.LockIPListenerWatchlist) {
+                        pnl_ipAutoBlock.Enabled = true;
+                        pnl_ipAutoBlock.Visible = true;
+                        pnl_addip.Enabled = true;
+                        pnl_addip.Visible = true;
+                    }
+                    else {
+                        pnl_ipAutoBlock.Enabled = false;
+                        pnl_ipAutoBlock.Visible = false;
+                        pnl_addip.Enabled = false;
+                        pnl_addip.Visible = false;
+                        ltl_lockedipwatchlist.Text = HelperMethods.GetLockedByMessage();
+                    }
                 }
 
                 RegisterPostbackScripts.RegisterStartupScript(this, "$('#imgPausePlay').removeClass('img-play');$('#imgPausePlay').addClass('img-pause');");
@@ -75,18 +88,13 @@ public partial class SiteTools_NetworkLog : Page {
                     pnl_attemptsBeforeBlock.Visible = false;
                 }
 
-                if (_userId.Name.ToLower() == ServerSettings.AdminUserName.ToLower()) {
+                if (_ss.LockIPListenerWatchlist) {
+                    MemberDatabase member = new MemberDatabase(_username);
+                    BuildIpAddresses_ViewOnly();
+                    ltl_lockediplistener.Text = HelperMethods.GetLockedByMessage();
+                }
+                else
                     BuildIpAddresses();
-                }
-                else {
-                    if (_ss.LockIPListener) {
-                        MemberDatabase member = new MemberDatabase(_username);
-                        BuildIpAddresses_ViewOnly();
-                        ltl_lockediplistener.Text = HelperMethods.GetLockedByMessage();
-                    }
-                    else
-                        BuildIpAddresses();
-                }
 
                 if (!IsPostBack) {
                     string ertk = _ss.WebEventsToKeep.ToString(CultureInfo.InvariantCulture);
@@ -109,34 +117,30 @@ public partial class SiteTools_NetworkLog : Page {
 
     private void BuildLinks() {
         StringBuilder str = new StringBuilder();
-        Panel pnl_extraitems = (Panel)Master.FindControl("pnl_extraitems");
-        if (pnl_extraitems != null) {
-            pnl_extraitems.Controls.Clear();
+        str.Append("<ul class='sitemenu-selection'>");
 
-            str.Append("<ul class='homedashlinks float-right'>");
-
-            SiteMapNodeCollection nodes = SiteMap.CurrentNode.ChildNodes;
-            if (nodes.Count == 0) {
-                nodes = SiteMap.CurrentNode.ParentNode.ChildNodes;
-            }
-
-            for (int i = 0; i < nodes.Count; i++) {
-                string url = nodes[i].Url;
-                string[] splitUrl = nodes[i].Url.Split(new string[] { "#?a=" }, StringSplitOptions.RemoveEmptyEntries);
-                if (splitUrl.Length > 0) {
-                    url = "#?a=" + splitUrl[1];
-                }
-                else {
-                    url = "#?a=" + splitUrl[0];
-                }
-
-                str.Append("<li id='hdl" + (i + 1).ToString() + "'><a href='" + url + "'>" + nodes[i].Title + "</a></li>");
-            }
-
-            str.Append("</ul>");
-
-            pnl_extraitems.Controls.Add(new LiteralControl(str.ToString()));
+        SiteMapNodeCollection nodes = SiteMap.CurrentNode.ChildNodes;
+        if (nodes.Count == 0) {
+            nodes = SiteMap.CurrentNode.ParentNode.ChildNodes;
         }
+
+        for (int i = 0; i < nodes.Count; i++) {
+            string url = nodes[i].Url;
+            string[] splitUrl = nodes[i].Url.Split(new string[] { "tab=" }, StringSplitOptions.RemoveEmptyEntries);
+            if (splitUrl.Length > 0) {
+                url = "#?tab=" + splitUrl[1];
+            }
+            else {
+                url = "#?tab=" + splitUrl[0];
+            }
+
+            str.Append("<li><a href='" + url + "'>" + nodes[i].Title + "</a></li>");
+        }
+
+        str.Append("</ul>");
+
+        pnlLinkBtns.Controls.Clear();
+        pnlLinkBtns.Controls.Add(new LiteralControl(str.ToString()));
     }
 
     private void GetCallBack() {
@@ -207,7 +211,7 @@ public partial class SiteTools_NetworkLog : Page {
     }
 
 
-    #region Error List
+    #region Event List
 
     public void LoadEvents(ref GridView gv) {
         DataView dvlist = GetRequestList();
@@ -249,6 +253,13 @@ public partial class SiteTools_NetworkLog : Page {
                  || (al.ApplicationPath.ToLower().Contains(x))) {
                 cancontinue = true;
             }
+
+            if (cb_ViewErrorsOnly.Checked && (string.IsNullOrEmpty(al.ExceptionType) || al.ExceptionType.ToLower() == "n/a")) {
+                if (!al.EventComment.ToLower().Contains("script error")) {
+                    continue;
+                }
+            }
+
 
             if (cancontinue) {
                 DataRow drlist = dtlist.NewRow();
@@ -674,7 +685,7 @@ public partial class SiteTools_NetworkLog : Page {
         LoadIpAddresses(ref GV_WatchList);
     }
     protected void GV_WatchList_RowDataBound(object sender, GridViewRowEventArgs e) {
-        if (!Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
+        if (!Roles.IsUserInRole(_username, ServerSettings.AdminUserName) || _ss.LockIPListenerWatchlist) {
             var lbBlock = (LinkButton)e.Row.FindControl("lb_block");
             var lbDelete = (LinkButton)e.Row.FindControl("lb_delete");
             var lbblockActionsna = (Label)e.Row.FindControl("lb_blockActions_na");
@@ -916,11 +927,11 @@ public partial class SiteTools_NetworkLog : Page {
         str.Append(
             "<td><input id='tb_createnew_listener' type='text' class='textEntry margin-right-big' style='width: 150px;'>");
         str.Append(
-            "<input id='btn_createnew_listener' type='button' class='input-buttons margin-right-big RandomActionBtns' value='Add IP Address' /></td>");
+            "<input id='btn_createnew_listener' type='button' class='input-buttons margin-right-big RandomActionBtns' value='Add IP Address' />");
         str.Append(
-            "<td style='min-width: 300px;'><small>Enter a new ip address for the site to listen for.</small></td></tr></table>");
+            "<div class='clear-space-five'></div><small>Enter a new ip address for the site to listen for.</small></td></tr></table>");
         str.Append(
-            "<div style='margin-left: 205px; margin-top: -10px;'><small><a href='#' class='sb-links' onclick='SetToCurrentIP(\"" +
+            "<div style='margin-left: 205px; margin-top: -10px;'><small><a href='#' onclick='SetToCurrentIP(\"" +
             ipaddress + "\");return false;'>Use Current IP Address</a></small></div>");
         str.Append("<div class='clear-space'></div></div>");
         return str.ToString();
@@ -993,5 +1004,9 @@ public partial class SiteTools_NetworkLog : Page {
     }
 
     #endregion
+
+    protected void cb_ViewErrorsOnly_CheckedChanged(object sender, EventArgs e) {
+
+    }
 
 }

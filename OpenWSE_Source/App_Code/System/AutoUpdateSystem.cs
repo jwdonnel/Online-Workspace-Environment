@@ -33,8 +33,7 @@ namespace OpenWSE_Tools.AutoUpdates {
                 }
             }
             catch (Exception e) {
-                AppLog _applog = new AppLog(false);
-                _applog.AddError(e);
+                AppLog.AddError(e);
             }
         }
     }

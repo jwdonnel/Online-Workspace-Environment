@@ -160,7 +160,7 @@ public class ShowUpdatePopup {
             StringBuilder updateList = new StringBuilder();
 
             if (splitValue.Length > 1)
-                updateList.Append("<ul style='list-style: none;'>");
+                updateList.Append("<div class='pad-left'><ul>");
 
             foreach (string m in splitValue) {
                 string tempM = m.Replace('\n', ' ').Trim();
@@ -173,13 +173,13 @@ public class ShowUpdatePopup {
             }
 
             if (splitValue.Length > 1)
-                updateList.Append("</ul>");
+                updateList.Append("</ul></div>");
 
             str.Append("<div class='pad-all new-update-holder'>" + updateList.ToString() + "</div>");
             str.Append("<div class='clear-space-five'></div>");
 
-            string img = "<img alt='' class='float-left pad-right-sml' src='" + ServerSettings.ResolveUrl("~/App_Themes/" + theme + "/App/approve.png") + "' />";
-            string text = "<span style='font-size: 18px'>Got it</span>";
+            string img = "<img alt='' class='float-left pad-right-sml' src='" + ServerSettings.ResolveUrl("~/App_Themes/" + theme + "/App/approve.png") + "' style='height: 17px;' />";
+            string text = "<span style='font-size: 15px'>Got it</span>";
             string button = "<a href='#gotit' class='input-buttons no-margin' onclick='openWSE.CloseUpdatesPopup();return false;' ";
             button += "style='text-decoration: none!important;'>" + img + " " + text + "</a>";
 

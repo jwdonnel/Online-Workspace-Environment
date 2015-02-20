@@ -40,7 +40,7 @@ public class ServerBackup {
         this.username = username;
         loc = sobLocation;
         _coll = new List<Dictionary<string, DataTable>>();
-        dbCall.NeedToLogErrors = false;
+        dbCall.NeedToLog = false;
     }
 
     public void BinarySerialize(DataTable dt) {

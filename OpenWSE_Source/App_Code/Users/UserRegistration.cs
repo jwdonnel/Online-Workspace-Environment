@@ -18,7 +18,6 @@ public class UserRegistration {
     private MemberDatabase _member;
     private NewUserDefaults defaults;
     private Dictionary<string, string> _drDefaults;
-    private readonly AppLog _appLog = new AppLog(false);
     private readonly Notifications _notifications = new Notifications();
     private readonly WorkspaceOverlays _workspaceOverlays = new WorkspaceOverlays();
 
@@ -55,7 +54,7 @@ public class UserRegistration {
             SignOffNewUser();
         }
         catch (Exception e) {
-            _appLog.AddError(e);
+            AppLog.AddError(e);
         }
     }
 

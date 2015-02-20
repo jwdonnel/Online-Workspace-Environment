@@ -26,7 +26,7 @@ var openWSE_Config = {
     ShowWorkspaceNumApp: true,
     desktopCSS: "site_desktop.css",
     mobileCSS: "site_mobile.css",
-    winMinWidth: 1000,
+    winMinWidth: 800,
     minPasswordLength: 6,
     workspaceMode: "",
     overlayPanelId: "pnl_OverlaysAll",
@@ -272,6 +272,8 @@ var openWSE = function () {
         autoupdate(hf_r, handler, updateAppId);
 
         ShowNewNotificationPopup();
+
+        // AdjustTableSettingsBox();
     });
     function autoupdate(_hf_r, _handler, _updateAppId) {
         if ((hf_r == "") && (_hf_r != "")) {
@@ -335,7 +337,17 @@ var openWSE = function () {
             }
         }
     };
-
+    function AdjustTableSettingsBox() {
+        if ($(".pnl-section").length == 0 && $(".table-settings-box").length > 0) {
+            $(".table-settings-box").eq($(".table-settings-box").length - 1).addClass("no-border");
+        }
+        else if ($(".pnl-section").length > 0 && $(".table-settings-box").length > 0) {
+            $(".pnl-section").each(function () {
+                var lastIndex = $(this).find(".table-settings-box").length;
+                $(this).find(".table-settings-box").eq(lastIndex - 1).addClass("no-border");
+            });
+        }
+    }
 
     $(document.body).on("click", ".RandomActionBtns", function () {
         if ($(this).closest("#searchwrapper").length != 0) {
@@ -1342,7 +1354,7 @@ var openWSE = function () {
         var popOutBtn = "";
         if ($this.attr("popoutloc") != "" && $this.attr("popoutloc") != undefined && $this.attr("popoutloc") != null) {
             var popoutloc = $this.attr("popoutloc");
-            popOutBtn = "<a href='#' class='sb-links float-right' onclick='openWSE.PopOutFrameFromSiteTools(\"" + name + "\", \"" + popoutloc + "\");return false;'>Open in new window</a>";
+            popOutBtn = "<a href='#' class='float-right' onclick='openWSE.PopOutFrameFromSiteTools(\"" + name + "\", \"" + popoutloc + "\");return false;'>Open in new window</a>";
         }
 
         var currDB = "1";
@@ -1553,6 +1565,8 @@ var openWSE = function () {
 
 
     /* Help Dialog */
+    var emailFocus = false;
+    var focusPassword = false;
     var newUserHelp = false;
     var needEmailChange = false;
     var adminPasswordChange = false;
@@ -1691,6 +1705,14 @@ var openWSE = function () {
                 }
 
                 $("#helpdiv_pageholder").html(newmember_text);
+                setTimeout(function () {
+                    if (emailFocus) {
+                        $("#tb_emailaddress_update").focus();
+                    }
+                    else if (focusPassword) {
+                        $("#tb_newpassword_update").focus();
+                    }
+                }, 500);
                 RemoveUpdateModal();
             }
         });
@@ -1775,6 +1797,8 @@ var openWSE = function () {
         var newmember_text = "";
 
         if (needEmailChange) {
+            emailFocus = true;
+            focusPassword = false;
             newmember_text += "<div id='update-email-helpdiv' class='pad-all' align='center'>";
             newmember_text += "<h3>Before you can continue, you must provide a valid email address.<br />This email address will be used for notifications and password recovery.<br />If you fail to provide a valid email address, you will not be able to use the password recovery feature on the login page.</h3>";
             newmember_text += "<div class='clear-space'></div>";
@@ -1789,6 +1813,8 @@ var openWSE = function () {
             newmember_text += "</div>";
         }
         else if (adminPasswordChange) {
+            emailFocus = false;
+            focusPassword = true;
             newmember_text += "<div id='update-password-helpdiv' class='pad-all' align='center'>";
             newmember_text += "<h3>You are currently signed in as Administrator. Create a new password for your Administrator account.</h3>";
             newmember_text += "<div class='clear-space-two'></div><small><b class='pad-right-sml'>Note:</b>Password must be at least " + openWSE_Config.minPasswordLength + " characters long.</small>";
@@ -2626,7 +2652,7 @@ var openWSE = function () {
                         var modal = "<div style='text-align: left'><small><b class='pad-right-sml'>Note:</b>All backgrounds will repeat on the workspace. Your connection speed will slow down with the larger sized images. Each image has the size details when you hover over them. Solid color backgrounds will be the quickest if you have a slower internet.</small></div>";
                         modal += "<div class='clear' style='height: 20px;'></div><div class='float-left'><span class='pad-right font-bold float-left pad-top-sml'>Url Link</span><input id='tb_imageurl' type='text' value='Link to image' class='textEntry' onfocus='if(this.value==\"Link to image\")this.value=\"\"' onblur='if(this.value==\"\")this.value=\"Link to image\"' style='width:355px;'>";
                         modal += "<input id='btn_urlupdate' type='button' value='Update Url' class='input-buttons margin-left' onclick='openWSE.updateBackgroundURL()' /><br /><div class='float-left'>Copy and paste any link that contains an image.</div></div>";
-                        modal += "<a href='#' class='sb-links float-right' onclick='openWSE.ClearBackground();return false;'>Clear Background</a>";
+                        modal += "<a href='#' class='float-right' onclick='openWSE.ClearBackground();return false;'>Clear Background</a>";
                         modal += "<div class='clear' style='height: 20px;'></div>";
                         modal += "<span class='pad-right font-bold float-left pad-top-sml'>Solid Color</span><input id='tb_solidColorBg' type='text' class='textEntry float-left margin-right color' style='width: 75px;' />";
                         modal += "<input id='btn_urlbgcolor' type='button' value='Update Color' class='input-buttons float-left' onclick='openWSE.updateBackgroundColor()' />";
@@ -3463,7 +3489,7 @@ var openWSE = function () {
                 headerHt = $appHead.outerHeight();
             }
 
-            var bodyHt = appHt - headerHt;
+            var bodyHt = appHt - (headerHt + 2);
             $this.find(".app-body").css({
                 height: bodyHt,
                 width: $this.width()
@@ -3953,7 +3979,6 @@ var openWSE = function () {
                     if (temp == id) {
                         if ($(".app-icon").eq(index).hasClass("active") == false) {
                             $(".app-icon").eq(index).addClass("active");
-                            break;
                         }
                     }
                 }
@@ -5195,6 +5220,7 @@ var openWSE = function () {
         loadingImg: loadingImg,
         loadingImg_lrg: loadingImg_lrg,
         topBarHt: topBarHt,
+        AdjustTableSettingsBox: AdjustTableSettingsBox,
         GetPagedAddOverlayAndModel: GetPagedAddOverlayAndModel,
         IsComplexWorkspaceMode: IsComplexWorkspaceMode,
         PagedWorkspace: PagedWorkspace,
@@ -5382,6 +5408,8 @@ $(document).ready(function () {
             $(this).autocomplete("search", "");
         });
     }
+
+    // openWSE.AdjustTableSettingsBox();
 });
 
 $(function () {
@@ -5390,7 +5418,7 @@ $(function () {
     });
 
     if (openWSE_Config.displayLoadingOnRedirect) {
-        $("#lnk_BackToWorkspace, .app-icon-links, .title-dd-name").click("click", function (e) {
+        $("#lnk_BackToWorkspace, .app-icon-links, .app-icon-sub-links, .title-dd-name").click("click", function (e) {
             if (e.target.className != "img-expand-sml" && e.target.className != "img-collapse-sml") {
                 if ($(this).attr("target") != "_blank") {
                     openWSE.LoadingMessage1("Loading...");

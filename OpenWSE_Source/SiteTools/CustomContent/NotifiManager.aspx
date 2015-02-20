@@ -16,20 +16,8 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding pad-top-big margin-top">
-        <div class="pad-bottom">
-            <small>Notifications can be added and configured here. Users will be able to enable these
-        notifications in their Account Settings.<br />
-                <b class="pad-right-sml">Note:</b>Apps must be coded/setup in order to send notifications
-        out.</small>
-        </div>
-        <div class="clear"></div>
+    <div class="maincontent-padding margin-top">
         <asp:Literal ID="ltl_locked" runat="server"></asp:Literal>
-        <div class="clear-space">
-        </div>
-        <a id="aAddNewNoti" runat="server" class="sb-links margin-right-big" onclick="openWSE.LoadModalWindow(true, 'AddNotification-element', 'Add New Notification');$('#MainContent_txt_uploadNotifiName').focus();return false;"><span class="td-add-btn float-left margin-right-sml" style="padding: 0!important;"></span>Add New Notification</a>
-        <div class="clear-space-five">
-        </div>
         <div id="AddNotification-element" class="Modal-element">
             <div class="Modal-overlay">
                 <div class="Modal-element-align">
@@ -45,7 +33,7 @@
                         <div class="ModalPadContent">
                             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                                 <ContentTemplate>
-                                    <asp:Panel ID="pnl_AddControls" runat="server" CssClass="modal-inner-scroll" style="margin-top: -15px;">
+                                    <asp:Panel ID="pnl_AddControls" runat="server" CssClass="modal-inner-scroll" Style="margin-top: -15px;">
                                         <div class="clear" style="height: 20px;">
                                         </div>
                                         Fill in the information below to create a new notification for users to enable. Notifications will only work if the app or workspace is configured to accept it.
@@ -118,47 +106,43 @@
                 </div>
             </div>
         </div>
-        <div class="actions no-pad-left">
-            <asp:UpdatePanel ID="updatepnl_notifi" runat="server" UpdateMode="Conditional">
-                <ContentTemplate>
-                    <div class="float-right" style="margin-top: -10px;">
-                        <span class="font-bold pad-right">Total Notifications:</span><asp:Label ID="lbl_notifiEnabled"
+        <asp:UpdatePanel ID="updatepnl_notifi" runat="server" UpdateMode="Conditional">
+            <ContentTemplate>
+                <div class="table-settings-box" style="margin-bottom: 0px!important;">
+                    <div class="td-settings-ctrl">
+                        <a id="aAddNewNoti" runat="server" class="margin-right-big input-buttons" onclick="openWSE.LoadModalWindow(true, 'AddNotification-element', 'Add New Notification');$('#MainContent_txt_uploadNotifiName').focus();return false;"><span class="td-add-btn float-left margin-right-sml" style="padding: 0!important;"></span>Add New Notification</a>
+                        <span class="font-bold pad-right">Total Notifications</span><asp:Label ID="lbl_notifiEnabled"
                             runat="server" Text="0"></asp:Label>
-                    </div>
-                    <div class="float-right pad-right-big" style="margin-top: -14px;">
-                        <asp:LinkButton ID="lbtn_Refresh" runat="server" Text="Rebuild Notifications" CssClass="sb-links RandomActionBtns"
+                        <div class="clear-space">
+                        </div>
+                        <asp:LinkButton ID="lbtn_Refresh" runat="server" Text="Rebuild Notifications" CssClass="RandomActionBtns"
                             OnClick="lbtn_Refresh_Clicked"></asp:LinkButton>
+                        <div class="clear-space">
+                        </div>
+                        <asp:Panel ID="pnl_notifi" runat="server">
+                        </asp:Panel>
                     </div>
-                    <div class="clear-space">
+                    <div class="td-settings-desc">
+                        Notifications can be added and configured here. Users will be able to enable these notifications in their Account Settings. Apps must be coded/setup in order to send notifications.
                     </div>
-                    <asp:Panel ID="pnl_notifi" runat="server">
-                    </asp:Panel>
-                </ContentTemplate>
-            </asp:UpdatePanel>
-        </div>
-        <div class="clear" style="height: 30px">
-        </div>
-        <div class="actions no-pad-left">
-            <div class="clear-space">
+                </div>
+            </ContentTemplate>
+        </asp:UpdatePanel>
+        <div class="table-settings-box no-border" style="padding-top: 0px!important; margin-top: 0px!important;">
+            <div class="td-settings-ctrl">
+                <asp:UpdatePanel ID="updatepnl_Associations" runat="server" UpdateMode="Conditional">
+                    <ContentTemplate>
+                        <asp:Panel ID="pnl_AppAssociation" runat="server">
+                        </asp:Panel>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+                <div class="clear-space">
+                </div>
             </div>
-            <div class="editor_titles">
-                <div class="title-line"></div>
-                <h3>App Associations</h3>
-            </div>
-            <div class="clear-space">
-            </div>
-            <small><b class="pad-right-sml">Note:</b>Notifications must be associated with an installed
+            <div class="td-settings-desc">
+                Notifications must be associated with an installed
             app in order to view them in the user notification settings. Some notifications
-            are hidden because they are a standard notification within the site.</small>
-            <div class="clear" style="height: 20px">
-            </div>
-            <asp:UpdatePanel ID="updatepnl_Associations" runat="server" UpdateMode="Conditional">
-                <ContentTemplate>
-                    <asp:Panel ID="pnl_AppAssociation" runat="server">
-                    </asp:Panel>
-                </ContentTemplate>
-            </asp:UpdatePanel>
-            <div class="clear-space">
+            are hidden because they are a standard notification within the site.
             </div>
         </div>
         <div id="App-element" class="Modal-element">

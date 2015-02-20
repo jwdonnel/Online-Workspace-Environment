@@ -82,6 +82,26 @@
             text-transform: none;
         }
 
+        .Modal-overlay .input-buttons
+        {
+            background: #4D90FE;
+            border: 1px solid #3079ED;
+            font-weight: bold;
+            color: #FFF;
+        }
+
+            .Modal-overlay .input-buttons:hover
+            {
+                background: #357AE8;
+                border: 1px solid #2F5BB7;
+            }
+
+            .Modal-overlay .input-buttons:active
+            {
+                background: #2E70C1;
+                border: 1px solid #2B53A5;
+            }
+
         .logo
         {
             padding-top: 10px;
@@ -353,45 +373,33 @@
 
         .input-buttons
         {
-            border: 1px solid lightgrey;
+            color: #333;
+            background: #F8F8F8;
+            border: 1px solid #D3D3D3;
+            -moz-border-radius: 4px;
+            -webkit-border-radius: 4px;
+            border-radius: 4px;
             text-decoration: none!important;
             cursor: pointer;
             text-align: center;
-            padding: 4px 9px 5px;
-            color: #5F5F5F;
-            font-weight: bold;
+            padding: 5px 9px;
             font-size: 12px;
             line-height: normal;
-            -webkit-border-radius: 4px;
-            -moz-border-radius: 4px;
-            border-radius: 4px;
-            -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
-            -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
             margin-right: 16px;
-        }
-
-        .input-buttons
-        {
-            background: #efefef;
-            background: -moz-linear-gradient(top,rgba(239,239,239,1) 0,rgba(230,230,230,1) 100%);
-            background: -webkit-gradient(linear,left top,left bottom,color-stop(0,rgba(239,239,239,1)),color-stop(100%,rgba(230,230,230,1)));
-            background: -webkit-linear-gradient(top,rgba(239,239,239,1) 0,rgba(230,230,230,1) 100%);
-            background: -o-linear-gradient(top,rgba(239,239,239,1) 0,rgba(230,230,230,1) 100%);
-            background: -ms-linear-gradient(top,rgba(239,239,239,1) 0,rgba(230,230,230,1) 100%);
-            background: linear-gradient(to bottom,rgba(239,239,239,1) 0,rgba(230,230,230,1) 100%);
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#efefef', endColorstr='#e6e6e6', GradientType=0);
+            -moz-transition: all .2s ease-in-out;
+            -webkit-transition: all .2s ease-in-out;
+            transition: all .2s ease-in-out;
         }
 
             .input-buttons:hover
             {
-                background: #DFDFDF;
+                background: #EFEFEF;
                 cursor: pointer;
             }
 
             .input-buttons:active
             {
-                background: #C5C5C5;
+                background: #E0E0E0;
             }
     </style>
 </head>

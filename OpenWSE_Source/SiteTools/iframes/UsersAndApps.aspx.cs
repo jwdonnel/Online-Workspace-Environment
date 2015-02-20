@@ -60,14 +60,14 @@ public partial class SiteTools_UsersAndApps : System.Web.UI.Page
             if (string.IsNullOrEmpty(forUser))
             {
                 lbl_title.Text = "Users and Apps";
-                lbl_note.Text = "<span class='pad-right-sml font-bold'>Note:</span>This is a non-editable list.";
+                lbl_note.Text = "This is a non-editable list.";
                 LoadAppsAndUsers();
                 LoadUserBackground(_username);
             }
             else
             {
                 lbl_title.Text = forUser + " App Edit";
-                lbl_note.Text = "<span class='pad-right-sml font-bold'>Note:</span>Add/Remove apps for the specified user.";
+                lbl_note.Text = "Add/Remove apps for the specified user.";
                 LoadUsersApps(forUser);
                 LoadUserBackground(forUser);
             }
@@ -135,7 +135,7 @@ public partial class SiteTools_UsersAndApps : System.Web.UI.Page
                     apps = new App(u.UserName);
                     str.Append("<table class='myItemStyle GridNormalRow' style='width:100%' cellpadding='0' cellspacing='0'>");
 
-                    string imgColor = UserImageColorCreator.CreateImgColor(member.AccountImage, member.UserColor, member.UserId, 40);
+                    string imgColor = UserImageColorCreator.CreateImgColor(member.AccountImage, member.UserColor, member.UserId, 30);
                     string userNameTitle = "<div class='float-left pad-left-sml' style='margin-top: -2px;'><h3>" + HelperMethods.MergeFMLNames(member) + "</h3><div class='clear-space-two'></div>" + member.Username + "</div>";
 
                     str.Append("<tr><td width='200px' valign='middle' style='border-right: 1px solid #CCC;'>" + imgColor + userNameTitle + "</td>");
@@ -208,7 +208,7 @@ public partial class SiteTools_UsersAndApps : System.Web.UI.Page
             str.Append("<td>Apps Installed</td></tr></table>");
             str.Append("<table class='myItemStyle GridNormalRow' style='width:100%' cellpadding='0' cellspacing='0'>");
 
-            string imgColor = UserImageColorCreator.CreateImgColor(member.AccountImage, member.UserColor, member.UserId, 40);
+            string imgColor = UserImageColorCreator.CreateImgColor(member.AccountImage, member.UserColor, member.UserId, 30);
             string userNameTitle = "<div class='float-left pad-left-sml' style='margin-top: -2px;'><h3>" + HelperMethods.MergeFMLNames(member) + "</h3><div class='clear-space-two'></div>" + member.Username + "</div>";
 
             str.Append("<tr><td width='200px' valign='middle' style='border-right: 1px solid #CCC;'>" + imgColor + userNameTitle + "</td>");
@@ -225,7 +225,7 @@ public partial class SiteTools_UsersAndApps : System.Web.UI.Page
             }
 
             str.Append("</select><input type='button' class='float-left input-buttons' value='Install Package' onclick='AppPackageInstall()' />");
-            str.Append("<a href='#' class='float-right sb-links' onclick='RemoveAllApp();return false;'>Uninstall All Apps</a>");
+            str.Append("<a href='#' class='float-right' onclick='RemoveAllApp();return false;'>Uninstall All Apps</a>");
             str.Append("<div class='clear' style='height: 20px;'></div>" + LoadAppIconsEdit(member, apps) + "</div></td></tr></table>");
         }
 
@@ -262,19 +262,19 @@ public partial class SiteTools_UsersAndApps : System.Web.UI.Page
 
             if (member.UserHasApp(appId)) {
                 appScriptInstalled.Append("<div class='app-icon-admin inline-block' style='padding: 5px 0 !important;'>");
-                appScriptInstalled.Append("<a href='#' class='img-collapse-sml cursor-pointer float-left' title='Uninstall " + appName + "' onclick='RemoveApp(\"" + appId + "\");return false;' style='margin-right: 5px; margin-top: 4px;'></a>");
                 if (!hideIcon) {
                     appScriptInstalled.Append("<img alt='' src='../../Standard_Images/App_Icons/" + iconname + "' class='float-left pad-right' style='height: 20px;' />");
                 }
+                appScriptInstalled.Append("<a href='#' class='img-collapse-sml cursor-pointer float-left' title='Uninstall " + appName + "' onclick='RemoveApp(\"" + appId + "\");return false;' style='margin-right: 5px; margin-top: 4px;'></a>");
                 appScriptInstalled.Append("<span class='app-span-modify font-color-light-black' style='text-align: left; padding: 2px 0 0 0 !important; width: 230px;'>" + appName + "</span>");
                 appScriptInstalled.Append("</div>");
             }
             else {
                 appScriptUninstalled.Append("<div class='app-icon-admin inline-block' style='padding: 5px 0 !important;'>");
-                appScriptUninstalled.Append("<a href='#' class='img-expand-sml cursor-pointer float-left' title='Install " + appName + "' onclick='AddApp(\"" + appId + "\");return false;' style='margin-right: 5px; margin-top: 4px;'></a>");
                 if (!hideIcon) {
                     appScriptUninstalled.Append("<img alt='' src='../../Standard_Images/App_Icons/" + iconname + "' class='float-left pad-right' style='height: 20px;' />");
                 }
+                appScriptUninstalled.Append("<a href='#' class='img-expand-sml cursor-pointer float-left' title='Install " + appName + "' onclick='AddApp(\"" + appId + "\");return false;' style='margin-right: 5px; margin-top: 4px;'></a>");
                 appScriptUninstalled.Append("<span class='app-span-modify font-color-light-black' style='text-align: left; padding: 2px 0 0 0 !important; width: 230px;'>" + appName + "</span>");
                 appScriptUninstalled.Append("</div>");
             }

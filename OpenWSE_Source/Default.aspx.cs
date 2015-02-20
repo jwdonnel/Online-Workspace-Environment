@@ -29,7 +29,6 @@ public partial class Default : Page {
     #region Private Variables
 
     private readonly Notifications _notifications = new Notifications();
-    private readonly AppLog _applog = new AppLog(false);
     private IPWatch _ipwatch = new IPWatch(false);
     private ServerSettings _ss = new ServerSettings();
     private bool _noLoginRequired;
@@ -203,7 +202,10 @@ public partial class Default : Page {
         DeleteGroupSession();
         string sitename = CheckLicense.SiteName;
         string theme = _ss.LoginScreenTheme;
+
         Page.Title = sitename + " Login Portal";
+        RegisterPostbackScripts.RegisterStartupScript(this, "siteName='" + sitename + "';");
+
         lbl_login_help.InnerHtml = "Sign in using your " + sitename + " Username and Password";
 
         if (!string.IsNullOrEmpty(_ss.LoginMessage)) {
@@ -296,8 +298,6 @@ public partial class Default : Page {
     private void SetGroupScreen(Dictionary<string, string> group) {
         string sitename = CheckLicense.SiteName;
         string theme = _ss.LoginScreenTheme;
-
-        header_site_title.InnerHtml = group["GroupName"] + " Login Portal";
 
         if (HelperMethods.ConvertBitToBoolean(group["IsURL"])) {
             string imgUrl = group["Image"];
@@ -730,7 +730,7 @@ public partial class Default : Page {
             ServerSettings.SendNewEmail(message, "<h1 style='color:#555'>User Logon Notification</h1>", CheckLicense.SiteName + ": " + loggedinuser + " has Logged In", messagebody.ToString());
         }
         catch (Exception e) {
-            _applog.AddError(e);
+            AppLog.AddError(e);
         }
     }
 

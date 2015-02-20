@@ -32,7 +32,7 @@ public class DefaultDBTables {
         string defaultsXml = ServerSettings.GetServerMapLocation + "App_Data\\DatabaseDefaults.xml";
         if (File.Exists(defaultsXml)) {
             DatabaseCall dbCall = new DatabaseCall();
-            dbCall.NeedToLogErrors = false;
+            dbCall.NeedToLog = false;
 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(defaultsXml);
@@ -122,7 +122,7 @@ public class DefaultDBTables {
         string defaultsXml = ServerSettings.GetServerMapLocation + "App_Data\\DatabaseDefaults.xml";
         if (File.Exists(defaultsXml)) {
             DatabaseCall dbCall = new DatabaseCall();
-            dbCall.NeedToLogErrors = false;
+            dbCall.NeedToLog = false;
 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(defaultsXml);
@@ -224,7 +224,7 @@ public class DefaultDBTables {
         string defaultsXml = ServerSettings.GetServerMapLocation + "App_Data\\DatabaseDefaults.xml";
         if (File.Exists(defaultsXml)) {
             DatabaseCall dbCall = new DatabaseCall();
-            dbCall.NeedToLogErrors = false;
+            dbCall.NeedToLog = false;
 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(defaultsXml);
@@ -343,7 +343,7 @@ public class DefaultDBTables {
     public static List<string> UpdatableTables(List<Dictionary<string, DataTable>> tableList) {
         List<string> tablesUpdate = new List<string>();
         DatabaseCall dbCall = new DatabaseCall();
-        dbCall.NeedToLogErrors = false;
+        dbCall.NeedToLog = false;
         tablesUpdate = CompareTablesWithXml_Updatable(tableList, dbCall);
         return tablesUpdate;
     }

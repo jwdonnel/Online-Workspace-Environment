@@ -62,7 +62,7 @@ public class CreateSitemap
             _xmlDoc.Save(ServerSettings.GetServerMapLocation + SiteMapFileName);
         }
         catch (Exception e) {
-            new AppLog(false).AddError(e);
+            AppLog.AddError(e);
         }
     }
 

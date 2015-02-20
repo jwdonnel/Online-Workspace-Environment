@@ -642,12 +642,12 @@ public partial class SiteTools_DbManager : Page {
             string verticalAlign = "top";
 
             StringBuilder str = new StringBuilder();
-            str.Append("<table cellpadding='10' cellspacing='10'><tbody>");
+            str.Append("<table cellpadding='5' cellspacing='5'><tbody>");
 
             #region Database Provider
 
             str.Append("<tr>");
-            str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Provider</b></td>");
+            str.Append("<td class='settings-name-column' style='padding-top: 0px!important;'>Provider</td>");
             str.Append("<td valign='" + verticalAlign + "'>" + dbCall.DataProvider + "</td>");
             str.Append("</tr>");
 
@@ -656,7 +656,7 @@ public partial class SiteTools_DbManager : Page {
             #region Up-To-Date
 
             str.Append("<tr>");
-            str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Up-To-Date</b></td>");
+            str.Append("<td class='settings-name-column' style='padding-top: 0px!important;'>Up-To-Date</td>");
             string uptoDate = "No";
             if (DefaultDBTables.DatabaseUpToDate) {
                 uptoDate = "Yes";
@@ -669,7 +669,7 @@ public partial class SiteTools_DbManager : Page {
             #region Table Count
 
             str.Append("<tr>");
-            str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Table Count</b></td>");
+            str.Append("<td class='settings-name-column' style='padding-top: 0px!important;'>Table Count</td>");
             DataTable tables = dbCall.CallGetSchema("Tables");
             string count = "0";
             if (tables != null) {
@@ -686,7 +686,7 @@ public partial class SiteTools_DbManager : Page {
             #region Number of Columns
 
             str.Append("<tr>");
-            str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Column Count</b></td>");
+            str.Append("<td class='settings-name-column' style='padding-top: 0px!important;'>Column Count</td>");
             str.Append("<td valign='" + verticalAlign + "'>" + DefaultDBTables.TotalNumberOfColumns.ToString() + "</td>");
             str.Append("</tr>");
 
@@ -695,7 +695,7 @@ public partial class SiteTools_DbManager : Page {
             #region Number of Rows
 
             str.Append("<tr>");
-            str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Row Count</b></td>");
+            str.Append("<td class='settings-name-column' style='padding-top: 0px!important;'>Row Count</td>");
             str.Append("<td valign='" + verticalAlign + "'>" + DefaultDBTables.TotalNumberOfRows.ToString() + "</td>");
             str.Append("</tr>");
 
@@ -707,7 +707,7 @@ public partial class SiteTools_DbManager : Page {
             #region Database is Local
 
             str.Append("<tr>");
-            str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Is Local</b></td>");
+            str.Append("<td class='settings-name-column' style='padding-top: 0px!important;'>Is Local</td>");
             string isLocal = "No";
 
 
@@ -723,7 +723,7 @@ public partial class SiteTools_DbManager : Page {
 
             if (dbIsLocal) {
                 str.Append("<tr>");
-                str.Append("<td valign='" + verticalAlign + "' align='" + alignText + "' class='pad-right'><b>Database Size</b></td>");
+                str.Append("<td class='settings-name-column' style='padding-top: 0px!important;'>Database Size</td>");
                 str.Append("<td valign='" + verticalAlign + "'>" + DatabaseSize(dbPath) + "</td>");
                 str.Append("</tr>");
             }

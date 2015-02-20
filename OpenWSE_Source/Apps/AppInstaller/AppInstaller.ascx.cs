@@ -118,12 +118,12 @@ public partial class Apps_AppInstaller_AppInstaller : System.Web.UI.UserControl
                 str.Append("<div class='pad-top-big'>");
 
                 if (!isInstalled)
-                    str.Append("<a href='#' class='sb-links margin-bottom margin-right-big' onclick=\"AddApp('" + dr.AppId + "');return false;\"><span class='float-left td-add-btn margin-right-sml' style='padding: 0px!important;'></span>Install " + dr.AppName + "</a>");
+                    str.Append("<a href='#' class='margin-bottom margin-right-big' onclick=\"AddApp('" + dr.AppId + "');return false;\"><span class='float-left td-add-btn margin-right-sml' style='padding: 0px!important;'></span>Install " + dr.AppName + "</a>");
                 else
-                    str.Append("<a href='#' class='sb-links margin-bottom margin-right-big' onclick=\"RemoveApp('" + dr.AppId + "');return false;\"><span class='float-left td-delete-btn margin-right-sml' style='padding: 0px!important;'></span>Remove " + dr.AppName + "</a>");
+                    str.Append("<a href='#' class='margin-bottom margin-right-big' onclick=\"RemoveApp('" + dr.AppId + "');return false;\"><span class='float-left td-delete-btn margin-right-sml' style='padding: 0px!important;'></span>Remove " + dr.AppName + "</a>");
 
 
-                str.Append("<a href='#' class='sb-links margin-left' onclick=\"AboutApp_AppInstaller('" + dr.AppName + "','" + dr.AppId + "');return false;\">Learn More</a>");
+                str.Append("<a href='#' class='margin-left' onclick=\"AboutApp_AppInstaller('" + dr.AppName + "','" + dr.AppId + "');return false;\">Learn More</a>");
                 str.Append("</div></div></div>");
                 str.Append("<div class='clear' style='height: 20px'></div>");
                 count++;

@@ -27,6 +27,7 @@
             text-align: center;
             width: 90px;
             border-right: 1px solid #DFDFDF;
+            color: #888;
         }
 
         #siteInfo, #changeLog
@@ -127,6 +128,12 @@
             -ms-transition: color 0.5s ease;
             -ms-transition: text-shadow 0.5s ease;
         }
+
+        #pnlLinkBtns
+        {
+            margin: 0 auto;
+            width: 1000px;
+        }
     </style>
 </head>
 <body>
@@ -146,14 +153,21 @@
                     <div class="float-left">
                         <span id="page_title" runat="server" class="page-title">Loading...</span>
                     </div>
-                    <ul class="homedashlinks float-right">
-                        <li id="hdl1" class="active"><a href="#" onclick="$('#changeLog').fadeOut(150, function(){  $('#siteInfo').fadeIn(150); $('#hdl2').removeClass('active'); $('#hdl1').addClass('active'); });return false;">Site Information</a></li>
-                        <li id="hdl2"><a href="#" onclick="$('#siteInfo').fadeOut(150, function(){ $('#changeLog').fadeIn(150); $('#hdl1').removeClass('active'); $('#hdl2').addClass('active'); });return false;">Change Log</a></li>
-                    </ul>
                 </div>
             </div>
         </div>
-        <div class="clear"></div>
+        <div class="clear" style="height: 25px;">
+        </div>
+        <asp:Panel ID="pnlLinkBtns" runat="server">
+            <ul class="sitemenu-selection">
+                <li class="active"><a href="#" onclick="$('#changeLog').hide();$('#siteInfo').show();$('.sitemenu-selection').find('li').removeClass('active');$('.sitemenu-selection').find('li').eq(0).addClass('active');return false;">Site Information</a></li>
+                <li><a href="#" onclick="$('#siteInfo').hide();$('#changeLog').show();$('.sitemenu-selection').find('li').removeClass('active');$('.sitemenu-selection').find('li').eq(1).addClass('active');return false;">Change Log</a></li>
+            </ul>
+        </asp:Panel>
+        <div class="clear-space">
+        </div>
+        <div class="clear-space">
+        </div>
         <div id="forkmeInfo" class="pad-top-big">
             <a id="forkme_banner" href="https://github.com/jwdonnel/OpenWSE" target="_blank">View on GitHub</a>
             <div id="lbl_currentVer" runat="server" class="float-right pad-right-big">
@@ -370,12 +384,12 @@
                             <ul style="list-style: disc;">
                                 <li>Microsoft ASP.NET 4.5</li>
                                 <li>JQuery <i>(<a href="http://www.jquery.com" target="_blank">www.jquery.com</a>)</i></li>
-                                <li>JQuery UI<i>(<a href="http://jqueryui.com" target="_blank">www.jqueryui.com</a>)</i></li>
-                                <li>TinyMCE - Javascript WYSIWYG editor<i>(<a href="WebControls/TinyMCE/license.txt"
+                                <li>JQuery UI <i>(<a href="http://jqueryui.com" target="_blank">www.jqueryui.com</a>)</i></li>
+                                <li>TinyMCE - Javascript WYSIWYG editor <i>(<a href="WebControls/TinyMCE/license.txt"
                                     target="_blank">View License</a>)</i></li>
-                                <li>SharpZipLib - The Zip, GZip, BZip2 and Tar Implementation For .NET<i>(<a href="http://www.icsharpcode.net/opensource/sharpziplib"
+                                <li>SharpZipLib - The Zip, GZip, BZip2 and Tar Implementation For .NET <i>(<a href="http://www.icsharpcode.net/opensource/sharpziplib"
                                     target="_blank">www.icsharpcode.net</a>)</i></li>
-                                <li>SyntaxHighlighter - JavaScript code syntax highlighter<i>(<a href="http://alexgorbatchev.com/SyntaxHighlighter"
+                                <li>SyntaxHighlighter - JavaScript code syntax highlighter <i>(<a href="http://alexgorbatchev.com/SyntaxHighlighter"
                                     target="_blank">www.alexgorbatchev.com/SyntaxHighlighter</a>)</i></li>
                                 <li>Google APIs</li>
                             </ul>

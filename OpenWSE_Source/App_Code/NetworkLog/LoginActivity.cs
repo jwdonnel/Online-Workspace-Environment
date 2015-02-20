@@ -93,7 +93,7 @@ public class LoginActivity
 
     public void AddItem(string nameUsed, bool success, ActivityType actType) {
         ServerSettings ss = new ServerSettings();
-        if (ss.RecordLoginActivity) {
+        if (ss.RecordActivity && ss.RecordLoginActivity) {
             string tempSuccess = "0";
             if (success) {
                 tempSuccess = "1";

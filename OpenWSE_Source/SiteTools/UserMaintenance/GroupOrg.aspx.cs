@@ -96,31 +96,31 @@ public partial class SiteTools_GroupOrg : Page {
                 imgurl = ResolveUrl(imgurl);
             }
 
-            strTemp.Append("<div class='contact-card-main contact-card-main-category-packages'><img alt='logo' src='" + imgurl + "'/ >");
+            strTemp.Append("<div class='table-settings-box contact-card-main'><img alt='logo' src='" + imgurl + "'/ >");
 
             if (dr["CreatedBy"].ToLower() == _username.ToLower() || _username.ToLower() == ServerSettings.AdminUserName.ToLower()) {
-                strTemp.Append("<a href='#delete' onclick='DeleteGroup(\"" + dr["GroupID"] + "\");return false;' class='td-delete-btn float-right margin-left-sml margin-right-sml' title='Delete Group'></a>");
-                strTemp.Append("<a href='#edit' onclick='EditGroup(\"" + dr["GroupID"] + "\");return false;' class='td-edit-btn float-right margin-left-sml margin-right-sml' title='Edit Group'></a>");
+                strTemp.Append("<a href='#' onclick='DeleteGroup(\"" + dr["GroupID"] + "\");return false;' class='td-delete-btn float-right margin-left-sml margin-right-sml' title='Delete Group'></a>");
+                strTemp.Append("<a href='#' onclick='EditGroup(\"" + dr["GroupID"] + "\");return false;' class='td-edit-btn float-right margin-left-sml margin-right-sml' title='Edit Group'></a>");
             }
 
             if (!Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
                 if (groupList.Contains(dr["GroupID"])) {
                     if (groupCount > 1) {
-                        strTemp.Append("<a href='#users' title='Remove yourself from this group' onclick='RemoveUser(\"" + _username + "\", \"" + dr["GroupID"] + "\");return false;' class='joinquit td-cancel-btn float-right margin-left-sml margin-right-sml'></a>");
+                        strTemp.Append("<a href='#' title='Remove yourself from this group' onclick='RemoveUser(\"" + _username + "\", \"" + dr["GroupID"] + "\");return false;' class='joinquit td-cancel-btn float-right margin-left-sml margin-right-sml'></a>");
                     }
                 }
                 else {
                     if ((CompareCreatedByGroup(_username, dr["CreatedBy"])) || (groupList.Contains(dr["GroupID"]))) {
-                        strTemp.Append("<a href='#users' title='Join this group'  onclick='AddUser(\"" + _username + "\", \"" + dr["GroupID"] + "\");return false;' class='joinquit td-add-btn float-right margin-left-sml margin-right-sml'></a>");
+                        strTemp.Append("<a href='#' title='Join this group'  onclick='AddUser(\"" + _username + "\", \"" + dr["GroupID"] + "\");return false;' class='joinquit td-add-btn float-right margin-left-sml margin-right-sml'></a>");
                     }
                     else
                         canContinue = false;
                 }
-                strTemp.Append("<a href='#users' title='View users in group (Non-Editable)' onclick='ViewGroup_Standard(\"" + dr["GroupID"] + "\");return false;' class='img-users float-right margin-left-sml margin-right-sml pad-all-sml'></a>");
+                strTemp.Append("<a href='#' title='View users in group (Non-Editable)' onclick='ViewGroup_Standard(\"" + dr["GroupID"] + "\");return false;' class='img-users float-right margin-left-sml margin-right-sml pad-all-sml'></a>");
             }
             else {
-                strTemp.Append("<a href='#users' title='View users in group (Non-Editable)' onclick='ViewGroup_Standard(\"" + dr["GroupID"].ToString() + "\");return false;' class='img-users float-right margin-right pad-all-sml'></a>");
-                strTemp.Append("<a href='#users' title='Add/Remove users from group' onclick='ViewGroup(\"" + dr["GroupID"].ToString() + "\");return false;' class='img-addremove float-right margin-right pad-all-sml'></a>");
+                strTemp.Append("<a href='#' title='View users in group (Non-Editable)' onclick='ViewGroup_Standard(\"" + dr["GroupID"].ToString() + "\");return false;' class='img-users float-right margin-right pad-all-sml'></a>");
+                strTemp.Append("<a href='#' title='Add/Remove users from group' onclick='ViewGroup(\"" + dr["GroupID"].ToString() + "\");return false;' class='img-addremove float-right margin-right pad-all-sml'></a>");
             }
 
             strTemp.Append("<a href='#network' title='Setup your Group to listen to certain IP Addresses' onclick='GroupNetwork(\"" + dr["GroupID"] + "\");return false;' class='img-network float-right margin-right pad-all-sml'></a>");
@@ -139,41 +139,38 @@ public partial class SiteTools_GroupOrg : Page {
                     continue;
                 }
 
-                strTemp.Append("<div class='clear-space-two'></div>");
-                strTemp.Append("<div class='clear'><h2 style='padding-top:15px!important;'>" + dr["GroupName"] + "</h2></div>");
-                strTemp.Append("<div class='clear-space-two'></div>");
+                strTemp.Append("<div class='clear-space'></div>");
+                strTemp.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Group name</span>" + dr["GroupName"] + "<div class='clear-space-five'></div>");
 
                 if (!string.IsNullOrEmpty(dr["Address"]))
-                    strTemp.Append("<p><b>Address:</b>" + dr["Address"] + "</p>");
+                    strTemp.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Address</span>" + dr["Address"] + "<div class='clear-space-five'></div>");
 
-                if ((!string.IsNullOrEmpty(dr["City"])) && (!string.IsNullOrEmpty(dr["State"])) && (!string.IsNullOrEmpty(dr["PostalCode"])))
-                    strTemp.Append("<p><b>City:</b>" + dr["City"] + "<b class='pad-left-big'>State:</b>" + dr["State"] + "<b class='pad-left-big'>Postal Code:</b>" + dr["PostalCode"].ToString() + "</p>");
+                if ((!string.IsNullOrEmpty(dr["City"])) && (!string.IsNullOrEmpty(dr["State"])) && (!string.IsNullOrEmpty(dr["PostalCode"]))) {
+                    strTemp.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>City</span>" + dr["City"] + "<div class='clear-space-five'></div>");
+                    strTemp.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>State</span>" + dr["State"] + "<div class='clear-space-five'></div>");
+                    strTemp.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Postal Code</span>" + dr["PostalCode"].ToString() + "<div class='clear-space-five'></div>");
+                }
+                if ((!string.IsNullOrEmpty(dr["PhoneNumber"])) && (dr["PhoneNumber"] != "--")) {
+                    strTemp.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Phone Number</span>" + dr["PhoneNumber"] + "<div class='clear-space-five'></div>");
+                }
 
-                if ((!string.IsNullOrEmpty(dr["PhoneNumber"])) && (dr["PhoneNumber"] != "--"))
-                    strTemp.Append("<p><b>Phone Number:</b>" + dr["PhoneNumber"] + "</p>");
-
-                strTemp.Append("<p><b>Date Created:</b>" + dr["Date"] + "</p>");
-                strTemp.Append("<div class='clear'></div>");
-                strTemp.Append("<p><b>Created By:</b>" + dr["CreatedBy"] + "</p>");
-                strTemp.Append("<div class='clear'></div>");
-                strTemp.Append("<p><b>Is Private:</b>" + (HelperMethods.ConvertBitToBoolean(dr["IsPrivate"])).ToString() + "</p>");
-                strTemp.Append("<div class='clear'></div>");
-                strTemp.Append("<p><b>Group Network:</b>" + CheckIfListening(dr["GroupID"]) + "</p>");
-
-                strTemp.Append("<div class='clear-space'></div>");
+                strTemp.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Date Created</span>" + dr["Date"] + "<div class='clear-space-five'></div>");
+                strTemp.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Created By</span>" + dr["CreatedBy"] + "<div class='clear-space-five'></div>");
+                strTemp.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Is Private</span>" + (HelperMethods.ConvertBitToBoolean(dr["IsPrivate"])).ToString() + "<div class='clear-space-five'></div>");
+                strTemp.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Group Network</span>" + CheckIfListening(dr["GroupID"]) + "<div class='clear-space-five'></div>");
                 if (_groups.IsApartOfGroup(groupList, dr["GroupID"])) {
                     if ((Session["LoginGroup"] != null) && (dr["GroupID"] == Session["LoginGroup"].ToString())) {
-                        strTemp.Append("<p class='float-left'><b>Login Query:</b><a href='#' title='Click to logout of " + dr["GroupName"] + "' onclick='LogoutOfGroup(); return false;'>Logout of group</a></p>");
+                        strTemp.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Login Query</span><a href='#' title='Click to logout of " + dr["GroupName"] + "' onclick='LogoutOfGroup(); return false;'>Logout of group</a>");
                     }
                     else {
-                        strTemp.Append("<p class='float-left'><b>Login Query:</b><a href='#' title='Click to login to " + dr["GroupName"] + "' onclick='LoginToGroup(\"" + dr["GroupID"] + "\"); return false;'>Default.aspx?group=" + dr["GroupID"] + "</a></p>");
+                        strTemp.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Login Query</span><a href='#' title='Click to login to " + dr["GroupName"] + "' onclick='LoginToGroup(\"" + dr["GroupID"] + "\"); return false;'>Default.aspx?group=" + dr["GroupID"] + "</a>");
                     }
                 }
                 else {
-                    strTemp.Append("<p class='float-left'><b>Login Query:</b>Default.aspx?group=" + dr["GroupID"] + "</p>");
+                    strTemp.Append("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Login Query</span>Default.aspx?group=" + dr["GroupID"]);
                 }
-                strTemp.Append("<p class='float-right'><b>Total Users:</b>" + (CountUsersPerGroup(dr["GroupID"])).ToString() + "</p>");
-                strTemp.Append("<div class='clear-space-two'></div></div>");
+                strTemp.Append("<div class='float-right pad-right'><b class='pad-right'>Total Users</b>" + (CountUsersPerGroup(dr["GroupID"])).ToString() + "</div>");
+                strTemp.Append("</div>");
 
                 str.Append(strTemp.ToString());
                 count++;
@@ -182,7 +179,7 @@ public partial class SiteTools_GroupOrg : Page {
 
         if (_username.ToLower() != ServerSettings.AdminUserName.ToLower()) {
             StringBuilder _strScriptreg = new StringBuilder();
-            if (count == 0) {
+            if (count == 0 && (string.IsNullOrEmpty(tb_search.Text.Trim().ToLower()) || tb_search.Text.Trim().ToLower() == "search groups")) {
                 _strScriptreg.Append("$('#aGroupLogin').css('display', 'none');$(\"body\").append(\"<h3 id='noapartofgroupmessage' style='position: fixed; bottom: 28px; right: 0; z-index: 10000; padding: 15px; background: #2F2F2F; color: #FFF;'>You must add yourself to a group</h3>\");");
             }
             else {
@@ -1168,4 +1165,5 @@ public partial class SiteTools_GroupOrg : Page {
     }
 
     #endregion
+
 }

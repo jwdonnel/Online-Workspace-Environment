@@ -8,26 +8,6 @@
             max-height: 400px;
         }
 
-        .Modal-element-modal-pw
-        {
-            background: #F9F9F9;
-            -moz-box-shadow: 0 5px 10px rgba(0,0,0,.4);
-            -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.4);
-            box-shadow: 0 5px 10px rgba(0,0,0,.4);
-            border: 1px solid #CCC;
-            margin: 0 auto;
-            z-index: 10000;
-            -moz-border-radius: 20px;
-            -webkit-border-radius: 20px;
-            border-radius: 20px;
-        }
-
-        .Modal-element-align-pw
-        {
-            margin-top: -110px;
-            margin-left: -168px;
-        }
-
         .sch_ColorCode
         {
             top: 3px;
@@ -38,21 +18,21 @@
     <div class="maincontent-padding pad-top-big margin-top">
         <div id="useraccounts">
             <asp:Panel ID="pnl_admin_tools" runat="server" CssClass="float-left">
-                <a class="sb-links float-left margin-right-big" onclick="ClearNewUserFields();openWSE.LoadModalWindow(true, 'NewUser-element', 'Create New User');return false;">
+                <a href="#" class="float-left input-buttons" onclick="ClearNewUserFields();openWSE.LoadModalWindow(true, 'NewUser-element', 'Create New User');return false;">
                     <span class="td-add-btn float-left margin-right-sml" style="padding: 0!important;"></span>Create a User</a>
                 <div id="customizeBtns" class="float-left">
-                    <a id="btn_customizeua" href="#iframecontent" class="sb-links margin-right" onclick="openWSE.LoadIFrameContent('SiteTools/UserMaintenance/AcctSettings.aspx?toolview=true&u=NewUserDefaults', this);return false;">
+                    <a id="btn_customizeua" href="#iframecontent" class="display-inline input-buttons" onclick="openWSE.LoadIFrameContent('SiteTools/UserMaintenance/AcctSettings.aspx?toolview=true&u=NewUserDefaults', this);return false;">
                         <span class="img-customize margin-right-sml float-left"></span>Customize New Users</a>
-                    <a id="btn_appsusers" href="#iframecontent" class="sb-links margin-right margin-left"
+                    <a id="btn_appsusers" href="#iframecontent" class="input-buttons"
                         onclick="openWSE.LoadIFrameContent('SiteTools/iframes/UsersAndApps.aspx', this);return false;">
                         <span class="img-app-dark margin-right-sml float-left"></span>Users and Apps</a>
                 </div>
                 <div class="float-left">
                     <asp:UpdatePanel ID="UpdatePanel3" runat="server">
                         <ContentTemplate>
-                            <asp:LinkButton ID="btn_manageRoles" runat="server" CssClass="sb-links margin-right margin-left RandomActionBtns"
+                            <asp:LinkButton ID="btn_manageRoles" runat="server" CssClass="RandomActionBtns input-buttons"
                                 OnClick="btn_manageRoles_Click"><span class="td-edit-btn float-left margin-right-sml" style="padding: 0!important;"></span>Manage Custom Roles</asp:LinkButton>
-                            <asp:LinkButton ID="btn_rebuild_uc" runat="server" CssClass="sb-links margin-right margin-left RandomActionBtns"
+                            <asp:LinkButton ID="btn_rebuild_uc" runat="server" CssClass="RandomActionBtns input-buttons"
                                 OnClick="btn_rebuild_uc_Clicked"><span class="img-refresh float-left margin-right-sml"></span>Rebuild User Customizations</asp:LinkButton>
                         </ContentTemplate>
                     </asp:UpdatePanel>
@@ -124,7 +104,7 @@
                                                         </td>
                                                     </tr>
                                                 </table>
-                                                <asp:LinkButton ID="lbtn_CreateNewRole" runat="server" OnClick="lbtn_CreateNewRole_Click" CssClass="sb-links RandomActionBtns margin-left float-right" Style="margin-top: -25px;"><span class="td-add-btn float-left margin-right-sml" style="padding: 0!important;"></span>Create New Role</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtn_CreateNewRole" runat="server" OnClick="lbtn_CreateNewRole_Click" CssClass="RandomActionBtns margin-left input-buttons float-right" Style="margin-top: -25px;">Create New Role</asp:LinkButton>
                                                 <div class="clear-space"></div>
                                                 <asp:Label ID="lbl_roleEditError" runat="server" ForeColor="Red"></asp:Label>
                                                 <div class="clear-space"></div>
@@ -428,56 +408,65 @@
         <asp:UpdatePanel ID="updatepnl_pwreset" runat="server">
             <ContentTemplate>
                 <asp:HiddenField ID="hf_createMultiUsers" runat="server" OnValueChanged="hf_createMultiUsers_ValueChanged" />
-                <div id="pwreset_overlay" class="Modal-overlay" runat="server" style="display: none;">
-                    <div class="Modal-element-align Modal-element-align-pw">
-                        <div id="pwreset_modal" class="Modal-element-modal-pw pad-all" runat="server" style="display: none;">
-                            <div class="pad-all">
-                                <asp:Literal ID="lbl_passwordReset" runat="server"></asp:Literal>
-                                <asp:ChangePassword ID="ChangeUserPassword" runat="server" EnableViewState="false"
-                                    RenderOuterTable="false">
-                                    <ChangePasswordTemplate>
-                                        <asp:Panel ID="pnl_changePassword" runat="server" DefaultButton="ChangePasswordPushButton_accountsettings">
-                                            <div class="failureNotification clear-margin" style="width: 295px;">
-                                                <asp:Literal ID="FailureText" runat="server"></asp:Literal>
-                                            </div>
-                                            <asp:ValidationSummary ID="ChangeUserPasswordValidationSummary" runat="server" CssClass="failureNotification"
-                                                ValidationGroup="ChangeUserPasswordValidationGroup" Style="padding-left: 18px" />
-                                            <div class="accountInfo">
-                                                <asp:TextBox ID="CurrentPassword" runat="server" Visible="false"></asp:TextBox>
-                                                <div class="clear-space">
+                <div id="pwreset_overlay" class="Modal-element" runat="server" style="display: none;">
+                    <div class="Modal-overlay">
+                        <div class="Modal-element-align">
+                            <div class="Modal-element-modal" style="min-width: 350px;">
+                                <div class="ModalHeader">
+                                    <div>
+                                        <div class="app-head-button-holder-admin">
+                                            <asp:LinkButton ID="btn_closepwreset" runat="server" Text="" OnClick="btn_closepwreset_Click"
+                                                CssClass="ModalExitButton RandomActionBtns" />
+                                        </div>
+                                        <span class="Modal-title">Password Reset</span>
+                                    </div>
+                                </div>
+                                <div class="ModalPadContent">
+                                    <asp:Literal ID="lbl_passwordReset" runat="server"></asp:Literal>
+                                    <asp:ChangePassword ID="ChangeUserPassword" runat="server" EnableViewState="false"
+                                        RenderOuterTable="false">
+                                        <ChangePasswordTemplate>
+                                            <asp:Panel ID="pnl_changePassword" runat="server" DefaultButton="ChangePasswordPushButton_accountsettings">
+                                                <div class="failureNotification clear-margin" style="width: 295px;">
+                                                    <asp:Literal ID="FailureText" runat="server"></asp:Literal>
                                                 </div>
-                                                <asp:Label ID="NewPasswordLabel" runat="server" AssociatedControlID="NewPassword"
-                                                    CssClass="font-color-black font-bold">New Password:</asp:Label>
-                                                <br />
-                                                <asp:TextBox ID="NewPassword" runat="server" CssClass="textEntry" TextMode="Password"></asp:TextBox>
-                                                <asp:RequiredFieldValidator ID="NewPasswordRequired" runat="server" ControlToValidate="NewPassword"
-                                                    CssClass="failureNotification" ErrorMessage="New Password is required." ToolTip="New Password is required."
-                                                    ValidationGroup="ChangeUserPasswordValidationGroup">*</asp:RequiredFieldValidator>
-                                                <div class="clear-space">
+                                                <asp:ValidationSummary ID="ChangeUserPasswordValidationSummary" runat="server" CssClass="failureNotification"
+                                                    ValidationGroup="ChangeUserPasswordValidationGroup" Style="padding-left: 18px" />
+                                                <div class="accountInfo">
+                                                    <asp:TextBox ID="CurrentPassword" runat="server" Visible="false"></asp:TextBox>
+                                                    <div class="clear-space">
+                                                    </div>
+                                                    <asp:Label ID="NewPasswordLabel" runat="server" AssociatedControlID="NewPassword"
+                                                        CssClass="font-color-black font-bold">New Password:</asp:Label>
+                                                    <br />
+                                                    <asp:TextBox ID="NewPassword" runat="server" CssClass="textEntry" TextMode="Password"></asp:TextBox>
+                                                    <asp:RequiredFieldValidator ID="NewPasswordRequired" runat="server" ControlToValidate="NewPassword"
+                                                        CssClass="failureNotification" ErrorMessage="New Password is required." ToolTip="New Password is required."
+                                                        ValidationGroup="ChangeUserPasswordValidationGroup">*</asp:RequiredFieldValidator>
+                                                    <div class="clear-space">
+                                                    </div>
+                                                    <asp:Label ID="ConfirmNewPasswordLabel" runat="server" AssociatedControlID="ConfirmNewPassword"
+                                                        CssClass="font-color-black font-bold">Confirm New Password:</asp:Label>
+                                                    <br />
+                                                    <asp:TextBox ID="ConfirmNewPassword" runat="server" CssClass="textEntry" TextMode="Password"></asp:TextBox>
+                                                    <asp:RequiredFieldValidator ID="ConfirmNewPasswordRequired" runat="server" ControlToValidate="ConfirmNewPassword"
+                                                        CssClass="failureNotification" Display="Dynamic" ErrorMessage="Confirm New Password is required."
+                                                        ToolTip="Confirm New Password is required." ValidationGroup="ChangeUserPasswordValidationGroup">*</asp:RequiredFieldValidator>
+                                                    <asp:CompareValidator ID="NewPasswordCompare" runat="server" ControlToCompare="NewPassword"
+                                                        ControlToValidate="ConfirmNewPassword" CssClass="failureNotification" Display="Dynamic"
+                                                        ErrorMessage="Confirm New Password must match the New Password." ValidationGroup="ChangeUserPasswordValidationGroup">*</asp:CompareValidator>
+                                                    <div class="clear-space">
+                                                    </div>
+                                                    <div class="clear-space-five">
+                                                    </div>
+                                                    <asp:Button ID="ChangePasswordPushButton_accountsettings" runat="server" OnClick="ChangePasswordPushButton_accountsettings_Clicked"
+                                                        Text="Change Password" ValidationGroup="ChangeUserPasswordValidationGroup" CssClass="input-buttons" />
                                                 </div>
-                                                <asp:Label ID="ConfirmNewPasswordLabel" runat="server" AssociatedControlID="ConfirmNewPassword"
-                                                    CssClass="font-color-black font-bold">Confirm New Password:</asp:Label>
-                                                <br />
-                                                <asp:TextBox ID="ConfirmNewPassword" runat="server" CssClass="textEntry" TextMode="Password"></asp:TextBox>
-                                                <asp:RequiredFieldValidator ID="ConfirmNewPasswordRequired" runat="server" ControlToValidate="ConfirmNewPassword"
-                                                    CssClass="failureNotification" Display="Dynamic" ErrorMessage="Confirm New Password is required."
-                                                    ToolTip="Confirm New Password is required." ValidationGroup="ChangeUserPasswordValidationGroup">*</asp:RequiredFieldValidator>
-                                                <asp:CompareValidator ID="NewPasswordCompare" runat="server" ControlToCompare="NewPassword"
-                                                    ControlToValidate="ConfirmNewPassword" CssClass="failureNotification" Display="Dynamic"
-                                                    ErrorMessage="Confirm New Password must match the New Password." ValidationGroup="ChangeUserPasswordValidationGroup">*</asp:CompareValidator>
-                                                <div class="clear-space">
-                                                </div>
-                                                <div class="clear-space-five">
-                                                </div>
-                                                <asp:Button ID="ChangePasswordPushButton_accountsettings" runat="server" OnClick="ChangePasswordPushButton_accountsettings_Clicked"
-                                                    Text="Change Password" ValidationGroup="ChangeUserPasswordValidationGroup" CssClass="input-buttons" />
-                                            </div>
-                                        </asp:Panel>
-                                    </ChangePasswordTemplate>
-                                </asp:ChangePassword>
-                                <asp:Literal ID="txt_PasswordFinishedText" runat="server"></asp:Literal>
-                                <asp:Button ID="btn_closepwreset" runat="server" Text="Cancel" OnClick="btn_closepwreset_Click"
-                                    CssClass="input-buttons float-right RandomActionBtns" Style="margin-top: -30px; margin-right: 0px;" />
+                                            </asp:Panel>
+                                        </ChangePasswordTemplate>
+                                    </asp:ChangePassword>
+                                    <asp:Literal ID="txt_PasswordFinishedText" runat="server"></asp:Literal>
+                                </div>
                             </div>
                         </div>
                     </div>

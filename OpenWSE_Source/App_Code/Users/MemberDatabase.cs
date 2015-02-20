@@ -1171,7 +1171,7 @@ public class MemberDatabase : IRequiresSessionState {
                     }
                 }
                 catch (Exception e) {
-                    new AppLog(false).AddError(e);
+                    AppLog.AddError(e);
                 }
             }
             else {
@@ -1914,11 +1914,13 @@ public class MemberDatabase : IRequiresSessionState {
     }
     public bool PrivateAccount {
         get {
-            if (CheckAndCreateUserSettings()) {
-                string val = UsersTable[_username]["PrivateAccount"];
-                return HelperMethods.ConvertBitToBoolean(val);
+            try {
+                if (CheckAndCreateUserSettings()) {
+                    string val = UsersTable[_username]["PrivateAccount"];
+                    return HelperMethods.ConvertBitToBoolean(val);
+                }
             }
-
+            catch { }
             return false;
         }
     }

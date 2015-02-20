@@ -109,7 +109,6 @@ public partial class SiteTools_LicenseManager : System.Web.UI.Page {
 
         string licenseFile = ServerSettings.GetServerMapLocation + "App_Data\\" + CheckLicense.LicenseFileName;
         if (File.Exists(licenseFile)) {
-            lbl_licenseFile.Text = ResolveUrl("~/App_Data/" + CheckLicense.LicenseFileName);
             pnl_licenseFileContents.Enabled = true;
             pnl_licenseFileContents.Visible = true;
 
@@ -125,9 +124,9 @@ public partial class SiteTools_LicenseManager : System.Web.UI.Page {
                 StringBuilder str = new StringBuilder();
                 str.Append("<div class='clear-space-two'></div>");
                 // str.AppendFormat("<span>Host Url:</span>{0}<div class='clear-space-five'></div>", lf.Host);
-                str.AppendFormat("<span>Date Issued:</span>{0}<div class='clear-space-five'></div>", lf.DateIssued);
-                str.AppendFormat("<span>Expiration Date:</span>{0}<div class='clear-space-five'></div>", lf.ExpirationDate);
-                str.AppendFormat("<span>Website Url:</span>{0}<div class='clear-space-five'></div>", lf.WebsiteUrl);
+                str.AppendFormat("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Date Issued</span>{0}<div class='clear-space-five'></div>", lf.DateIssued);
+                str.AppendFormat("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Expiration Date</span>{0}<div class='clear-space-five'></div>", lf.ExpirationDate);
+                str.AppendFormat("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Website Url</span>{0}<div class='clear-space-five'></div>", lf.WebsiteUrl);
 
                 string siteName = lf.WebsiteName;
                 if (CheckLicense.SiteName != lf.WebsiteName) {
@@ -135,8 +134,8 @@ public partial class SiteTools_LicenseManager : System.Web.UI.Page {
                     siteName = lf.WebsiteName + " - <b>Refresh the page to update the website name.</b>";
                 }
 
-                str.AppendFormat("<span>Website Name:</span>{0}<div class='clear-space-five'></div>", siteName);
-                str.AppendFormat("<span>Email Address:</span>{0}<div class='clear-space-five'></div>", lf.EmailAddress);
+                str.AppendFormat("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Website Name</span>{0}<div class='clear-space-five'></div>", siteName);
+                str.AppendFormat("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Email Address</span>{0}<div class='clear-space-five'></div>", lf.EmailAddress);
 
                 string licenseType = "Full";
                 if (lf.LicenseId.ToLower().Contains("-trial")) {
@@ -148,13 +147,12 @@ public partial class SiteTools_LicenseManager : System.Web.UI.Page {
                     licenseType = days.ToString() + " Day Trial";
                 }
 
-                str.AppendFormat("<span>License Type:</span>{0}<div class='clear-space-five'></div>", licenseType);
-                str.AppendFormat("<span>Creative Commons License:</span><div class='clear-space-five'></div><div class='cc-type'>{0}</div><div class='clear-space-five'></div>", CheckLicense.GetLicenseTermLinks(lf.CCLicenseType));
+                str.AppendFormat("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>License Type</span>{0}<div class='clear-space-five'></div>", licenseType);
+                str.AppendFormat("<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Creative Commons License</span><div class='cc-type'>{0}</div><div class='clear-space-five'></div>", CheckLicense.GetLicenseTermLinks(lf.CCLicenseType));
                 pnl_licenseContents.Controls.Add(new LiteralControl(str.ToString()));
             }
         }
         else {
-            lbl_licenseFile.Text = "No license file present";
             pnl_licenseFileContents.Enabled = false;
             pnl_licenseFileContents.Visible = false;
         }

@@ -194,8 +194,7 @@ public class AppBuilder : Page {
                     }
                 }
                 catch (Exception ex) {
-                    AppLog applog = new AppLog(false);
-                    applog.AddError(ex);
+                    AppLog.AddError(ex);
                 }
             }
             appHolder.Controls.Add(advPanel);
@@ -336,8 +335,7 @@ public class AppBuilder : Page {
                     }
                 }
                 catch (Exception ex) {
-                    AppLog applog = new AppLog(false);
-                    applog.AddError(ex);
+                    AppLog.AddError(ex);
                 }
             }
 

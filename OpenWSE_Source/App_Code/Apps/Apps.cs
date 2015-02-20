@@ -816,7 +816,7 @@ public class App {
             }
         }
         catch (Exception e) {
-            new AppLog(false).AddError(e);
+            AppLog.AddError(e);
         }
 
         dbCall.CallDelete("AppList", new List<DatabaseQuery>() { new DatabaseQuery("AppID", id) });
@@ -841,7 +841,7 @@ public class App {
             }
         }
         catch (Exception e) {
-            new AppLog(false).AddError(e);
+            AppLog.AddError(e);
         }
     }
 

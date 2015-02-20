@@ -63,19 +63,17 @@ $("form").submit(function () {
 });
 
 function MapPathSelect() {
-    $('#UploadPlugin').fadeOut(openWSE_Config.animationSpeed, function () {
-        $('#AddPlugin').fadeIn(openWSE_Config.animationSpeed);
-        $('#aUploadFile').removeClass('selected');
-        $('#aMapPath').addClass('selected'); 
-    });
+    $('#UploadPlugin').hide();
+    $('#AddPlugin').show();
+    $('#aMapPath').hide();
+    $('#aUploadFile').show();
 }
 
 function UploadFileSelect() {
-    $('#AddPlugin').fadeOut(openWSE_Config.animationSpeed, function () {
-        $('#UploadPlugin').fadeIn(openWSE_Config.animationSpeed);
-        $('#aMapPath').removeClass('selected');
-        $('#aUploadFile').addClass('selected'); 
-    });
+    $('#AddPlugin').hide();
+    $('#UploadPlugin').show();
+    $('#aUploadFile').hide();
+    $('#aMapPath').show();
 }
 
 function DeletePlugin(id, name) {

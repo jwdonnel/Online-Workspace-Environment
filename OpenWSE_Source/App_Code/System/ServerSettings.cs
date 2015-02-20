@@ -249,7 +249,7 @@ public class ServerSettings {
                 DefaultDBTables.UpdateDefaults();
             }
             catch (Exception e) {
-                new AppLog(false).AddError(e);
+                AppLog.AddError(e);
             }
         }
     }
@@ -502,7 +502,7 @@ public class ServerSettings {
                     emailClient.Dispose();
                 }
                 catch (Exception e) {
-                    new AppLog(false).AddError(e);
+                    AppLog.AddError(e);
                 }
             }
         }
@@ -674,7 +674,7 @@ public class ServerSettings {
                 absolutePath = "//" + HttpUtility.UrlEncode(request.ServerVariables["SERVER_NAME"]) + request.ApplicationPath;
         }
         catch (Exception e) {
-            new AppLog(false).AddError(e);
+            AppLog.AddError(e);
         }
         return absolutePath;
     }
@@ -952,6 +952,18 @@ public class ServerSettings {
         }
     }
 
+    public bool RecordErrorsOnly {
+        get {
+            CheckAndBuildServerSettingsTable();
+            try {
+                return HelperMethods.ConvertBitToBoolean(SettingsTable["RecordErrorsOnly"]);
+            }
+            catch { }
+
+            return false;
+        }
+    }
+
     public bool SiteOffLine {
         get {
             CheckAndBuildServerSettingsTable();
@@ -1056,10 +1068,14 @@ public class ServerSettings {
         }
     }
 
-    public bool LockIPListener {
+    public bool LockIPListenerWatchlist {
         get {
             CheckAndBuildServerSettingsTable();
-            return HelperMethods.ConvertBitToBoolean(SettingsTable["LockIPListener"]);
+            if (SettingsTable.ContainsKey("LockIPListenerWatchlist")) {
+                return HelperMethods.ConvertBitToBoolean(SettingsTable["LockIPListenerWatchlist"]);
+            }
+
+            return false;
         }
     }
 
@@ -1338,6 +1354,7 @@ public class ServerSettings {
         if (canUpdateDate) {
             dbCall.CallUpdate(dbTable, new List<DatabaseQuery>() { new DatabaseQuery("LoginMessageDate", date) }, null);
         }
+        UpdateServerSettingsTable();
     }
 
     public static List<string> AdminPages() {
@@ -1572,6 +1589,15 @@ public class ServerSettings {
         UpdateServerSettingsTable();
     }
 
+    public static void update_RecordErrorsOnly(bool errorsOnly) {
+        int temp = 0;
+        if (errorsOnly) {
+            temp = 1;
+        }
+        dbCall.CallUpdate(dbTable, new List<DatabaseQuery>() { new DatabaseQuery("RecordErrorsOnly", temp.ToString()) }, null);
+        UpdateServerSettingsTable();
+    }
+
     public static void update_AllowPrivacy(bool allow) {
         int temp = 0;
         if (allow) {
@@ -1662,12 +1688,12 @@ public class ServerSettings {
         UpdateServerSettingsTable();
     }
 
-    public static void update_LockIPListener(bool _lock) {
+    public static void update_LockIPListenerWatchlist(bool _lock) {
         int temp = 0;
         if (_lock) {
             temp = 1;
         }
-        dbCall.CallUpdate(dbTable, new List<DatabaseQuery>() { new DatabaseQuery("LockIPListener", temp.ToString()) }, null);
+        dbCall.CallUpdate(dbTable, new List<DatabaseQuery>() { new DatabaseQuery("LockIPListenerWatchlist", temp.ToString()) }, null);
         UpdateServerSettingsTable();
     }
 
@@ -1891,7 +1917,7 @@ public class ServerSettings {
             DataEncryption.EncryptFile(_loc, encryptloc);
         }
         catch (Exception e) {
-            new AppLog(false).AddError(e);
+            AppLog.AddError(e);
         }
     }
     public static void MailSettingsDeserialize() {
@@ -1908,7 +1934,7 @@ public class ServerSettings {
             }
         }
         catch (Exception e) {
-            new AppLog(false).AddError(e);
+            AppLog.AddError(e);
         }
     }
 

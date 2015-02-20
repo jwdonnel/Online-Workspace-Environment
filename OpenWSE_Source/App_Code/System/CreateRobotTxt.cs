@@ -46,7 +46,7 @@ public class CreateRobotTxt
             File.WriteAllLines(ServerSettings.GetServerMapLocation + RobotsFileName, lines.ToArray());
         }
         catch (Exception e) {
-            new AppLog(false).AddError(e);
+            AppLog.AddError(e);
         }
     }
 }

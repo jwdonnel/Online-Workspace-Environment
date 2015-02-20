@@ -116,7 +116,7 @@
                                                             <div class="pad-top-big pad-left">
                                                                 <asp:Label ID="lbl_currFolderName" runat="server" Style="color: #555; font-size: 22px">Root Directory</asp:Label>
                                                                 <div class="float-right">
-                                                                    <asp:LinkButton ID="lbtn_HideImages" runat="server" Text="Hide Images" CssClass="RandomActionBtns sb-links margin-right-big" OnClick="lbtn_HideImages_Click"></asp:LinkButton>
+                                                                    <asp:LinkButton ID="lbtn_HideImages" runat="server" Text="Hide Images" CssClass="RandomActionBtns margin-right-big" OnClick="lbtn_HideImages_Click"></asp:LinkButton>
                                                                 </div>
                                                             </div>
                                                             <div class="pad-left pad-right">
@@ -127,9 +127,9 @@
                                                                         Visible="False">
                                                                     </asp:DropDownList>
                                                                     <asp:LinkButton ID="lbtn_moveFile_documents" runat="server" Visible="False" Enabled="False"
-                                                                        CssClass="margin-left sb-links RandomActionBtns-docs margin-right-big" OnClick="lbtn_moveFile_Click">Move Selected</asp:LinkButton>
+                                                                        CssClass="margin-left RandomActionBtns-docs margin-right-big" OnClick="lbtn_moveFile_Click">Move Selected</asp:LinkButton>
                                                                 </div>
-                                                                <asp:LinkButton ID="lbtn_selectAll_documents" runat="server" CssClass="sb-links RandomActionBtns-docs float-left"
+                                                                <asp:LinkButton ID="lbtn_selectAll_documents" runat="server" CssClass="RandomActionBtns-docs float-left"
                                                                     OnClick="lbtn_selectAll_Click" Style="margin-top: 1px">Select All</asp:LinkButton>
                                                                 <asp:LinkButton ID="refresh_Click_documents" runat="server" CssClass="float-right margin-left margin-top-sml RandomActionBtns-docs margin-right img-refresh"
                                                                     ToolTip="Refresh Files" OnClick="btn_refresh_Click" />

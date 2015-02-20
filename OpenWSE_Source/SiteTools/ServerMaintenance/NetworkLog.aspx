@@ -21,21 +21,32 @@
             min-width: 385px;
             max-width: 50%;
         }
+
+        .eventlog-datecol
+        {
+            font-weight: bold;
+            text-align: right;
+            padding-right: 10px;
+            width: 115px;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="Server">
     <div class="maincontent-padding pad-top-big margin-top">
-        <div id="activity" style="display: none">
-            <small><b class="pad-right-sml">Note:</b>If charts are not updating every given time
+        <asp:Panel ID="pnlLinkBtns" runat="server">
+        </asp:Panel>
+        <div class="clear-space">
+        </div>
+        <div id="activity" class="pnl-section" style="display: none">
+            If charts are not updating every given time
             interval, switch to another browser. (Works best in Google Chrome and Internet Explorer
-            8+).<br />
-                Averages are calculated for 1 minute.</small>
+            8+). Averages are calculated for 1 minute.
             <asp:UpdatePanel ID="UpdatePanel2" runat="server">
                 <ContentTemplate>
                     <div class="clear-space">
                     </div>
                     <div class="float-left pad-right-big">
-                        <span><b>Update Interval:</b></span>
+                        <b class="pad-right">Update Interval</b>
                         <asp:DropDownList ID="dd_interval" CssClass="margin-left" runat="server" ClientIDMode="Static">
                             <asp:ListItem Text="2 Seconds" Value="2000"></asp:ListItem>
                             <asp:ListItem Text="5 Seconds" Value="5000" Selected="True"></asp:ListItem>
@@ -46,7 +57,7 @@
                     <a href="#" id="imgPausePlay" class="margin-left-sml margin-top-sml margin-right-sml float-left cursor-pointer img-pause"
                         title="Pause/Play"></a>
                     <div class="float-left pad-left-big">
-                        <span><b>Time to Track:</b></span>
+                        <b class="pad-right">Time to Track</b>
                         <asp:DropDownList ID="dd_track" CssClass="margin-left" runat="server" ClientIDMode="Static">
                             <asp:ListItem Text="5 Second" Value="5"></asp:ListItem>
                             <asp:ListItem Text="10 Seconds" Value="10"></asp:ListItem>
@@ -70,9 +81,9 @@
             </asp:UpdatePanel>
             <table width="100%" cellpadding="10" cellspacing="10" border="0">
                 <tr>
-                    <td valign="top" style="width: 220px;">
+                    <td valign="top" style="width: 250px;">
                         <div id="network-info-div" class="pad-right-big">
-                            <h3 class="font-bold">Network Information</h3>
+                            <h3 align="center" class="font-bold">Network Information</h3>
                             <div class="clear-space">
                             </div>
                             <div id="pnl_NetworkInfoHolder">
@@ -147,8 +158,8 @@
                                 OnClick="imgbtn_search_Click" />
                         </asp:Panel>
                     </div>
-                    <span class="float-right margin-left-big"><small>Leave search textbox blank to search
-                    all events</small></span>
+                    <span class="float-right margin-left-big">Leave search textbox blank to search
+                    all events</span>
                 </div>
                 <asp:HiddenField ID="hf_searchreset" runat="server" ClientIDMode="Static" OnValueChanged="hf_searchreset_Changed" />
                 <div class="clear-space">
@@ -160,11 +171,11 @@
                 <asp:HiddenField ID="hf_resetHitCount" runat="server" OnValueChanged="hf_resetHitCount_Changed" />
                 <asp:HiddenField ID="hf_DeleteLoginEvent" runat="server" OnValueChanged="hf_DeleteLoginEvent_Changed" />
                 <asp:HiddenField ID="hf_AllowBlockLoginEvent" runat="server" OnValueChanged="hf_AllowBlockLoginEvent_Changed" />
-                <div id="errors" style="display: none;">
+                <div id="log" class="pnl-section" style="display: none;">
                     <div class="float-left">
                         <asp:Panel ID="pnl_rtk_E" runat="server" DefaultButton="btn_Update_rtk_E" CssClass="float-left pad-right">
-                            <b class="pad-right">Events To Keep: </b>
-                            <asp:TextBox ID="tb_Records_to_keep_E" runat="server" CssClass="textEntry margin-right-big"
+                            <b class="pad-right">Events To Keep</b>
+                            <asp:TextBox ID="tb_Records_to_keep_E" runat="server" CssClass="textEntry margin-right"
                                 Width="50px"></asp:TextBox><asp:Button ID="btn_Update_rtk_E" runat="server" CssClass="input-buttons RandomActionBtns"
                                     Text="Update" OnClick="btn_Update_rtk_E_Clicked" />
                         </asp:Panel>
@@ -175,12 +186,14 @@
                             <div class="float-left pad-left">
                                 <span class="img-ignore float-left"></span><b>Ignored</b>
                             </div>
-                            <small class="pad-left-big float-left pad-top-sml">Sorted from newest to oldest</small>
+                        </div>
+                        <div class="float-left pad-left-big margin-left-big pad-top">
+                            <asp:CheckBox ID="cb_ViewErrorsOnly" ClientIDMode="Static" runat="server" Text="&nbsp;View Errors Only" AutoPostBack="true" OnCheckedChanged="cb_ViewErrorsOnly_CheckedChanged" />
                         </div>
                     </div>
                     <div class="float-right">
-                        <asp:LinkButton ID="lbtn_refresherrors" runat="server" OnClick="lbtn_refresherrors_Click" ToolTip="Refresh" CssClass="RandomActionBtns float-right margin-left img-refresh" Style="margin-top: 5px;"></asp:LinkButton>
-                        <asp:LinkButton ID="LinkButton1" runat="server" CssClass="sb-links" OnClientClick="return ConfirmClearLogAll(this);">Clear All Errors</asp:LinkButton>
+                        <asp:LinkButton ID="lbtn_refresherrors" runat="server" OnClick="lbtn_refresherrors_Click" ToolTip="Refresh" CssClass="RandomActionBtns float-right margin-left img-refresh"></asp:LinkButton>
+                        <asp:LinkButton ID="LinkButton1" runat="server" OnClientClick="return ConfirmClearLogAll(this);">Clear All Events</asp:LinkButton>
                     </div>
                     <div class="clear-space">
                     </div>
@@ -199,11 +212,7 @@
                                     <table class="myHeaderStyle" cellpadding="5" cellspacing="0">
                                         <tr>
                                             <td style="width: 40px;"></td>
-                                            <td style="width: 95px;">Date
-                                            </td>
-                                            <td style="width: 400px;">Event Information
-                                            </td>
-                                            <td>Event Message / Stack Trace
+                                            <td>Event Information
                                             </td>
                                             <td style="width: 75px; text-align: center;">Actions
                                             </td>
@@ -213,41 +222,44 @@
                                 <ItemTemplate>
                                     <table class="myItemStyle" cellpadding="5" cellspacing="0">
                                         <tbody>
-                                            <td class="GridViewNumRow" valign="top" style="width: 40px; text-align: center;">
+                                            <td class="GridViewNumRow" valign="middle" style="width: 40px; text-align: center;">
                                                 <%#Container.DataItemIndex + 1 %>
                                             </td>
-                                            <td class="border-right" valign="top" style="width: 95px;">
-                                                <%#Eval("date") %>
-                                            </td>
-                                            <td class="border-right" valign="top" style="width: 400px;">
-                                                <b class="pad-right">Event Name</b><br />
-                                                <%#Eval("name") %>
-                                                <div class="clear-space">
-                                                </div>
-                                                <b class="pad-right">Exception Type</b><br />
-                                                <%#Eval("exceptiontype") %>
-                                                <div class="clear-space">
-                                                </div>
-                                                <b class="pad-right">Machine Name</b><br />
-                                                <%#Eval("machinename")%>
-                                                <div class="clear-space">
-                                                </div>
-                                                <b class="pad-right">Request Url</b><br />
-                                                <%#Eval("requesturl")%>
-                                                <div class="clear-space">
-                                                </div>
-                                                <b class="pad-right">Username</b><br />
-                                                <%#Eval("username")%>
-                                                <div class="clear-space">
-                                                </div>
-                                            </td>
                                             <td class="border-right" valign="top">
-                                                <b class="pad-right">Event Message</b><br />
-                                                <%#Eval("comment") %>
-                                                <div class="clear-space">
-                                                </div>
-                                                <b class="pad-right">Stack Trace</b><br />
-                                                <%#Eval("stacktrace") %>
+                                                <table>
+                                                    <tr>
+                                                        <td class="eventlog-datecol">Date</td>
+                                                        <td><%#Eval("date") %></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="eventlog-datecol">Event Name</td>
+                                                        <td><%#Eval("name") %></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="eventlog-datecol">Event Message</td>
+                                                        <td><%#Eval("comment") %></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="eventlog-datecol">Stack Trace</td>
+                                                        <td><%#Eval("stacktrace") %></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="eventlog-datecol">Exception Type</td>
+                                                        <td><%#Eval("exceptiontype") %></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="eventlog-datecol">Machine Name</td>
+                                                        <td><%#Eval("machinename") %></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="eventlog-datecol">Request Url</td>
+                                                        <td><%#Eval("requesturl") %></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="eventlog-datecol">Username</td>
+                                                        <td><%#Eval("username") %></td>
+                                                    </tr>
+                                                </table>
                                             </td>
                                             <td class='border-right' style="width: 75px; text-align: center;">
                                                 <%#Eval("ignore")%>
@@ -261,17 +273,13 @@
                         </Columns>
                     </asp:GridView>
                 </div>
-                <div id="ignore" style="display: none">
+                <div id="ignore" class="pnl-section" style="display: none">
                     <div class="float-left">
-                        <small>Sorted from newest to oldest
-                        <br />
-                            Ignore certain requests from being recorded if it contains or equals a certain event
-                    momment.</small>
+                        Sorted from newest to oldest Ignore certain requests from being recorded if it contains or equals a certain event momment.
                     </div>
                     <div class="float-right">
-                        <asp:LinkButton ID="lbtn_refreshignore" runat="server" OnClick="lbtn_refreshignore_Click" ToolTip="Refresh" CssClass="RandomActionBtns float-right margin-left img-refresh" Style="margin-top: 5px;"></asp:LinkButton>
-                        <asp:LinkButton ID="lbtnClearAllIgnored" runat="server"
-                            CssClass="sb-links" OnClientClick="return ConfirmClearAllIgnored(this);">Clear All Ignored</asp:LinkButton>
+                        <asp:LinkButton ID="lbtn_refreshignore" runat="server" OnClick="lbtn_refreshignore_Click" ToolTip="Refresh" CssClass="RandomActionBtns float-right margin-left img-refresh"></asp:LinkButton>
+                        <asp:LinkButton ID="lbtnClearAllIgnored" runat="server" OnClientClick="return ConfirmClearAllIgnored(this);">Clear All Ignored</asp:LinkButton>
                     </div>
                     <div class="clear-space">
                     </div>
@@ -327,10 +335,9 @@
                         </Columns>
                     </asp:GridView>
                 </div>
-                <div id="loginActivity" style="display: none;">
+                <div id="loginActivity" class="pnl-section" style="display: none;">
                     <div class="float-left">
-                        <small><b class="pad-right-sml">Note:</b>This list is partially populated from the IP Watchlist. Blocking or allowing an IP Address on this activity log will update the IP Watchlist. Only records within the past 5 days will be displayed. Records past 5 days will be deleted.<br />
-                            Sorted from newest to oldest</small>
+                        This list is partially populated from the IP Watchlist. Blocking or allowing an IP Address on this activity log will update the IP Watchlist. Only records within the past 5 days will be displayed. Records past 5 days will be deleted. Sorted from newest to oldest.
                     </div>
                     <div class="clear-space">
                     </div>
@@ -344,9 +351,10 @@
                         <span id="loginactError"></span>
                     </div>
                     <div class="float-right">
-                        <asp:LinkButton ID="lbtn_refreshLoginactivity" runat="server" OnClick="lbtn_refreshLoginactivity_Click" ToolTip="Refresh" CssClass="RandomActionBtns float-right margin-left img-refresh" Style="margin-top: 5px;"></asp:LinkButton>
-                        <asp:LinkButton ID="lbtnClearAllLogin" runat="server"
-                            CssClass="sb-links" OnClientClick="return ConfirmClearAllLoginActivity(this);">Clear All Login Activity</asp:LinkButton>
+                        <asp:LinkButton ID="lbtn_refreshLoginactivity" runat="server" OnClick="lbtn_refreshLoginactivity_Click" ToolTip="Refresh" CssClass="RandomActionBtns float-right margin-left img-refresh"></asp:LinkButton>
+                        <asp:LinkButton ID="lbtnClearAllLogin" runat="server" OnClientClick="return ConfirmClearAllLoginActivity(this);">Clear All Login Activity</asp:LinkButton>
+                    </div>
+                    <div class="clear-space">
                     </div>
                     <div class="clear-space">
                     </div>
@@ -417,64 +425,57 @@
                         </Columns>
                     </asp:GridView>
                 </div>
-                <div id="ipwatchlist" style="display: none;">
-                    <small>Blocking an IP Address will redirect every request to a default blocked page for
-                    that IP. That (blocked) IP will not<br />
-                        be able to access the site until the IP is released from the watch list.</small>
+                <div id="ipwatchlist" class="pnl-section" style="display: none;">
+                    <asp:Literal ID="ltl_lockedipwatchlist" runat="server"></asp:Literal>
+                    Blocking an IP Address will redirect every request to a default blocked page for
+                    that IP. That (blocked) IP will not be able to access the site until the IP is released from the watch list.
                     <div class="clear-space">
                     </div>
                     <asp:Panel ID="pnl_ipAutoBlock" runat="server">
-                        <table cellpadding="10" cellspacing="10">
-                            <tr>
-                                <td class="td-settings-title">
-                                    <span class="pad-right font-bold">Auto Block IP</span>
-                                </td>
-                                <td class="td-settings-ctrl">
-                                    <div class="field switch inline-block">
-                                        <asp:RadioButton ID="rb_AutoIPBlock_on" runat="server" Text="True" CssClass="RandomActionBtns cb-enable"
-                                            OnCheckedChanged="rb_AutoIPBlock_on_CheckedChanged" AutoPostBack="True" />
-                                        <asp:RadioButton ID="rb_AutoIPBlock_off" runat="server" Text="False" CssClass="RandomActionBtns cb-disable"
-                                            OnCheckedChanged="rb_AutoIPBlock_off_CheckedChanged" AutoPostBack="True" />
-                                    </div>
-                                </td>
-                                <td class="td-settings-desc">
-                                    <small>Set to True if you want the site to automatically block
-                                any IP after a certain amount of attempts.</small>
-                                </td>
-                            </tr>
-                        </table>
-                        <div class="clear-space">
+                        <div class="table-settings-box">
+                            <div class="td-settings-title">
+                                Auto Block IP
+                            </div>
+                            <div class="title-line"></div>
+                            <div class="td-settings-ctrl">
+                                <div class="field switch inline-block">
+                                    <asp:RadioButton ID="rb_AutoIPBlock_on" runat="server" Text="True" CssClass="RandomActionBtns cb-enable"
+                                        OnCheckedChanged="rb_AutoIPBlock_on_CheckedChanged" AutoPostBack="True" />
+                                    <asp:RadioButton ID="rb_AutoIPBlock_off" runat="server" Text="False" CssClass="RandomActionBtns cb-disable"
+                                        OnCheckedChanged="rb_AutoIPBlock_off_CheckedChanged" AutoPostBack="True" />
+                                </div>
+                            </div>
+                            <div class="td-settings-desc">
+                                Set to True if you want the site to automatically block any IP after a certain amount of attempts.
+                            </div>
                         </div>
                         <asp:Panel ID="pnl_attemptsBeforeBlock" runat="server">
-                            <table cellpadding="10" cellspacing="10">
-                                <tr>
-                                    <td class="td-settings-title">
-                                        <span class="pad-right font-bold">Attempts Before Blocked</span>
-                                    </td>
-                                    <td class="td-settings-ctrl">
-                                        <asp:Panel ID="pnl_autoblock_count" runat="server" DefaultButton="btn_autoblock_count">
-                                            <asp:TextBox ID="tb_autoblock_count" runat="server" CssClass="textEntry margin-right-big"
-                                                Width="50px"></asp:TextBox><asp:Button ID="btn_autoblock_count" runat="server" CssClass="input-buttons RandomActionBtns"
-                                                    Text="Update" OnClick="btn_autoblock_count_Clicked" />
-                                        </asp:Panel>
-                                    </td>
-                                    <td class="td-settings-desc">
-                                        <small>Set the number of attempts before IP is blocked. (Must be
-                                greater than 0)</small>
-                                    </td>
-                                </tr>
-                            </table>
-                            <div class="clear-space">
+                            <div class="table-settings-box">
+                                <div class="td-settings-title">
+                                    Attempts Before Blocked
+                                </div>
+                                <div class="title-line"></div>
+                                <div class="td-settings-ctrl">
+                                    <asp:Panel ID="pnl_autoblock_count" runat="server" DefaultButton="btn_autoblock_count">
+                                        <asp:TextBox ID="tb_autoblock_count" runat="server" CssClass="textEntry margin-right-big"
+                                            Width="50px"></asp:TextBox><asp:Button ID="btn_autoblock_count" runat="server" CssClass="input-buttons RandomActionBtns"
+                                                Text="Update" OnClick="btn_autoblock_count_Clicked" />
+                                    </asp:Panel>
+                                </div>
+                                <div class="td-settings-desc">
+                                    Set the number of attempts before IP is blocked. (Must be greater than 0)
+                                </div>
                             </div>
                         </asp:Panel>
                     </asp:Panel>
+                    <div class="clear-space"></div>
                     <div class="float-left pad-right">
                         <span class="img-allow float-left"></span><b>Allowed</b>
                     </div>
                     <div class="float-left pad-left">
                         <span class="img-ignore float-left"></span><b>Blocked</b>
                     </div>
-                    <asp:LinkButton ID="lbtn_refreshIPWatchList" runat="server" OnClick="lbtn_refreshIPWatchList_Click" ToolTip="Refresh" CssClass="RandomActionBtns float-left margin-left img-refresh" Style="margin-top: 5px; margin-left: 408px;"></asp:LinkButton>
+                    <asp:LinkButton ID="lbtn_refreshIPWatchList" runat="server" OnClick="lbtn_refreshIPWatchList_Click" ToolTip="Refresh" CssClass="RandomActionBtns float-left margin-left img-refresh" Style="margin-left: 408px;"></asp:LinkButton>
                     <div class="clear-space">
                     </div>
                     <div>
@@ -543,11 +544,23 @@
                                 <div class="clear" style="height: 35px">
                                 </div>
                                 <asp:Panel ID="pnl_addip" runat="server" DefaultButton="btn_createnew_listener">
-                                    <span class="pad-right font-bold">Add IP Address</span><asp:TextBox ID="tb_createnew_listener"
-                                        runat="server" CssClass="textEntry margin-right-big" Width="150px"></asp:TextBox>
-                                    <asp:Button ID="btn_createnew_listener" runat="server" Text="Add IP Address" CssClass="input-buttons margin-right-big RandomActionBtns"
-                                        OnClick="btn_createnew_listener_Click" />
-                                    <span class="pad-left"><small>Enter a new ip address for the site to block.</small></span>
+                                    <table cellpadding="10" cellspacing="10">
+                                        <tbody>
+                                            <tr>
+                                                <td align="right" style="width: 185px;">
+                                                    <span class="pad-right font-bold">Add IP Address</span>
+                                                </td>
+                                                <td>
+                                                    <asp:TextBox ID="tb_createnew_listener"
+                                                        runat="server" CssClass="textEntry margin-right-big" Width="150px"></asp:TextBox>
+                                                    <asp:Button ID="btn_createnew_listener" runat="server" Text="Add IP Address" CssClass="input-buttons margin-right-big RandomActionBtns"
+                                                        OnClick="btn_createnew_listener_Click" />
+                                                    <div class="clear-space-five"></div>
+                                                    <small>Enter a new ip address for the site to block.</small>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                     <div class="clear-space-two">
                                     </div>
                                     <div id="ipwatch_postmessage" runat="server" style="margin-left: 107px;">
@@ -559,59 +572,29 @@
                         </asp:UpdatePanel>
                     </div>
                 </div>
-                <div id="iplistener" style="display: none;">
-                    <small>The IP Listener can be used to set up an <a href="#iframecontent" onclick="openWSE.LoadIFrameContent('http://en.wikipedia.org/wiki/Intranet', this);return false;">internal</a> only version of the site and/or only allowing certain ip address to
-                    access the site. (This works best for companies with a static IP Address)</small>
+                <div id="iplistener" class="pnl-section" style="display: none;">
+                    <asp:Literal ID="ltl_lockediplistener" runat="server"></asp:Literal>
+                    The IP Listener can be used to set up an <a href="#iframecontent" onclick="openWSE.LoadIFrameContent('http://en.wikipedia.org/wiki/Intranet', this);return false;">internal</a> only version of the site and/or only allowing certain ip address to
+                    access the site. (This works best for companies with a static IP Address)
                     <div class="clear">
                     </div>
-                    <div>
-                        <asp:UpdatePanel ID="UpdatePanel3" runat="server">
-                            <ContentTemplate>
-                                <asp:Literal ID="ltl_lockediplistener" runat="server"></asp:Literal>
-                                </div>
+                    <asp:UpdatePanel ID="UpdatePanel3" runat="server">
+                        <ContentTemplate>
                             <div class="clear"></div>
-                                <small><b class="pad-right-sml">Note:</b>If any IP address is active to listen for,
+                            If any IP address is active to listen for,
                                     all other IP addresses will be blocked (Only the active ip address(s) will be available
                                     to access). You may have multiple IP addresses active. Turn off or delete all IP
-                                    address to allow for everyone to access the site.</small>
-
+                                    address to allow for everyone to access the site.
                                 <div class="clear-space"></div>
-                                <asp:Panel ID="pnl_iplistener_holder" runat="server">
-                                </asp:Panel>
-                                <div id="listener_postmessage" style="margin-left: 205px; margin-top: -10px;">
-                                </div>
-                                <asp:HiddenField ID="hf_UpdateIPListener" ClientIDMode="Static" runat="server" OnValueChanged="hf_UpdateIPListener_ValueChanged" />
-                                <div class="clear" style="height: 20px;">
-                                </div>
-                            </ContentTemplate>
-                        </asp:UpdatePanel>
-                    </div>
-                </div>
-                <div id="stats" style="display: none;">
-                    <table width="100%">
-                        <tbody>
-                            <tr>
-                                <td valign="top" style="width: 250px;"></td>
-                                <td valign="top">
-                                    <h3 class="font-bold float-left">IP Location Map</h3>
-                                    <small class="float-right">Information below updates every 30 seconds.</small>
-                                    <div class="clear-space">
-                                    </div>
-                                    <div id="NetworkMap" class="float-left">
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="clear" style="height: 30px;">
-                    </div>
-                    <div class="clear-margin">
-                        <h3 class="font-bold">IP Location List</h3>
-                        <div class="clear-space">
-                        </div>
-                        <div id="ip-loc">
-                        </div>
-                    </div>
+                            <asp:Panel ID="pnl_iplistener_holder" runat="server">
+                            </asp:Panel>
+                            <div id="listener_postmessage" style="margin-left: 205px; margin-top: -10px;">
+                            </div>
+                            <asp:HiddenField ID="hf_UpdateIPListener" ClientIDMode="Static" runat="server" OnValueChanged="hf_UpdateIPListener_ValueChanged" />
+                            <div class="clear" style="height: 20px;">
+                            </div>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
                 </div>
             </ContentTemplate>
         </asp:UpdatePanel>

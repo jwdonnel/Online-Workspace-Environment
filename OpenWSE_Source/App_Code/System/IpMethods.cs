@@ -128,7 +128,7 @@ public class IpMethods : System.Web.Services.WebService {
             }
         }
         catch (Exception e) {
-            new AppLog(false).AddError(e);
+            AppLog.AddError(e);
         }
 
         return title;

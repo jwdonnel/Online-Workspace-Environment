@@ -2,227 +2,206 @@
     AutoEventWireup="true" CodeFile="dbManager.aspx.cs" Inherits="SiteTools_DbManager" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
-    <style type="text/css">
-        #confirmPassword
-        {
-            float: left;
-            padding-left: 10px;
-            margin-top: -3px;
-        }
-    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
     <div class="maincontent-padding pad-top-big margin-top">
         <div id="dbviewer-load">
-            <asp:Panel ID="DBMaintenance" runat="server" CssClass="clear-margin">
-                <div class="clear-margin">
-                    <div class="pad-bottom-sml float-left pad-top-sml">
-                        <small>Backups may take awhile depending on the database size. Backup files are encrypted
-                    and can only be used with this site.<br />
-                            <b class="pad-right-sml">Note:</b>Not all tables from the database will be backed
-                    up. Only the critical tables will be backed up. Any type of restore/delete will
-                    require a password to continue. To backup all tables, choose the 'Download Current Database' feature.</small>
+
+            <asp:Panel ID="DBMaintenance" runat="server">
+                <div class="table-settings-box">
+                    <div class="td-settings-title">
+                        Database Recovery
                     </div>
-                </div>
-                <div class="clear" style="height: 20px;">
-                </div>
-                <div style="border-bottom: 1px solid #DDD;">
-                </div>
-                <div class="clear" style="height: 20px;">
-                </div>
-                <div class="float-left pad-top pad-bottom" style="width: 365px; margin-right: 60px; border-right: 1px solid #DDD">
-                    <div class="clear-space">
-                    </div>
-                    <div class="clear-space">
-                    </div>
-                    <asp:UpdatePanel ID="UpdatePanel5" runat="server">
-                        <ContentTemplate>
-                            <div class="float-left font-bold pad-right">
-                                <div class="float-left pad-top-sml font">
-                                    Download Current Database:
-                                </div>
-                            </div>
-                            <asp:LinkButton ID="lbtn_downloaddb" runat="server" CssClass="sb-links" OnClick="lbtn_downloaddb_Click"
-                                PostBackUrl="~/SiteTools/DBMaintenance/dbManager.aspx" Style="margin-left: 50px;">Download</asp:LinkButton>
-                        </ContentTemplate>
-                        <Triggers>
-                            <asp:AsyncPostBackTrigger ControlID="lbtn_downloaddb" />
-                        </Triggers>
-                    </asp:UpdatePanel>
-                    <div class="clear-margin">
-                        <asp:TextBox ID="tb_download_backup" runat="server" Text="Download File Description"
-                            Width="300" CssClass="textEntry" MaxLength="50" onfocus="if(this.value=='Download File Description')this.value=''"
-                            onblur="if(this.value=='')this.value='Download File Description'"></asp:TextBox>
-                    </div>
-                </div>
-                <div class="float-left pad-top pad-bottom" style="width: 365px; margin-right: 60px; border-right: 1px solid #DDD">
-                    <span class="font-bold">Upload Backup <%= ServerSettings.BackupFileExt %> file</span>
-                    <div class="clear-space-five">
-                    </div>
-                    <asp:FileUpload ID="FileUpload1" runat="server" />
-                    <asp:LinkButton ID="lbtn_uploaddb" runat="server" CssClass="sb-links margin-left RandomActionBtns"
-                        OnClick="lbtn_uploaddb_Click">Upload</asp:LinkButton>
-                    <div class="clear-margin">
-                        <asp:TextBox ID="tb_upload_desc" runat="server" Text="Upload File Description" CssClass="textEntry"
-                            MaxLength="50" onfocus="if(this.value=='Upload File Description')this.value=''"
-                            Width="300" onblur="if(this.value=='')this.value='Upload File Description'"></asp:TextBox>
-                    </div>
-                </div>
-                <div class="float-left pad-top pad-bottom" style="width: 365px;">
-                    <span class="font-bold">Backup Non-Asp Database</span>
-                    <div class="clear-space-five">
-                    </div>
-                    <div class="float-left">
-                        <small><i class="pad-right">Last Saved</i><asp:Label ID="lb_busavedtime" runat="server"
-                            Text="N/A"></asp:Label></small>
-                    </div>
-                    <div class="float-right" style="padding-right: 62px;">
-                        <asp:LinkButton ID="lbtn_buchat" runat="server" OnClick="lbtn_buchat_Click" CssClass="sb-links RandomActionBtns-backup-perform"
-                            Text="Backup" />
-                    </div>
-                    <div class="clear-margin">
-                        <asp:TextBox ID="tb_backup_databse" runat="server" Text="Backup File Description"
-                            Width="300" CssClass="textEntry" MaxLength="50" onfocus="if(this.value=='Backup File Description')this.value=''"
-                            onblur="if(this.value=='')this.value='Backup File Description'"></asp:TextBox>
-                    </div>
-                </div>
-                <div class="clear-space">
-                </div>
-                <div class="clear-space">
-                </div>
-                <asp:UpdatePanel ID="updatepnl_list" runat="server">
-                    <ContentTemplate>
-                        <asp:XmlDataSource ID="XmlDataSource_1" runat="server" DataFile="~/Backups/BackupLog.xml"
-                            XPath="Backups/Backup"></asp:XmlDataSource>
-                        <asp:HiddenField ID="HiddenField1_sitesettings" runat="server" ClientIDMode="Static" />
-                        <asp:GridView ID="GV_BackupList" runat="server" CellPadding="0" CellSpacing="0" AutoGenerateColumns="False"
-                            GridLines="None" OnRowCommand="GV_BackupList_RowCommand" OnRowDataBound="GV_BackupList_RowDataBound"
-                            AllowPaging="false" ShowHeaderWhenEmpty="True">
-                            <EmptyDataRowStyle ForeColor="Black" />
-                            <RowStyle CssClass="GridNormalRow" />
-                            <EmptyDataTemplate>
-                                <div class="emptyGridView">
-                                    No backups in log
-                                </div>
-                            </EmptyDataTemplate>
-                            <Columns>
-                                <asp:TemplateField>
-                                    <HeaderTemplate>
-                                        <table class="myHeaderStyle" cellpadding="5" cellspacing="0" style="min-width: 1160px">
-                                            <tr>
-                                                <td style="min-width: 150px;">Filename
-                                                </td>
-                                                <td width="140px">Backup Date
-                                                </td>
-                                                <td width="140px">Restore Date
-                                                </td>
-                                                <td width="80px">Size
-                                                </td>
-                                                <td width="140px">Backed up by
-                                                </td>
-                                                <td width="100px" align="center">Actions
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <table class="myItemStyle" cellpadding="5" cellspacing="0" style="min-width: 1160px">
-                                            <tr>
-                                                <td style="min-width: 150px; border-right: 1px solid #CCC; border-left: 1px solid #CCC;">
-                                                    <%# XPath("Filename") %>
-                                                    <div class="clear-space-two">
-                                                    </div>
-                                                    <div style="font-size: 11px">
-                                                        <%# XPath("Description")%>
-                                                    </div>
-                                                </td>
-                                                <td align="center" width="140px" style="border-right: 1px solid #CCC;">
-                                                    <%# XPath("BackupDate")%>
-                                                </td>
-                                                <td align="center" width="140px" style="border-right: 1px solid #CCC;">
-                                                    <%# XPath("RestoreDate")%>
-                                                </td>
-                                                <td align="center" width="80px" style="border-right: 1px solid #CCC;">
-                                                    <%# XPath("Size")%>
-                                                </td>
-                                                <td align="center" width="140px" style="border-right: 1px solid #CCC;">
-                                                    <%# XPath("User")%>
-                                                </td>
-                                                <td width="100px" align="center" style="border-right: 1px solid #CCC;">
-                                                    <asp:LinkButton ID="lb_restorethis" runat="server" CommandArgument='<%# XPath("Filename") %>'
-                                                        CommandName="Restore" CssClass="td-restore-btn margin-right-sml" OnClientClick="openWSE.LoadingMessage1('Please Wait...');dbType='restore';" ToolTip="Restore"></asp:LinkButton>
-                                                    <asp:LinkButton ID="lb_downloadthis" runat="server" CommandArgument='<%# XPath("Filename") %>'
-                                                        CommandName="Download" CssClass="td-download-btn margin-right-sml" PostBackUrl="~/SiteTools/DBMaintenance/dbManager.aspx"
-                                                        ToolTip="Download"></asp:LinkButton>
-                                                    <a id="lb_deletethis" class="td-delete-btn cursor-pointer" onclick="OnDelete('<%# XPath("Filename") %>');"
-                                                        title="Delete"></a>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                            </Columns>
-                        </asp:GridView>
-                        <asp:HiddenField ID="hf_buRestore_type" runat="server" ClientIDMode="Static" />
-                        <asp:HiddenField ID="hf_buRestoreCommand_Value" runat="server" ClientIDMode="Static" />
-                        <asp:HiddenField ID="hf_StartWork" runat="server" OnValueChanged="hf_StartWork_Changed"
-                            ClientIDMode="Static" />
-                    </ContentTemplate>
-                </asp:UpdatePanel>
-                <asp:Panel ID="pnl_adminOnly_DbScanner" runat="server">
-                    <div class="clear" style="height: 40px;">
-                    </div>
-                    <asp:UpdatePanel ID="updatepnl_DbScanner" runat="server">
-                        <ContentTemplate>
-                            <div class="editor_titles">
-                                <div class="title-line"></div>
-                                <h3>Database Scanner</h3>
-                            </div>
-                            <div class="float-left pad-top-big">
-                                <small>You can use this feature to check if all your table are up to date with the current system. When changing databases from SqlCe to an Sql Express, you will need to run this to insert and update existing tables.<br />
-                                    This will not overwrite any data in your current database. This process may take a couple of minutes.</small>
+                    <div class="title-line"></div>
+                    <div class="td-settings-ctrl">
+                        <div class="float-left pad-top pad-bottom" style="width: 365px; margin-right: 60px; border-right: 1px solid #DDD">
+                            <div class="clear-space">
                             </div>
                             <div class="clear-space">
                             </div>
-                            <div class="pad-all">
-                                <div class="pad-left">
-                                    <asp:Panel ID="pnl_databaseChecker" runat="server">
-                                    </asp:Panel>
-                                    <div class="pad-left">
-                                        <div class="clear-space"></div>
-                                        <div class="clear-space"></div>
-                                        <asp:Button ID="btn_checkDatabase" runat="server" CssClass="input-buttons" Text="Scan" Width="75px" OnClick="btn_checkDatabase_Click" />
-                                        <asp:Button ID="btn_UpdateDatabase" runat="server" CssClass="input-buttons" Text="Fix" Width="75px" OnClick="btn_UpdateDatabase_Click" Visible="false" Enabled="false" />
-                                        <div class="clear-space"></div>
-                                        <asp:CheckBox ID="cbAutoFixDB" ClientIDMode="Static" runat="server" Text="&nbsp;Automatically fix any database issues" Visible="false" Enabled="false" OnCheckedChanged="cbAutoFixDB_CheckedChanged" AutoPostBack="true" />
-                                        <div class="clear-space"></div>
-                                        <asp:Label ID="lbl_updatedbHint" runat="server" Font-Size="Small" Visible="false" Enabled="false" Text="You may have to update the database more than once to completely update it."></asp:Label>
-                                        <div class="clear-space-five"></div>
+                            <asp:UpdatePanel ID="UpdatePanel5" runat="server">
+                                <ContentTemplate>
+                                    <div class="float-left font-bold pad-right">
+                                        <div class="float-left pad-top-sml font">
+                                            Download Current Database:
+                                        </div>
                                     </div>
-                                </div>
+                                    <asp:LinkButton ID="lbtn_downloaddb" runat="server" OnClick="lbtn_downloaddb_Click"
+                                        PostBackUrl="~/SiteTools/DBMaintenance/dbManager.aspx" Style="margin-left: 50px;">Download</asp:LinkButton>
+                                </ContentTemplate>
+                                <Triggers>
+                                    <asp:AsyncPostBackTrigger ControlID="lbtn_downloaddb" />
+                                </Triggers>
+                            </asp:UpdatePanel>
+                            <div class="clear-margin">
+                                <asp:TextBox ID="tb_download_backup" runat="server" Text="Download File Description"
+                                    Width="300" CssClass="textEntry" MaxLength="50" onfocus="if(this.value=='Download File Description')this.value=''"
+                                    onblur="if(this.value=='')this.value='Download File Description'"></asp:TextBox>
                             </div>
-                        </ContentTemplate>
-                    </asp:UpdatePanel>
-                </asp:Panel>
-                <div class="clear" style="height: 30px;">
-                </div>
-                <div class="actions no-pad-left">
-                    <div class="clear-space">
+                        </div>
+                        <div class="float-left pad-top pad-bottom" style="width: 365px; margin-right: 60px; border-right: 1px solid #DDD">
+                            <span class="font-bold">Upload Backup <%= ServerSettings.BackupFileExt %> file</span>
+                            <div class="clear-space-five">
+                            </div>
+                            <asp:FileUpload ID="FileUpload1" runat="server" />
+                            <asp:LinkButton ID="lbtn_uploaddb" runat="server" CssClass="margin-left RandomActionBtns"
+                                OnClick="lbtn_uploaddb_Click">Upload</asp:LinkButton>
+                            <div class="clear-margin">
+                                <asp:TextBox ID="tb_upload_desc" runat="server" Text="Upload File Description" CssClass="textEntry"
+                                    MaxLength="50" onfocus="if(this.value=='Upload File Description')this.value=''"
+                                    Width="300" onblur="if(this.value=='')this.value='Upload File Description'"></asp:TextBox>
+                            </div>
+                        </div>
+                        <div class="float-left pad-top pad-bottom" style="width: 365px;">
+                            <span class="font-bold">Backup Non-Asp Database</span>
+                            <div class="clear-space-five">
+                            </div>
+                            <div class="float-left">
+                                <small><i class="pad-right">Last Saved</i><asp:Label ID="lb_busavedtime" runat="server"
+                                    Text="N/A"></asp:Label></small>
+                            </div>
+                            <div class="float-right" style="padding-right: 62px;">
+                                <asp:LinkButton ID="lbtn_buchat" runat="server" OnClick="lbtn_buchat_Click" CssClass="RandomActionBtns-backup-perform"
+                                    Text="Backup" />
+                            </div>
+                            <div class="clear-margin">
+                                <asp:TextBox ID="tb_backup_databse" runat="server" Text="Backup File Description"
+                                    Width="300" CssClass="textEntry" MaxLength="50" onfocus="if(this.value=='Backup File Description')this.value=''"
+                                    onblur="if(this.value=='')this.value='Backup File Description'"></asp:TextBox>
+                            </div>
+                        </div>
+                        <div class="clear-space">
+                        </div>
+                        <div class="clear-space">
+                        </div>
+                        <asp:UpdatePanel ID="updatepnl_list" runat="server">
+                            <ContentTemplate>
+                                <asp:XmlDataSource ID="XmlDataSource_1" runat="server" DataFile="~/Backups/BackupLog.xml"
+                                    XPath="Backups/Backup"></asp:XmlDataSource>
+                                <asp:HiddenField ID="HiddenField1_sitesettings" runat="server" ClientIDMode="Static" />
+                                <asp:GridView ID="GV_BackupList" runat="server" CellPadding="0" CellSpacing="0" AutoGenerateColumns="False"
+                                    GridLines="None" OnRowCommand="GV_BackupList_RowCommand" OnRowDataBound="GV_BackupList_RowDataBound"
+                                    AllowPaging="false" ShowHeaderWhenEmpty="True">
+                                    <EmptyDataRowStyle ForeColor="Black" />
+                                    <RowStyle CssClass="GridNormalRow" />
+                                    <EmptyDataTemplate>
+                                        <div class="emptyGridView">
+                                            No backups in log
+                                        </div>
+                                    </EmptyDataTemplate>
+                                    <Columns>
+                                        <asp:TemplateField>
+                                            <HeaderTemplate>
+                                                <table class="myHeaderStyle" cellpadding="5" cellspacing="0" style="min-width: 1160px">
+                                                    <tr>
+                                                        <td style="min-width: 150px;">Filename
+                                                        </td>
+                                                        <td width="140px">Backup Date
+                                                        </td>
+                                                        <td width="140px">Restore Date
+                                                        </td>
+                                                        <td width="80px">Size
+                                                        </td>
+                                                        <td width="140px">Backed up by
+                                                        </td>
+                                                        <td width="100px" align="center">Actions
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <table class="myItemStyle" cellpadding="5" cellspacing="0" style="min-width: 1160px">
+                                                    <tr>
+                                                        <td style="min-width: 150px; border-right: 1px solid #CCC; border-left: 1px solid #CCC;">
+                                                            <%# XPath("Filename") %>
+                                                            <div class="clear-space-two">
+                                                            </div>
+                                                            <div style="font-size: 11px">
+                                                                <%# XPath("Description")%>
+                                                            </div>
+                                                        </td>
+                                                        <td align="center" width="140px" style="border-right: 1px solid #CCC;">
+                                                            <%# XPath("BackupDate")%>
+                                                        </td>
+                                                        <td align="center" width="140px" style="border-right: 1px solid #CCC;">
+                                                            <%# XPath("RestoreDate")%>
+                                                        </td>
+                                                        <td align="center" width="80px" style="border-right: 1px solid #CCC;">
+                                                            <%# XPath("Size")%>
+                                                        </td>
+                                                        <td align="center" width="140px" style="border-right: 1px solid #CCC;">
+                                                            <%# XPath("User")%>
+                                                        </td>
+                                                        <td width="100px" align="center" style="border-right: 1px solid #CCC;">
+                                                            <asp:LinkButton ID="lb_restorethis" runat="server" CommandArgument='<%# XPath("Filename") %>'
+                                                                CommandName="Restore" CssClass="td-restore-btn margin-right-sml" OnClientClick="openWSE.LoadingMessage1('Please Wait...');dbType='restore';" ToolTip="Restore"></asp:LinkButton>
+                                                            <asp:LinkButton ID="lb_downloadthis" runat="server" CommandArgument='<%# XPath("Filename") %>'
+                                                                CommandName="Download" CssClass="td-download-btn margin-right-sml" PostBackUrl="~/SiteTools/DBMaintenance/dbManager.aspx"
+                                                                ToolTip="Download"></asp:LinkButton>
+                                                            <a id="lb_deletethis" class="td-delete-btn cursor-pointer" onclick="OnDelete('<%# XPath("Filename") %>');"
+                                                                title="Delete"></a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                    </Columns>
+                                </asp:GridView>
+                                <asp:HiddenField ID="hf_buRestore_type" runat="server" ClientIDMode="Static" />
+                                <asp:HiddenField ID="hf_buRestoreCommand_Value" runat="server" ClientIDMode="Static" />
+                                <asp:HiddenField ID="hf_StartWork" runat="server" OnValueChanged="hf_StartWork_Changed"
+                                    ClientIDMode="Static" />
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
                     </div>
-                    <div class="clear-margin">
-                        <div class="editor_titles">
-                            <div class="title-line"></div>
-                            <h3>Automatic Backup System</h3>
+                    <div class="td-settings-desc">
+                        Backups may take awhile depending on the database size. Backup files are encrypted
+                    and can only be used with this site. Not all tables from the database will be backed
+                    up. Only the critical tables will be backed up. Any type of restore/delete will
+                    require a password to continue. To backup all tables, choose the 'Download Current Database' feature.
+                    </div>
+                </div>
+                <asp:Panel ID="pnl_adminOnly_DbScanner" runat="server">
+                    <div class="table-settings-box">
+                        <div class="td-settings-title">
+                            Database Scanner
                         </div>
-                        <div class="pad-bottom-sml float-left pad-top">
-                            <small><b class="pad-right-sml">Note:</b>The automatic backup system only works when the Site
-                        Application is on.<br />
-                                Each backup will run at the given time and day as specified in the list.</small>
+                        <div class="title-line"></div>
+                        <div class="td-settings-ctrl">
+                            <asp:UpdatePanel ID="updatepnl_DbScanner" runat="server">
+                                <ContentTemplate>
+                                    <div class="pad-all">
+                                        <div class="pad-left">
+                                            <asp:Panel ID="pnl_databaseChecker" runat="server">
+                                            </asp:Panel>
+                                            <div class="pad-left">
+                                                <div class="clear-space"></div>
+                                                <div class="clear-space"></div>
+                                                <asp:Button ID="btn_checkDatabase" runat="server" CssClass="input-buttons" Text="Scan" Width="75px" OnClick="btn_checkDatabase_Click" />
+                                                <asp:Button ID="btn_UpdateDatabase" runat="server" CssClass="input-buttons" Text="Fix" Width="75px" OnClick="btn_UpdateDatabase_Click" Visible="false" Enabled="false" />
+                                                <div class="clear-space"></div>
+                                                <asp:CheckBox ID="cbAutoFixDB" ClientIDMode="Static" runat="server" Text="&nbsp;Automatically fix any database issues" Visible="false" Enabled="false" OnCheckedChanged="cbAutoFixDB_CheckedChanged" AutoPostBack="true" />
+                                                <div class="clear-space"></div>
+                                                <asp:Label ID="lbl_updatedbHint" runat="server" Font-Size="Small" Visible="false" Enabled="false" Text="You may have to update the database more than once to completely update it."></asp:Label>
+                                                <div class="clear-space-five"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
                         </div>
-                        <div class="clear-space">
+                        <div class="td-settings-desc">
+                            You can use this feature to check if all your table are up to date with the current system. When changing databases from SqlCe to an Sql Express, you will need to run this to insert and update existing tables.<br />
+                            This will not overwrite any data in your current database. This process may take a couple of minutes.
                         </div>
-                        <div class="clear-space">
-                        </div>
+                    </div>
+                </asp:Panel>
+                <div class="table-settings-box no-border">
+                    <div class="td-settings-title">
+                        Automatic Backup System
+                    </div>
+                    <div class="title-line"></div>
+                    <div class="td-settings-ctrl">
                         <asp:UpdatePanel ID="UpdatePanel7" runat="server">
                             <ContentTemplate>
                                 <asp:HiddenField ID="hf_EditSlot" runat="server" OnValueChanged="hf_EditSlot_Changed"
@@ -236,21 +215,23 @@
                                 <asp:HiddenField ID="hf_dayofweek_edit" runat="server" ClientIDMode="Static" />
                                 <asp:HiddenField ID="hf_timeofweek_edit" runat="server" ClientIDMode="Static" />
                                 <asp:HiddenField ID="hf_backuptype_edit" runat="server" ClientIDMode="Static" />
-                                <table cellpadding="10" cellspacing="10">
-                                    <tr>
-                                        <td class="td-settings-title" style="width: 120px;">
-                                            <span class="pad-right font-bold font-color-black">Auto Backup</span>
-                                        </td>
-                                        <td class="td-settings-ctrl">
-                                            <div class="field switch inline-block">
-                                                <asp:RadioButton ID="rb_autoBackuState_on" runat="server" Text="On" CssClass="RandomActionBtns cb-enable"
-                                                    OnCheckedChanged="rb_autoBackuState_on_CheckedChanged" AutoPostBack="True" />
-                                                <asp:RadioButton ID="rb_autoBackuState_off" runat="server" Text="Off" CssClass="RandomActionBtns cb-disable"
-                                                    OnCheckedChanged="rb_autoBackuState_off_CheckedChanged" AutoPostBack="True" />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">
+                                        Auto Backup
+                                    </div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <div class="field switch inline-block">
+                                            <asp:RadioButton ID="rb_autoBackuState_on" runat="server" Text="On" CssClass="RandomActionBtns cb-enable"
+                                                OnCheckedChanged="rb_autoBackuState_on_CheckedChanged" AutoPostBack="True" />
+                                            <asp:RadioButton ID="rb_autoBackuState_off" runat="server" Text="Off" CssClass="RandomActionBtns cb-disable"
+                                                OnCheckedChanged="rb_autoBackuState_off_CheckedChanged" AutoPostBack="True" />
+                                        </div>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        Turning this feature on will automatically start running the Automatic Backup System. The automatic backup system only works when the Site Application is on. Each backup will run at the given time and day as specified in the list.
+                                    </div>
+                                </div>
                                 <asp:Panel ID="pnl_AutoBackup" runat="server">
                                     <div class="clear-space">
                                     </div>
@@ -375,23 +356,36 @@
                     </div>
                 </div>
             </div>
-            <div id="db_overlay" class="Modal-overlay" style="display: none;">
-                <div class="password-element-align-db">
-                    <div id="db_modal" class="password-element-modal-db" style="display: none;">
-                        <div id="confirmPassword">
-                            <asp:UpdatePanel ID="updatepnl_passwordConfirm" runat="server">
-                                <ContentTemplate>
-                                    <asp:Panel ID="pnl_passwordConfirm" runat="server" DefaultButton="btn_passwordConfirm">
-                                        <b class="margin-right">Password:</b>
-                                        <asp:TextBox ID="tb_passwordConfirm" runat="server" TextMode="Password" CssClass="TextBoxControls"></asp:TextBox>
-                                        <asp:Button ID="btn_passwordConfirm" runat="server" CssClass="input-buttons margin-left"
-                                            Text="Confirm" OnClick="btn_passwordConfirm_Clicked" OnClientClick="openWSE.LoadingMessage1('Validating Password...');"
-                                            Style="margin-top: -2px; margin-right: 5px!important" />
-                                        <input type="button" class="input-buttons" value="Cancel" onclick="CancelRequest()"
-                                            style="margin-top: -2px" />
-                                    </asp:Panel>
-                                </ContentTemplate>
-                            </asp:UpdatePanel>
+            <div id="password-element" class="Modal-element">
+                <div class="Modal-overlay">
+                    <div class="Modal-element-align">
+                        <div class="Modal-element-modal">
+                            <div class='ModalHeader'>
+                                <div>
+                                    <div class="app-head-button-holder-admin">
+                                        <a href="#close" onclick="CancelRequest();return false;" class="ModalExitButton"></a>
+                                    </div>
+                                    <span class='Modal-title'></span>
+                                </div>
+                            </div>
+                            <div class="ModalPadContent">
+                                <asp:UpdatePanel ID="updatepnl_passwordConfirm" runat="server">
+                                    <ContentTemplate>
+                                        <asp:Panel ID="pnl_passwordConfirm" runat="server" DefaultButton="btn_passwordConfirm">
+                                            <span class="password-hint">Enter the password of the user who created the backup.</span>
+                                            <div class="clear-space"></div>
+                                            <b class="pad-right">Password</b>
+                                            <asp:TextBox ID="tb_passwordConfirm" runat="server" TextMode="Password" CssClass="TextBoxControls"></asp:TextBox>
+                                            <asp:Button ID="btn_passwordConfirm" runat="server" CssClass="input-buttons margin-left"
+                                                Text="Confirm" OnClick="btn_passwordConfirm_Clicked" OnClientClick="openWSE.LoadingMessage1('Validating Password...');"
+                                                Style="margin-top: -2px; margin-right: 5px!important" />
+                                            <input type="button" class="input-buttons" value="Cancel" onclick="CancelRequest()"
+                                                style="margin-top: -2px" />
+                                            <div class="clear-space"></div>
+                                        </asp:Panel>
+                                    </ContentTemplate>
+                                </asp:UpdatePanel>
+                            </div>
                         </div>
                     </div>
                 </div>

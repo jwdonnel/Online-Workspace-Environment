@@ -13,19 +13,24 @@ using System.Web.Services;
 [System.Web.Script.Services.ScriptService]
 public class AppLog_Errors : System.Web.Services.WebService {
 
-    private readonly AppLog _applog = new AppLog(false);
-
     public AppLog_Errors() { }
 
     [WebMethod]
     public void AddError(string message, string url) {
         try {
             url = HttpUtility.UrlDecode(url);
-            string comment = HttpUtility.UrlDecode(message) + ".<br />Url error occured at was " + url;
-            _applog.AddError(comment);
+            if (url == "undefined") {
+                url = string.Empty;
+            }
+            else {
+                url = "<br />Url error occured at was " + url;
+            }
+
+            string comment = HttpUtility.UrlDecode(message) + url;
+            AppLog.AddError(comment);
         }
         catch (Exception e) {
-            _applog.AddError(e);
+            AppLog.AddError(e);
         }
     }
 }

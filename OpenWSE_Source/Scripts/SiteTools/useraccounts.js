@@ -165,6 +165,42 @@ function ClearNewUserFields() {
 
 var prm = Sys.WebForms.PageRequestManager.getInstance();
 prm.add_endRequest(function () {
+    $("#MainContent_pwreset_overlay").find(".Modal-element-modal").draggable({
+        containment: "container",
+        cancel: '.ModalPadContent, .ModalExitButton',
+        drag: function (event, ui) {
+            var $this = $(this);
+            $this.css("opacity", "0.6");
+            $this.css("filter", "alpha(opacity=60)");
+
+            // Apply an overlay over app
+            // This fixes the issues when dragging iframes
+            if ($this.find("iframe").length > 0) {
+                var $_id = $this.find(".ModalPadContent");
+                $wo = $_id.find(".app-overlay-fix");
+                if ($wo.length == 0) {
+                    if ($_id.length == 1) {
+                        $_id.append("<div class='app-overlay-fix'></div>");
+                    }
+                }
+            }
+        },
+        stop: function (event, ui) {
+            var $this = $(this);
+            $this.css("opacity", "1.0");
+            $this.css("filter", "alpha(opacity=100)");
+            $wo = $(this).find(".app-overlay-fix");
+            if ($wo.length == 1) {
+                $wo.remove();
+            }
+        }
+    });
+
+    $("#MainContent_pwreset_overlay").find(".Modal-element-align").css({
+        marginTop: -($("#MainContent_pwreset_overlay").find(".Modal-element-modal").height() / 2),
+        marginLeft: -($("#MainContent_pwreset_overlay").find(".Modal-element-modal").width() / 2)
+    });
+
     $(window).resize();
     if ($("#MainContent_tb_search").val() == "") {
         $("#MainContent_tb_search").val("Search Users");

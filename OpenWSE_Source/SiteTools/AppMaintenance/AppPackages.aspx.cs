@@ -91,7 +91,7 @@ public partial class SiteTools_AppPackages : Page {
             if (cancontinue) {
                 string[] list = _packs.GetAppList(dr["ID"]);
                 str.Append(
-                    "<div class='contact-card-main contact-card-main-category-packages'>");
+                    "<div class='table-settings-box contact-card-main'>");
 
                 bool candelete = false;
                 if (!Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
@@ -103,18 +103,18 @@ public partial class SiteTools_AppPackages : Page {
                     candelete = true;
                 }
 
+                str.Append("<div class='td-settings-title'>" + dr["PackageName"]);
                 if (candelete)
                     str.Append("<a href='#delete' class='float-right td-delete-btn' onclick='DeletePackageCategory(\"" + dr["ID"] + "\", \"Package\");return false;'></a>");
 
                 str.Append("<a href='#edit' class='float-right td-edit-btn margin-right' onclick='EditPackage(\"" + dr["ID"] + "\");return false;'></a>");
+                str.Append("</div>");
 
-                str.Append("<div class='float-left'><h2>" + dr["PackageName"] +
-                           "</h2></div><div class='clear-space'></div>");
-                str.Append("<div class='clear'></div>");
-                str.Append("<div class='clear-margin package-contents pad-top pad-bottom'>" + LoadAppIcons(list) + "</div>");
-                str.Append("<div class='clear-space-five'></div><div style='height: 45px;'><p class='float-right'><b>Total Apps</b>" + CountAppIcons(list) + "</p>");
-                str.Append("<p class='float-left'><b>Updated By</b>" + dr["UpdatedBy"].ToString() + "</p><div class='clear-space-five'></div>");
-                str.Append("<p class='float-left'><b>Last Updated</b>" + dr["Date"].ToString() + "</p></div></div>");
+                str.Append("<div class='title-line'></div>");
+                str.Append("<div class='td-settings-ctrl'>" + LoadAppIcons(list) + "</div>");
+                str.Append("<div class='td-settings-desc'><div class='float-right'><b class='pad-right-sml'>Total Apps:</b>" + CountAppIcons(list) + "</div>");
+                str.Append("<b class='pad-left-sml pad-right-sml'>Updated By:</b>" + dr["UpdatedBy"].ToString() + "<div class='clear-space-two'></div>");
+                str.Append("<b class='pad-left-sml pad-right-sml'>Last Updated:</b>" + dr["Date"].ToString() + "</div></div>");
 
                 dd_appdemo.Items.Add(new ListItem(dr["PackageName"], dr["ID"]));
                 dd_appinstaller.Items.Add(new ListItem(dr["PackageName"], dr["ID"]));
@@ -268,13 +268,13 @@ public partial class SiteTools_AppPackages : Page {
                     if (list.Contains(_appId)) {
                         strApps.Append("<div id='app-icon-" + _appId + "' class='app-icon-admin inline-block' style='padding: 0 !important;'>" + image);
                         strApps.Append("<span class='app-span-modify' style='text-align: left; padding: 11px 0 0 0 !important; line-height: 4px !important; font-size: 12px; width: 190px;'>" + dr.AppName);
-                        strApps.Append("<a href='#' onclick=\"RemoveApp(this, '" + _appId + "');return false;\" title='Remove " + dr.AppName + "'>");
+                        strApps.Append("<a href='#' onclick=\"RemoveApp(this, '" + _appId + "');return false;\" title='Remove " + dr.AppName + "' class='float-left'>");
                         strApps.Append("<div title='Remove' class='img-collapse-sml cursor-pointer float-left'></div></a></span></div>");
                     }
                     else {
                         strApps2.Append("<div id='app-icon-" + _appId + "' class='app-icon-admin inline-block' style='padding: 0 !important;'>" + image);
                         strApps2.Append("<span class='app-span-modify' style='text-align: left; padding: 11px 0 0 0 !important; line-height: 4px !important; font-size: 12px; width: 190px;'>" + dr.AppName);
-                        strApps2.Append("<a href='#' onclick=\"AddApp(this, '" + _appId + "');return false;\" title='Add " + dr.AppName + "'>");
+                        strApps2.Append("<a href='#' onclick=\"AddApp(this, '" + _appId + "');return false;\" title='Add " + dr.AppName + "' class='float-left'>");
                         strApps2.Append("<div title='Add' class='img-expand-sml cursor-pointer float-left'></div></a></span></div>");
                     }
                 }

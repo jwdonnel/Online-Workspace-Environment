@@ -147,7 +147,7 @@ public partial class SiteTools_CustomProjects : System.Web.UI.Page {
             str.Append("<div class='emptyGridView'>No Sites Found</div>");
         }
 
-        lbl_TotalWebServices.Text = "<span class='font-bold pad-right-sml'>Total Sites:</span>" + fileCount.ToString();
+        lbl_TotalWebServices.Text = "<span class='font-bold pad-right'>Total Sites</span>" + fileCount.ToString();
         pnl_CustomPageList.Controls.Add(new LiteralControl(str.ToString()));
     }
     private void BuildDefaultPageList(string defaultPage, string folder) {

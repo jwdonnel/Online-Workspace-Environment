@@ -14,7 +14,6 @@ using System.Globalization;
 using System.Web.Security;
 
 public partial class SiteTools_dbViewer : System.Web.UI.Page {
-    private readonly AppLog _applog = new AppLog(false);
     private readonly DBViewer _dbviewer = new DBViewer(true);
     private AutoBackupSystem _abs;
     private string _ctrlname;
@@ -247,7 +246,7 @@ public partial class SiteTools_dbViewer : System.Web.UI.Page {
             }
         }
         catch (Exception e) {
-            _applog.AddError(e);
+            AppLog.AddError(e);
         }
     }
     private void Search_Found(DataTable dt) {
@@ -298,7 +297,7 @@ public partial class SiteTools_dbViewer : System.Web.UI.Page {
             rowCount = dtlist.Rows.Count.ToString();
         }
 
-        lbl_rowCount.Text = "<span class='font-bold pad-right'>Row Count:</span>" + rowCount;
+        lbl_rowCount.Text = "<span class='settings-name-column float-left' style='padding-top: 0px!important;'>Row Count</span>" + rowCount;
         UpdatePanel1.Update();
     }
 
@@ -341,8 +340,12 @@ public partial class SiteTools_dbViewer : System.Web.UI.Page {
         }
 
         if (!string.IsNullOrEmpty(str.ToString())) {
-            string title = "<div class='clear' style='height: 20px;'></div><h3>" + tableName + " Schema</h3><div class='clear-space-five'></div>";
-            pnl_tableSchema.Controls.Add(new LiteralControl(title + str.ToString() + "<div class='clear-space'></div>"));
+            StringBuilder str2 = new StringBuilder();
+            str2.Append("<div class='table-settings-box'>");
+            str2.Append("<div class='td-settings-title'>" + tableName + " Schema</div>");
+            str2.Append("<div class='title-line'></div>");
+            str2.Append("<div class='td-settings-ctrl'>" + str.ToString() + "</div></div>");
+            pnl_tableSchema.Controls.Add(new LiteralControl(str2.ToString()));
         }
 
         UpdatePanel4.Update();

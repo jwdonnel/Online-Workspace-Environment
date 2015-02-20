@@ -4,7 +4,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding pad-top-big margin-top">
+    <div class="maincontent-padding margin-top">
         <asp:UpdatePanel ID="updatepnl_refresh" runat="server">
             <ContentTemplate>
                 <asp:HiddenField ID="hf_edit" runat="server" OnValueChanged="hf_edit_ValueChanged"
@@ -42,35 +42,34 @@
         </asp:UpdatePanel>
         <asp:UpdatePanel ID="updatepnl_header" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
-                <small><b class="pad-right-sml">Note:</b>The groups created are used to determine how to
-                pull data from each app. Each user created MUST be associated with a group. When sending a user an invite, that user must have their group notification enabled. Otherwise, you will not see the user in the invite list.</small>
-                <div class="clear-space">
-                </div>
-                <asp:Panel ID="pnl_addgroupbtn" runat="server">
-                    <a class="sb-links margin-right-big" onclick="CreateGroup();return false;">
-                        <span class="td-add-btn float-left margin-right-sml" style="padding: 0!important;"></span>Create a Group</a>
-                    <div class="clear-space">
-                    </div>
-                </asp:Panel>
-                <div class="clear-space">
-                </div>
-                <b class="pad-right">Group Count:</b><asp:Label ID="lbl_companycount" runat="server" Text="0"></asp:Label>
-                <div class="clear-space-five"></div>
-                <div class="float-left">
-                    <div id="searchwrapper">
-                        <asp:HiddenField ID="hf_clearsearch" runat="server" ClientIDMode="Static" OnValueChanged="hf_clearsearch_Changed" />
-                        <asp:Panel ID="Panel1_groupsearch" runat="server" DefaultButton="imgbtn_search">
-                            <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
-                                onfocus="if(this.value=='Search Groups')this.value=''" onblur="if(this.value=='')this.value='Search Groups'"
-                                Text="Search Groups"></asp:TextBox>
-                            <a href="#" onclick="return false;" class="searchbox_clear" title="Clear search"></a>
-                            <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
-                                OnClick="imgbtn_search_Click" />
+                <div class="table-settings-box">
+                    <div class="td-settings-ctrl">
+                        <asp:Panel ID="pnl_addgroupbtn" runat="server">
+                            <a class="margin-right-big input-buttons" onclick="CreateGroup();return false;">
+                                <span class="td-add-btn float-left margin-right-sml" style="padding: 0!important;"></span>Create a Group</a>
+                            <b class="pad-right">Group Count</b><asp:Label ID="lbl_companycount" runat="server" Text="0"></asp:Label>
+                            <div class="clear-space">
+                            </div>
                         </asp:Panel>
+                        <div class="clear-space-five"></div>
+                        <div class="float-left">
+                            <div id="searchwrapper">
+                                <asp:HiddenField ID="hf_clearsearch" runat="server" ClientIDMode="Static" OnValueChanged="hf_clearsearch_Changed" />
+                                <asp:Panel ID="Panel1_groupsearch" runat="server" DefaultButton="imgbtn_search">
+                                    <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
+                                        onfocus="if(this.value=='Search Groups')this.value=''" onblur="if(this.value=='')this.value='Search Groups'"
+                                        Text="Search Groups"></asp:TextBox>
+                                    <a href="#" onclick="return false;" class="searchbox_clear" title="Clear search"></a>
+                                    <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
+                                        OnClick="imgbtn_search_Click" />
+                                </asp:Panel>
+                            </div>
+                        </div>
+                        <div class="clear-space"></div>
                     </div>
-                </div>
-                <div class="float-right margin-left-big pad-top">
-                    <small>Leave search textbox blank to search all groups</small>
+                    <div class="td-settings-desc">
+                        The groups created are used to determine how to pull data from each app. Each user created MUST be associated with a group. When sending a user an invite, that user must have their group notification enabled. Otherwise, you will not see the user in the invite list.
+                    </div>
                 </div>
                 <div class="clear-space">
                 </div>
@@ -244,7 +243,7 @@
         <div id="GroupEdit-element" class="Modal-element">
             <div class="Modal-overlay">
                 <div class="Modal-element-align">
-                    <div class="Modal-element-modal">
+                    <div class="Modal-element-modal" style="width: 650px; height: 471px;">
                         <div class="ModalHeader">
                             <div>
                                 <div class="app-head-button-holder-admin">
@@ -257,7 +256,7 @@
                         <div class="ModalPadContent">
                             <asp:UpdatePanel ID="updatepnl_viewusers" runat="server" UpdateMode="Conditional">
                                 <ContentTemplate>
-                                    <asp:Panel ID="pnl_modalTitle" runat="server" Style="padding-right: 25px;">
+                                    <asp:Panel ID="pnl_modalTitle" runat="server">
                                     </asp:Panel>
                                     <asp:Panel ID="pnl_users" CssClass="modal-inner-scroll" runat="server">
                                     </asp:Panel>
@@ -271,7 +270,7 @@
         <div id="GroupInviteUser-element" class="Modal-element">
             <div class="Modal-overlay">
                 <div class="Modal-element-align">
-                    <div class="Modal-element-modal">
+                    <div class="Modal-element-modal" style="width: 650px;">
                         <div class="ModalHeader">
                             <div>
                                 <div class="app-head-button-holder-admin">

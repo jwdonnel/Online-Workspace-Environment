@@ -24,7 +24,7 @@
         <div class="pad-left pad-right">
             <input id="imgbtn_update" type="button" class="input-buttons-postmessage margin-top float-left margin-left margin-right"
                 value="Post Message" onclick="PostMessage()" />
-            <a href="#clear" id="btn_clearpost_messageboard" class="sb-links float-left margin-right margin-left margin-top"
+            <a href="#clear" id="btn_clearpost_messageboard" class="float-left margin-right margin-left margin-top"
                 onclick="ClearPost();return false;">Clear</a>
             <div class="float-right pad-left pad-right pad-top">
                 New message board postings may take a couple of seconds to refresh.

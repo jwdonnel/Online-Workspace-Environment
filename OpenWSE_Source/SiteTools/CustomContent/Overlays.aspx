@@ -16,20 +16,8 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding pad-top-big margin-top">
-        <div class="pad-bottom">
-            <small>Overlays can be uploaded and configured here. Only ASP.Net user control files (.ascx)
-        and .zip that contains the .dll and the .ascx are allowed at the moment. Users will be able to enable these overlays their Account
-        Settings.</small>
-        </div>
-        <div class="clear">
-        </div>
+    <div class="maincontent-padding margin-top">
         <asp:Literal ID="ltl_locked" runat="server"></asp:Literal>
-        <div class="clear-space">
-        </div>
-        <a id="aAddNewOverlay" runat="server" class="sb-links margin-right-big" onclick="openWSE.LoadModalWindow(true, 'AddOverlay-element', 'Add New Overlay');$('#MainContent_txt_uploadNotifiName').focus();return false;"><span class="td-add-btn float-left margin-right-sml" style="padding: 0!important;"></span>Add New Overlay</a>
-        <div class="clear-space-five">
-        </div>
         <div id="AddOverlay-element" class="Modal-element">
             <div class="Modal-overlay">
                 <div class="Modal-element-align">
@@ -124,42 +112,39 @@
                 </div>
             </div>
         </div>
-        <div class="actions no-pad-left">
-            <asp:UpdatePanel ID="updatepnl_overlays" runat="server" UpdateMode="Conditional">
-                <ContentTemplate>
-                    <div class="float-right" style="margin-top: -18px;">
-                        <span class="font-bold pad-right">Total Overlays:</span><asp:Label ID="lbl_overlaysEnabled"
+        <asp:UpdatePanel ID="updatepnl_overlays" runat="server" UpdateMode="Conditional">
+            <ContentTemplate>
+                <div class="table-settings-box" style="margin-bottom: 0px!important;">
+                    <div class="td-settings-ctrl">
+                        <a id="aAddNewOverlay" runat="server" class="margin-right-big input-buttons" onclick="openWSE.LoadModalWindow(true, 'AddOverlay-element', 'Add New Overlay');$('#MainContent_txt_uploadNotifiName').focus();return false;"><span class="td-add-btn float-left margin-right-sml" style="padding: 0!important;"></span>Add New Overlay</a>
+                        <span class="font-bold pad-right">Total Overlays</span><asp:Label ID="lbl_overlaysEnabled"
                             runat="server" Text="0"></asp:Label>
+                        <div class="clear-space">
+                        </div>
+                        <asp:Panel ID="pnl_overlays" runat="server" CssClass="pad-top-big">
+                        </asp:Panel>
+                        <div class="clear-space">
+                        </div>
                     </div>
-                    <div class="clear-space">
+                    <div class="td-settings-desc">
+                        Overlays can be uploaded and configured here. Only ASP.Net user control files (.ascx) and .zip that contains the .dll and the .ascx are allowed at the moment. Users will be able to enable these overlays their Account Settings.
                     </div>
-                    <asp:Panel ID="pnl_overlays" runat="server">
-                    </asp:Panel>
-                </ContentTemplate>
-            </asp:UpdatePanel>
-        </div>
-        <div class="clear" style="height: 30px">
-        </div>
-        <div class="actions no-pad-left">
-            <div class="clear-space">
+                </div>
+            </ContentTemplate>
+        </asp:UpdatePanel>
+        <div class="table-settings-box no-border" style="padding-top: 0px!important; margin-top: 0px!important;">
+            <div class="td-settings-ctrl">
+                <asp:UpdatePanel ID="updatepnl_Associations" runat="server" UpdateMode="Conditional">
+                    <ContentTemplate>
+                        <asp:Panel ID="pnl_AppAssociation" runat="server">
+                        </asp:Panel>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+                <div class="clear">
+                </div>
             </div>
-            <div class="editor_titles">
-                <div class="title-line"></div>
-                <h3>App Associations</h3>
-            </div>
-            <div class="clear-space">
-            </div>
-            <small><b class="pad-right-sml">Note:</b>Overlays must be associated with an installed
-            app in order to view them in the user overlay settings.</small>
-            <div class="clear" style="height: 20px">
-            </div>
-            <asp:UpdatePanel ID="updatepnl_Associations" runat="server" UpdateMode="Conditional">
-                <ContentTemplate>
-                    <asp:Panel ID="pnl_AppAssociation" runat="server">
-                    </asp:Panel>
-                </ContentTemplate>
-            </asp:UpdatePanel>
-            <div class="clear-space">
+            <div class="td-settings-desc">
+                Overlays must be associated with an installed app in order to view them in the user overlay settings.
             </div>
         </div>
         <div id="App-element" class="Modal-element">

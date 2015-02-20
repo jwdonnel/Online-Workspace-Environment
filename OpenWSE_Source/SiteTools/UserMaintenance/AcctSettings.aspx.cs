@@ -112,6 +112,7 @@ public partial class SiteTools_AcctSettings : Page {
             if (string.IsNullOrEmpty(controlName)) {
                 controlName = string.Empty;
             }
+
             LoadSettingsPage(controlName);
         }
     }
@@ -203,8 +204,12 @@ public partial class SiteTools_AcctSettings : Page {
             _siteTheme = "Standard";
         }
 
-        RegisterPostbackScripts.RegisterStartupScript(this, "$('#iframe_changepassword_holder').html(\"<iframe src='../iframes/ChangePassword.aspx' frameborder='0' height='265px' width='320px' scrolling='auto'></iframe>\");");
         AssociateWithGroups = _ss.AssociateWithGroups;
+
+        if (userName.ToLower() != ServerSettings.AdminUserName.ToLower()) {
+            pnl_DeleteAccount.Enabled = true;
+            pnl_DeleteAccount.Visible = true;
+        }
 
         btn_markasnewuser.Enabled = false;
         btn_markasnewuser.Visible = false;
@@ -304,7 +309,6 @@ public partial class SiteTools_AcctSettings : Page {
         if (HttpContext.Current.User.Identity.Name.ToLower() == Username.ToLower() && !Member.IsSocialAccount) {
             pnl_passwordchange.Enabled = true;
             pnl_passwordchange.Visible = true;
-            _strJSRegister.Append("$('#iframe_changepassword_holder').html(\"<iframe src='../iframes/ChangePassword.aspx' frameborder='0' height='265px' width='320px' scrolling='auto'></iframe>\");");
         }
         else {
             pnl_passwordchange.Enabled = false;
@@ -379,8 +383,6 @@ public partial class SiteTools_AcctSettings : Page {
         pnl_clearNoti.Visible = false;
         #endregion
 
-        h3_setuserinfo.InnerHtml = "New User Information";
-
         if (RoleSelect.ToLower() == ServerSettings.AdminUserName.ToLower()) {
             pnl_adminpages_Holder.Enabled = false;
             pnl_adminpages_Holder.Visible = false;
@@ -435,8 +437,22 @@ public partial class SiteTools_AcctSettings : Page {
         pnl_ChatClient.Visible = false;
         pnl_WorkspaceContainer.Enabled = false;
         pnl_WorkspaceContainer.Visible = false;
-        pnl_SiteCustomizations.Enabled = false;
-        pnl_SiteCustomizations.Visible = false;
+
+        pnl_demoPackage.Enabled = false;
+        pnl_demoPackage.Visible = false;
+        pnl_WorkspaceMode.Enabled = false;
+        pnl_WorkspaceMode.Visible = false;
+        pnl_clearproperties.Enabled = false;
+        pnl_clearproperties.Visible = false;
+        pnl_clearUserProp.Enabled = false;
+        pnl_clearUserProp.Visible = false;
+        pnl_presentationMode.Enabled = false;
+        pnl_presentationMode.Visible = false;
+        pnl_ShowAppTitle.Enabled = false;
+        pnl_ShowAppTitle.Visible = false;
+        pnl_showAppImage.Enabled = false;
+        pnl_showAppImage.Visible = false;
+
         pnl_WorkspaceOverlays.Enabled = false;
         pnl_WorkspaceOverlays.Visible = false;
         pnl_IconSelector.Enabled = false;
@@ -797,6 +813,10 @@ public partial class SiteTools_AcctSettings : Page {
 
     #endregion
 
+    protected void OnContinueButtonClick(object sender, EventArgs e) {
+        Page.Response.Redirect(Page.Request.RawUrl);
+    }
+
     protected void btn_updateinfo_Click(object sender, EventArgs e) {
         try {
             if (Member.FirstName != tb_firstname_accountsettings.Text)
@@ -849,8 +869,7 @@ public partial class SiteTools_AcctSettings : Page {
                 }
             }
             catch (Exception ex) {
-                AppLog log = new AppLog(false);
-                log.AddError(ex);
+                AppLog.AddError(ex);
             }
         }
 
@@ -870,8 +889,7 @@ public partial class SiteTools_AcctSettings : Page {
             SetUserImage();
         }
         catch (Exception ex) {
-            AppLog log = new AppLog(false);
-            log.AddError(ex);
+            AppLog.AddError(ex);
         }
 
         LoadUserInformation();
@@ -984,6 +1002,17 @@ public partial class SiteTools_AcctSettings : Page {
         var msu = new MemberDatabase(user);
         msu.UpdateIsNewMember(true);
         LoadUserInformation();
+    }
+
+    protected void hf_DeleteUserAccount_ValueChanged(object sender, EventArgs e) {
+        string user = HttpContext.Current.User.Identity.Name;
+        if (user.ToLower() != ServerSettings.AdminUserName.ToLower()) {
+            Membership.DeleteUser(user, true);
+            MemberDatabase m = new MemberDatabase(user);
+            m.DeleteUserCustomizations(user);
+            FormsAuthentication.SignOut();
+            Page.Response.Redirect("~/Default.aspx");
+        }
     }
 
     #endregion
@@ -2684,7 +2713,15 @@ public partial class SiteTools_AcctSettings : Page {
             UpdateDrDefaults();
         }
 
-        Response.Redirect(Request.RawUrl);
+        string redirectUrl = Request.RawUrl;
+        if (Request.QueryString.Count > 0) {
+            redirectUrl += "&tab=SiteCustomizations";
+        }
+        else {
+            redirectUrl += "?tab=SiteCustomizations";
+        }
+
+        Response.Redirect(redirectUrl);
     }
 
     protected void hf_AnimationSpeed_Changed(object sender, EventArgs e) {

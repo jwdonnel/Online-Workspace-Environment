@@ -250,7 +250,7 @@ public class NotificationRetrieve : System.Web.Services.WebService {
 
         if (includeRemove) {
             cell.Append("<br />");
-            cell.Append("<img title='Hide' class='sb-links alert-panel-noti-btns-remove' src='" + _serverLoc + "/App_Themes/" + siteTheme + "/Icons/remove.png' onclick='openWSE.NotiActionsHideInd(this);'>");
+            cell.Append("<img title='Hide' class='alert-panel-noti-btns-remove' src='" + _serverLoc + "/App_Themes/" + siteTheme + "/Icons/remove.png' onclick='openWSE.NotiActionsHideInd(this);'>");
 
         }
         cell.Append("</div>");

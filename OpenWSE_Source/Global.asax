@@ -15,8 +15,7 @@
     }
     
     private void Application_Error(object sender, EventArgs e) {
-        var applog = new AppLog(false);
-        applog.AddError(Context.Error);
+        AppLog.AddError(Context.Error);
     }
 
     private void Session_Start(object sender, EventArgs e) { }

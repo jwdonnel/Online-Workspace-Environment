@@ -105,7 +105,7 @@
         </div>
         <asp:Panel ID="pnl_chat_users" runat="server" Style="display: none;">
             <div id="statusDiv" class="pad-all-big">
-                <b class="float-left pad-right pad-top">Your Status: </b><a href="#" class="sb-links chatstatus_mid">
+                <b class="float-left pad-right">Your Status:</b><a href="#" class="chatstatus_mid">
                     <span id="currentStatus" style="width: 130px;"></span></a>
                 <div id="ul_StatusList" style="display: none;">
                     <ul style="list-style: none;">

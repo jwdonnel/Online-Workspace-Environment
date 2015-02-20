@@ -36,14 +36,14 @@ public partial class SiteTools_FileManager : Page {
 
                 if (!IsPostBack) {
                     dd_viewtype.SelectedIndex = 0;
-                    if ((userId.Name.ToLower() != ServerSettings.AdminUserName.ToLower()) && (_ss.LockFileManager)) {
+                    if (_ss.LockFileManager) {
                         ltl_locked.Text = HelperMethods.GetLockedByMessage();
                     }
 
                     if (!string.IsNullOrEmpty(Request.QueryString["edit"])) {
                         string drive = new DirectoryInfo(ServerSettings.GetServerMapLocation).Root.Name.Replace("\\", "");
                         string filename = HttpUtility.UrlDecode(drive + Request.QueryString["file"]);
-                        if (HelperMethods.ConvertBitToBoolean((Request.QueryString["edit"])) && ((userId.Name.ToLower() == ServerSettings.AdminUserName.ToLower()) || (!_ss.LockFileManager))) {
+                        if (HelperMethods.ConvertBitToBoolean((Request.QueryString["edit"])) && (!_ss.LockFileManager)) {
                             pnl1.Enabled = false;
                             pnl1.Visible = false;
                             pnl2.Enabled = true;
@@ -106,7 +106,7 @@ public partial class SiteTools_FileManager : Page {
                 string drive = new DirectoryInfo(ServerSettings.GetServerMapLocation).Root.Name.Replace("\\", "");
                 string path = drive + Request.QueryString["file"].Replace("!", "\\");
                 var fi = new FileInfo(path);
-                if ((HttpContext.Current.User.Identity.Name.ToLower() == ServerSettings.AdminUserName.ToLower()) || (!_ss.LockFileManager)) {
+                if (!_ss.LockFileManager) {
                     if ((fi.Directory != null) && (fi.Extension.ToLower() == ".css") && (fi.Directory.Name.ToLower() != "standard")) {
                         string editorText = HttpUtility.UrlDecode(hidden_editor.Value.Trim());
                         if (!string.IsNullOrEmpty(editorText)) {
@@ -193,6 +193,7 @@ public partial class SiteTools_FileManager : Page {
         dtFiles.Columns.Add(new DataColumn("Path"));
         dtFiles.Columns.Add(new DataColumn("EditClass"));
         dtFiles.Columns.Add(new DataColumn("DownloadClass"));
+        dtFiles.Columns.Add(new DataColumn("PreviewClass"));
         dtFiles.Columns.Add(new DataColumn("RowCount"));
 
         int count = 1;
@@ -221,13 +222,15 @@ public partial class SiteTools_FileManager : Page {
                                 drFile["Path"] = HttpUtility.UrlEncode(parentFolder + "&toolView=true");
                             }
 
-                            if ((HttpContext.Current.User.Identity.Name.ToLower() == ServerSettings.AdminUserName.ToLower()) || (!_ss.LockFileManager)) {
+                            if (!_ss.LockFileManager) {
                                 drFile["EditClass"] = "td-edit-btn margin-left-sml margin-right-sml RandomActionBtns";
                                 drFile["DownloadClass"] = "img-download pad-all-sml";
+                                drFile["PreviewClass"] = "img-view pad-all-sml margin-left-sml RandomActionBtns";
                             }
                             else {
                                 drFile["EditClass"] = "display-none";
                                 drFile["DownloadClass"] = "display-none";
+                                drFile["PreviewClass"] = "display-none";
                             }
 
                             drFile["RowCount"] = count.ToString();
@@ -246,13 +249,15 @@ public partial class SiteTools_FileManager : Page {
                             drFile["Path"] = HttpUtility.UrlEncode(parentFolder + "&toolView=true");
                         }
 
-                        if ((HttpContext.Current.User.Identity.Name.ToLower() == ServerSettings.AdminUserName.ToLower()) || (!_ss.LockFileManager)) {
+                        if (!_ss.LockFileManager) {
                             drFile["EditClass"] = "td-edit-btn margin-left-sml margin-right-sml RandomActionBtns";
                             drFile["DownloadClass"] = "img-download pad-all-sml";
+                            drFile["PreviewClass"] = "img-view pad-all-sml margin-left-sml RandomActionBtns";
                         }
                         else {
                             drFile["EditClass"] = "display-none";
                             drFile["DownloadClass"] = "display-none";
+                            drFile["PreviewClass"] = "display-none";
                         }
 
                         drFile["RowCount"] = count.ToString();
@@ -315,7 +320,7 @@ public partial class SiteTools_FileManager : Page {
                             drFile["Path"] = HttpUtility.UrlEncode(parentFolder + "&toolView=true");
                         }
 
-                        if ((HttpContext.Current.User.Identity.Name.ToLower() == ServerSettings.AdminUserName.ToLower()) || (!_ss.LockFileManager)) {
+                        if (!_ss.LockFileManager) {
                             drFile["EditClass"] = "td-edit-btn margin-left-sml margin-right-sml RandomActionBtns";
                             drFile["DownloadClass"] = "img-download pad-all-sml";
                         }
@@ -369,7 +374,7 @@ public partial class SiteTools_FileManager : Page {
         string filePath = drive + path;
         var fi = new FileInfo(filePath);
         if (fi.Directory != null) filePath = fi.Directory.Root.Name.Replace("\\", "") + path;
-        if ((HttpContext.Current.User.Identity.Name.ToLower() == ServerSettings.AdminUserName.ToLower()) || (!_ss.LockFileManager)) {
+        if (!_ss.LockFileManager) {
             if (File.Exists(filePath)) {
                 string strFileName = Path.GetFileName(filePath);
                 Response.ContentType = "application/octet-stream";
@@ -385,7 +390,7 @@ public partial class SiteTools_FileManager : Page {
     }
 
     protected void DeleteFile(string path) {
-        if ((HttpContext.Current.User.Identity.Name.ToLower() == ServerSettings.AdminUserName.ToLower()) || (!_ss.LockFileManager)) {
+        if (!_ss.LockFileManager) {
             string filePath = ServerSettings.GetServerMapLocation + path;
             if (File.Exists(filePath)) {
                 File.Delete(path);
@@ -394,34 +399,6 @@ public partial class SiteTools_FileManager : Page {
         else {
             RegisterPostbackScripts.RegisterStartupScript(this, "openWSE.AlertWindow('You do not have permission to delete this file');");
         }
-    }
-
-    #endregion
-
-    #region Quick Search
-
-    protected void imgbtn_all_Themes_Click(object sender, EventArgs e) {
-        LoadScripts(ref GV_Script, "0", "asc");
-    }
-
-    protected void imgbtn_search_Themes_Click(object sender, EventArgs e) {
-        var types = new List<string> { "Scripts", "WebControls", "Apps" };
-        LoadScripts(ref GV_Script, "0", "asc", "App_Themes", types);
-    }
-
-    protected void imgbtn_search_Scripts_Click(object sender, EventArgs e) {
-        var types = new List<string> { "App_Themes", "WebControls", "Apps" };
-        LoadScripts(ref GV_Script, "0", "asc", "Scripts", types);
-    }
-
-    protected void imgbtn_search_WebControls_Click(object sender, EventArgs e) {
-        var types = new List<string> { "App_Themes", "Scripts", "Apps" };
-        LoadScripts(ref GV_Script, "0", "asc", "WebControls", types);
-    }
-
-    protected void imgbtn_search_Apps_Click(object sender, EventArgs e) {
-        var types = new List<string> { "App_Themes", "Scripts", "WebControls" };
-        LoadScripts(ref GV_Script, "0", "asc", "Apps", types);
     }
 
     #endregion

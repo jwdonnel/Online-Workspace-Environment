@@ -16,7 +16,7 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding pad-top-big margin-top">
+    <div class="maincontent-padding margin-top">
         <asp:UpdatePanel ID="updatepnl_refresh" runat="server">
             <ContentTemplate>
                 <asp:HiddenField ID="hf_edit" runat="server" OnValueChanged="hf_edit_ValueChanged"
@@ -32,18 +32,18 @@
                 <asp:HiddenField ID="hf_currPackage" runat="server" Value="" ClientIDMode="Static" />
             </ContentTemplate>
         </asp:UpdatePanel>
-        <small><b class="pad-right-sml">Note:</b>Apps can be in as many categories as you want. Adding a app
-        to a category will remove it from the previous category.</small>
-        <div class="clear-space">
-        </div>
         <asp:UpdatePanel ID="updatepnl_header" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
-                <a class="sb-links margin-right-big" onclick="openWSE.LoadModalWindow(true, 'NewCategory-element', 'Create New App Category');$('#MainContent_tb_categoryname').focus();return false;">
-                    <span class="td-add-btn float-left margin-right-sml" style="padding: 0!important;"></span>Create a Category</a> <b class="pad-right">Category Count</b><asp:Label ID="lbl_packagecount"
-                        runat="server" Text="0"></asp:Label>
-                <div class="clear-space">
-                </div>
-                <div class="clear-space">
+                <div class="table-settings-box no-border" style="padding-bottom: 0px!important;">
+                    <div class="td-settings-ctrl">
+                        <a href="#" class="margin-right-big input-buttons" onclick="openWSE.LoadModalWindow(true, 'NewCategory-element', 'Create New App Category');$('#MainContent_tb_categoryname').focus();return false;">
+                            <span class="td-add-btn float-left margin-right-sml" style="padding: 0!important;"></span>Create a Category</a> <b class="pad-right">Category Count</b><asp:Label ID="lbl_packagecount"
+                                runat="server" Text="0"></asp:Label>
+                    </div>
+                    <div class="td-settings-desc">
+                        Apps can be in as many categories as you want. Adding a app
+        to a category will remove it from the previous category.
+                    </div>
                 </div>
                 <asp:Panel ID="pnl_packageholder" runat="server">
                 </asp:Panel>

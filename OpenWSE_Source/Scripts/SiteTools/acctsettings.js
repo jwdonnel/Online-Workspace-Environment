@@ -1,4 +1,24 @@
-﻿Sys.Application.add_load(function () {
+﻿$(document).ready(function () {
+    BuildLinks();
+
+    var url = location.href;
+    load(url == "" ? "1" : url);
+});
+
+var currentTab = "";
+function BuildLinks() {
+    $(".pnl-section").each(function (index) {
+        var id = $(this).attr("id").replace("pnl_", "");
+        $(".sitemenu-selection").append("<li><a href='#?tab=" + id + "'>" + $(this).attr("data-title") + "</a></li>");
+    });
+
+    $(".sitemenu-selection").find("li").find("a").on("click", function () {
+        load($(this).attr("href"));
+        return false;
+    });
+}
+
+Sys.Application.add_load(function () {
     openWSE.RadioButtonStyle();
     if (learMoreOn) {
         $("#moreInfo-PrivateAccount").show();
@@ -6,6 +26,11 @@
     else {
         $("#moreInfo-PrivateAccount").hide();
     }
+});
+
+var prm = Sys.WebForms.PageRequestManager.getInstance();
+prm.add_endRequest(function () {
+    load(currentTab);
 });
 
 $(document.body).on("keypress", "#tb_updateintervals, #txt_AppGridSize", function (e) {
@@ -204,3 +229,42 @@ $(document.body).on("click", ".image-selector-acct", function () {
         __doPostBack('hf_backgroundimg', "");
     }
 });
+
+function load(num) {
+    $(".pnl-section").hide();
+    $(".sitemenu-selection").find("li").removeClass("active");
+
+    currentTab = num;
+    var index = 0;
+
+    var arg1 = num.split("tab=");
+    if (arg1.length > 1) {
+        var arg2 = arg1[1].split("#");
+        if (arg2.length == 1) {
+            index = GetPnlSectionIndex(arg2[0]);
+        }
+    }
+
+    $(".pnl-section").eq(index).show();
+    $(".sitemenu-selection").find("li").eq(index).addClass("active");
+}
+
+function GetPnlSectionIndex(ele) {
+    var pnlIndex = 0;
+    $(".pnl-section").each(function (index) {
+        if ($(this).attr("id") == "pnl_" + ele) {
+            pnlIndex = index;
+        }
+    });
+
+    return pnlIndex;
+}
+
+function DeleteUserAccount() {
+    openWSE.ConfirmWindow("Are you sure you want to delete your account? There is no going back if once you click Ok.",
+       function () {
+           openWSE.LoadingMessage1("Deleting Account. Please Wait...");
+           $("#hf_DeleteUserAccount").val(new Date().toString());
+           __doPostBack("hf_DeleteUserAccount", "");
+       }, null);
+}

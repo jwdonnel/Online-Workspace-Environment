@@ -103,7 +103,7 @@ public partial class SiteTools_EmailSettings : System.Web.UI.Page {
 
     private void HeaderChecked() {
         var str = new StringBuilder();
-        str.Append("$('#hdl2').removeClass('active');$('#hdl1').addClass('active');");
+        str.Append("$('.sitemenu-selection').find('li').removeClass('active');$('.sitemenu-selection').find('li').eq(0).addClass('active');");
         str.Append("UnescapeCode(" + HttpUtility.JavaScriptStringEncode(ServerSettings.EmailHeader, true) + ");");
         str.Append("$('#btn1').val('Update Header');$('#lbtn_ClearFooter').hide();$('#lbtn_ClearHeader').show();");
         RegisterPostbackScripts.RegisterStartupScript(this, str.ToString());
@@ -111,7 +111,7 @@ public partial class SiteTools_EmailSettings : System.Web.UI.Page {
 
     private void FooterChecked() {
         var str = new StringBuilder();
-        str.Append("$('#hdl1').removeClass('active');$('#hdl2').addClass('active');");
+        str.Append("$('.sitemenu-selection').find('li').removeClass('active');$('.sitemenu-selection').find('li').eq(1).addClass('active');");
         str.Append("UnescapeCode(" + HttpUtility.JavaScriptStringEncode(ServerSettings.EmailFooter, true) + ");");
         str.Append("$('#btn1').val('Update Footer');$('#lbtn_ClearHeader').hide();$('#lbtn_ClearFooter').show();");
         RegisterPostbackScripts.RegisterStartupScript(this, str.ToString());

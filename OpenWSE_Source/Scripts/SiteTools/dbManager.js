@@ -95,33 +95,21 @@ function SelectAllTables() {
 /* --------------------------- */
 
 function Confirm_Restore() {
-    $("#db_overlay").css("display", "block");
-    $("#db_overlay").css("visibility", "visible");
-    $("#db_modal").css("display", "block");
-    $("#db_modal").css("opacity", "1.0");
-    $("#db_modal").css("filter", "alpha(opacity=100)");
+    openWSE.LoadModalWindow(true, "password-element", "Need Password to Continue");
     $("#hf_buRestore_type").val("Restore");
     $("#MainContent_tb_passwordConfirm").focus();
     dbMessage = "Restoring Database. Please Wait...";
 }
 
 function Confirm_RestoreLast() {
-    $("#db_overlay").css("display", "block");
-    $("#db_overlay").css("visibility", "visible");
-    $("#db_modal").css("display", "block");
-    $("#db_modal").css("opacity", "1.0");
-    $("#db_modal").css("filter", "alpha(opacity=100)");
+    openWSE.LoadModalWindow(true, "password-element", "Need Password to Continue");
     $("#hf_buRestore_type").val("RestoreLast");
     $("#MainContent_tb_passwordConfirm").focus();
     dbMessage = "Restoring Database. Please Wait...";
 }
 
 function Confirm_Delete() {
-    $("#db_overlay").css("display", "block");
-    $("#db_overlay").css("visibility", "visible");
-    $("#db_modal").css("display", "block");
-    $("#db_modal").css("opacity", "1.0");
-    $("#db_modal").css("filter", "alpha(opacity=100)");
+    openWSE.LoadModalWindow(true, "password-element", "Need Password to Continue");
     $("#hf_buRestore_type").val("Delete");
     $("#MainContent_tb_passwordConfirm").focus();
     dbMessage = "Deleting Backup. Please Wait...";
@@ -142,18 +130,16 @@ function OnDelete(id) {
 }
 
 function CancelRequest() {
-    $("#db_overlay").css("display", "none");
-    $("#db_overlay").css("visibility", "hidden");
-    $("#db_modal").fadeOut(300);
+    openWSE.LoadModalWindow(false, "password-element", "");
     dbType = "";
     $("#MainContent_tb_passwordConfirm").val("");
 }
 
 function BeginWork() {
-    $("#db_overlay").css("display", "none");
-    $("#db_overlay").css("visibility", "hidden");
-    $("#db_modal").fadeOut(300);
-    openWSE.LoadingMessage1(dbMessage);
+    openWSE.LoadModalWindow(false, "password-element", "");
+    setTimeout(function () {
+        openWSE.LoadingMessage1(dbMessage);
+    }, 500);
     $("#hf_StartWork").val(new Date().toString());
     __doPostBack("hf_StartWork", "");
 }

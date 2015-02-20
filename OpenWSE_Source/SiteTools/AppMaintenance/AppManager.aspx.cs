@@ -105,7 +105,7 @@ public partial class SiteTools_AppManager : Page {
                 if (cc_associatedOverlayNew.Items.Count == 0)
                     BuildOverlayDropDown();
 
-                if ((_ss.LockASCXEdit) && (_username.ToLower() != ServerSettings.AdminUserName.ToLower())) {
+                if (_ss.LockASCXEdit) {
                     dd_filename_ext.Enabled = false;
                     dd_filename_ext.Visible = false;
                     lbl_dotHtml.Enabled = true;
@@ -164,7 +164,7 @@ public partial class SiteTools_AppManager : Page {
                     pnl_filename.Visible = false;
                     cb_wrapIntoIFrame.Enabled = false;
                     cb_wrapIntoIFrame.Visible = false;
-                    RegisterPostbackScripts.RegisterStartupScript(this, "$('#_hdl3').addClass('active');$('#newupload').show();");
+                    RegisterPostbackScripts.RegisterStartupScript(this, "$('.sitemenu-selection').find('li').eq(2).addClass('active');$('#newupload').show();");
                 }
                 else if (Request.QueryString["c"] == "easycreate") {
                     pnl_appList2.Controls.Add(new LiteralControl(sidebar.BuildAppEditor(Page)));
@@ -192,7 +192,7 @@ public partial class SiteTools_AppManager : Page {
                         newAppID = HelperMethods.RandomString(10);
                         tb_filename_create.Text = newAppID;
                     }
-                    RegisterPostbackScripts.RegisterStartupScript(this, "$('#_hdl2').addClass('active');");
+                    RegisterPostbackScripts.RegisterStartupScript(this, "$('.sitemenu-selection').find('li').eq(1).addClass('active');");
                 }
                 else if (Request.QueryString["c"] == "params") {
                     pnl_appList1.Controls.Add(new LiteralControl(sidebar.BuildAppEditor(Page)));
@@ -213,7 +213,7 @@ public partial class SiteTools_AppManager : Page {
                     pnl_apphtml.Enabled = false;
                     pnl_apphtml.Visible = false;
                     hf_isParams.Value = "1";
-                    RegisterPostbackScripts.RegisterStartupScript(this, "$('#_hdl4').addClass('active');");
+                    RegisterPostbackScripts.RegisterStartupScript(this, "$('.sitemenu-selection').find('li').eq(3).addClass('active');");
                 }
                 else {
                     pnl_appList2.Controls.Add(new LiteralControl(sidebar.BuildAppEditor(Page)));
@@ -226,7 +226,7 @@ public partial class SiteTools_AppManager : Page {
                         tb_filename_create.Text = newAppID;
                         btn_viewCode.Visible = true;
                     }
-                    RegisterPostbackScripts.RegisterStartupScript(this, "$('#_hdl1').addClass('active');");
+                    RegisterPostbackScripts.RegisterStartupScript(this, "$('.sitemenu-selection').find('li').eq(0).addClass('active');");
                 }
 
                 GetPostBack();
@@ -306,31 +306,29 @@ public partial class SiteTools_AppManager : Page {
     }
     private void BuildLinks() {
         StringBuilder str = new StringBuilder();
-        Panel pnl_extraitems = (Panel)Master.FindControl("pnl_extraitems");
-        if (pnl_extraitems != null) {
-            pnl_extraitems.Controls.Clear();
+        str.Append("<ul class='sitemenu-selection'>");
 
-            str.Append("<ul class='homedashlinks float-right'>");
-
-            SiteMapNodeCollection nodes = SiteMap.CurrentNode.ChildNodes;
-            if (nodes.Count == 0) {
-                nodes = SiteMap.CurrentNode.ParentNode.ChildNodes;
-            }
-
-            for (int i = 0; i < nodes.Count; i++) {
-                string url = nodes[i].Url;
-                url = nodes[i].Url.Substring(nodes[i].Url.LastIndexOf("/") + 1);
-                if (HelperMethods.ConvertBitToBoolean(Request.QueryString["toolView"])) {
-                    url += "&toolView=true";
-                }
-                str.Append("<li id='_hdl" + (i + 1).ToString() + "'><a href='" + url + "'>" + nodes[i].Title + "</a></li>");
-            }
-
-            str.Append("</ul>");
-
-            pnl_extraitems.Controls.Add(new LiteralControl(str.ToString()));
+        SiteMapNodeCollection nodes = SiteMap.CurrentNode.ChildNodes;
+        if (nodes.Count == 0) {
+            nodes = SiteMap.CurrentNode.ParentNode.ChildNodes;
         }
+
+        for (int i = 0; i < nodes.Count; i++) {
+            string url = nodes[i].Url;
+            url = nodes[i].Url.Substring(nodes[i].Url.LastIndexOf("/") + 1);
+            if (HelperMethods.ConvertBitToBoolean(Request.QueryString["toolView"])) {
+                url += "&toolView=true";
+            }
+
+            str.Append("<li><a href='" + url + "'>" + nodes[i].Title + "</a></li>");
+        }
+
+        str.Append("</ul>");
+
+        pnlLinkBtns.Controls.Clear();
+        pnlLinkBtns.Controls.Add(new LiteralControl(str.ToString()));
     }
+
 
     private void BuildCategories() {
         dd_category.Items.Clear();
@@ -852,7 +850,7 @@ public partial class SiteTools_AppManager : Page {
                 else {
                     Appedit();
                     if (new FileInfo(db.filename).Extension.ToLower() == ".ascx") {
-                        if ((_username.ToLower() == ServerSettings.AdminUserName.ToLower()) || (!_ss.LockASCXEdit)) {
+                        if (!_ss.LockASCXEdit) {
                             lb_editsource.Enabled = true;
                             lb_editsource.Visible = true;
                             btn_delete.Enabled = true;
@@ -1157,7 +1155,7 @@ public partial class SiteTools_AppManager : Page {
     private void SetStandardApps(string appId) {
         if ((appId == "app-appinstaller") || (appId == "app-rssfeed") || (appId == "app-documents") ||
             (appId == "app-notepad") || (appId == "app-bookmarkviewer") || (appId == "app-googletraffic") ||
-            (appId == "app-chatsettings") || (appId == "app-messageboard") || (appId == "app-twitter") ||
+            (appId == "app-chatsettings") || (appId == "app-messageboard") || (appId == "app-twitterstation") ||
             (appId == "app-personalcalendar") || (appId == "app-alarmclock") || (appId == "app-feedback")) {
             btn_delete.Enabled = false;
             btn_delete.Visible = false;
@@ -1187,7 +1185,7 @@ public partial class SiteTools_AppManager : Page {
 
                 FileInfo fi = new FileInfo(ServerSettings.GetServerMapLocation + "Apps\\" + tb_filename_edit.Text);
 
-                if ((!_ss.LockFileManager) || (_username.ToLower() == ServerSettings.AdminUserName.ToLower())) {
+                if (!_ss.LockFileManager) {
                     StringBuilder extLinks = new StringBuilder();
                     string dir = fi.Directory.Name;
                     if (dir != "Apps") {
@@ -1202,7 +1200,7 @@ public partial class SiteTools_AppManager : Page {
                                     editable = "true";
                                 }
                                 extLinks.Append("<a href='" + ResolveUrl("~/SiteTools/ServerMaintenance/FileManager.aspx?edit=" + editable + "&file=" + parentFolder2) + "' ");
-                                extLinks.Append("class='sb-links margin-left-big margin-right margin-top-sml float-left' target='_blank'>View " + fi_indir.Name + "</a>");
+                                extLinks.Append("class='margin-left-big margin-right margin-top-sml float-left' target='_blank'>View " + fi_indir.Name + "</a>");
                             }
                         }
 
@@ -1212,7 +1210,7 @@ public partial class SiteTools_AppManager : Page {
                 }
 
                 if ((fi.Extension.ToLower() == ".ascx") || (fi.Extension.ToLower() == ".aspx")) {
-                    if ((_username.ToLower() == ServerSettings.AdminUserName.ToLower()) || (!_ss.LockASCXEdit))
+                    if (!_ss.LockASCXEdit)
                         scriptcode = srcode;
                     else
                         scriptcode = ".ascx file extensions are locked. Contact your administrator for access.";
@@ -1318,7 +1316,7 @@ public partial class SiteTools_AppManager : Page {
             cansave = true;
         }
         else if (fi.Extension.ToLower() == ".ascx") {
-            if ((_username.ToLower() == ServerSettings.AdminUserName.ToLower()) || (!_ss.LockASCXEdit)) {
+            if (!_ss.LockASCXEdit) {
                 html.Append(editor);
                 cansave = true;
             }
@@ -1622,7 +1620,7 @@ public partial class SiteTools_AppManager : Page {
                         else if (dd_filename_ext.SelectedValue == ".ascx") {
                             html.AppendLine("<%@ Control Language='C#' AutoEventWireup='true' ClientIDMode='Static' %>");
                             html.AppendLine("<div id='" + newAppID + "-load' class='main-div-app-bg'>");
-                            if ((_username.ToLower() == ServerSettings.AdminUserName.ToLower()) || (!_ss.LockASCXEdit)) {
+                            if (!_ss.LockASCXEdit) {
                                 html.AppendLine(editor);
                             }
                             html.AppendLine("</div>");

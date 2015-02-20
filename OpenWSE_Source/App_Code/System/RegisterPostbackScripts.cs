@@ -98,7 +98,7 @@ public class RegisterPostbackScripts {
                 }
             }
             catch (Exception e) {
-                new AppLog(false).AddError(e);
+                AppLog.AddError(e);
             }
         }
 
@@ -228,8 +228,7 @@ public class RegisterPostbackScripts {
                         if (!string.IsNullOrEmpty(_username))
                             _apps.DeleteAppLocal(id, _username);
 
-                        AppLog applog = new AppLog(false);
-                        applog.AddError(ex);
+                        AppLog.AddError(ex);
                     }
                 }
             }
@@ -388,8 +387,7 @@ public class RegisterPostbackScripts {
                                         if (!string.IsNullOrEmpty(_username))
                                             _apps.DeleteAppLocal(appId, _username);
 
-                                        AppLog appLog = new AppLog(false);
-                                        appLog.AddError(ex);
+                                        AppLog.AddError(ex);
                                     }
                                 }
 

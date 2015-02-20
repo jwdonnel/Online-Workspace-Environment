@@ -103,7 +103,8 @@ public class SideBarItems : Page {
                         }
 
                         string title = node.Title;
-                        if (node.HasChildNodes) {
+
+                        if ((string.IsNullOrEmpty(node["nodisplaychildren"]) || node["nodisplaychildren"] == "false") && (node.HasChildNodes)) {
                             string expandBtn = "<span class='img-expand-sml' title='Expand links' onclick='openWSE.ExpandAdminLinks(this, \"" + tempUrl + "-sub-link\");return false;'></span>";
                             appScript.Append("<a class='app-icon-links' href='" + node.Url + "'" + target + toolTip + ">" + icon + "<span class='app-icon-font'>" + expandBtn + title + "</span></a>");
                             appScript.Append("<div class='app-icon-sub-link-holder " + tempUrl + "-sub-link' style='display: none;'>");

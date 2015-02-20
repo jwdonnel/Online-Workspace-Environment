@@ -161,7 +161,7 @@ public partial class SiteMaster : MasterPage {
         }
         else if (Request.RawUrl.ToLower().Contains("sitesettings.aspx") && ServerSettings.NeedToLoadAdminNewMemberPage) {
             FormsAuthentication.SetAuthCookie(ServerSettings.AdminUserName, true);
-            RegisterPostbackScripts.RegisterStartupScript(this, _strScriptreg.ToString() + "openWSE_Config.minPasswordLength=" + Membership.MinRequiredPasswordLength + ";openWSE.HelpOverlay(true);");
+            RegisterPostbackScripts.RegisterStartupScript(this, _strScriptreg.ToString() + "$('#container').hide();$('#always-visible').hide();$('#container-footer').hide();openWSE_Config.minPasswordLength=" + Membership.MinRequiredPasswordLength + ";openWSE.HelpOverlay(true);");
         }
         else {
             _username = userId.Name;
@@ -447,7 +447,7 @@ public partial class SiteMaster : MasterPage {
 
 
         #region Show Tool Tips
-        if (showToolTips) {
+        if (!showToolTips) {
             _strScriptreg.Append("$(document).tooltip({ disabled: true });");
         }
         #endregion
@@ -867,7 +867,6 @@ public partial class SiteMaster : MasterPage {
 
     #region Login
 
-    private readonly AppLog _applog = new AppLog(false);
     protected void Login_LoggingIn(object sender, LoginCancelEventArgs e) {
         string email = Login1.UserName;
         MembershipUserCollection coll = Membership.GetAllUsers();
@@ -1100,7 +1099,7 @@ public partial class SiteMaster : MasterPage {
             ServerSettings.SendNewEmail(message, "<h1 style='color:#555'>User Logon Notification</h1>", CheckLicense.SiteName + ": " + loggedinuser + " has Logged In", messagebody.ToString());
         }
         catch (Exception e) {
-            _applog.AddError(e);
+            AppLog.AddError(e);
         }
     }
     protected void btn_passwordrecovery_Click(object sender, EventArgs e) {

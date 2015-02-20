@@ -48,30 +48,6 @@
             text-decoration: underline;
         }
 
-        .sb-links, .cb-links
-        {
-            transition: all .1s ease-in-out;
-            -moz-transition: all .1s ease-in-out;
-            -webkit-transition: all .1s ease-in-out;
-            cursor: pointer;
-            border: 1px solid transparent;
-            padding: 3px;
-        }
-
-        .sb-links
-        {
-            color: #555;
-            -moz-border-radius: 2px;
-            -webkit-border-radius: 2px;
-            border-radius: 2px;
-        }
-
-            .sb-links:hover
-            {
-                color: #555!important;
-                text-decoration: underline;
-            }
-
         .margin-right-sml
         {
             margin-right: 3px;
@@ -90,7 +66,7 @@
             EnableHistory="true" EnableSecureHistoryState="False" AsyncPostBackTimeout="360000" />
         <asp:HiddenField ID="hf_appID" runat="server" />
         <asp:LinkButton ID="lb_downloadApp" runat="server" OnClick="lb_downloadApp_Click"
-            PostBackUrl="~/SiteTools/iframes/AppDownloadBtn.aspx" CssClass="float-right margin-right-sml sb-links"></asp:LinkButton>
+            PostBackUrl="~/SiteTools/iframes/AppDownloadBtn.aspx" CssClass="float-right margin-right-sml"></asp:LinkButton>
     </form>
 </body>
 </html>

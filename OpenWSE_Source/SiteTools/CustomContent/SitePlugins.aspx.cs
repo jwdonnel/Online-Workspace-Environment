@@ -14,7 +14,6 @@ using System.Text.RegularExpressions;
 public partial class SiteTools_SitePlugins : System.Web.UI.Page {
     #region private variables
 
-    private readonly AppLog _applog = new AppLog(false);
     private ServerSettings _ss = new ServerSettings();
     private string _sitetheme = "Standard";
     private string _username;
@@ -38,7 +37,7 @@ public partial class SiteTools_SitePlugins : System.Web.UI.Page {
                 lbl_appInstaller.Text = apps.GetAppName("app-appinstaller");
 
                 CheckQueryString();
-                if ((_username.ToLower() == ServerSettings.AdminUserName.ToLower()) || (!_ss.SitePluginsLocked)) {
+                if (!_ss.SitePluginsLocked) {
                     pnl_AddControls.Enabled = true;
                     pnl_AddControls.Visible = true;
                     BuildTable_Editable("");
@@ -495,7 +494,7 @@ public partial class SiteTools_SitePlugins : System.Web.UI.Page {
                             }
                         }
                         catch (Exception ex) {
-                            _applog.AddError(ex);
+                            AppLog.AddError(ex);
                         }
                     }
                     else if (File.Exists(filename)) {
@@ -503,7 +502,7 @@ public partial class SiteTools_SitePlugins : System.Web.UI.Page {
                             File.Delete(filename);
                         }
                         catch (Exception ex) {
-                            _applog.AddError(ex);
+                            AppLog.AddError(ex);
                         }
                     }
                 }

@@ -127,7 +127,6 @@ public class DBImporter_Coll
 [Serializable]
 public class DBImporter
 {
-    private readonly AppLog applog = new AppLog(false);
     private readonly string encryptloc;
     private readonly string loc;
     private List<DBImporter_Coll> _coll = new List<DBImporter_Coll>();
@@ -164,7 +163,7 @@ public class DBImporter
         }
         catch (Exception e)
         {
-            applog.AddError(e);
+            AppLog.AddError(e);
         }
     }
 
@@ -187,7 +186,7 @@ public class DBImporter
         }
         catch (Exception e)
         {
-            applog.AddError(e);
+            AppLog.AddError(e);
         }
     }
 
@@ -202,7 +201,7 @@ public class DBImporter
         }
         catch (Exception e)
         {
-            applog.AddError(e);
+            AppLog.AddError(e);
         }
     }
 
@@ -225,7 +224,7 @@ public class DBImporter
         }
         catch (Exception e)
         {
-            applog.AddError(e);
+            AppLog.AddError(e);
         }
     }
 

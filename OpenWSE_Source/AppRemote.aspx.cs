@@ -579,7 +579,6 @@ public partial class AppRemote : System.Web.UI.Page {
 
     #region Login
 
-    private readonly AppLog _applog = new AppLog(false);
     protected void Login_LoggingIn(object sender, LoginCancelEventArgs e) {
         string email = Login1.UserName;
         MembershipUserCollection coll = Membership.GetAllUsers();
@@ -800,7 +799,7 @@ public partial class AppRemote : System.Web.UI.Page {
             ServerSettings.SendNewEmail(message, "<h1 style='color:#555'>User Logon Notification</h1>", CheckLicense.SiteName + ": " + loggedinuser + " has Logged In", messagebody.ToString());
         }
         catch (Exception e) {
-            _applog.AddError(e);
+            AppLog.AddError(e);
         }
     }
     protected void btn_passwordrecovery_Click(object sender, EventArgs e) {

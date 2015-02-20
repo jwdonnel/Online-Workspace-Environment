@@ -229,8 +229,8 @@ function editfolder(_this, folder) {
     document.getElementById(currEdit).style.display = 'none';
     var element = $(_this).closest('div');
     element.append("<input id='tb_editfolderentry' maxlength='15' type='text' value='" + folder.replace(/_/g, " ") + "' class='textEntry margin-right-sml' style='width: 105px;' />");
-    element.append("<small><a href='#canceledit' onclick='canceleditfolder();return false;' class='sb-links RandomActionBtns-docs margin-right-sml float-right'>Cancel</a></small>");
-    element.append("<small><a href='#updatefolder' onclick=\"updatefolder('" + folder + "');return false;\" class='sb-links RandomActionBtns-docs margin-right-sml float-right'>Update</a></small>");
+    element.append("<small><a href='#canceledit' onclick='canceleditfolder();return false;' class='RandomActionBtns-docs margin-right-sml float-right'>Cancel</a></small>");
+    element.append("<small><a href='#updatefolder' onclick=\"updatefolder('" + folder + "');return false;\" class='RandomActionBtns-docs margin-right-sml float-right'>Update</a></small>");
     window.setTimeout(function () { openWSE.RemoveUpdateModal(); }, 500);
 }
 

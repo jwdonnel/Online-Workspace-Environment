@@ -8,6 +8,10 @@ $(window).load(function () {
         LoadCategoryCookies(true);
     }
     catch (evt) { }
+
+    $(".sitemenu-selection").find("li").on("click", function () {
+        openWSE.LoadingMessage1("Loading...");
+    });
 });
 
 function ConfirmLoaderFileCancel(_this) {
@@ -166,39 +170,31 @@ $(document.body).on("change", "#MainContent_fu_image_edit", function () {
 
 function ChangeIconUploadType(x) {
     if (x == 0) {
-        $("#uploadIcon").fadeOut(openWSE_Config.animationSpeed, function () {
-            $("#uploadIcon-tab").removeClass("selected");
-            $("#urlIcon").fadeIn(openWSE_Config.animationSpeed, function () {
-                $("#urlIcon-tab").addClass("selected");
-            });
-        });
+        $("#urlIcon-tab").hide();
+        $("#uploadIcon-tab").show();
+        $("#uploadIcon").hide();
+        $("#urlIcon").show();
     }
     else {
-        $("#urlIcon").fadeOut(openWSE_Config.animationSpeed, function () {
-            $("#urlIcon-tab").removeClass("selected");
-            $("#uploadIcon").fadeIn(openWSE_Config.animationSpeed, function () {
-                $("#uploadIcon-tab").addClass("selected");
-            });
-        });
+        $("#uploadIcon-tab").hide();
+        $("#urlIcon-tab").show();
+        $("#urlIcon").hide();
+        $("#uploadIcon").show();
     }
 }
 
 function ChangeIconUploadTypeEdit(x) {
     if (x == 0) {
-        $("#uploadIcon-edit").fadeOut(openWSE_Config.animationSpeed, function () {
-            $("#uploadIcon-tab-edit").removeClass("selected");
-            $("#urlIcon-edit").fadeIn(openWSE_Config.animationSpeed, function () {
-                $("#urlIcon-tab-edit").addClass("selected");
-            });
-        });
+        $("#urlIcon-tab-edit").hide();
+        $("#uploadIcon-tab-edit").show();
+        $("#uploadIcon-edit").hide();
+        $("#urlIcon-edit").show();
     }
     else {
-        $("#urlIcon-edit").fadeOut(openWSE_Config.animationSpeed, function () {
-            $("#urlIcon-tab-edit").removeClass("selected");
-            $("#uploadIcon-edit").fadeIn(openWSE_Config.animationSpeed, function () {
-                $("#uploadIcon-tab-edit").addClass("selected");
-            });
-        });
+        $("#uploadIcon-tab-edit").hide();
+        $("#urlIcon-tab-edit").show();
+        $("#urlIcon-edit").hide();
+        $("#uploadIcon-edit").show();
     }
 }
 
@@ -665,18 +661,14 @@ function CancelParameterEdit() {
 /* Password Protected Requests */
 /* --------------------------- */
 function Confirm_Delete() {
-    $("#db_overlay").css("display", "block");
-    $("#db_overlay").css("visibility", "visible");
-    $("#db_modal").css("display", "block");
-    $("#db_modal").css("opacity", "1.0");
-    $("#db_modal").css("filter", "alpha(opacity=100)");
+    openWSE.RemoveUpdateModal();
+    openWSE.LoadModalWindow(true, "password-element", "Need Password to Continue");
     $("#MainContent_tb_passwordConfirm").focus();
 }
 
 function OnDelete() {
     openWSE.ConfirmWindow("Are you sure you want to delete this app? App will have to be reapplied to all users if re-installed.",
       function () {
-          openWSE.LoadingMessage1("Please Wait...");
           dbType = "delete";
           Confirm_Delete();
           return true;
@@ -689,18 +681,16 @@ function OnDelete() {
 }
 
 function CancelRequest() {
-    $("#db_overlay").css("display", "none");
-    $("#db_overlay").css("visibility", "hidden");
-    $("#db_modal").fadeOut(openWSE_Config.animationSpeed);
+    openWSE.LoadModalWindow(false, "password-element", "");
     dbType = "";
     $("#MainContent_tb_passwordConfirm").val("");
 }
 
 function BeginWork() {
-    $("#db_overlay").css("display", "none");
-    $("#db_overlay").css("visibility", "hidden");
-    $("#db_modal").fadeOut(openWSE_Config.animationSpeed);
-    openWSE.LoadingMessage1("Deleting App. Please Wait...");
+    openWSE.LoadModalWindow(false, "password-element", "");
+    setTimeout(function () {
+        openWSE.LoadingMessage1("Deleting App. Please Wait...");
+    }, 500);
     $("#hf_StartDelete").val(new Date().toString());
     __doPostBack("hf_StartDelete", "");
 }

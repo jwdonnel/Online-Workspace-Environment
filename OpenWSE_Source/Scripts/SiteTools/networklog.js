@@ -11,11 +11,12 @@ $(document).ready(function () {
         google.load("visualization", "1", { callback: function () { }, packages: ["corechart"] });
     });
 
-    var url = location.hash;
+    openWSE.RadioButtonStyle();
 
     startGraphTimer1();
     BuildGraphs();
 
+    var url = location.href;
     load(url == "" ? "1" : url);
 
     $("#MainContent_tb_search").autocomplete({
@@ -76,84 +77,18 @@ function ConfirmClearAllLoginActivity(_this) {
     return false;
 }
 
-$(function () {
-    $(window).hashchange(function () {
-        var url = location.hash;
-        load(url == "" ? "1" : url);
-    });
-});
-
 $(document.body).on("click", ".searchbox_clear", function () {
     openWSE.LoadingMessage1("Updating...");
     $('#hf_searchreset').val(new Date().toString());
     __doPostBack("hf_searchreset", "");
 });
 
-var prevTab = "";
-$(document.body).on("click", ".homedashlinks li a", function () {
-    try {
-        var temp_prevTab = prevTab;
-        $('.homedashlinks li').each(function () {
-            var can_remove = true;
-            if ($(this).hasClass('active')) {
-                var $t = $(this).children();
-                var temp = $t.attr("href");
-                temp = temp.split("#?a=");
-                if (temp.length > 1) {
-                    var temp2 = temp[1].split("#");
-                    if (temp2.length > 1) {
-                        if (temp2[0] == prevTab) {
-                            can_remove = false;
-                            prevTab = "";
-                        }
-                        else {
-                            prevTab = temp2[0];
-                        }
-                    }
-                    else {
-                        if (temp[1] == prevTab) {
-                            can_remove = false;
-                            prevTab = "";
-                        }
-                        else {
-                            prevTab = temp[1];
-                        }
-                    }
-                }
-            }
-            if (can_remove) {
-                $(this).removeClass("active");
-            }
-        });
-        if (prevTab != "") {
-            var newtab = "";
-            var temp3 = $(this).attr("href");
-            temp3 = temp3.split("#?a=");
-            if (temp3.length > 1) {
-                var temp4 = temp3[1].split("#");
-                if (temp4.length > 1) {
-                    newtab = temp4[0];
-                }
-                else {
-                    newtab = temp3[1];
-                }
-            }
-            $(this).parent().addClass("active");
-            $("#" + prevTab).fadeOut(openWSE_Config.animationSpeed, function () {
-                $("#" + newtab).fadeIn(openWSE_Config.animationSpeed);
-            });
-        }
-        else {
-            prevTab = temp_prevTab;
-        }
-    }
-    catch (evt) {
-        openWSE.AlertWindow("Error opening tab!");
-    }
-});
-
 $(document.body).on("click", "#btn_createnew_listener", function () {
     AddIPToListener();
+});
+
+$(document.body).on("change", "#cb_ViewErrorsOnly", function () {
+    openWSE.LoadingMessage1('Updating. Please Wait...');
 });
 
 $(document.body).on("keydown", "#tb_createnew_listener", function (e) {
@@ -501,9 +436,11 @@ function startGraphTimer1() {
     }, (updateinterval));
 }
 
+var currentTab = "";
 var prm = Sys.WebForms.PageRequestManager.getInstance();
 prm.add_endRequest(function () {
-    load(window.location.href);
+    openWSE.RadioButtonStyle();
+    load(currentTab);
     $("#MainContent_tb_search").autocomplete({
         minLength: 0,
         source: function (request, response) {
@@ -561,116 +498,56 @@ function DeleteEvent(id) {
         }, null);
 }
 
+$(function () {
+    $(".sitemenu-selection").find("li").find("a").on("click", function () {
+        load($(this).attr("href"));
+        return false;
+    });
+});
+
 function load(num) {
-    $(".RadioButton-Toggle-Overlay").remove();
-    openWSE.RadioButtonStyle();
     clearTimeout(timeOut1);
     clearTimeout(timeOut2);
+
+    currentTab = num;
+
     $("#search_box").hide();
-    $(".homedashlinks li").each(function () {
-        $(this).removeClass("active");
-        var div = $(this).find("a").attr("href").replace("#?a=", "");
-        if ($("#" + div).length > 0) {
-            $("#" + div).hide();
+    $(".pnl-section").hide();
+    $(".sitemenu-selection").find("li").removeClass("active");
+
+    var index = 0;
+
+    var arg1 = num.split("?tab=");
+    if (arg1.length > 1) {
+        var arg2 = arg1[1].split("#");
+        if (arg2.length == 1) {
+            index = GetPnlSectionIndex(arg2[0]);
+        }
+    }
+
+    $(".pnl-section").eq(index).show();
+    $(".sitemenu-selection").find("li").eq(index).addClass("active");
+
+    switch (index) {
+        case 0:
+            startGraphTimer1();
+            BuildGraphs();
+            break;
+
+        case 1:
+        case 2:
+            $("#search_box").show();
+            break;
+    }
+}
+
+function GetPnlSectionIndex(ele) {
+    var pnlIndex = 0;
+    $(".pnl-section").each(function (index) {
+        if ($(this).attr("id") == ele) {
+            pnlIndex = index;
         }
     });
 
-    arg1 = num.split("?a=");
-    if (arg1.length > 1) {
-        arg2 = arg1[1].split("#");
-        if (arg2.length == 1) {
-            arg2 = arg2[0].split("&");
-            if (arg2[0] == "activity") {
-                startGraphTimer1();
-                if (prevTab == "activity") {
-                    $("#activity").show();
-                }
-                else {
-                    $("#activity").fadeIn(openWSE_Config.animationSpeed);
-                }
-                $("#hdl1").addClass("active");
-                BuildGraphs();
-                prevTab = "activity";
-                document.title = "Network Activity: Graphs";
-            }
-            else if (arg2[0] == "errors") {
-                if (prevTab == "errors") {
-                    $("#errors").show();
-                    $("#search_box").show();
-                }
-                else {
-                    $("#errors").fadeIn(openWSE_Config.animationSpeed);
-                    $("#search_box").fadeIn(openWSE_Config.animationSpeed);
-                }
-                $("#hdl2").addClass("active");
-                prevTab = "errors";
-                document.title = "Network Activity: Error Log";
-            }
-            else if (arg2[0] == "ignore") {
-                if (prevTab == "ignore") {
-                    $("#ignore").show();
-                    $("#search_box").show();
-                }
-                else {
-                    $("#ignore").fadeIn(openWSE_Config.animationSpeed);
-                    $("#search_box").fadeIn(openWSE_Config.animationSpeed);
-                }
-                $("#hdl3").addClass("active");
-                prevTab = "ignore";
-                document.title = "Network Activity: Ignored Requests";
-            }
-            else if (arg2[0] == "loginActivity") {
-                if (prevTab == "loginActivity") {
-                    $("#loginActivity").show();
-                }
-                else {
-                    $("#loginActivity").fadeIn(openWSE_Config.animationSpeed);
-                }
-                $("#hdl4").addClass("active");
-                prevTab = "loginActivity";
-                document.title = "Network Activity: Login Activity";
-            }
-            else if (arg2[0] == "ipwatchlist") {
-                if (prevTab == "ipwatchlist") {
-                    $("#ipwatchlist").show();
-                }
-                else {
-                    $("#ipwatchlist").fadeIn(openWSE_Config.animationSpeed);
-                }
-                $("#hdl5").addClass("active");
-                prevTab = "ipwatchlist";
-                document.title = "Network Activity: IP Watch List";
-            }
-            else if (arg2[0] == "iplistener") {
-                if (prevTab == "iplistener") {
-                    $("#iplistener").show();
-                }
-                else {
-                    $("#iplistener").fadeIn(openWSE_Config.animationSpeed);
-                }
-                $("#hdl6").addClass("active");
-                prevTab = "iplistener";
-                document.title = "Network Activity: IP Listener";
-            }
-        }
-    }
-    else {
-        startGraphTimer1();
-        if (prevTab == "activity") {
-            $("#activity").show();
-        }
-        else {
-            $("#activity").fadeIn(openWSE_Config.animationSpeed);
-        }
-        $("#hdl1").addClass("active");
-        BuildGraphs();
-        prevTab = "activity";
-        document.title = "Network Activity: Graphs";
-    }
-
-    if (typeof GetCurrentPage == 'function') {
-        GetCurrentPage();
-    }
-
-    openWSE.RemoveUpdateModal();
+    return pnlIndex;
 }

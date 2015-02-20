@@ -1,6 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Items>
-    <version>ver. 4.2.5</version>
+    <version>ver. 4.2.6</version>
+    <log name="2/18/2015">
+        Html rewrite of the Site Tool pages.<br />
+        Css Style changes to the setting menus.<br />
+        You can now delete your account from your Account Settings.<br />
+        DatabaseCall Insert fix - If columns did not match the correct order that it appears in the database, it would throw an error.
+    </log>
+    <log name="2/13/2015">
+        Menu style changes.<br />
+        Removed unused css code for all pages.<br />
+        Code cleanup.
+    </log>
     <log name="2/10/2015">
         Added auto fix feature to the database. If database is every out of date, it can be udpated automatically by anyone.<br />
         Apps can now be placed into multiple categories.

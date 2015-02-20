@@ -16,7 +16,7 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding pad-top-big margin-top">
+    <div class="maincontent-padding margin-top">
         <asp:UpdatePanel ID="updatepnl_refresh" runat="server">
             <ContentTemplate>
                 <asp:HiddenField ID="hf_edit" runat="server" OnValueChanged="hf_edit_ValueChanged"
@@ -34,50 +34,52 @@
         </asp:UpdatePanel>
         <asp:UpdatePanel ID="updatepnl_header" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
-                <small><b class="pad-right-sml">Note:</b>These app packages are used for the app installer
-                within the user accounts setup.</small>
-                <div class="clear-margin">
-                    <div class="clear-space">
+                <div class="table-settings-box no-border" style="padding-bottom: 0px!important;">
+                    <div class="td-settings-ctrl">
+                        <a href="#" class="margin-right-big input-buttons" onclick="openWSE.LoadModalWindow(true, 'NewPackage-element', 'Create New App Package');$('#MainContent_tb_packagename').focus();return false;">
+                            <span class="td-add-btn float-left margin-right-sml" style="padding: 0!important;"></span>Create a Package</a> <b class="pad-right">Package Count</b><asp:Label ID="lbl_packagecount"
+                                runat="server" Text="0"></asp:Label>
                     </div>
-                    <asp:Panel ID="pnl_app_installer" runat="server" DefaultButton="btn_updateinstaller">
-                        <small>Select the package you would like to use for the App Installer.</small>
-                        <div class="clear-space-two">
-                        </div>
-                        <div class="float-left pad-top-sml" style="width: 185px;">
-                            <b class="pad-right">App Installer Package</b>
-                        </div>
-                        <asp:DropDownList ID="dd_appinstaller" runat="server">
-                        </asp:DropDownList>
-                        <asp:LinkButton ID="btn_updateinstaller" runat="server" Text="Update" CssClass="sb-links margin-left RandomActionBtns"
-                            OnClick="btn_updateinstaller_Click" />
-                    </asp:Panel>
-                    <div class="clear-space">
-                    </div>
-                    <div class="clear-space">
-                    </div>
-                    <asp:Panel ID="pnl_demo_installer" runat="server" DefaultButton="btn_updatedemo">
-                        <small>Select the package you would like to use for the Demo Site and the Non-Authenticated
-                        users (The Non-Authenticated has to be enabled by the administrator).</small>
-                        <div class="clear-space-two">
-                        </div>
-                        <div class="float-left pad-top-sml" style="width: 185px;">
-                            <b class="pad-right">App Demo Package</b>
-                        </div>
-                        <asp:DropDownList ID="dd_appdemo" runat="server">
-                        </asp:DropDownList>
-                        <asp:LinkButton ID="btn_updatedemo" runat="server" Text="Update" CssClass="sb-links margin-left RandomActionBtns"
-                            OnClick="btn_updatedemo_Click" />
-                    </asp:Panel>
-                    <div class="clear-space">
-                    </div>
-                    <div class="clear-space">
+                    <div class="td-settings-desc">
+                        These app packages are used for the app installer
+                within the user accounts setup.
                     </div>
                 </div>
-                <div class="clear">
-                </div>
-                <a class="sb-links margin-right-big" onclick="openWSE.LoadModalWindow(true, 'NewPackage-element', 'Create New App Package');$('#MainContent_tb_packagename').focus();return false;">
-                    <span class="td-add-btn float-left margin-right-sml" style="padding: 0!important;"></span>Create a Package</a> <b class="pad-right">Package Count</b><asp:Label ID="lbl_packagecount"
-                        runat="server" Text="0"></asp:Label>
+                <asp:Panel ID="pnl_app_installer" runat="server" DefaultButton="btn_updateinstaller">
+                    <div class="table-settings-box">
+                        <div class="td-settings-title">
+                            App Installer Package
+                        </div>
+                        <div class="title-line"></div>
+                        <div class="td-settings-ctrl">
+                            <asp:DropDownList ID="dd_appinstaller" runat="server">
+                            </asp:DropDownList>
+                            <asp:Button ID="btn_updateinstaller" runat="server" Text="Update" CssClass="margin-left input-buttons RandomActionBtns"
+                                OnClick="btn_updateinstaller_Click" />
+                        </div>
+                        <div class="td-settings-desc">
+                            Select the package you would like to use for the App Installer.
+                        </div>
+                    </div>
+                </asp:Panel>
+                <asp:Panel ID="pnl_demo_installer" runat="server" DefaultButton="btn_updatedemo">
+                    <div class="table-settings-box">
+                        <div class="td-settings-title">
+                            App Demo Package
+                        </div>
+                        <div class="title-line"></div>
+                        <div class="td-settings-ctrl">
+                            <asp:DropDownList ID="dd_appdemo" runat="server">
+                            </asp:DropDownList>
+                            <asp:Button ID="btn_updatedemo" runat="server" Text="Update" CssClass="margin-left input-buttons RandomActionBtns"
+                                OnClick="btn_updatedemo_Click" />
+                        </div>
+                        <div class="td-settings-desc">
+                            Select the package you would like to use for the Demo Site and the Non-Authenticated
+                        users (The Non-Authenticated has to be enabled by the administrator).
+                        </div>
+                    </div>
+                </asp:Panel>
                 <div class="clear-space">
                 </div>
                 <div class="clear-space">

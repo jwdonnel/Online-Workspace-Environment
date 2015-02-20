@@ -20,32 +20,41 @@
         <div id="app_title_bg" runat="server" class="app-Settings-title-bg-color-main">
             <div class="pad-all">
                 <div class="app-Settings-title-user-info">
-                    <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-                        <ContentTemplate>
-                            <div class="float-left">
-                                <asp:Label ID="Label1" runat="server" CssClass="page-title" Text="Outgoing Email Customizations"></asp:Label>
-                            </div>
-                            <ul class="homedashlinks float-right">
-                                <li id="hdl1" class="active">
-                                    <asp:LinkButton ID="lbtn_header" runat="server" CssClass="RandomActionBtns"
-                                        OnClick="lbtn_header_Checked" Text="Header Message" /></li>
-                                <li id="hdl2">
-                                    <asp:LinkButton ID="lbtn_footer" runat="server" CssClass="RandomActionBtns"
-                                        OnClick="lbtn_footer_Checked" Text="Footer Message" />
-                                </li>
-                            </ul>
-                        </ContentTemplate>
-                    </asp:UpdatePanel>
+                    <div class="float-left">
+                        <asp:Label ID="Label1" runat="server" CssClass="page-title" Text="Outgoing Email Customizations"></asp:Label>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="clear" style="height: 25px;">
+        </div>
+        <div class="pad-left-big pad-right-big">
+            <asp:Panel ID="pnlLinkBtns" runat="server">
+                <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                    <ContentTemplate>
+                        <ul class="sitemenu-selection">
+                            <li class="active">
+                                <asp:LinkButton ID="lbtn_header" runat="server" CssClass="RandomActionBtns"
+                                    OnClick="lbtn_header_Checked" Text="Header Message" /></li>
+                            <li>
+                                <asp:LinkButton ID="lbtn_footer" runat="server" CssClass="RandomActionBtns"
+                                    OnClick="lbtn_footer_Checked" Text="Footer Message" /></li>
+                        </ul>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+            </asp:Panel>
+        </div>
+        <div class="clear-space">
+        </div>
+        <div class="clear-space">
+        </div>
         <div style="padding: 15px 30px">
             <div class="clear-margin" style="margin-top: 10px">
-                <small><b class="pad-right-sml">Note:</b>These settings will stylize all outgoing emails sent
+                These settings will stylize all outgoing emails sent
             by the site. Edit the header and footer of the email to give it a custom look.<br />
                     If you wish to put a custom message title in the header, place [MESSAGE_TITLE] anywhere
             in the header/footer. Using the message title override will remove the default message
-            title.</small>
+            title.
             </div>
             <script type="text/javascript" src="<%=ResolveUrl("~/Scripts/SiteCalls/Min/openwse.min.js") %>"></script>
             <script type="text/javascript">
@@ -104,8 +113,8 @@
                 }
 
                 $(document.body).on("click", "#btn1", function () {
-                    var x = tinymce.activeEditor.getContent();
-                    if (x != null) {
+                    var x = $.trim(tinymce.activeEditor.getContent());
+                    if (x != null && x != "") {
                         openWSE.LoadingMessage1("Updating. Please Wait...");
                         if ($(this).val() == "Update Header") {
                             $("#hf_UpdateHeader").val(escape(x));
@@ -150,10 +159,10 @@
                     <ContentTemplate>
                         <div class="clear-space">
                         </div>
-                        <asp:LinkButton ID="lbtn_ClearHeader" runat="server" CssClass="sb-links float-right"
+                        <asp:LinkButton ID="lbtn_ClearHeader" runat="server" CssClass="float-right"
                             OnClick="lbtn_ClearHeader_Checked" OnClientClick=""
                             Text="Clear Header" />
-                        <asp:LinkButton ID="lbtn_ClearFooter" runat="server" CssClass="sb-links float-right"
+                        <asp:LinkButton ID="lbtn_ClearFooter" runat="server" CssClass="float-right"
                             OnClick="lbtn_ClearFooter_Checked"
                             Text="Clear Footer" />
                         <div class="clear" style="height: 60px">

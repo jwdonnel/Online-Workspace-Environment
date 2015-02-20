@@ -61,11 +61,7 @@ function DeleteTable(id, name) {
        function () {
            if (id != "") {
                $("#hf_tableDeleteID").val(id);
-               $("#db_overlay").css("display", "block");
-               $("#db_overlay").css("visibility", "visible");
-               $("#db_modal").css("display", "block");
-               $("#db_modal").css("opacity", "1.0");
-               $("#db_modal").css("filter", "alpha(opacity=100)");
+               openWSE.LoadModalWindow(true, "password-element", "Need Password to Continue");
                $("#hf_buRestore_type").val("RestoreLast");
                $("#MainContent_tb_passwordConfirm").focus();
            }
@@ -73,17 +69,13 @@ function DeleteTable(id, name) {
 }
 
 function CancelDelete() {
-    $("#db_overlay").css("display", "none");
-    $("#db_overlay").css("visibility", "hidden");
-    $("#db_modal").fadeOut(300);
+    openWSE.LoadModalWindow(false, "password-element", "");
     $("#hf_tableDeleteID").val("");
     $("#MainContent_tb_passwordConfirm").val("");
 }
 
 function PerformDelete(id) {
-    $("#db_overlay").css("display", "none");
-    $("#db_overlay").css("visibility", "hidden");
-    $("#db_modal").fadeOut(300);
+    openWSE.LoadModalWindow(false, "password-element", "");
     setTimeout(function () {
         openWSE.LoadingMessage1("Deleting Table. Please Wait...");
     }, 500);

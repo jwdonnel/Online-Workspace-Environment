@@ -42,7 +42,7 @@ public class DBViewer {
     public void GetTableData(string tablename, bool recordErrors = true) {
         dataTable = new DataTable();
 
-        dbCall.NeedToLogErrors = recordErrors;
+        dbCall.NeedToLog = recordErrors;
 
         List<Dictionary<string, string>> dbSelect = dbCall.CallSelect(tablename, "", null);
         if (dbSelect.Count >= 0) {
@@ -63,7 +63,7 @@ public class DBViewer {
             }
         }
 
-        dbCall.NeedToLogErrors = true;
+        dbCall.NeedToLog = true;
     }
 
     public void GetCustomDataSort(string tablename, string sortCol = "", string sortDir = "") {

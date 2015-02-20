@@ -67,7 +67,7 @@ namespace SocialSignInApis.Facebook {
                     }
                 }
                 catch (Exception e) {
-                    new AppLog(false).AddError(e);
+                    AppLog.AddError(e);
                 }
             }
         }

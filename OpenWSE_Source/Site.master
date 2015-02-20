@@ -292,7 +292,7 @@
                                     <div class="sidebar-divider"></div>
                                     <asp:Panel ID="pnl_chat_users" runat="server" CssClass="li-pnl-tab">
                                         <div id="statusDiv" class="pad-top pad-left pad-right pad-bottom-big">
-                                            <b class="float-left pad-right pad-top">Status:</b><a href="#" class="sb-links chatstatus_mid">
+                                            <b class="float-left pad-right">Your Status:</b><a href="#" class="chatstatus_mid">
                                                 <span id="currentStatus" style="width: 130px;"></span></a>
                                             <div id="ul_StatusList" style="display: none;">
                                                 <ul style="list-style: none;">
@@ -377,8 +377,7 @@
                 <div id="footer-signdate" class="float-right pad-left pad-right">
                     John Donnelly | OpenWSE 2015 |
                     <a href="#" title="Open Mobile Workspace" class="my-app-remote-link" onclick="return openWSE.OpenMobileWorkspace();">Mobile</a> | 
-                    <a href="#iframecontent" onclick="openWSE.LoadIFrameContent('About.aspx', this);return false;" class="margin-right">About</a>-
-                    <a id="iwantthis" href="~/About.aspx#IWantThis" runat="server" title="Find out more" class="float-right margin-left" style="font-size: 14px;"><span class="img-present float-left margin-right-sml"></span>I want this</a>
+                    <a href="#iframecontent" onclick="openWSE.LoadIFrameContent('About.aspx', this);return false;">About</a>
                 </div>
             </div>
         </div>
@@ -431,7 +430,7 @@
                                     <div class="clear-space">
                                     </div>
                                     <div class="pad-top-big pad-bottom border-top" style="height: 25px;">
-                                        <a href="#" id="btn_uninstallApp" runat="server" visible="false" class="sb-links">
+                                        <a href="#" id="btn_uninstallApp" runat="server" visible="false">
                                             <span class="td-delete-btn float-left margin-right-sml" style="padding: 0px!important;"></span>Remove</a>
                                         <input type="button" value="Close" onclick="openWSE.LoadModalWindow(false, 'aboutApp-element', '');" class="input-buttons no-margin float-right" />
                                     </div>

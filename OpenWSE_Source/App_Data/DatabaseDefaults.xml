@@ -113,7 +113,6 @@
             <Column id="LockStartupScripts" type="bit" nullable="true"></Column>
             <Column id="LockASCXEdit" type="bit" nullable="true"></Column>
             <Column id="LockCustomTables" type="bit" nullable="true"></Column>
-            <Column id="LockIPListener" type="bit" nullable="true"></Column>
             <Column id="LoginScreenTheme" type="nvarchar" length="250" nullable="true"></Column>
             <Column id="AllowUserSignUp" type="bit" nullable="true"></Column>
             <Column id="UserSignUpEmailChecker" type="bit" nullable="true"></Column>
@@ -158,6 +157,8 @@
             <Column id="MetaTagDescription" type="nvarchar" length="4000" nullable="true"></Column>
             <Column id="MetaTagKeywords" type="nvarchar" length="4000" nullable="true"></Column>
             <Column id="AutoFixDBIssues" type="bit" nullable="true"></Column>
+            <Column id="RecordErrorsOnly" type="bit" nullable="true"></Column>
+            <Column id="LockIPListenerWatchlist" type="bit" nullable="true"></Column>
         </Columns>
     </Table>
     <Table name="aspnet_ShowUpdates">

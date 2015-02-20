@@ -16,7 +16,6 @@ public partial class SiteTools_ProjectExplorer : System.Web.UI.Page {
     #region Variables
 
     private ServerSettings _ss = new ServerSettings();
-    private readonly AppLog _applog = new AppLog(false);
     private IIdentity _userId;
     private string _username;
     private string _ctrlname;
@@ -466,7 +465,7 @@ public partial class SiteTools_ProjectExplorer : System.Web.UI.Page {
             RegisterPostbackScripts.RegisterStartupScript(this, str.ToString());
         }
         catch (Exception ex) {
-            _applog.AddError(ex);
+            AppLog.AddError(ex);
             RegisterPostbackScripts.RegisterStartupScript(this, "openWSE.AlertWindow('There was an error creating your new page. Page was not added.');");
         }
 
@@ -518,7 +517,7 @@ public partial class SiteTools_ProjectExplorer : System.Web.UI.Page {
             PageList.Add(editor);
         }
         catch (Exception ex) {
-            _applog.AddError(ex);
+            AppLog.AddError(ex);
             RegisterPostbackScripts.RegisterStartupScript(this, "openWSE.AlertWindow('There was an error creating your new folder. Folder was not added.');");
         }
         ReloadList();
@@ -806,7 +805,7 @@ public partial class SiteTools_ProjectExplorer : System.Web.UI.Page {
             }
         }
         catch (Exception ex) {
-            _applog.AddError(ex);
+            AppLog.AddError(ex);
         }
 
         hf_moveFile.Value = string.Empty;
@@ -927,7 +926,7 @@ public partial class SiteTools_ProjectExplorer : System.Web.UI.Page {
             }
         }
         catch (Exception ex) {
-            _applog.AddError(ex);
+            AppLog.AddError(ex);
         }
 
         hf_moveFolder.Value = string.Empty;

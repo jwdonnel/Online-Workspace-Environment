@@ -3,11 +3,6 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
-        #MainContent_pnl_licenseFileContents span
-        {
-            font-weight: bold;
-            padding-right: 4px;
-        }
         .cc-type span
         {
             font-weight: normal!important;
@@ -16,51 +11,43 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding pad-top-big margin-top">
-        <div class="clear-margin">
-            <div class="pad-bottom-sml float-left pad-top-sml">
-                <small><b class="pad-right-sml">Note:</b>Licenses are good for a single domain.
-            Your license file will contain all the information you need to validate your request.
-            Once the license is validated, it will not have to repeat this procedure until the
-            site is restarted or the session state has ended. Site must have an active internet connection in order to validate a license.</small>
-            </div>
-        </div>
-        <div class="clear-space">
-        </div>
-        <div class="clear-space">
-        </div>
+    <div class="maincontent-padding margin-top">
         <asp:UpdatePanel ID="updatepnl1" runat="server">
             <ContentTemplate>
                 <asp:Panel ID="pnl_nonTrialVersion" runat="server">
-                    <h3 class="float-left margin-right-big">
-                        <span class="font-bold pad-right-sml">License Status :</span>
-                        <asp:Label ID="lbl_licenseStatus" runat="server" Text=""></asp:Label></h3>
-                    <asp:LinkButton ID="lbtn_tryValidate" runat="server" CssClass="margin-left sb-links RandomActionBtns float-left"
-                        Text="Try to validate" OnClick="lbtn_tryValidate_Clicked" Style="margin-top: -2px;"></asp:LinkButton>
-                    <div class="clear-space-five">
-                    </div>
-                    <asp:Label ID="lbl_licenseInvalidHint" runat="server" Text="An invalid or expired license file means you will not be able to access any feature of this site until this is validated."
-                        Enabled="false" Visible="false" Style="font-size: 12px; font-style: italic;"></asp:Label>
-                    <div class="clear" style="height: 30px;">
-                    </div>
-                    <span class="font-bold pad-right-sml">License File :</span>
-                    <asp:Label ID="lbl_licenseFile" runat="server" Text=""></asp:Label>
-                    <div class="clear-space-two">
-                    </div>
-                    <asp:Panel ID="pnl_licenseFileContents" runat="server" Enabled="false" Visible="false">
-                        <table cellpadding="5" cellspacing="5" width="100%">
-                            <tr>
-                                <td valign="top" width="55px">
-                                    <div class="img-arrow-down-right margin-right margin-left-big">
-                                    </div>
-                                </td>
-                                <td valign="top">
-                                    <asp:Panel ID="pnl_licenseContents" runat="server" CssClass="pad-left-sml pad-top-big">
+                    <div class="table-settings-box">
+                        <div class="td-settings-ctrl">
+                            <h3 class="float-left margin-right-big">
+                                <span class="font-bold pad-right-sml">License Status :</span>
+                                <asp:Label ID="lbl_licenseStatus" runat="server" Text=""></asp:Label></h3>
+                            <asp:Button ID="lbtn_tryValidate" runat="server" CssClass="margin-left RandomActionBtns input-buttons float-left"
+                                Text="Try to validate" OnClick="lbtn_tryValidate_Clicked" Style="margin-top: -5px;"></asp:Button>
+                            <div class="clear-space-five">
+                            </div>
+                            <asp:Label ID="lbl_licenseInvalidHint" runat="server" Text="An invalid or expired license file means you will not be able to access any feature of this site until this is validated."
+                                Enabled="false" Visible="false" Style="font-size: 12px; font-style: italic;"></asp:Label>
+                            <div class="clear">
+                            </div>
+                            <div class="table-settings-box no-border" style="padding-bottom: 0px!important; margin-bottom: 0px!important;">
+                                <div class="td-settings-title">
+                                    License File Contents
+                                </div>
+                                <div class="title-line"></div>
+                                <div class="td-settings-ctrl">
+                                    <asp:Panel ID="pnl_licenseFileContents" runat="server" Enabled="false" Visible="false">
+                                        <asp:Panel ID="pnl_licenseContents" runat="server" CssClass="pad-left-sml pad-top-big">
+                                        </asp:Panel>
                                     </asp:Panel>
-                                </td>
-                            </tr>
-                        </table>
-                    </asp:Panel>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="td-settings-desc">
+                            Licenses are good for a single domain.
+            Your license file will contain all the information you need to validate your request.
+            Once the license is validated, it will not have to repeat this procedure until the
+            site is restarted or the session state has ended. Site must have an active internet connection in order to validate a license.
+                        </div>
+                    </div>
                 </asp:Panel>
                 <asp:Panel ID="pnl_trialVersion" runat="server" Enabled="false" Visible="false">
                     <div class="pad-all">
@@ -71,42 +58,36 @@
                             <table cellpadding="10" cellspacing="10">
                                 <tr>
                                     <td align="right" style="width: 125px;">
-                                        <h4 class="font-bold pad-right">Website Name:</h4>
+                                        <h4 class="font-bold pad-right">Website Name</h4>
                                     </td>
                                     <td>
-                                        <div class="pad-bottom">
                                             <asp:TextBox ID="txt_WebsiteName" runat="server" CssClass="textEntry"></asp:TextBox>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="*"
                                                 ControlToValidate="txt_WebsiteName" ForeColor="Red">
                                             </asp:RequiredFieldValidator>
-                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td align="right">
-                                        <h4 class="font-bold pad-right">Website Url:</h4>
+                                        <h4 class="font-bold pad-right">Website Url</h4>
                                     </td>
                                     <td>
-                                        <div class="pad-bottom">
                                             <asp:TextBox ID="txt_WebsiteUrl" runat="server" CssClass="textEntry"></asp:TextBox>
                                             <asp:LinkButton ID="lbtn_useDefaultUrl" runat="server" Font-Size="Small" Text="Use Default" CssClass="margin-left margin-right" CausesValidation="false" OnClick="lbtn_useDefaultUrl_Click"></asp:LinkButton>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="*"
                                                 ControlToValidate="txt_WebsiteUrl" ForeColor="Red">
                                             </asp:RequiredFieldValidator>
-                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td align="right">
-                                        <h4 class="font-bold pad-right">Email Address:</h4>
+                                        <h4 class="font-bold pad-right">Email Address</h4>
                                     </td>
                                     <td>
-                                        <div class="pad-bottom">
                                             <asp:TextBox ID="txt_emailAddress" runat="server" CssClass="textEntry"></asp:TextBox>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="*"
                                                 ControlToValidate="txt_emailAddress" ForeColor="Red">
                                             </asp:RequiredFieldValidator>
-                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -131,8 +112,7 @@
                             <br />
                             <br />
                         </h4>
-                        <h4>
-                            If you require help, please email John Donnelly at <a href="mailto:jwdonnel@gmail.com" target="_blank">jwdonnel@gmail.com</a>.
+                        <h4>If you require help, please email John Donnelly at <a href="mailto:jwdonnel@gmail.com" target="_blank">jwdonnel@gmail.com</a>.
                         </h4>
                     </div>
                     <div class="pad-all">
@@ -166,7 +146,7 @@
                             </div>
                             <h4>If you have already purchased the OpenWSE and have your validation code, enter it below and click Activate.<br />
                                 Your validation code is the same as your receipt id from PayPal without the hyphens(-).
-			                </h4>
+                            </h4>
                             <div class="clear-space">
                             </div>
                             <span class="font-bold pad-right">Validation Code:</span><asp:TextBox ID="txt_ValidationCodePurchased" runat="server" CssClass="textEntry margin-right"></asp:TextBox><asp:Button ID="btn_ValidationCodePurchased" runat="server" Text="Activate" CssClass="input-buttons" OnClick="btn_ValidationCodePurchased_Click" />
@@ -182,8 +162,7 @@
                             An email will be sent to you as soon as the issue is found or resolved.<br />
                             <br />
                         </h4>
-                        <h4>
-                            If you require help, please email John Donnelly at <a href="mailto:jwdonnel@gmail.com" target="_blank">jwdonnel@gmail.com</a>.
+                        <h4>If you require help, please email John Donnelly at <a href="mailto:jwdonnel@gmail.com" target="_blank">jwdonnel@gmail.com</a>.
                         </h4>
                     </div>
                     <div class="pad-all">
@@ -265,32 +244,28 @@
                             <br />
                             <br />
                         </h4>
-                        <h4>
-                            If you require help, please email John Donnelly at <a href="mailto:jwdonnel@gmail.com" target="_blank">jwdonnel@gmail.com</a>.
+                        <h4>If you require help, please email John Donnelly at <a href="mailto:jwdonnel@gmail.com" target="_blank">jwdonnel@gmail.com</a>.
                         </h4>
                     </div>
                 </asp:Panel>
             </ContentTemplate>
         </asp:UpdatePanel>
-        <div class="clear" style="height: 30px;">
-        </div>
-        <div class="border-bottom">
-        </div>
-        <div class="clear" style="height: 30px;">
-        </div>
-        <h3 class="font-bold float-left">Upload License File</h3>
-        <div class="clear-space-five">
-        </div>
-        <small><span class="font-bold pad-right-sml">Note:</span>You only need to upload a License
+        <div class="table-settings-box">
+            <div class="td-settings-title">
+                Upload License File
+            </div>
+            <div class="title-line"></div>
+            <div class="td-settings-ctrl">
+                <asp:FileUpload ID="fu_newLicenseFile" runat="server" />
+                <div class="clear-space">
+                </div>
+                <asp:Button ID="btn_uploadFile" runat="server" CssClass="input-buttons" OnClientClick="return ConfirmUploadLicense(this);" Text="Upload License" />
+            </div>
+            <div class="td-settings-desc">
+                You only need to upload a License
     File if either your current license has expired, missing, corrupted, or if site
-    name and/or domain has changed.</small>
-        <div class="clear-space">
-        </div>
-        <asp:FileUpload ID="fu_newLicenseFile" runat="server" />
-        <div class="clear-space">
-        </div>
-        <asp:Button ID="btn_uploadFile" runat="server" CssClass="input-buttons" OnClientClick="return ConfirmUploadLicense(this);" Text="Upload License" />
-        <div class="clear-space">
+    name and/or domain has changed.
+            </div>
         </div>
     </div>
     <script type="text/javascript">
