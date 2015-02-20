@@ -54,17 +54,17 @@
                                 <tr>
                                     <td>
                                         <li class="a" onclick="OpenApp_External();return false;">
-                                            <a href="#" class="img-popin margin-right-sml margin-left" title="Place on workspace"></a>
+                                            <a href="#" class="img-popin margin-right-sml margin-left" title="Place on workspace" onclick="OpenApp_External();return false;"></a>
                                         </li>
                                     </td>
                                     <td>
                                         <li class="a" onclick="window.location.href=window.location.href;">
-                                            <a href="#" class="img-refresh-alt margin-right-sml margin-left" title="Refresh app" ></a>
+                                            <a href="#" class="img-refresh-alt margin-right-sml margin-left" title="Refresh app" onclick="window.location.href=window.location.href;"></a>
                                         </li>
                                     </td>
                                     <td>
                                         <li class="a" onclick="window.close();return false;">
-                                            <a href="#" class="img-close-alt margin-right margin-left" title="Close"></a>
+                                            <a href="#" class="img-close-alt margin-right margin-left" title="Close" onclick="window.close();return false;"></a>
                                         </li>
                                     </td>
                                 </tr>
