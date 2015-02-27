@@ -1,4 +1,4 @@
-<img alt="OpenWSE - Open Workspace Environment" src="http://openwse.com/Standard_Images/logo_alt.png" />
+<img alt="OpenWSE - Open Workspace Environment" src="http://openwse.com/Standard_Images/About%20Logos/openwse.png" />
 <br />
 <hr />
 <br />
