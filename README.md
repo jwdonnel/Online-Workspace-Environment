@@ -2,7 +2,7 @@
 <br />
 <hr />
 <br />
-OpenWSE is free for personal use. In order to buy a license, download and run the OpenWSE_Installer.exe which will setup a website on your local machine using IIS. Once you buy the license, you can make any changes you want to the source code.
+OpenWSE is free for personal use as long as the copyright notices are intact. In order to remove the copyright, you must purchase a license. Download and run the OpenWSE_Installer.exe which will setup a website on your local machine using IIS. Once you buy the license, you can make any changes you want to the code.
 <br />
 <br />
 <img alt="workspace" src="http://openwse.com/Standard_Images/About%20Logos/Workspace.PNG" />
