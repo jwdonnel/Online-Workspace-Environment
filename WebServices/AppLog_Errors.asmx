@@ -1,0 +1,1 @@
+﻿<%@ WebService Language="C#" CodeBehind="~/App_Code/AppLog_Errors.cs" Class="AppLog_Errors" %>
