@@ -1,4 +1,4 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_RSSFeed_RSSFeed, App_Web_m5l3x2o0" %>
+﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_RSSFeed_RSSFeed, App_Web_l01inchp" %>
 <div id="rssfeed-load" class="main-div-app-bg">
     <div class="pad-all app-title-bg-color" style="min-height: 40px; position: relative;">
         <div class="float-left">
@@ -27,7 +27,7 @@
                 <span class="font-bold pad-right">Feeds to Show</span>
                 <select id="RSSFeedsToPull" class="margin-right">
                     <option value="5">5</option>
-                    <option value="10">10</option>
+                    <option value="10" selected="selected">10</option>
                     <option value="15">15</option>
                     <option value="20">20</option>
                     <option value="25">25</option>

@@ -1,4 +1,4 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_Feedback, App_Web_4xd04dkg" clientidmode="Static" %>
+﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_Feedback, App_Web_xqib2kpx" clientidmode="Static" %>
 <div id="feedback-load" class="main-div-app-bg">
     <div class="pad-all">
         <h3 class="float-left pad-top">Give me your feedback on the site.</h3>

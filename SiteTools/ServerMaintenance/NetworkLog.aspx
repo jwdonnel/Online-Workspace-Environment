@@ -1,4 +1,4 @@
-﻿<%@ page title="Network Log" async="true" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_NetworkLog, App_Web_xios5jfa" %>
+﻿<%@ page title="Network Log" async="true" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_NetworkLog, App_Web_et3auwnc" %>
 
 <asp:Content ID="HeaderContent" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">

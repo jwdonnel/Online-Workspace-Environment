@@ -1,4 +1,4 @@
-﻿<%@ page title="Database Viewer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_dbViewer, App_Web_f3u2d1ls" %>
+﻿<%@ page title="Database Viewer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_dbViewer, App_Web_4wvhsrrq" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">

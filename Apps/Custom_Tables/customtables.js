@@ -300,7 +300,7 @@ var customTables = function () {
         $("#" + id + "-" + rowType + "Row").find(".border-right").each(function (index) {
             var $input = $(this).find("input");
             var columnName = $(this).find(".td-columnName-" + rowType).html();
-            var columnType = $(this).find(".td-columnType-" + rowType).html();
+            var columnType = $(this).find("input").attr("data-type");
 
             if ($.trim(columnType) == "datetime") {
                 $input.datepicker({

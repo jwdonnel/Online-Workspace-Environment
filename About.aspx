@@ -1,4 +1,4 @@
-﻿<%@ page title="" language="C#" autoeventwireup="true" inherits="SiteTools_About, App_Web_etymirm1" %>
+﻿<%@ page title="" language="C#" autoeventwireup="true" inherits="SiteTools_About, App_Web_xersn2b0" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -297,13 +297,14 @@
                             <li>3.) Sticky Note</li>
                             <li>4.) My Calendar</li>
                             <li>5.) Chat Settings</li>
+                            <li>6.) Stock Viewer</li>
                         </ul>
                         <ul class="float-left pad-left-big" style="list-style: none;">
-                            <li>6.) Alarm Clock</li>
-                            <li>7.) Google Traffic</li>
-                            <li>8.) RSS News Feed</li>
-                            <li>9.) Twitter Station</li>
-                            <li>10.) Message Board</li>
+                            <li>7.) Alarm Clock</li>
+                            <li>8.) Google Traffic</li>
+                            <li>9.) RSS News Feed</li>
+                            <li>10.) Twitter Station</li>
+                            <li>11.) Message Board</li>
                         </ul>
                     </div>
                     <div class="clear-space"></div>

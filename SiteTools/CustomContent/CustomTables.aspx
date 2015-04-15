@@ -1,4 +1,4 @@
-﻿<%@ page title="Custom Tables" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_CustomTables, App_Web_tiq55j4e" %>
+﻿<%@ page title="Custom Tables" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_CustomTables, App_Web_rytka2m4" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -185,6 +185,7 @@
                                                 <td class="border-right" align="center" width="135px">
                                                     <select id="ddl_datatypes">
                                                         <option value="nvarchar">nvarchar</option>
+                                                        <option value="DateTime">Date</option>
                                                         <option value="DateTime">DateTime</option>
                                                         <option value="Integer">Integer</option>
                                                         <option value="Decimal">Decimal</option>

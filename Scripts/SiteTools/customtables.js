@@ -120,7 +120,7 @@ function EditTable(table, name) {
                 $("#tb_columnName").val("");
                 $("#ddl_datatypes").val("nvarchar");
                 $("#cb_nullable").prop("checked", false);
-                
+
                 for (var i = 1; i < data.d.length; i++) {
                     columns.push(data.d[i]);
                 }
@@ -385,7 +385,7 @@ function BuildColumn(name, type, nullable, inEditMode, isEditVal, columnNum) {
         }
 
         name = "<input type='text' id='tb_columnName_edit' class='textEntry' onkeydown='FinishEditKeyDown(event)' maxlength='100' " + disabledControlName + "style='width: 170px;' />";
-        type = "<select id='ddl_datatypes_edit'><option value='nvarchar'>nvarchar</option><option value='DateTime'>DateTime</option><option value='Integer'>Integer</option><option value='Decimal'>Decimal</option><option value='Boolean'>Boolean</option></select>";
+        type = "<select id='ddl_datatypes_edit'><option value='nvarchar'>nvarchar</option><option value='Date'>Date</option><option value='DateTime'>DateTime</option><option value='Integer'>Integer</option><option value='Decimal'>Decimal</option><option value='Boolean'>Boolean</option></select>";
         nullable = "<input id='cb_nullable_edit' type='checkbox' />";
     }
     else {

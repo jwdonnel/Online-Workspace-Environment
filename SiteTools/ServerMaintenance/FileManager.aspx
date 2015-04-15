@@ -1,4 +1,4 @@
-﻿<%@ page title="File Manager" async="true" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_FileManager, App_Web_xios5jfa" %>
+﻿<%@ page title="File Manager" async="true" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_FileManager, App_Web_et3auwnc" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <link type="text/css" rel="stylesheet" href='<%=ResolveUrl("~/Scripts/SyntaxHighlighter/Styles/shCore.css")%>' />

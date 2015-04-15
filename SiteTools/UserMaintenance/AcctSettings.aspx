@@ -1,4 +1,4 @@
-﻿<%@ page title="Account Settings" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AcctSettings, App_Web_foujlgjq" clientidmode="Static" %>
+﻿<%@ page title="Account Settings" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AcctSettings, App_Web_51qbwcjs" clientidmode="Static" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">

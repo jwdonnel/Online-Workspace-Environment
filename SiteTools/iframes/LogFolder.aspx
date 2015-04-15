@@ -1,4 +1,4 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="SiteTools_iframes_LogFolder, App_Web_r2bjagtp" %>
+﻿<%@ page language="C#" autoeventwireup="true" inherits="SiteTools_iframes_LogFolder, App_Web_wvk1ptnk" %>
 
 <!DOCTYPE html>
 
