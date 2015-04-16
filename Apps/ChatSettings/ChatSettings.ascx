@@ -1,4 +1,4 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_ChatSettings, App_Web_bclpmmev" clientidmode="Static" %>
+﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_ChatSettings, App_Web_bh0ot0sn" clientidmode="Static" %>
 <div id="chatlog-load" class="main-div-app-bg">
     <div class="pad-all app-title-bg-color" style="height: 40px">
         <div class="float-left">

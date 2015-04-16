@@ -1,4 +1,4 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Overlays_MessageBoard_Overlay, App_Web_c1455elw" clientidmode="Static" %>
+﻿<%@ control language="C#" autoeventwireup="true" inherits="Overlays_MessageBoard_Overlay, App_Web_pt2yieop" clientidmode="Static" %>
 <div id="messageboard_overlay_pnl" runat="server" clientidmode="Static" class="message-board-workspace">
     <h4 id="loadmessageboardposts" class="pad-all">
         Loading Message Board Posts...</h4>

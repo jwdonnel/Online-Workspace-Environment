@@ -1,4 +1,4 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="Default, App_Web_xersn2b0" %>
+﻿<%@ page language="C#" autoeventwireup="true" inherits="Default, App_Web_qf51xbfi" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -350,8 +350,7 @@
                 <div id="copyright-footer" class="float-left">&copy; 2015 John Donnelly</div>
                 <div id="footer-signdate" class="float-right">
                     <a href="AppRemote.aspx" title="Open Mobile Workspace">Mobile</a> | 
-                    <a href="#" onclick="OpeniframePage('About.aspx?iframeName=About&iframeFullScreen=false');return false;">About</a> | 
-                    <a href="About.aspx#IWantThis" id="iwantthis" title="Find out more"><span class="img-present float-left margin-right-sml"></span>I want this</a>
+                    <a href="#" onclick="OpeniframePage('About.aspx?iframeName=About&iframeFullScreen=false');return false;">About</a>
                 </div>
             </div>
         </div>

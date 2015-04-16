@@ -1,4 +1,4 @@
-﻿<%@ page title="Account Settings" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AcctSettings, App_Web_51qbwcjs" clientidmode="Static" %>
+﻿<%@ page title="Account Settings" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AcctSettings, App_Web_lo5bbrui" clientidmode="Static" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -631,7 +631,7 @@
                                 if you have a slower internet connection.
                             </div>
                         </div>
-                        <asp:Panel ID="pnl_backgroundurl" runat="server" DefaultButton="btn_urlupdate">
+                        <asp:Panel ID="pnl_backgroundurl" runat="server">
                             <div class="table-settings-box">
                                 <div class="td-settings-title">
                                     Multiple Backgrounds

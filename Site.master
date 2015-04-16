@@ -1,9 +1,9 @@
-﻿<%@ master language="C#" autoeventwireup="true" inherits="SiteMaster, App_Web_xersn2b0" %>
+﻿<%@ master language="C#" autoeventwireup="true" inherits="SiteMaster, App_Web_qf51xbfi" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head runat="server">
-    <title>OpenWSE - Open Workspace Environment</title>
+    <title>OnlineWSE - Online Workspace Environment</title>
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <link id="Link1" runat="server" rel="shortcut icon" href="~/Standard_Images/favicon.ico"
         type="image/x-icon" />
@@ -185,9 +185,9 @@
                                             </div>
                                         </div>
                                         <div id="profile_tab_Buttons">
-                                            <a id="aGroupLogin" runat="server" href="#" onclick="openWSE.GroupLoginModal();return false;" class="float-left margin-left">Group Login</a>
-                                            <asp:LinkButton ID="aGroupLogoff" runat="server" OnClick="aGroupLogoff_Click" CssClass="RandomActionBtns float-left margin-left margin-right-big" Enabled="false" Visible="false">Log Out of Group</asp:LinkButton>
-                                            <asp:LinkButton ID="lbtn_signoff" runat="server" OnClick="lbtn_signoff_Click" CssClass="float-right margin-right">Log Out</asp:LinkButton>
+                                            <a id="aGroupLogin" runat="server" href="#" onclick="openWSE.GroupLoginModal();return false;" class="float-left margin-left margin-right">Group Login</a>
+                                            <asp:LinkButton ID="aGroupLogoff" runat="server" OnClick="aGroupLogoff_Click" CssClass="RandomActionBtns float-left margin-left margin-right" Enabled="false" Visible="false">Log out of Group</asp:LinkButton>
+                                            <asp:LinkButton ID="lbtn_signoff" runat="server" OnClick="lbtn_signoff_Click" CssClass="float-right margin-left margin-right">Log Out</asp:LinkButton>
                                         </div>
                                     </li>
                                 </ul>

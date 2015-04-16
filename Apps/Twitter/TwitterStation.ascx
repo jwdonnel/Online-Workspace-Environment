@@ -1,4 +1,4 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_Twitter_TwitterStation, App_Web_su3ehygd" clientidmode="Static" %>
+﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_Twitter_TwitterStation, App_Web_spofsajd" clientidmode="Static" %>
 <div id="twitterstation-load" class="main-div-app-bg">
     <div class="pad-all app-title-bg-color" style="min-height: 55px;">
         <div class="float-left">

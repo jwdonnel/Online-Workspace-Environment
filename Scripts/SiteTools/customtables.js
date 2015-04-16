@@ -120,7 +120,7 @@ function EditTable(table, name) {
                 $("#tb_columnName").val("");
                 $("#ddl_datatypes").val("nvarchar");
                 $("#cb_nullable").prop("checked", false);
-
+                
                 for (var i = 1; i < data.d.length; i++) {
                     columns.push(data.d[i]);
                 }

@@ -1,4 +1,4 @@
-﻿<%@ page title="App Categories" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppCategory, App_Web_w0j21z2l" %>
+﻿<%@ page title="App Categories" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppCategory, App_Web_tg1onwhl" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">

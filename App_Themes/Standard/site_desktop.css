@@ -1152,7 +1152,7 @@ input.signintextbox{width:200px;padding:10px;border:1px solid #DDD;background-co
 .top-options li.a.active .username-top-info,.top-options li.a.active .signin-text{color:#3d3d3d}
 #user_profile_tab .a{opacity:1.0;filter:alpha(opacity=100);padding-top:10px;height:24px}
 #profile_tab_Buttons{min-height:52px;padding:0 3px;margin-top:10px;display:block;background:#FFF url(Body/transparent-hr.png) top center no-repeat}
-#profile_tab_Buttons a{font-size:12px;text-align:center;display:inline-block;min-width:70px;padding:5px 9px;margin-top:15px;margin-bottom:10px;color:#FFF;font-weight:bold;background:#4D90FE;border:1px solid #3079ED;text-decoration:none;transition:all .1s ease-in-out;-moz-transition:all .1s ease-in-out;-webkit-transition:all .1s ease-in-out;-moz-border-radius:2px;border-radius:2px;-webkit-border-radius:2px}
+#profile_tab_Buttons a{font-size:12px;text-align:center;display:inline-block;min-width:111px;padding:7px 2px;margin-top:15px;margin-bottom:10px;color:#FFF;font-weight:bold;background:#4D90FE;border:1px solid #3079ED;text-decoration:none;transition:all .1s ease-in-out;-moz-transition:all .1s ease-in-out;-webkit-transition:all .1s ease-in-out;-moz-border-radius:2px;border-radius:2px;-webkit-border-radius:2px}
 #profile_tab_Buttons a:hover{background:#357AE8;border:1px solid #2F5BB7}
 .top-options .li-header{background:#F0F0F0;width:100%;border-bottom:1px solid #CCC;border-size:border-box;-mox-box-sizing:border-box;padding:10px 10px 5px 10px;position:relative;font-size:12px;font-weight:bold;color:#777}
 .top-options .li-header a{font-weight:normal}

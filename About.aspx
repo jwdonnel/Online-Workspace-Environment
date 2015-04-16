@@ -1,4 +1,4 @@
-﻿<%@ page title="" language="C#" autoeventwireup="true" inherits="SiteTools_About, App_Web_xersn2b0" %>
+﻿<%@ page title="" language="C#" autoeventwireup="true" inherits="SiteTools_About, App_Web_qf51xbfi" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -362,7 +362,6 @@
                     <div class="clear-space"></div>
                     <img alt="Chat Client" src="Standard_Images/About Logos/chatclient.png" class="boxshadow" class="screenshot-img" />
                 </div>
-                <div id="IWantThis" class="about-section"></div>
                 <div class="about-section">
                     <h2>Wiki and Documentation</h2>
                     <div class="clear-space-five"></div>
@@ -370,7 +369,7 @@
                     <div class="clear-space-two"></div>
                     An integration guide is available <a href="Integration.html" target="_blank">here.</a>
                     <div class="clear-space"></div>
-                    OpenWSE is free for personal use as long as the copyright notices are intact. In order to remove the copyright, you must purchase a license. Download and run the OpenWSE_Installer.exe which will setup a website on your local machine using IIS. Once you buy the license, you can make any changes you want to the code.
+                    OpenWSE is free for personal use as long as the copyright notices are intact. In order to remove the copyright, you must purchase a license. Download and run the OpenWSE_Installer.exe which will setup a website on your local machine using IIS. Once you buy the license, you can make any changes you want to the code. 
                 </div>
                 <div class="about-section">
                     <h2>Frameworks and Technologies Used</h2>

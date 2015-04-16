@@ -1,4 +1,4 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_MessageBoard_MessageBoard, App_Web_qupnax20" clientidmode="Static" %>
+﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_MessageBoard_MessageBoard, App_Web_xn1l0xgv" clientidmode="Static" %>
 <div id="messageboard-load" class="main-div-app-bg">
     <div class="pad-all app-title-bg-color" style="height: 40px">
         <div class="float-left">

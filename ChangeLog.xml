@@ -1,6 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Items>
-    <version>ver. 4.3.2</version>
+    <version>ver. 4.3.3</version>
+    <log name="4/15/2015">
+        Group login session fix.<br />
+        Social login while attempting to log into a group will result in the user not being logged into the group fix.<br />
+        Chat Client group session login fix.
+    </log>
     <log name="4/2/2015">
         Removed the Login Theme selector from the Site Customizations.<br />
         Login theme is based off of the Signup Role and New User Defaults.<br />

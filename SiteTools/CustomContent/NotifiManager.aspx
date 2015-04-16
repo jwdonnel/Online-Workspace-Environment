@@ -1,4 +1,4 @@
-﻿<%@ page title="Notification Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_NotifiManager, App_Web_rytka2m4" %>
+﻿<%@ page title="Notification Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_NotifiManager, App_Web_kmou1qyu" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">

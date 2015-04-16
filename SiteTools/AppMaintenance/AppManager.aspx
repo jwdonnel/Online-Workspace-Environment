@@ -1,4 +1,4 @@
-﻿<%@ page title="App Editor" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppManager, App_Web_w0j21z2l" %>
+﻿<%@ page title="App Editor" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppManager, App_Web_tg1onwhl" %>
 
 <%@ Register TagPrefix="cc" Namespace="TextEditor" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">

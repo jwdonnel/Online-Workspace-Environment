@@ -1,4 +1,4 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_RSSFeed_RSSFeed, App_Web_l01inchp" %>
+﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_RSSFeed_RSSFeed, App_Web_exa5r1k4" %>
 <div id="rssfeed-load" class="main-div-app-bg">
     <div class="pad-all app-title-bg-color" style="min-height: 40px; position: relative;">
         <div class="float-left">
