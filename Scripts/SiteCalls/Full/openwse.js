@@ -2,7 +2,7 @@
 //
 //	openWSE v4.0
 //	by John Donnelly
-//	Last Modification: 4/7/2015
+//	Last Modification: 4/16/2015
 //
 //	Licensed under the Creative Commons Attribution 2.5 License - http://creativecommons.org/licenses/by/2.5/
 //  	- Free for use in both personal and commercial projects
@@ -5254,43 +5254,52 @@ var openWSE = function () {
             Create();
             MenuLinkCookie();
             TryToFindOneOpen();
+
+            if ($("." + settings.headerClass).length == 1 && $("." + settings.bodyClass).length == 1) {
+                $("." + settings.headerClass).attr("title", "");
+                $("." + settings.headerClass).css("cursor", "default");
+                $("." + settings.headerClass).find("." + settings.menuDropDownClass).remove();
+                $("." + settings.bodyClass).show();
+            }
         });
         $accordianDiv.find("." + settings.headerClass).on("click", function () {
-            var $menu = $(this).find("." + settings.menuDropDownClass);
-            var $pnl = $(this).parent().find("." + settings.bodyClass);
-            if ($menu.length != 0 && $pnl.length != 0) {
-                var toolTip = "";
-                if ($menu.hasClass(settings.collapsedClass)) {
-                    toolTip = settings.collapseTooltip;
-                    $(this).attr("title", toolTip);
-                    $menu.removeClass(settings.collapsedClass).addClass(settings.expandedClass);
-                    $pnl.slideDown(settings.animationSpeed);
-                }
-                else if ((!settings.allowCloseAll && GetTotalOpen() > 1) || settings.allowCloseAll) {
-                    toolTip = settings.expandTooltip;
-                    $(this).attr("title", toolTip);
-                    $menu.removeClass(settings.expandedClass).addClass(settings.collapsedClass);
-                    $pnl.slideUp(settings.animationSpeed);
-                }
+            if ($("." + settings.headerClass).length > 1 && $("." + settings.bodyClass).length > 1) {
+                var $menu = $(this).find("." + settings.menuDropDownClass);
+                var $pnl = $(this).parent().find("." + settings.bodyClass);
+                if ($menu.length != 0 && $pnl.length != 0) {
+                    var toolTip = "";
+                    if ($menu.hasClass(settings.collapsedClass)) {
+                        toolTip = settings.collapseTooltip;
+                        $(this).attr("title", toolTip);
+                        $menu.removeClass(settings.collapsedClass).addClass(settings.expandedClass);
+                        $pnl.slideDown(settings.animationSpeed);
+                    }
+                    else if ((!settings.allowCloseAll && GetTotalOpen() > 1) || settings.allowCloseAll) {
+                        toolTip = settings.expandTooltip;
+                        $(this).attr("title", toolTip);
+                        $menu.removeClass(settings.expandedClass).addClass(settings.collapsedClass);
+                        $pnl.slideUp(settings.animationSpeed);
+                    }
 
-                if (settings.oneOpen) {
-                    $accordianDiv.find("." + settings.bodyClass).each(function () {
-                        if ($(this).attr("id") != $pnl.attr("id")) {
-                            $(this).parent().find("." + settings.headerClass).attr("title", settings.expandTooltip);
-                            $(this).parent().find("." + settings.headerClass).find("." + settings.menuDropDownClass).removeClass(settings.expandedClass).addClass(settings.collapsedClass);
-                            $(this).slideUp(settings.animationSpeed);
-                        }
-                    });
-                }
+                    if (settings.oneOpen) {
+                        $accordianDiv.find("." + settings.bodyClass).each(function () {
+                            if ($(this).attr("id") != $pnl.attr("id")) {
+                                $(this).parent().find("." + settings.headerClass).attr("title", settings.expandTooltip);
+                                $(this).parent().find("." + settings.headerClass).find("." + settings.menuDropDownClass).removeClass(settings.expandedClass).addClass(settings.collapsedClass);
+                                $(this).slideUp(settings.animationSpeed);
+                            }
+                        });
+                    }
 
-                if ($(this).attr("aria-describedby") != null && $(this).attr("aria-describedby") != "") {
-                    var jqueryToolTipId = $(this).attr("aria-describedby");
-                    $("#" + jqueryToolTipId).find(".ui-tooltip-content").html(toolTip);
-                }
+                    if ($(this).attr("aria-describedby") != null && $(this).attr("aria-describedby") != "") {
+                        var jqueryToolTipId = $(this).attr("aria-describedby");
+                        $("#" + jqueryToolTipId).find(".ui-tooltip-content").html(toolTip);
+                    }
 
-                setTimeout(function () {
-                    SetSidebarTabCookie();
-                }, settings.animationSpeed * 2);
+                    setTimeout(function () {
+                        SetSidebarTabCookie();
+                    }, settings.animationSpeed * 2);
+                }
             }
         });
 

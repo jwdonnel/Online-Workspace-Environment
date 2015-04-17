@@ -1,4 +1,4 @@
-﻿<%@ page title="License Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_LicenseManager, App_Web_eye1hras" %>
+﻿<%@ page title="License Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_LicenseManager, App_Web_x0t4gn0u" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">

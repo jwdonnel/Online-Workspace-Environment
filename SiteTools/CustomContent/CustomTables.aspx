@@ -1,4 +1,4 @@
-﻿<%@ page title="Custom Tables" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_CustomTables, App_Web_kmou1qyu" %>
+﻿<%@ page title="Custom Tables" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_CustomTables, App_Web_h0a3vuy0" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">

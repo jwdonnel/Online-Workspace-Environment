@@ -1,4 +1,4 @@
-﻿<%@ page title="Web Services" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_WebServices, App_Web_kmou1qyu" %>
+﻿<%@ page title="Web Services" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_WebServices, App_Web_h0a3vuy0" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
 </asp:Content>
