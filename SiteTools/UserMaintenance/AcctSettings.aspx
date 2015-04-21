@@ -1,4 +1,4 @@
-﻿<%@ page title="Account Settings" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AcctSettings, App_Web_thajkrpw" clientidmode="Static" %>
+﻿<%@ page title="Account Settings" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AcctSettings, App_Web_o42ostsu" clientidmode="Static" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -187,8 +187,8 @@
                     </div>
                     <div class="title-line"></div>
                     <div class="td-settings-ctrl">
-                        <asp:Image ID="imgAcctImage" runat="server" ImageUrl="~/Standard_Images/EmptyUserImg.png" CssClass="acct-image float-left margin-right margin-top-big" />
-                        <div class="float-left pad-all-big margin-left-big">
+                        <asp:Image ID="imgAcctImage" runat="server" ImageUrl="~/Standard_Images/EmptyUserImg.png" CssClass="acct-image float-left margin-top-big" />
+                        <div class="float-left pad-all-big margin-left">
                             <asp:FileUpload ID="fileUpload_acctImage" runat="server" />
                             <div class="clear-space"></div>
                             <asp:Button ID="btn_fileUpload_acctImage" runat="server" CssClass="input-buttons" Text="Upload" OnClick="btn_fileUpload_acctImage_Clicked" />
@@ -253,6 +253,22 @@
                                 <asp:Panel ID="pnl_groups" runat="server">
                                 </asp:Panel>
                                 <div class="clear"></div>
+                            </div>
+                        </div>
+                    </asp:Panel>
+                    <asp:Panel ID="pnl_defaultLoginGroup" runat="server">
+                        <div class="table-settings-box">
+                            <div class="td-settings-title">
+                                Default Login Group
+                            </div>
+                            <div class="title-line"></div>
+                            <div class="td-settings-ctrl">
+                                <asp:DropDownList ID="ddl_defaultGroupLogin" runat="server" CssClass="margin-right">
+                                </asp:DropDownList>
+                                <asp:Button ID="btn_defaultGroupLogin" runat="server" CssClass="input-buttons RandomActionBtns" OnClick="btn_defaultGroupLogin_Click" Text="Update" />
+                            </div>
+                            <div class="td-settings-desc">
+                                You can set a default group to log into when signing in.
                             </div>
                         </div>
                     </asp:Panel>
@@ -729,6 +745,23 @@
                             Select Hide if you dont want to see the date/time in the top tool bar.
                         </div>
                     </div>
+                    <div class="table-settings-box">
+                        <div class="td-settings-title">
+                            Only Allow One Sidebar Accordion to be Open
+                        </div>
+                        <div class="title-line"></div>
+                        <div class="td-settings-ctrl">
+                            <div class="field switch inline-block">
+                                <asp:RadioButton ID="rb_SidebarAccordionMutliOpenAllowed_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                    OnCheckedChanged="rb_SidebarAccordionMutliOpenAllowed_on_CheckedChanged" AutoPostBack="True" />
+                                <asp:RadioButton ID="rb_SidebarAccordionMutliOpenAllowed_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                    OnCheckedChanged="rb_SidebarAccordionMutliOpenAllowed_off_CheckedChanged" AutoPostBack="True" />
+                            </div>
+                        </div>
+                        <div class="td-settings-desc">
+                            Select no to allow any dropdown accordion to be open without minimizing another. (You must refresh the page when updated)
+                        </div>
+                    </div>
                     <asp:Panel ID="pnl_loadLinksOnNewPage" runat="server">
                         <div class="table-settings-box">
                             <div class="td-settings-title">
@@ -830,6 +863,8 @@
                     <asp:AsyncPostBackTrigger ControlID="rb_showWorkspacePreview_off" />
                     <asp:AsyncPostBackTrigger ControlID="rb_showdatetime_on" />
                     <asp:AsyncPostBackTrigger ControlID="rb_showdatetime_off" />
+                    <asp:AsyncPostBackTrigger ControlID="rb_SidebarAccordionMutliOpenAllowed_on" />
+                    <asp:AsyncPostBackTrigger ControlID="rb_SidebarAccordionMutliOpenAllowed_on" />
                     <asp:AsyncPostBackTrigger ControlID="rb_linksnewpage_on" />
                     <asp:AsyncPostBackTrigger ControlID="rb_linksnewpage_off" />
                     <asp:AsyncPostBackTrigger ControlID="rb_autohidemode_on" />
@@ -867,7 +902,7 @@
                     </asp:Panel>
                     <div class="table-settings-box">
                         <div class="td-settings-title">
-                            Group Icons
+                            Categorize App List
                         </div>
                         <div class="title-line"></div>
                         <div class="td-settings-ctrl">
@@ -879,13 +914,13 @@
                             </div>
                         </div>
                         <div class="td-settings-desc">
-                            Enabling this will group the icons by category allowing for easier browsing.
+                            Enabling this will group the icons by category allowing for easier browsing. (Note: Sorting may not work properly when grouping is enabled)
                         </div>
                     </div>
                     <asp:Panel ID="pnl_categoryCount" runat="server" Enabled="false" Visible="false">
                         <div class="table-settings-box">
                             <div class="td-settings-title">
-                                Icon Category Count
+                                App Category Count
                             </div>
                             <div class="title-line"></div>
                             <div class="td-settings-ctrl">
@@ -904,7 +939,7 @@
                     <asp:Panel ID="pnl_HideAppIcons" runat="server">
                         <div class="table-settings-box">
                             <div class="td-settings-title">
-                                Hide Icon Image
+                                Hide App Icon
                             </div>
                             <div class="title-line"></div>
                             <div class="td-settings-ctrl">
@@ -1205,20 +1240,20 @@
                             </div>
                         </div>
                     </asp:Panel>
-                        <div class="table-settings-box">
-                            <div id="lbl_appmodalstyle_title" runat="server" class="td-settings-title">
-                                App and Modal Window Style
-                            </div>
-                            <div class="title-line"></div>
-                            <div class="td-settings-ctrl">
-                                <asp:DropDownList ID="dd_appStyle" runat="server" CssClass="margin-right">
-                                </asp:DropDownList>
-                                <asp:Button ID="btn_appStyle" runat="server" OnClick="dd_appStyle_Changed" Text="Update" CssClass="input-buttons RandomActionBtns" />
-                            </div>
-                            <div id="lbl_appmodalstyle_desc" runat="server" class="td-settings-desc">
-                                Change the look of your app window and modal popups.
-                            </div>
+                    <div class="table-settings-box">
+                        <div id="lbl_appmodalstyle_title" runat="server" class="td-settings-title">
+                            App and Modal Window Style
                         </div>
+                        <div class="title-line"></div>
+                        <div class="td-settings-ctrl">
+                            <asp:DropDownList ID="dd_appStyle" runat="server" CssClass="margin-right">
+                            </asp:DropDownList>
+                            <asp:Button ID="btn_appStyle" runat="server" OnClick="dd_appStyle_Changed" Text="Update" CssClass="input-buttons RandomActionBtns" />
+                        </div>
+                        <div id="lbl_appmodalstyle_desc" runat="server" class="td-settings-desc">
+                            Change the look of your app window and modal popups.
+                        </div>
+                    </div>
                 </ContentTemplate>
                 <Triggers>
                     <asp:AsyncPostBackTrigger ControlID="rb_tooltips_off" />

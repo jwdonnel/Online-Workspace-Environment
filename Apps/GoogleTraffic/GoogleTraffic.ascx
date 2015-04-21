@@ -1,4 +1,4 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_GoogleTraffic_GoogleTraffic, App_Web_rpil0052" clientidmode="Static" %>
+﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_GoogleTraffic_GoogleTraffic, App_Web_ea2m1kqg" clientidmode="Static" %>
 <div id="googletraffic-load" class="main-div-app-bg">
     <div class="pad-all app-title-bg-color">
         <asp:Image ID="img_Title" runat="server" CssClass="float-left pad-right" Height="38px" />

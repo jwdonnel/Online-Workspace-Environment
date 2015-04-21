@@ -28,7 +28,7 @@ var twitterStation = function () {
                 }, interval);
             }
 
-            $("#TwitterAdd-element").find("input[type='text']").keypress(function (e) {
+            $("#TwitterAdd_element").find("input[type='text']").keypress(function (e) {
                 if (e.which == 13 || e.keyCode == 13) {
                     if (editId != "") {
                         twitterStation.UpdateFeed(editId);
@@ -51,7 +51,7 @@ var twitterStation = function () {
         $("#tb_caption").val("");
         $("#tb_twitteraccount").val("");
         editId = "";
-        openWSE.LoadModalWindow(true, "TwitterAdd-element", "Add Twitter Feed");
+        openWSE.LoadModalWindow(true, "TwitterAdd_element", "Add Twitter Feed");
         $("#tb_twitteraccount").focus();
     }
     function FinishAdd() {
@@ -65,7 +65,7 @@ var twitterStation = function () {
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     editId = "";
-                    openWSE.LoadModalWindow(false, "TwitterAdd-element", "");
+                    openWSE.LoadModalWindow(false, "TwitterAdd_element", "");
                     openWSE.RemoveUpdateModal();
                     GetFeeds(true);
                 },
@@ -101,7 +101,7 @@ var twitterStation = function () {
                     $("#dd_mode").val(data.d[3]);
                     $("#dd_display_amount").val(data.d[4]);
 
-                    openWSE.LoadModalWindow(true, "TwitterAdd-element", "Edit Twitter Feed");
+                    openWSE.LoadModalWindow(true, "TwitterAdd_element", "Edit Twitter Feed");
                     openWSE.RemoveUpdateModal();
                     $("#tb_twitteraccount").focus();
                 },
@@ -124,7 +124,7 @@ var twitterStation = function () {
                     contentType: "application/json; charset=utf-8",
                     success: function (data) {
                         editId = "";
-                        openWSE.LoadModalWindow(false, "TwitterAdd-element", "");
+                        openWSE.LoadModalWindow(false, "TwitterAdd_element", "");
                         openWSE.RemoveUpdateModal();
                         GetFeeds(true);
                     },
@@ -166,7 +166,7 @@ var twitterStation = function () {
     function CloseModal() {
         editId = "";
         $("#must-have-twitter-search").hide();
-        openWSE.LoadModalWindow(false, "TwitterAdd-element", "");
+        openWSE.LoadModalWindow(false, "TwitterAdd_element", "");
     }
 
     function GetFeeds(showLoading) {
@@ -182,8 +182,9 @@ var twitterStation = function () {
             success: function (data) {
                 if (data.d.length > 0) {
                     var tweetHolder = "";
+                    var enableEdit = data.d[0];
 
-                    for (var i = 0; i < data.d.length; i++) {
+                    for (var i = 1; i < data.d.length; i++) {
                         var id = data.d[i][0];
                         tweetHolder += "<div id='" + id + "' class='clear'>";
                         tweetHolder += "<div class='twitter-header'><table style='width: 100%;'><tr>";
@@ -200,8 +201,10 @@ var twitterStation = function () {
                         tweetHolder += "<td><h3>" + name + "</h3><div class='clear-space-two'></div>";
                         tweetHolder += "<h4>" + description + "</h4></td>";
                         tweetHolder += "<td style='width: 90px;'><div class='float-right'><a href='#collapse-expand' class='collapse-expand-btn td-subtract-btn margin-right' onclick=\"twitterStation.CollapseExpand(this);return false;\" title='Collapse/Expand'></a>";
-                        tweetHolder += "<a href='#edit' class='td-edit-btn margin-right' onclick=\"twitterStation.EditFeed('" + id + "');return false;\" title='Edit'></a>";
-                        tweetHolder += "<a href='#delete' class='td-cancel-btn' onclick=\"twitterStation.DeleteFeed('" + id + "');return false;\" title='Delete'></a>";
+                        if (enableEdit == "true") {
+                            tweetHolder += "<a href='#edit' class='td-edit-btn margin-right' onclick=\"twitterStation.EditFeed('" + id + "');return false;\" title='Edit'></a>";
+                            tweetHolder += "<a href='#delete' class='td-cancel-btn' onclick=\"twitterStation.DeleteFeed('" + id + "');return false;\" title='Delete'></a>";
+                        }
                         tweetHolder += "</div></td></tr></table></div>";
                         tweetHolder += "<div class='twitter-feed-list'><ul>";
 
@@ -224,6 +227,10 @@ var twitterStation = function () {
                     }
 
                     $("#twitterstation-load").find("#twitterstation-posts").html(tweetHolder);
+
+                    if ($.trim($("#twitterstation-load").find("#twitterstation-posts").html()) == "") {
+                        $("#twitterstation-load").find("#twitterstation-posts").html("<h3 class='pad-all'>No Twitter feeds found.</h3>");
+                    }
                     
                     for (var i = 0; i < collapsedItems.length; i++) {
                         $("#" + collapsedItems[i]).find(".twitter-feed-list").hide();

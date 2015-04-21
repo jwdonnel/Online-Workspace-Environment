@@ -1,4 +1,4 @@
-﻿<%@ page title="App Editor" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppManager, App_Web_maxdjl0u" %>
+﻿<%@ page title="App Editor" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppManager, App_Web_wwykq1g1" %>
 
 <%@ Register TagPrefix="cc" Namespace="TextEditor" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
@@ -212,11 +212,11 @@
                             <asp:Panel ID="pnl_filename" runat="server">
                                 <table cellpadding="10" cellspacing="10">
                                     <tr>
-                                        <td class="settings-name-column">Filename
+                                        <td class="settings-name-column">Filename Ext.
                                         </td>
                                         <td>
                                             <asp:TextBox ID="tb_filename_create" CssClass="textEntry" runat="server" Width="210px"
-                                                Enabled="false" MaxLength="150" BackColor="#EFEFEF"></asp:TextBox>
+                                                Enabled="false" MaxLength="150" BackColor="#EFEFEF" Style="display: none;"></asp:TextBox>
                                             <asp:DropDownList ID="dd_filename_ext" runat="server" ClientIDMode="Static" CssClass="margin-left">
                                                 <asp:ListItem Text=".html (Standard Extention)" Value=".html"></asp:ListItem>
                                                 <asp:ListItem Text=".ascx (ASP.Net Extention)" Value=".ascx"></asp:ListItem>
@@ -262,27 +262,23 @@
                             </div>
                             <div class="clear">
                             </div>
-                            <table cellpadding="10" cellspacing="10">
+                            <table cellpadding="10" cellspacing="10" width="100%">
                                 <tr>
                                     <td class="settings-name-column">Description
                                     </td>
                                     <td>
-                                        <asp:TextBox ID="tb_description_create" runat="server" CssClass="textEntry" AutoPostBack="False"
-                                            TextMode="MultiLine" Height="65px" Font-Names='"Arial"' BorderColor="#D9D9D9"
-                                            Width="375px" BorderStyle="Solid" BorderWidth="1px" Style="padding: 4px;" ForeColor="#353535"></asp:TextBox>
+                                        <asp:TextBox ID="tb_description_create" runat="server" CssClass="textEntry" AutoPostBack="False" Width="90%"></asp:TextBox>
                                     </td>
                                 </tr>
                             </table>
                             <div class="clear">
                             </div>
-                            <table cellpadding="10" cellspacing="10">
+                            <table cellpadding="10" cellspacing="10" width="100%">
                                 <tr>
                                     <td class="settings-name-column">About
                                     </td>
                                     <td>
-                                        <asp:TextBox ID="tb_about_create" runat="server" CssClass="textEntry" AutoPostBack="False"
-                                            TextMode="MultiLine" Height="65px" Font-Names='"Arial"' BorderColor="#D9D9D9"
-                                            Width="375px" BorderStyle="Solid" BorderWidth="1px" Style="padding: 4px;" ForeColor="#353535"></asp:TextBox>
+                                        <asp:TextBox ID="tb_about_create" runat="server" CssClass="textEntry" AutoPostBack="False" Width="90%"></asp:TextBox>
                                     </td>
                                 </tr>
                             </table>
@@ -292,16 +288,14 @@
                                         <td class="settings-name-column">HTML Link
                                         </td>
                                         <td>
-                                            <asp:TextBox ID="tb_html_create" runat="server" CssClass="textEntry" AutoPostBack="False"
-                                                TextMode="MultiLine" Height="50px" Font-Names='"Arial"' BorderColor="#D9D9D9"
-                                                Width="375px" BorderStyle="Solid" BorderWidth="1px" Style="padding: 4px;" ForeColor="#353535"></asp:TextBox>
+                                            <asp:TextBox ID="tb_html_create" runat="server" CssClass="textEntry" AutoPostBack="False" Width="90%"></asp:TextBox>
+                                            <div class="clear-space-five">
+                                            </div>
+                                            <small><b class="pad-right-sml">Note:</b>Icon will be downloaded from html link
+                                        automatically if available.</small>
                                         </td>
                                     </tr>
                                 </table>
-                                <div class="clear-space-five">
-                                </div>
-                                <small><b class="pad-right-sml pad-left">Note:</b>Icon will be downloaded from html link
-                                        automatically if available.</small>
                             </asp:Panel>
                             <asp:Panel ID="pnl_appicon" runat="server">
                                 <table cellpadding="10" cellspacing="10">
@@ -336,7 +330,7 @@
                                             <td class="settings-name-column">Icon Url
                                             </td>
                                             <td>
-                                                <asp:TextBox ID="tb_imageurl" runat="server" CssClass="textEntry" Width="375px"></asp:TextBox>
+                                                <asp:TextBox ID="tb_imageurl" runat="server" CssClass="textEntry" Width="90%"></asp:TextBox>
                                                 <div class="clear-space-five">
                                                 </div>
                                                 <small><b>.png</b> <b>.jpeg</b> and <b>.gif</b> only allowed</small>
@@ -346,32 +340,6 @@
                                 </div>
                             </asp:Panel>
                             <div class="clear-space-five">
-                            </div>
-                            <table cellpadding="10" cellspacing="10">
-                                <tr>
-                                    <td class="settings-name-column">Allow Pop Out
-                                    </td>
-                                    <td>
-                                        <asp:DropDownList ID="dd_allowpopout_create" runat="server" Style="width: 75px; margin-top: 2px;">
-                                            <asp:ListItem Text="True" Value="1"></asp:ListItem>
-                                            <asp:ListItem Text="False" Value="0" Selected="True"></asp:ListItem>
-                                        </asp:DropDownList>
-                                    </td>
-                                </tr>
-                            </table>
-                            <div class="clear-space-two">
-                            </div>
-                            <table cellpadding="10" cellspacing="10">
-                                <tr>
-                                    <td class="settings-name-column">
-                                        <span id="span1">Pop Out Location</span>
-                                    </td>
-                                    <td>
-                                        <asp:TextBox ID="tb_popoutLoc_create" runat="server" CssClass="textEntry" Width="375px"></asp:TextBox>
-                                    </td>
-                                </tr>
-                            </table>
-                            <div class="clear-space-two">
                             </div>
                             <asp:Panel ID="pnl_new_AssociatedOverlay" runat="server">
                                 <table cellpadding="10" cellspacing="10">
@@ -429,19 +397,51 @@
                             </table>
                             <div class="clear-space-two">
                             </div>
+                            <asp:Panel ID="pnl_AppPackage" runat="server">
+                                <table cellpadding="10" cellspacing="10">
+                                    <tr>
+                                        <td class="settings-name-column">App Package
+                                        </td>
+                                        <td style="width: 200px;">
+                                            <asp:CheckBoxList ID="dd_package" runat="server">
+                                            </asp:CheckBoxList>
+                                        </td>
+                                        <td><small>Select a app package that you want the created app to be in.</small>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="clear-space-two">
+                                </div>
+                            </asp:Panel>
                             <table cellpadding="10" cellspacing="10">
                                 <tr>
-                                    <td class="settings-name-column">App Package
+                                    <td class="settings-name-column">Allow Pop Out
                                     </td>
                                     <td style="width: 200px;">
-                                        <asp:DropDownList ID="dd_package" runat="server">
+                                        <asp:DropDownList ID="dd_allowpopout_create" runat="server" Style="width: 75px; margin-top: 2px;">
+                                            <asp:ListItem Text="True" Value="1"></asp:ListItem>
+                                            <asp:ListItem Text="False" Value="0" Selected="True"></asp:ListItem>
                                         </asp:DropDownList>
                                     </td>
-                                    <td><small>Select a app package that you want the created app to be in.</small>
+                                    <td><small>You can set a popout location for an app that allows users to open the app in a seperate window outside the workspace.</small>
                                     </td>
                                 </tr>
                             </table>
                             <div class="clear-space-two">
+                            </div>
+                            <div id="popoutlocdiv" style="display: none;">
+                                <table cellpadding="10" cellspacing="10" width="100%">
+                                    <tr>
+                                        <td class="settings-name-column">
+                                            <span id="span1">Pop Out Location</span>
+                                        </td>
+                                        <td>
+                                            <asp:TextBox ID="tb_popoutLoc_create" runat="server" CssClass="textEntry" Width="90%"></asp:TextBox>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="clear-space-two">
+                                </div>
                             </div>
                             <table cellpadding="10" cellspacing="10">
                                 <tr>

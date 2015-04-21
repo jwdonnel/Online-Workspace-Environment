@@ -1,4 +1,4 @@
-﻿<%@ page title="Site Settings" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_SiteSettings, App_Web_x0t4gn0u" %>
+﻿<%@ page title="Site Settings" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_SiteSettings, App_Web_i1ijfqeu" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -565,6 +565,18 @@
                                 </div>
                             </div>
                             <div class="table-settings-box">
+                                <div class="td-settings-title">
+                                    Clear All User Group Session States
+                                </div>
+                                <div class="title-line"></div>
+                                <div class="td-settings-ctrl">
+                                    <asp:Button ID="btn_ClearGroupSessions" runat="server" CssClass="RandomActionBtns input-buttons" Text="Clear Sessions" OnClick="btn_ClearGroupSessions_Click" />
+                                </div>
+                                <div class="td-settings-desc">
+                                    Click here to clear all group session states stored in memory. This will kick any user currently logged into a group off.
+                                </div>
+                            </div>
+                            <div class="table-settings-box">
                                 <div class="td-settings-title">Lock File Manager</div>
                                 <div class="title-line"></div>
                                 <div class="td-settings-ctrl">
@@ -829,6 +841,23 @@
                                     </div>
                                 </div>
                             </asp:Panel>
+                            <div class="table-settings-box">
+                                <div class="td-settings-title">
+                                    Force Group Login
+                                </div>
+                                <div class="title-line"></div>
+                                <div class="td-settings-ctrl">
+                                    <div class="field switch inline-block">
+                                        <asp:RadioButton ID="rb_ForceGroupLogin_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                            OnCheckedChanged="rb_ForceGroupLogin_on_CheckedChanged" AutoPostBack="True" />
+                                        <asp:RadioButton ID="rb_ForceGroupLogin_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                            OnCheckedChanged="rb_ForceGroupLogin_off_CheckedChanged" AutoPostBack="True" />
+                                    </div>
+                                </div>
+                                <div class="td-settings-desc">
+                                    You can force users to login to a group by enabling this feature. Enabling this will force users to use the default login page. (No preview or demo users allowed)
+                                </div>
+                            </div>
                             <asp:Panel ID="pnl_showpreviewbutton" runat="server">
                                 <div class="table-settings-box">
                                     <div class="td-settings-title">
@@ -849,24 +878,26 @@
                                     </div>
                                 </div>
                             </asp:Panel>
-                            <div class="table-settings-box">
-                                <div class="td-settings-title">
-                                    No Login Required
-                                </div>
-                                <div class="title-line"></div>
-                                <div class="td-settings-ctrl">
-                                    <div class="field switch inline-block">
-                                        <asp:RadioButton ID="rb_nologinrequired_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                            OnCheckedChanged="rb_nologinrequired_on_CheckedChanged" AutoPostBack="True" />
-                                        <asp:RadioButton ID="rb_nologinrequired_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                            OnCheckedChanged="rb_nologinrequired_off_CheckedChanged" AutoPostBack="True" />
+                            <asp:Panel ID="pnl_nologinrequired" runat="server">
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">
+                                        No Login Required
+                                    </div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <div class="field switch inline-block">
+                                            <asp:RadioButton ID="rb_nologinrequired_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                                OnCheckedChanged="rb_nologinrequired_on_CheckedChanged" AutoPostBack="True" />
+                                            <asp:RadioButton ID="rb_nologinrequired_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                                OnCheckedChanged="rb_nologinrequired_off_CheckedChanged" AutoPostBack="True" />
+                                        </div>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        Set to No to make the site available to anyone without
+                                                an account.
                                     </div>
                                 </div>
-                                <div class="td-settings-desc">
-                                    Set to No to make the site available to anyone without
-                                                an account.
-                                </div>
-                            </div>
+                            </asp:Panel>
                             <asp:Panel ID="pnl_NoLoginMainPage" runat="server" Enabled="false" Visible="false">
                                 <div class="clear-space">
                                 </div>
@@ -1166,26 +1197,26 @@
                                                 </div>
                                             </div>
                                         </asp:Panel>
-                                        <div class="table-settings-box">
-                                            <div class="td-settings-title">
-                                                User Sign Up Role
-                                            </div>
-                                            <div class="title-line"></div>
-                                            <div class="td-settings-ctrl">
-                                                <asp:DropDownList ID="dd_usersignuprole" runat="server" CssClass="margin-right">
-                                                </asp:DropDownList>
-                                                <asp:Button ID="btn_usersignuprole" runat="server" OnClick="dd_usersignuprole_Changed" CssClass="input-buttons RandomActionBtns" Text="Update" />
-                                            </div>
-                                            <div class="td-settings-desc">
-                                                Select an initial role for the user registering an account. (To create new roles, go to User Accounts and select Manage Roles at the top)
-                                            </div>
-                                        </div>
-                                        <div class="clear-space">
-                                        </div>
-                                        <a id="btn_customizeua" href="#iframecontent" class="margin-right float-left input-buttons"
-                                            onclick="openWSE.LoadIFrameContent('SiteTools/UserMaintenance/AcctSettings.aspx?toolview=true&u=NewUserDefaults&NoRegistration=true', this);return false;"
-                                            style="display: block;"><span class="img-customize margin-right-sml float-left"></span>New User Customization Settings</a>
                                     </asp:Panel>
+                                    <div class="table-settings-box">
+                                        <div class="td-settings-title">
+                                            User Sign Up Role
+                                        </div>
+                                        <div class="title-line"></div>
+                                        <div class="td-settings-ctrl">
+                                            <asp:DropDownList ID="dd_usersignuprole" runat="server" CssClass="margin-right">
+                                            </asp:DropDownList>
+                                            <asp:Button ID="btn_usersignuprole" runat="server" OnClick="dd_usersignuprole_Changed" CssClass="input-buttons RandomActionBtns" Text="Update" />
+                                        </div>
+                                        <div class="td-settings-desc">
+                                            Select an initial role for the user registering an account. (To create new roles, go to User Accounts and select Manage Roles at the top)
+                                        </div>
+                                    </div>
+                                    <div class="clear-space">
+                                    </div>
+                                    <a id="btn_customizeua" href="#iframecontent" class="margin-right float-left input-buttons"
+                                        onclick="openWSE.LoadIFrameContent('SiteTools/UserMaintenance/AcctSettings.aspx?toolview=true&u=NewUserDefaults&NoRegistration=true', this);return false;"
+                                        style="display: block;"><span class="img-customize margin-right-sml float-left"></span>New User Customization Settings</a>
                                 </div>
                             </div>
                         </asp:Panel>

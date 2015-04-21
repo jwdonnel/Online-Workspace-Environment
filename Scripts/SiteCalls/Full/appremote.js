@@ -1,8 +1,8 @@
 ﻿// -----------------------------------------------------------------------------------
 //
-//	appRemote v4.0
+//	appRemote v4.1
 //	by John Donnelly
-//	Last Modification: 3/30/2015
+//	Last Modification: 4/19/2015
 //
 //	Licensed under the Creative Commons Attribution 2.5 License - http://creativecommons.org/licenses/by/2.5/
 //  	- Free for use in both personal and commercial projects
@@ -24,7 +24,8 @@ var appRemote_Config = {
     workspaceMode: "",
     notiInterval: 7000,
     siteTheme: "Standard",
-    siteRootFolder: ""
+    siteRootFolder: "",
+    forceGroupLogin: false
 };
 
 var appRemote = function () {
@@ -302,7 +303,7 @@ var appRemote = function () {
         StartLoadingOverlay("Trying to Sync");
         CanConnectToWorkspace();
     });
-    $(document.body).on("click", "#groupLogin", function () {
+    $(document.body).on("click", "#groupLogin, #changeGroupLogin", function () {
         if ($("#grouplogin-list").css("display") != "block") {
             if (window.location.href.indexOf("?") == -1) {
                 window.location += "?groupLogin=true";
@@ -379,7 +380,7 @@ var appRemote = function () {
             contentType: "application/json; charset=utf-8",
             success: function (data) {
                 if (data.d == "true") {
-                    location.reload();
+                    window.location = "AppRemote.aspx";
                 }
                 else {
                     window.location = "AppRemote.aspx?group=" + id;
@@ -453,36 +454,38 @@ var appRemote = function () {
 
     var canConnect = false;
     function CanConnectToWorkspace() {
-        if (!appRemote.IsComplexWorkspaceMode()) {
-            $("#db-s").remove();
-            canConnect = true;
-        }
-        else {
-            if (!isDemoMode && !isAdminMode) {
-                $.ajax({
-                    url: "WebServices/AcctSettings.asmx/CanConnectToWorkspace",
-                    type: "POST",
-                    data: '{ }',
-                    contentType: "application/json; charset=utf-8",
-                    success: function (data) {
-                        if (data.d == "simple") {
-                            canConnect = false;
-                        }
-                        else {
-                            if (appRemote.ConvertBitToBoolean(data.d)) {
-                                canConnect = true;
-                            }
-                            else {
+        if (!appRemote_Config.forceGroupLogin) {
+            if (!appRemote.IsComplexWorkspaceMode()) {
+                $("#db-s").remove();
+                canConnect = true;
+            }
+            else {
+                if (!isDemoMode && !isAdminMode) {
+                    $.ajax({
+                        url: "WebServices/AcctSettings.asmx/CanConnectToWorkspace",
+                        type: "POST",
+                        data: '{ }',
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            if (data.d == "simple") {
                                 canConnect = false;
                             }
+                            else {
+                                if (appRemote.ConvertBitToBoolean(data.d)) {
+                                    canConnect = true;
+                                }
+                                else {
+                                    canConnect = false;
+                                }
+                            }
+                            Load();
+                        },
+                        error: function () {
+                            canConnect = false;
+                            Load();
                         }
-                        Load();
-                    },
-                    error: function () {
-                        canConnect = false;
-                        Load();
-                    }
-                });
+                    });
+                }
             }
         }
     }
@@ -524,55 +527,61 @@ var appRemote = function () {
             ResetControls();
             ShiftControls();
 
-            if (currUrl == "") {
-                if ($("#pnl_login").length > 0 && $("#pnl_icons").length == 0) {
-                    $("#pnl_login").show();
-                }
-                else {
-                    $("#pnl_icons").show();
-                    GetAllOpenedApps();
-                    CategoryBack(false);
-                }
-            }
-            else if (currUrl.indexOf("loginPnl=true") != -1) {
-                $("#pnl_login").show();
-                $("#pnl_icons").hide();
-            }
-            else if (currUrl.indexOf("notiOn=true") != -1) {
-                $("#apps_header_btn, #chat_header_btn, #pages_header_btn, #login_header_btn").hide();
-                $("#db-c").show();
-                GetUserNotifications(true);
-                $("#notifications-viewtable").show();
-            }
-            else if (currUrl.indexOf("groupLogin=true") != -1) {
-                $("#apps_header_btn, #chat_header_btn, #pages_header_btn, #login_header_btn").hide();
-                $("#db-c").show();
-                GroupLoginModal();
+            if (appRemote_Config.forceGroupLogin) {
                 $("#grouplogin-list").show();
+                GroupLoginModal();
             }
             else {
-                if ($("#pnl_login").length > 0 && $("#pnl_icons").length == 0) {
-                    $("#pnl_login").show();
-                }
-                else {
-                    var id = getUrlParameterByName("id");
-                    var category = getUrlParameterByName("category");
-                    var appId = getUrlParameterByName("appId");
-                    var name = getUrlParameterByName("name");
-
-                    appRemote_Config.categoryId = id;
-                    appRemote_Config.categoryName = category;
-                    appRemote_Config.remoteId = appId;
-                    appRemote_Config.remoteName = name;
-
-                    if (id == "chatClient") {
-                        LoadChatClient(category, appId, name);
-                    }
-                    else if (id == "adminPages") {
-                        LoadAdminPages(id, category);
+                if (currUrl == "") {
+                    if ($("#pnl_login").length > 0 && $("#pnl_icons").length == 0) {
+                        $("#pnl_login").show();
                     }
                     else {
-                        LoadAppIcons(id, category, appId, name);
+                        $("#pnl_icons").show();
+                        GetAllOpenedApps();
+                        CategoryBack(false);
+                    }
+                }
+                else if (currUrl.indexOf("loginPnl=true") != -1) {
+                    $("#pnl_login").show();
+                    $("#pnl_icons").hide();
+                }
+                else if (currUrl.indexOf("notiOn=true") != -1) {
+                    $("#apps_header_btn, #chat_header_btn, #pages_header_btn, #login_header_btn").hide();
+                    $("#db-c").show();
+                    GetUserNotifications(true);
+                    $("#notifications-viewtable").show();
+                }
+                else if (currUrl.indexOf("groupLogin=true") != -1) {
+                    $("#apps_header_btn, #chat_header_btn, #pages_header_btn, #login_header_btn").hide();
+                    $("#db-c").show();
+                    GroupLoginModal();
+                    $("#grouplogin-list").show();
+                }
+                else {
+                    if ($("#pnl_login").length > 0 && $("#pnl_icons").length == 0) {
+                        $("#pnl_login").show();
+                    }
+                    else {
+                        var id = getUrlParameterByName("id");
+                        var category = getUrlParameterByName("category");
+                        var appId = getUrlParameterByName("appId");
+                        var name = getUrlParameterByName("name");
+
+                        appRemote_Config.categoryId = id;
+                        appRemote_Config.categoryName = category;
+                        appRemote_Config.remoteId = appId;
+                        appRemote_Config.remoteName = name;
+
+                        if (id == "chatClient") {
+                            LoadChatClient(category, appId, name);
+                        }
+                        else if (id == "adminPages") {
+                            LoadAdminPages(id, category);
+                        }
+                        else {
+                            LoadAppIcons(id, category, appId, name);
+                        }
                     }
                 }
             }
@@ -1342,7 +1351,7 @@ var appRemote = function () {
                 var listorder = '';
                 $('.app-icon').each(function () {
                     var temp = $(this).attr('data-appid');
-                    if (temp != '') {
+                    if (temp != '' && listorder.indexOf(temp) == -1) {
                         listorder += (temp + ',');
                     }
                 });

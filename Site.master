@@ -1,4 +1,4 @@
-﻿<%@ master language="C#" autoeventwireup="true" inherits="SiteMaster, App_Web_2ux1dlqd" %>
+﻿<%@ master language="C#" autoeventwireup="true" inherits="SiteMaster, App_Web_iv0v2cts" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -185,9 +185,10 @@
                                             </div>
                                         </div>
                                         <div id="profile_tab_Buttons">
-                                            <a id="aGroupLogin" runat="server" href="#" onclick="openWSE.GroupLoginModal();return false;" class="float-left margin-left margin-right">Group Login</a>
-                                            <asp:LinkButton ID="aGroupLogoff" runat="server" OnClick="aGroupLogoff_Click" CssClass="RandomActionBtns float-left margin-left margin-right" Enabled="false" Visible="false">Log out of Group</asp:LinkButton>
-                                            <asp:LinkButton ID="lbtn_signoff" runat="server" OnClick="lbtn_signoff_Click" CssClass="float-right margin-left margin-right">Log Out</asp:LinkButton>
+                                            <a id="aGroupLogin" runat="server" href="#" onclick="openWSE.GroupLoginModal();return false;" class="margin-left margin-right">Group Login</a>
+                                            <a id="aChangeGroupLogin" runat="server" href="#" onclick="openWSE.GroupLoginModal();return false;" class="margin-left margin-right" visible="false">Change Group</a>
+                                            <asp:LinkButton ID="aGroupLogoff" runat="server" OnClick="aGroupLogoff_Click" CssClass="RandomActionBtns margin-left margin-right" Enabled="false" Visible="false">Log out of Group</asp:LinkButton>
+                                            <asp:LinkButton ID="lbtn_signoff" runat="server" OnClick="lbtn_signoff_Click" CssClass="margin-left margin-right">Log Out</asp:LinkButton>
                                         </div>
                                     </li>
                                 </ul>

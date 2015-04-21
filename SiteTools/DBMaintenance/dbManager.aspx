@@ -1,4 +1,4 @@
-﻿<%@ page title="Database Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_DbManager, App_Web_cp2zhyoy" %>
+﻿<%@ page title="Database Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_DbManager, App_Web_gr4m0uh1" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
 </asp:Content>

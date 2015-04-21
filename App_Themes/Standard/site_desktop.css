@@ -377,9 +377,8 @@ td.day-picker-alt-hover:hover a{color:#2d2d2d!important}
 .applog-workspace-entries{max-height:560px;min-height:200px;overflow:auto}
 .message-board-workspace,.rss-feed-workspace{max-height:545px;min-height:200px;min-width:475px;overflow:hidden}
 .message-board-pnl-entries,.rss-feed-pnl-entries{max-height:490px;min-height:145px;overflow:auto}
-.message-board-workspace-entry{padding:7px 5px 15px 5px;margin-bottom:5px;border-bottom:1px solid #B7B7B7}
+.message-board-workspace-entry{padding:7px 5px 15px 5px;margin-bottom:5px;border-bottom:1px solid #555}
 .message-board-workspace-entry a{text-decoration:underline}
-.message-board-workspace-entry-altRow{background:#EEE}
 .OverlayMBLoading{height:30px;padding:5px 15px}
 .personalcalendar-overlay-entry{float:left;font-size:12px;padding:10px;margin-bottom:10px;min-width:225px;min-height:65px;margin-right:15px;margin-left:15px;position:relative}
 .personalcalendar-entry-bg{filter:alpha(opacity=35);opacity:0.35;position:absolute;top:0;bottom:0;left:0;right:0;-moz-border-radius:15px;-webkit-border-radius:15px;border-radius:15px}
@@ -472,7 +471,7 @@ h5,h6{font-size:0.9em}
 .font-color-gray-dark{color:#A0A0A0!important}
 .font-color-white{color:White!important}
 .font-size-small{font-size:11px}
-small{font-size:11px;color:#555656}
+small{font-size:11px}
 b{font-weight:bold}
 
 
@@ -699,7 +698,7 @@ a:hover{text-decoration:underline}
 -------------------------------------------------------*/
 #update-element{display:none}
 .update-element-overlay{height:100%;left:0;position:fixed;text-align:center;top:0;width:100%;z-index:12000}
-.update-element-modal{display:block;text-align:center;position:fixed;background-color:rgba(15,15,15,0.8);padding:20px 40px 17px 40px;left:50%;top:50%;min-height:20px;margin-left:-50px;margin-top:-50px;-moz-box-shadow:-3px 3px 3px rgba(0,0,0,.25);-webkit-box-shadow:0 5px 7px rgba(0,0,0,.25);box-shadow:0 5px 7px rgba(0,0,0,.25);z-index:12000;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px}
+.update-element-modal{display:block;text-align:center;position:fixed;background-color:rgba(15,15,15,0.9);padding:20px 40px 17px 40px;left:50%;top:50%;min-height:20px;margin-left:-50px;margin-top:-50px;-moz-box-shadow:-3px 3px 3px rgba(0,0,0,.25);-webkit-box-shadow:0 5px 7px rgba(0,0,0,.25);box-shadow:0 5px 7px rgba(0,0,0,.25);z-index:12000;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px}
 .update-element-modal .loading-icon-sml{margin-top:-3px}
 .update-element-modal h3{color:#FFF;font-weight:bold;float:left;margin-top:1px;margin-left:10px;font-size:13px}
 .update-element-modal .progress{width:15px;padding-left:2px;text-align:left}
@@ -822,8 +821,8 @@ ul#ScheduleMenu li.active a,ul.ctlLineLinks li.active a,ul.homedashlinks li.acti
 .PostsComments:hover{-moz-border-radius:10px;-webkit-border-radius:10px;background-color:#fff;border-bottom:1px solid #efefef;border-left:1px solid #DDD;border-top:1px solid #DDD;border-radius:10px;border-right:1px solid #DDD;transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;-moz-box-shadow:-1px 1px 1px rgba(0,0,0,.3);-webkit-box-shadow:0 1px 2px rgba(0,0,0,.3);box-shadow:0 1px 2px rgba(0,0,0,.3)}
 .gvPostsBG{margin-bottom:20px;padding:0 15px}
 .messageText img{display:block;padding-bottom:25px;padding-top:25px}
+.quoting{padding:10px 10px 20px 10px;font-size:12px}
 .officePostsComments{color:#555656}
-.PostsComments-altRow{background:#EEE}
 .shopPostsComments{-moz-border-radius:10px;-webkit-border-radius:10px;border-radius:10px;background:#e0e0e0;color:#555656}
 .shopPostsComments b{color:#000;font-size:14px}
 .shopPostsComments p{color:#990404;font-size:14px;line-height:1.6em;margin:0 15px;padding:2px 3px}
@@ -975,6 +974,7 @@ a,.inline-block,#searchwrapper,#searchwrapper-app-search,.RadioButton-Toggle-Ove
 .ajaxCall_Modal,.docTableClick,.catButtons,.usersclick,.RandomActionBtns,.updatestatus{cursor:pointer}
 select{-moz-border-radius:3px;-webkit-border-radius:3px;background:#F9F9F9;border:1px solid #EEE;border-top:1px solid #CCC!important;border-radius:3px;color:#555656;height:25px;padding:3px}
 img{border:0 solid transparent}
+.loading-message{display:none;padding:10px;font-size:15px}
 
 
 
@@ -1151,7 +1151,7 @@ input.signintextbox{width:200px;padding:10px;border:1px solid #DDD;background-co
 .top-options li.a.active{background-color:#F0F0F0;opacity:1.0;filter:alpha(opacity=100)}
 .top-options li.a.active .username-top-info,.top-options li.a.active .signin-text{color:#3d3d3d}
 #user_profile_tab .a{opacity:1.0;filter:alpha(opacity=100);padding-top:10px;height:24px}
-#profile_tab_Buttons{min-height:52px;padding:0 3px;margin-top:10px;display:block;background:#FFF url(Body/transparent-hr.png) top center no-repeat}
+#profile_tab_Buttons{min-height:52px;padding:0 3px;margin-top:10px;display:block;background:#FFF url(Body/transparent-hr.png) top center no-repeat;text-align:center}
 #profile_tab_Buttons a{font-size:12px;text-align:center;display:inline-block;min-width:111px;padding:7px 2px;margin-top:15px;margin-bottom:10px;color:#FFF;font-weight:bold;background:#4D90FE;border:1px solid #3079ED;text-decoration:none;transition:all .1s ease-in-out;-moz-transition:all .1s ease-in-out;-webkit-transition:all .1s ease-in-out;-moz-border-radius:2px;border-radius:2px;-webkit-border-radius:2px}
 #profile_tab_Buttons a:hover{background:#357AE8;border:1px solid #2F5BB7}
 .top-options .li-header{background:#F0F0F0;width:100%;border-bottom:1px solid #CCC;border-size:border-box;-mox-box-sizing:border-box;padding:10px 10px 5px 10px;position:relative;font-size:12px;font-weight:bold;color:#777}
@@ -1225,10 +1225,10 @@ input.signintextbox{width:200px;padding:10px;border:1px solid #DDD;background-co
 
 /* Workspace Selector
 ----------------------------------*/
-#workspace-selector{height:34px;overflow:hidden;float:left;margin-right:5px;border-left:1px solid transparent;border-right:1px solid transparent;transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out}
+#workspace-selector{height:34px;overflow:hidden;float:left;border-left:1px solid transparent;border-right:1px solid transparent;transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out}
 #workspace-selector:hover{background:#252525;border-left:1px solid #444;border-right:1px solid #444}
 #workspace-selector:active{background:#1C1C1C}
-#workspace-selector #lnk_BackToWorkspace{font-size:12px;color:#FFF;text-decoration:none!important;padding:10px 15px 0 20px;height:24px;float:left;background-image:url(Icons/back.png);background-position:left center;background-repeat:no-repeat}
+#workspace-selector #lnk_BackToWorkspace,#workspace-selector #lbtn_Logoff{font-size:12px;color:#FFF;text-decoration:none!important;padding:10px 15px 0 20px;height:24px;float:left;background-image:url(Icons/back.png);background-position:left center;background-repeat:no-repeat}
 #ddl_WorkspaceSelector{font-size:12px;float:left;cursor:pointer;padding:10px 17px 3px 10px;height:21px;transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out}
 #ddl_WorkspaceSelector.active{background:#F0F0F0}
 #ddl_WorkspaceSelector.active .selected-workspace{color:#3D3D3D}

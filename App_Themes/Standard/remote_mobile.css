@@ -61,9 +61,9 @@
 
 /* Group Login
 ----------------------------------*/
-#groupLogin,#groupLogout{cursor:pointer;color:#555;background:#EFEFEF;padding:5px;text-align:center;font-size:14px;border-bottom:1px solid #CCC;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
-#groupLogin:hover,#groupLogout:hover{background:#DDD}
-#groupLogin:active,#groupLogout:active{background:#CCC}
+#groupLogin,#changeGroupLogin,#groupLogout{cursor:pointer;color:#555;background:#EFEFEF;padding:5px;text-align:center;font-size:14px;border-bottom:1px solid #CCC;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
+#groupLogin:hover,#changeGroupLogin:hover,#groupLogout:hover{background:#DDD}
+#groupLogin:active,#changeGroupLogin:active,#groupLogout:active{background:#CCC}
 #grouplogin-list{display:none;z-index:8000}
 
 

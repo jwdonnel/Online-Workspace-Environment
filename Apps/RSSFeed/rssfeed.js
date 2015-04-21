@@ -77,7 +77,7 @@ function GetRSSHeaders(loading) {
             data: '{ }',
             contentType: "application/json; charset=utf-8",
             success: function (data) {
-                openWSE.RemoveUpdateModal();
+                HideRSSLoading();
                 if (data.d != null) {
                     if (data.d[0].length == 0) {
                         $("#Saved-RSSFeeds").html("");
@@ -126,6 +126,11 @@ function GetRSSHeaders(loading) {
 
                         if (currRSSselected != "") {
                             $("#Saved-RSSFeeds").val(currRSSselected);
+                            if ($("#Saved-RSSFeeds").val() == "" || $("#Saved-RSSFeeds").val() == null) {
+                                currRSSselected = "-MostRecent-";
+                                $("#Saved-RSSFeeds").val(currRSSselected);
+                            }
+
                             if (loading) {
                                 LoadingRSSFeed("Building RSS Feed...");
                             }
@@ -141,7 +146,7 @@ function GetRSSHeaders(loading) {
                 }
             },
             error: function (data) {
-                openWSE.RemoveUpdateModal();
+                HideRSSLoading();
                 $("#rssfeed_Holder").html("<h3 class='pad-all' style='color: Red'>Error loading news feeds. Please close app and try again.</h3>");
             }
         });
@@ -185,7 +190,7 @@ function ViewAllNewFeeds(index) {
     }
 
     if (index < x.length) {
-        openWSE.RemoveUpdateModal();
+        HideRSSLoading();
         LoadingRSSFeed("Building RSS Feeds...");
         if (x.options[index].value != "-MostRecent-") {
             GetRSSFeeds(x.options[index].value, true, index);
@@ -227,7 +232,7 @@ function GetRSSFeeds(url, viewAll, index) {
             contentType: "application/json; charset=utf-8",
             success: function (data) {
                 var response = $.trim(data.d);
-                openWSE.RemoveUpdateModal();
+                HideRSSLoading();
                 gettingFeeds = false;
                 if (viewAll) {
                     $("#viewallul").append(response);
@@ -258,7 +263,7 @@ function GetRSSFeeds(url, viewAll, index) {
             error: function (data) {
                 $("#rssadderror").html("<h3 class='pad-all' style='color: Red'>There seems to be an error getting the requested feeds. Try changing the Feeds to Show to a smaller number.</h3>");
                 gettingFeeds = false;
-                openWSE.RemoveUpdateModal();
+                HideRSSLoading();
             }
         });
     }
@@ -317,7 +322,7 @@ function AddCustomRSSUrl() {
             success: function (data) {
                 var title = data.d[0];
                 var id = data.d[1];
-                openWSE.RemoveUpdateModal();
+                HideRSSLoading();
                 if ((title != "error") && (id != "")) {
                     $("#myfeedsmessage").remove();
                     $("#myfeedsholder").prepend("<div id='" + id + "' class='add-rss-list-item add-rss-list-item-hasitem' title='Add " + title + "' onclick=\"AddFeed(this, '" + url + "')\">" + title + "</div>");
@@ -333,7 +338,7 @@ function AddCustomRSSUrl() {
                 }, 3000);
             },
             error: function (data) {
-                openWSE.RemoveUpdateModal();
+                HideRSSLoading();
                 $("#rssadderror").html("<h4 style='color: Red;'>Could not add feed. Check to make sure url points to RSS feed.</h4>");
                 setTimeout(function () {
                     $("#rssadderror").html("");
@@ -344,8 +349,13 @@ function AddCustomRSSUrl() {
 }
 
 function LoadingRSSFeed(message) {
-    openWSE.RemoveUpdateModal();
-    openWSE.LoadingMessage1(message);
+    $("#rssfeed-load").find(".loading-message").show();
+    $("#rssfeed-load").find(".loading-message").html(message);
+}
+
+function HideRSSLoading() {
+    $("#rssfeed-load").find(".loading-message").hide();
+    $("#rssfeed-load").find(".loading-message").html("");
 }
 
 function BuildADDRSSList() {
@@ -358,7 +368,7 @@ function BuildADDRSSList() {
         contentType: "application/json; charset=utf-8",
         success: function (data) {
             var count = 0;
-            openWSE.RemoveUpdateModal();
+            HideRSSLoading();
             if (data.d[0].length > 0) {
                 for (var i = 0; i < data.d[0].length; i++) {
                     if (openWSE.ConvertBitToBoolean(data.d[2][i])) {
@@ -381,7 +391,7 @@ function BuildADDRSSList() {
             LoadStandardRSSList(data, x);
         },
         error: function (data) {
-            openWSE.RemoveUpdateModal();
+            HideRSSLoading();
             x += "<h4 id='myfeedsmessage' class='pad-all' style='color: Red'>Error loading your rss feeds. Please close app and try again.</h4>";
             x += "</div>";
         }
@@ -462,11 +472,11 @@ function AddFeed(_this, url) {
         data: '{ "_title": "' + escape(title) + '","_url": "' + escape(url) + '","_rssid": "' + rssid + '","_needAdd": "' + needAdd + '" }',
         contentType: "application/json; charset=utf-8",
         success: function (data) {
-            openWSE.RemoveUpdateModal();
+            HideRSSLoading();
             GetRSSHeaders(false);
         },
         error: function (data) {
-            openWSE.RemoveUpdateModal();
+            HideRSSLoading();
         }
     });
 }

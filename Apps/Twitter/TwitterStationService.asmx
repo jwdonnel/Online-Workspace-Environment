@@ -22,26 +22,41 @@ public class TwitterStationService  : System.Web.Services.WebService {
     private ServerSettings _ss = new ServerSettings();
     private Dictionary<string, string> _params = new Dictionary<string, string>();
 
+    private string GetUsername {
+        get {
+            string userFeedName = HttpContext.Current.User.Identity.Name;
+            string groupId = GroupSessions.GetUserGroupSessionName(userFeedName);
+            if (!string.IsNullOrEmpty(groupId)) {
+                userFeedName = groupId;
+            }
+
+            return userFeedName;
+        }
+    }
+    
     [WebMethod]
     public string AddUserFeed(string title, string caption, string search, string display, string searchType) {
-        TwitterFeeds tf = new TwitterFeeds(HttpContext.Current.User.Identity.Name, false);
-        tf.addItem(Guid.NewGuid().ToString(), HttpContext.Current.User.Identity.Name, title.Trim(), caption.Trim(), search.Trim(), display.Trim(), searchType.Trim());
+        if (OpenWSE_Tools.Apps.AppInitializer.IsGroupAdminSession(HttpContext.Current.User.Identity.Name)) {
+            TwitterFeeds tf = new TwitterFeeds(GetUsername, false);
+            tf.addItem(Guid.NewGuid().ToString(), GetUsername, title.Trim(), caption.Trim(), search.Trim(), display.Trim(), searchType.Trim());
+        }
         
         return string.Empty;
     }
 
     [WebMethod]
     public string[] EditUserFeed(string id) {
-        TwitterFeeds tf = new TwitterFeeds(HttpContext.Current.User.Identity.Name, false);
-        Dictionary<string, string> row = tf.GetRow(id);
-
         List<string> returnObj = new List<string>();
-        if (row.Count > 0) {
-            returnObj.Add(row["Title"]);
-            returnObj.Add(row["Caption"]);
-            returnObj.Add(row["TwitterSearch"]);
-            returnObj.Add(row["Type"]);
-            returnObj.Add(row["Display"]);
+        if (OpenWSE_Tools.Apps.AppInitializer.IsGroupAdminSession(HttpContext.Current.User.Identity.Name)) {
+            TwitterFeeds tf = new TwitterFeeds(HttpContext.Current.User.Identity.Name, false);
+            Dictionary<string, string> row = tf.GetRow(id);
+            if (row.Count > 0) {
+                returnObj.Add(row["Title"]);
+                returnObj.Add(row["Caption"]);
+                returnObj.Add(row["TwitterSearch"]);
+                returnObj.Add(row["Type"]);
+                returnObj.Add(row["Display"]);
+            }
         }
 
         return returnObj.ToArray();
@@ -49,17 +64,21 @@ public class TwitterStationService  : System.Web.Services.WebService {
 
     [WebMethod]
     public string UpdateUserFeed(string id, string title, string caption, string search, string display, string searchType) {
-        TwitterFeeds tf = new TwitterFeeds(HttpContext.Current.User.Identity.Name, false);
-        tf.UpdateItem(id, title.Trim(), caption.Trim(), search.Trim(), display.Trim(), searchType.Trim());
+        if (OpenWSE_Tools.Apps.AppInitializer.IsGroupAdminSession(HttpContext.Current.User.Identity.Name)) {
+            TwitterFeeds tf = new TwitterFeeds(HttpContext.Current.User.Identity.Name, false);
+            tf.UpdateItem(id, title.Trim(), caption.Trim(), search.Trim(), display.Trim(), searchType.Trim());
+        }
         
         return string.Empty;
     }
 
     [WebMethod]
     public string DeleteUserFeed(string id) {
-        TwitterFeeds tf = new TwitterFeeds(HttpContext.Current.User.Identity.Name, false);
-        tf.deleteFeed(id);
-
+        if (OpenWSE_Tools.Apps.AppInitializer.IsGroupAdminSession(HttpContext.Current.User.Identity.Name)) {
+            TwitterFeeds tf = new TwitterFeeds(HttpContext.Current.User.Identity.Name, false);
+            tf.deleteFeed(id);
+        }
+        
         return string.Empty;
     }
     
@@ -69,7 +88,8 @@ public class TwitterStationService  : System.Web.Services.WebService {
             InitializeParms();
 
             List<object> returnObj = new List<object>();
-            TwitterFeeds feeds = new TwitterFeeds(HttpContext.Current.User.Identity.Name, true);
+            returnObj.Add(OpenWSE_Tools.Apps.AppInitializer.IsGroupAdminSession(HttpContext.Current.User.Identity.Name).ToString().ToLower());
+            TwitterFeeds feeds = new TwitterFeeds(GetUsername, true);
             
             foreach (Dictionary<string, string> entry in feeds.twitter_list) {
                 List<object> obj = new List<object>();
@@ -287,7 +307,8 @@ public class TwitterStationService  : System.Web.Services.WebService {
             return string.Format("{0} weeks ago",
             Math.Ceiling((double)dayDiff / 7));
         }
-        return null;
+        
+        return string.Empty;
     }
 
     private static string ConvertUrlsToLinks(string msg) {

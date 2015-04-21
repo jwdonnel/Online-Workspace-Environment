@@ -1,8 +1,8 @@
 ﻿// -----------------------------------------------------------------------------------
 //
-//	openWSE v4.0
+//	openWSE v4.1
 //	by John Donnelly
-//	Last Modification: 4/16/2015
+//	Last Modification: 4/19/2015
 //
 //	Licensed under the Creative Commons Attribution 2.5 License - http://creativecommons.org/licenses/by/2.5/
 //  	- Free for use in both personal and commercial projects
@@ -37,7 +37,8 @@ var openWSE_Config = {
     defaultBackgroundColor: "#FFFFFF",
     defaultBackgroundPosition: "center right",
     appSnapHelper: false,
-    appStyle: "Style_1"
+    appStyle: "Style_1",
+    onlyAllowOneAccordionOpen: false
 };
 
 var openWSE = function () {
@@ -93,7 +94,7 @@ var openWSE = function () {
 
         $("#accordian-sidebar").AccordianTab({
             allowCloseAll: true,
-            oneOpen: true,
+            oneOpen: openWSE_Config.onlyAllowOneAccordionOpen,
             startCollapsed: true,
             animationSpeed: openWSE_Config.animationSpeed,
             createCookie: true
@@ -3159,7 +3160,7 @@ var openWSE = function () {
                 var listorder = '';
                 $('.app-icon').each(function () {
                     var temp = $(this).attr('data-appid');
-                    if (temp != '') {
+                    if (temp != '' && listorder.indexOf(temp) == - 1) {
                         listorder += (temp + ',');
                     }
                 });

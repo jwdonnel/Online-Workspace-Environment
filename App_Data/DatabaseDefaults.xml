@@ -161,6 +161,7 @@
             <Column id="SaveCookiesAsSessions" type="bit" nullable="true"></Column>
             <Column id="HideSiteSettingIcons" type="bit" nullable="true"></Column>
             <Column id="SidebarToolCategoryIcons" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="ForceGroupLogin" type="bit" nullable="true"></Column>
         </Columns>
     </Table>
     <Table name="aspnet_ShowUpdates">
@@ -261,6 +262,8 @@
             <Column id="WorkspaceMode" type="nvarchar" length="50" nullable="true"></Column>
             <Column id="AppSnapHelper" type="bit" nullable="true"></Column>
             <Column id="UserAppStyle" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="SidebarAccordionMutliOpenAllowed" type="bit" nullable="true"></Column>
+            <Column id="DefaultLoginGroup" type="nvarchar" length="500" nullable="true"></Column>
         </Columns>
     </Table>
     <Table name="aspnet_UserNotificationMessages" primaryKey="ID">
@@ -509,6 +512,8 @@
             <Column id="AppSnapHelper" type="bit" nullable="true"></Column>
             <Column id="PluginsToInstall" type="nvarchar" length="4000" nullable="true"></Column>
             <Column id="UserAppStyle" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="SidebarAccordionMutliOpenAllowed" type="bit" nullable="true"></Column>
+            <Column id="DefaultLoginGroup" type="nvarchar" length="500" nullable="true"></Column>
             <Column id="DateUpdated" type="datetime" nullable="true"></Column>
         </Columns>
     </Table>

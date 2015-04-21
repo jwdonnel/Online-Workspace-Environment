@@ -25,6 +25,15 @@ function ConfirmLoaderFileCancel(_this) {
     return false;
 }
 
+$(document.body).on("change", "#MainContent_dd_allowpopout_create", function () {
+    if ($(this).val() == "1") {
+        $("#popoutlocdiv").show();
+    }
+    else {
+        $("#popoutlocdiv").hide();
+    }
+});
+
 function PerformAppCleanUp() {
     var x = "<div id='ConfirmCleanup-element' class='Modal-element' style='display: none;'>";
     x += "<div class='Modal-overlay'>";

@@ -1,4 +1,4 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_Twitter_TwitterStation, App_Web_rqtfc154" clientidmode="Static" %>
+﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_Twitter_TwitterStation, App_Web_p11pnu0o" clientidmode="Static" %>
 <div id="twitterstation-load" class="main-div-app-bg">
     <div class="pad-all app-title-bg-color" style="min-height: 55px;">
         <div class="float-left">
@@ -6,7 +6,7 @@
             <asp:Label ID="lbl_Title" runat="server" Text="" Font-Size="30px"></asp:Label>
         </div>
         <div>
-            <input type="button" value="Add Feed" class="input-buttons float-right no-margin" onclick="twitterStation.AddFeed();" />
+            <input id="btn_addNewTwitterFeed" runat="server" type="button" value="Add Feed" class="input-buttons float-right no-margin" onclick="twitterStation.AddFeed();" />
             <div class="clear-space-two">
             </div>
             <span id="update-int-text"></span>
@@ -16,7 +16,7 @@
     <div id="twitterstation-posts">
     </div>
 </div>
-<div id="TwitterAdd-element" class="Modal-element outside-main-app-div">
+<div id="TwitterAdd_element" runat="server" class="Modal-element outside-main-app-div">
     <div class="Modal-overlay">
         <div class="Modal-element-align">
             <div class="Modal-element-modal" data-setwidth="565">

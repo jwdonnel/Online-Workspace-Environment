@@ -499,11 +499,7 @@ public class MessageBoard : WebService
     {
         List<string> obj = new List<string>();
         StringBuilder str = new StringBuilder();
-        string altRow = "";
-        if (total % 2 != 0)
-            altRow = " PostsComments-altRow";
-
-        string className = "PostsComments officePostsComments" + altRow;
+        string className = "PostsComments officePostsComments";
 
         if (row["UserName"].ToLower() == "shop")
             className = "PostsComments shopPostsComments";
@@ -547,12 +543,7 @@ public class MessageBoard : WebService
         List<string> returnArray = new List<string>();
         StringBuilder str = new StringBuilder();
 
-        string altRow = "";
-        if (total % 2 != 0)
-            altRow = " message-board-workspace-entry-altRow";
-
         returnArray.Add(row["ID"] + "-overlay");
-        returnArray.Add(altRow);
 
         string realGroupNames = "";
         Groups g = new Groups();

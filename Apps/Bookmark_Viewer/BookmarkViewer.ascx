@@ -1,4 +1,4 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_Bookmark_Viewer_BookmarkViewer, App_Web_1befoqq0" clientidmode="Static" %>
+﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_Bookmark_Viewer_BookmarkViewer, App_Web_ucmd1ayt" clientidmode="Static" %>
 <div id="bookmarkviewer-load" class="main-div-app-bg">
     <div id="bookmarkviewer_scroller" class="pad-all app-title-bg-color"
         style="min-height: 70px">

@@ -1,4 +1,4 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="Default, App_Web_2ux1dlqd" %>
+﻿<%@ page language="C#" autoeventwireup="true" inherits="Default, App_Web_iv0v2cts" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -141,7 +141,7 @@
                                 <div id="pnl_preview" runat="server" onclick="OpeniframePage('Workspace.aspx?Demo=true&iframeName=Site Preview&iframeFullScreen=true');" class="panel-link" title="Preview Site">
                                     <div class="btn-sprite preview"></div>
                                 </div>
-                                <div id="pnl_CancelGroupLogin" runat="server" onclick="window.location.href='Default.aspx';" class="panel-link" visible="false" title="Cancel Group Login">
+                                <div id="pnl_CancelGroupLogin" runat="server" class="panel-link" visible="false" title="Cancel Group Login">
                                     <div class="btn-sprite cancel-lrg"></div>
                                 </div>
                             </div>
@@ -344,6 +344,11 @@
                     </div>
                 </div>
             </div>
+            <asp:UpdatePanel ID="updatepnl_GroupSessionLogoff" runat="server">
+                <ContentTemplate>
+                    <asp:HiddenField ID="hf_GroupSessionLogoff" runat="server" OnValueChanged="hf_GroupSessionLogoff_ValueChanged" />
+                </ContentTemplate>
+            </asp:UpdatePanel>
         </div>
         <div id="container-footer" class="footer">
             <div class="footer-padding">
@@ -390,6 +395,11 @@
         $(document).ready(function () {
             UpdateContainerHeight();
             HashChange();
+        });
+
+        $(document.body).on("click", "#pnl_CancelGroupLogin", function () {
+            $("#hf_GroupSessionLogoff").val(new Date().toString());
+            __doPostBack("hf_GroupSessionLogoff", "");
         });
 
         function UpdateContainerHeight() {

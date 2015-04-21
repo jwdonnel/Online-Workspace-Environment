@@ -1,4 +1,4 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_RSSFeed_RSSFeed, App_Web_syjcg4yl" %>
+﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_RSSFeed_RSSFeed, App_Web_cq31hv5y" %>
 <div id="rssfeed-load" class="main-div-app-bg">
     <div class="pad-all app-title-bg-color" style="min-height: 40px; position: relative;">
         <div class="float-left">
@@ -35,7 +35,7 @@
                 </select>
             </div>
             <div class="float-left">
-                <input id="btn_AddRemoveFeeds" type="button" class="input-buttons margin-left margin-right float-left margin-bottom" value="Add / Remove RSS Feeds"
+                <input id="btn_AddRemoveFeeds" runat="server" type="button" class="input-buttons margin-left margin-right float-left margin-bottom" value="Add / Remove RSS Feeds"
                     onclick="BuildADDRSSList()" />
                 <div class="float-left pad-left">
                     Feeds are automatically updated every 5 minutes.<br />
@@ -47,6 +47,7 @@
         </div>
         <div class="clear">
         </div>
+        <div class="loading-message"></div>
         <div id="rssfeed_Holder">
         </div>
     </div>

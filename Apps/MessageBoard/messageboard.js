@@ -188,9 +188,9 @@ function PostMessageQuote(id) {
     var message = $("#" + id).find(".messageText").html();
     var userInfo = $("#" + id).find(".userInfo").html();
     var userInfoDate = $("#" + id).find(".userInfoDate").html();
-    var holder = "<div style='border: 1px solid #B7B7B7; color: #353535!important; float: left; clear: both; padding: 15px 20px; margin: 10px 15px; background: #F5F5F5; background: rgba(230, 230, 230, 0.7); border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;'>";
-    holder += "<span style='float: left; padding-right: 5px; font-size: 13px; font-weight: bold;'>Quoting " + userInfo + "</span><span style='float: left;'>&bull;  " + userInfoDate + "</span>";
-    holder += "<div style='clear: both;'></div><div style='padding-left: 10px;'>" + message + "</div></div><div style='clear: both;'></div><br />";
+    var holder = "<div class='quoting' style='font-size: 12px!important; padding-left: 20px!important; padding-bottom: 10px!important; margin-bottom: 20px!important; border-bottom: 1px solid #DDD;'>";
+    holder += "<b>Quoting " + userInfo + "</b> - " + userInfoDate;
+    holder += "<br />" + message + "</div><br />";
     tinyMCE.get('Editor_messageboard').setContent(holder);
 }
 
@@ -326,16 +326,14 @@ function LoadMessageBoardPosts() {
                         }
 
                         if (str != "") {
-                            $("#MessageList_messageboard").html(str);
+                            $("#MessageList_messageboard").prepend(str);
                         }
                     }
 
                     if (data.d[1] != null) {
                         for (var i = 0; i < data.d[1].length; i++) {
                             var tempId = data.d[1][i];
-                            $("#" + tempId).fadeOut(openWSE_Config.animationSpeed, function () {
-                                $("#" + tempId).remove();
-                            });
+                            $("#" + tempId).remove();
                         }
                     }
 
@@ -443,9 +441,9 @@ function LoadTinyMCEControls_Simple() {
     var ed = new tinymce.Editor("Editor_messageboard", {
         selector: "#Editor_messageboard",
         theme: "modern",
-        height: 150,
+        height: 100,
         plugins: ["advlist autolink lists link image charmap print preview anchor", "searchreplace visualblocks code fullscreen", "insertdatetime media table contextmenu paste", "autoresize"],
-        autoresize_min_height: 150,
+        autoresize_min_height: 100,
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     }, tinymce.EditorManager);
     ed.render();
@@ -540,10 +538,9 @@ function GetMessageBoardOverlayPosts() {
                         var str = "";
                         for (var i = 0; i < data.d[0].length; i++) {
                             var mbId = data.d[0][i][0];
-                            var mbClass = data.d[0][i][1];
-                            var mbMessage = $.trim(data.d[0][i][2]);
+                            var mbMessage = $.trim(data.d[0][i][1]);
                             if ($("#" + mbId).length == 0) {
-                                str += "<div id='" + mbId + "' class='message-board-workspace-entry" + mbClass + "'>" + mbMessage + "</div>";
+                                str += "<div id='" + mbId + "' class='message-board-workspace-entry'>" + mbMessage + "</div>";
                             }
                         }
 
@@ -608,10 +605,9 @@ function GetMoreMessageBoardOverlayPosts() {
                 success: function (data) {
                     for (var i = 0; i < data.d.length; i++) {
                         var mbId = data.d[i][0];
-                        var mbClass = data.d[i][1];
-                        var mbMessage = $.trim(data.d[i][2]);
+                        var mbMessage = $.trim(data.d[i][1]);
                         if ($("#" + mbId).length == 0) {
-                            $("#message_board_pnl_entries").append("<div id='" + mbId + "' class='message-board-workspace-entry" + mbClass + "'>" + mbMessage + "</div>");
+                            $("#message_board_pnl_entries").append("<div id='" + mbId + "' class='message-board-workspace-entry'>" + mbMessage + "</div>");
                         }
                     }
 

@@ -19,11 +19,17 @@ using System.Text.RegularExpressions;
 [System.Web.Script.Services.ScriptService]
 public class RSSFeed : System.Web.Services.WebService {
 
-    private MemberDatabase _member;
     private string _username;
 
     public RSSFeed() {
         _username = HttpContext.Current.User.Identity.Name;
+        
+        if (OpenWSE_Tools.Apps.AppInitializer.IsGroupAdminSession(HttpContext.Current.User.Identity.Name)) {
+            _username = GroupSessions.GetUserGroupSessionName(HttpContext.Current.User.Identity.Name);
+        }
+        else if (GroupSessions.DoesUserHaveGroupLoginSessionKey(_username)) {
+            _username = GroupSessions.GetUserGroupSessionName(_username);
+        }
     }
 
     [WebMethod]
@@ -77,9 +83,11 @@ public class RSSFeed : System.Web.Services.WebService {
             }
             catch {
                 if ((search.ToLower() == "search feeds") || (string.IsNullOrEmpty(search))) {
-                    sb.Append("<li class='remove-rss-li'><div class='pad-all'>Could not load " + _url + ".");
-                    sb.Append("<div class='remove-rss-q pad-top clear'>Would you want to remove it from your list? <input type='button' value='Yes' class='input-buttons margin-left' onclick='RemoveNotFoundRssFeed(this, \"" + _url + "\")' style='width: 50px;' />");
-                    sb.Append("<input type='button' value='No' class='input-buttons' onclick='CancelNotFoundRssFeed(this)' style='width: 50px;' /></div></div></li>");
+                    if (OpenWSE_Tools.Apps.AppInitializer.IsGroupAdminSession(HttpContext.Current.User.Identity.Name)) {
+                        sb.Append("<li class='remove-rss-li'><div class='pad-all'>Could not load " + _url + ".");
+                        sb.Append("<div class='remove-rss-q pad-top clear'>Would you want to remove it from your list? <input type='button' value='Yes' class='input-buttons margin-left' onclick='RemoveNotFoundRssFeed(this, \"" + _url + "\")' style='width: 50px;' />");
+                        sb.Append("<input type='button' value='No' class='input-buttons' onclick='CancelNotFoundRssFeed(this)' style='width: 50px;' /></div></div></li>");
+                    }
                 }
             }
         }

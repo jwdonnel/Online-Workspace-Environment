@@ -1,4 +1,4 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="AppRemote, App_Web_2ux1dlqd" %>
+﻿<%@ page language="C#" autoeventwireup="true" inherits="AppRemote, App_Web_iv0v2cts" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -102,6 +102,7 @@
         <div id="top-btns-holder">
             <div id="tryconnect" style="display: none;">Sync with Workspace</div>
             <div id="groupLogin" runat="server" visible="false">Group Login</div>
+            <div id="changeGroupLogin" runat="server" visible="false">Change Group</div>
             <div id="groupLogout" runat="server" visible="false"></div>
             <div id="notifications" class="no-notifications">Notifications:<span id="total-noti" class="pad-left-sml">0</span></div>
         </div>

@@ -1,4 +1,4 @@
-﻿<%@ page title="Network Log" async="true" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_NetworkLog, App_Web_x0t4gn0u" %>
+﻿<%@ page title="Network Log" async="true" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_NetworkLog, App_Web_i1ijfqeu" %>
 
 <asp:Content ID="HeaderContent" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -417,9 +417,9 @@
                             <div class="title-line"></div>
                             <div class="td-settings-ctrl">
                                 <div class="field switch inline-block">
-                                    <asp:RadioButton ID="rb_AutoIPBlock_on" runat="server" Text="True" CssClass="RandomActionBtns cb-enable"
+                                    <asp:RadioButton ID="rb_AutoIPBlock_on" runat="server" Text="On" CssClass="RandomActionBtns cb-enable"
                                         OnCheckedChanged="rb_AutoIPBlock_on_CheckedChanged" AutoPostBack="True" />
-                                    <asp:RadioButton ID="rb_AutoIPBlock_off" runat="server" Text="False" CssClass="RandomActionBtns cb-disable"
+                                    <asp:RadioButton ID="rb_AutoIPBlock_off" runat="server" Text="Off" CssClass="RandomActionBtns cb-disable"
                                         OnCheckedChanged="rb_AutoIPBlock_off_CheckedChanged" AutoPostBack="True" />
                                 </div>
                             </div>

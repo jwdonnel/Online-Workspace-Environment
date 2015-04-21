@@ -1,4 +1,4 @@
-﻿<%@ page title="Plugin Installer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_CustomContent_PluginInstaller, App_Web_h0a3vuy0" %>
+﻿<%@ page title="Plugin Installer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_CustomContent_PluginInstaller, App_Web_muevkmyy" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
 </asp:Content>

@@ -1,4 +1,4 @@
-﻿<%@ page title="Group Organizer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_GroupOrg, App_Web_thajkrpw" %>
+﻿<%@ page title="Group Organizer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_GroupOrg, App_Web_o42ostsu" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
 </asp:Content>
