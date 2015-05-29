@@ -99,7 +99,6 @@ JQuery UI<br />
 TinyMCE - Javascript WYSIWYG editor<br />
 ASP.Net AJAX Control Toolkit<br />
 SharpZipLib - The Zip, GZip, BZip2 and Tar Implementation For .NET<br />
-SyntaxHighlighter - JavaScript code syntax highlighter<br />
 Google APIs
 <br />
 <br />
