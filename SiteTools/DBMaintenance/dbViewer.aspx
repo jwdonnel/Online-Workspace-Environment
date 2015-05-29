@@ -1,4 +1,4 @@
-﻿<%@ page title="Database Viewer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_dbViewer, App_Web_gr4m0uh1" %>
+﻿<%@ page title="Database Viewer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_dbViewer, App_Web_uowmthqy" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -28,7 +28,7 @@
                 <a href="#" id="a_turn_onoff_refresh" class="dbviewer-update-img">Turn off</a>
                 <div class="clear-space">
                 </div>
-                <span class="settings-name-column float-left" style="padding-top: 0px!important;">Table Name</span>
+                <span class="settings-name-column float-left" style="padding-top: 3px!important;">Table Name</span>
                 <asp:DropDownList ID="dd_table" runat="server" CssClass="float-left margin-right"
                     ClientIDMode="Static" AutoPostBack="true" OnSelectedIndexChanged="dd_table_Changed">
                 </asp:DropDownList>
@@ -83,7 +83,7 @@
         <div class='clear-space-five'>
         </div>
         <div id="search_box">
-            <div id="searchwrapper" style="width: 500px">
+            <div class="searchwrapper" style="width: 400px">
                 <asp:Panel ID="Panel1_dbviewer" runat="server" DefaultButton="imgbtn_search">
                     <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
                         onfocus="if(this.value=='Search Database Table')this.value=''" onblur="if(this.value=='')this.value='Search Database Table'"

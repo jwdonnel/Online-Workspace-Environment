@@ -1,12 +1,11 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="GroupLogin, App_Web_iv0v2cts" %>
+﻿<%@ page language="C#" autoeventwireup="true" inherits="GroupLogin, App_Web_ravcmota" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
     <title>Group Login Page</title>
-    <meta name="description" content="" />
-    <meta name="keywords" content="apps,app,social,jquery draggables,john donnelly,workspace,workspaces,chat,messenger,so source,gemicon.net,iconfinder.com,media,file upload,file share,customize,social networking,groups,friend chat,friend hangout" />
     <meta name="author" content="John Donnelly" />
+    <meta name="revisit-after" content="10 days" />
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <meta name="viewport" content="user-scalable = yes" />
     <link id="Link1" runat="server" rel="shortcut icon" href="~/Standard_Images/favicon.ico"
@@ -52,8 +51,7 @@
                 <div id="copyright-footer" class="float-left">&copy; 2015 John Donnelly</div>
                 <div id="footer-signdate" class="float-right">
                     <a href="AppRemote.aspx" title="Open Mobile Workspace">Mobile</a> | 
-                    <a href="#" onclick="OpeniframePage('About.aspx?iframeName=About&iframeFullScreen=false');return false;">About</a> | 
-                    <a href="About.aspx#IWantThis" id="iwantthis" title="Find out more"><span class="img-present float-left margin-right-sml"></span>I want this</a>
+                    <a href="#" onclick="OpeniframePage('About.aspx?iframeName=About&iframeFullScreen=false');return false;">About</a>
                 </div>
             </div>
         </div>
@@ -76,7 +74,13 @@
                 UpdateContainerHeight();
 
                 if ($("#iframe-content-src").length > 0) {
-                    $("#iframe-content-src").css("height", $(window).height());
+                    var fullScreen = GetUrlParameterByName("iframeFullScreen");
+                    var iframeHeight = $(window).height();
+
+                    if (fullScreen == "false") {
+                        iframeHeight -= ($("#always-visible").height() + $("#container-footer").height());
+                    }
+                    $("#iframe-content-src").css("height", iframeHeight);
                 }
 
             });

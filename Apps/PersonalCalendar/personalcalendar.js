@@ -19,6 +19,13 @@ month_pc[11] = "December";
 
 var reloadingSchedule_pc = false;
 
+function pageLoad() {
+    if ($("#personalcalendar-load").length > 0) {
+        onCalendarLoad_pc();
+        RestorePostBack_pc();
+    }
+}
+
 var prm = Sys.WebForms.PageRequestManager.getInstance();
 prm.add_endRequest(function (sender, args) {
     if ($("#personalcalendar-load").length > 0) {

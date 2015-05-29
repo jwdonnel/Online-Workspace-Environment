@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<preserve resultType="8" virtualPath="/PRODUCTION_VERSION_ONLY/global.asax" hash="ffffffffbf567358" filehash="ffffd7debd0e1a40" flags="150000" assembly="App_global.asax" type="ASP.global_asax">
+<preserve resultType="8" virtualPath="/Production/global.asax" hash="ffffffffbf567358" filehash="42198d1630c6" flags="150000" assembly="App_global.asax" type="ASP.global_asax">
     <filedeps>
-        <filedep name="/PRODUCTION_VERSION_ONLY/global.asax" />
+        <filedep name="/Production/global.asax" />
     </filedeps>
 </preserve>

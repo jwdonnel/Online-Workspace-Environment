@@ -11,7 +11,8 @@ $(document).ready(function () {
 var currRSSselected = "";
 function StartRSSFeeder() {
     if (openWSE_Config.demoMode) {
-        $("#btn_AddRemoveFeeds").remove();
+        $("#UCapp_rssfeed_btn_AddRemoveFeeds").remove();
+        $("#MainContent_UCapp_rssfeed_btn_AddRemoveFeeds").remove();
     }
 
     if (!openWSE_Config.demoMode) {
@@ -189,17 +190,20 @@ function ViewAllNewFeeds(index) {
         $("#rssfeed_Holder").html("<ul id='viewallul' class='rssFeed'></ul>");
     }
 
-    if (index < x.length) {
-        HideRSSLoading();
-        LoadingRSSFeed("Building RSS Feeds...");
-        if (x.options[index].value != "-MostRecent-") {
-            GetRSSFeeds(x.options[index].value, true, index);
-        }
-        else {
-            index = index + 1;
-            ViewAllNewFeeds(index);
+    try {
+        if (index < x.length) {
+            HideRSSLoading();
+            LoadingRSSFeed("Building RSS Feeds...");
+            if (x.options[index].value != "-MostRecent-") {
+                GetRSSFeeds(x.options[index].value, true, index);
+            }
+            else {
+                index = index + 1;
+                ViewAllNewFeeds(index);
+            }
         }
     }
+    catch (evt) { }
 
     CorrectHrefLinks_RssFeeds("rssfeed_Holder");
 }
@@ -235,20 +239,23 @@ function GetRSSFeeds(url, viewAll, index) {
                 HideRSSLoading();
                 gettingFeeds = false;
                 if (viewAll) {
-                    $("#viewallul").append(response);
-                    var x = document.getElementById("Saved-RSSFeeds");
-                    index = index + 1;
-                    if (index < x.length) {
-                        ViewAllNewFeeds(index);
-                    }
-                    else {
-                        if ($.trim($("#viewallul").html()) == "") {
-                            $("#rssfeed_Holder").html("<h3 class='pad-all'>No feeds founds.</h3>");
+                    try {
+                        $("#viewallul").append(response);
+                        var x = document.getElementById("Saved-RSSFeeds");
+                        index = index + 1;
+                        if (index < x.length) {
+                            ViewAllNewFeeds(index);
                         }
                         else {
-                            CorrectHrefLinks_RssFeeds("rssfeed_Holder");
+                            if ($.trim($("#viewallul").html()) == "") {
+                                $("#rssfeed_Holder").html("<h3 class='pad-all'>No feeds founds.</h3>");
+                            }
+                            else {
+                                CorrectHrefLinks_RssFeeds("rssfeed_Holder");
+                            }
                         }
                     }
+                    catch (evt) { }
                 }
                 else {
                     if (response == "") {

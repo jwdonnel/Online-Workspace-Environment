@@ -5,6 +5,13 @@
     load(url == "" ? "1" : url);
 });
 
+$(function () {
+    $(window).hashchange(function () {
+        var url = location.href;
+        load(url == "" ? "1" : url);
+    });
+});
+
 var currentTab = "";
 function BuildLinks() {
     $(".pnl-section").each(function (index) {
@@ -12,9 +19,8 @@ function BuildLinks() {
         $(".sitemenu-selection").append("<li><a href='#?tab=" + id + "'>" + $(this).attr("data-title") + "</a></li>");
     });
 
-    $(".sitemenu-selection").find("li").find("a").on("click", function () {
-        load($(this).attr("href"));
-        return false;
+    $(".sitemenu-selection").find("li").on("click", function () {
+        load($(this).find("a").attr("href"));
     });
 }
 
@@ -25,6 +31,15 @@ Sys.Application.add_load(function () {
     }
     else {
         $("#moreInfo-PrivateAccount").hide();
+    }
+});
+
+$(document.body).on("keypress", "#MainContent_tb_backgroundlooptimer", function (e) {
+    var code = (e.which) ? e.which : e.keyCode;
+    var val = String.fromCharCode(code);
+
+    if (val != "0" && val != "1" && val != "2" && val != "3" && val != "4" && val != "5" && val != "6" && val != "7" && val != "8" && val != "9") {
+        return false;
     }
 });
 
@@ -154,7 +169,7 @@ function removeGroup(id) {
     __doPostBack('hf_removeGroup', "");
 }
 
-$(document.body).on("change", "#dd_theme, #dd_backgroundSelector", function () {
+$(document.body).on("change", "#dd_theme, #dd_backgroundSelector, #dd_imageFolder", function () {
     openWSE.LoadingMessage1("Updating. Please Wait...");
 });
 
@@ -209,25 +224,47 @@ function BackgroundSelector() {
     __doPostBack('hf_backgroundselector', "");
 }
 
-$(document.body).on("click", ".image-selector-acct", function () {
-    var id = $(this).find("img").attr("src");
-    var bi = document.getElementById('hf_backgroundimg');
-    if (bi.value != id) {
-        bi.value = id;
+$(document.body).on("click", "#pnl_images .image-selector-acct", function (e) {
+    if (e.target.className != "delete-uploadedimg") {
+        var id = $(this).find("img").attr("src");
+        var bi = document.getElementById('hf_backgroundimg');
+        if (bi.value != id) {
+            bi.value = id;
 
-        $('.image-selector-active').each(function () {
-            $(this).removeClass("image-selector-active");
-            $(this).addClass("image-selector-acct");
-        });
-
-        $("#backgroundsaved").html("Workspace background has been saved");
-        setTimeout(function () { $("#backgroundsaved").html(""); }, 2000);
-        $(this).removeClass("image-selector-acct");
-        $(this).addClass("image-selector-active");
-        openWSE.LoadModalWindow(false, 'Background-element', '');
-        openWSE.LoadingMessage1("Updating. Please Wait...");
-        __doPostBack('hf_backgroundimg', "");
+            openWSE.LoadingMessage1("Updating. Please Wait...");
+            __doPostBack('hf_backgroundimg', "");
+        }
     }
+});
+
+$(document.body).on("click", "#pnl_images .image-selector-active", function (e) {
+    if (e.target.className != "delete-uploadedimg") {
+        var id = $(this).find("img").attr("src");
+        var bi = document.getElementById('hf_removebackgroundimgEdit');
+        if (bi.value != id) {
+            bi.value = id;
+
+            openWSE.LoadingMessage1("Updating. Please Wait...");
+            __doPostBack('hf_removebackgroundimgEdit', "");
+        }
+    }
+});
+
+$(document.body).on("click", "#CurrentBackground .remove-background-img", function () {
+    var img = $(this).attr("data-imgsrc");
+    openWSE.LoadingMessage1("Updating. Please Wait...");
+    document.getElementById('hf_removebackgroundimg').value = img;
+    __doPostBack('hf_removebackgroundimg', "");
+});
+
+$(document.body).on("click", "#pnl_images .delete-uploadedimg", function () {
+    var img = $(this).attr("data-imgsrc");
+    openWSE.ConfirmWindow("Are you sure you want to delete " + img + "?",
+       function () {
+           openWSE.LoadingMessage1("Deleting. Please Wait...");
+           document.getElementById('hf_deleteUploadedImage').value = img;
+           __doPostBack('hf_deleteUploadedImage', "");
+       }, null);
 });
 
 function load(num) {
@@ -239,7 +276,7 @@ function load(num) {
 
     var arg1 = num.split("tab=");
     if (arg1.length > 1) {
-        var arg2 = arg1[1].split("#");
+        var arg2 = arg1[arg1.length - 1].split("#");
         if (arg2.length == 1) {
             index = GetPnlSectionIndex(arg2[0]);
         }
@@ -267,6 +304,43 @@ function DeleteUserAccount() {
            $("#hf_DeleteUserAccount").val(new Date().toString());
            __doPostBack("hf_DeleteUserAccount", "");
        }, null);
+}
+
+function DeleteAllOverrides() {
+    openWSE.ConfirmWindow("Are you sure you want to delete all your app overrides? There is no going back if once you click Ok.",
+       function () {
+           openWSE.LoadingMessage1("Deleting Overrides. Please Wait...");
+           $("#hf_DeleteUserAppOverrides").val(new Date().toString());
+           __doPostBack("hf_DeleteUserAppOverrides", "");
+       }, null);
+}
+
+var overrideEditId = "";
+function DeleteOverrides(id) {
+    if (id == "") {
+        id = overrideEditId;
+    }
+    openWSE.ConfirmWindow("Are you sure you want to delete your app overrides? There is no going back if once you click Ok.",
+       function () {
+           openWSE.LoadingMessage1("Deleting Overrides. Please Wait...");
+           $("#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").val(id);
+           __doPostBack("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", "");
+       }, null);
+}
+
+function EditOverrides(id) {
+    overrideEditId = id;
+    openWSE.LoadingMessage1("Loading Overrides. Please Wait...");
+    $("#hf_EditUserAppOverrides").val(id);
+    __doPostBack("hf_EditUserAppOverrides", "");
+}
+
+function UpdateOverrides() {
+    if (overrideEditId != "") {
+        openWSE.LoadingMessage1("Saving Overrides. Please Wait...");
+        $("#hf_UpdateUserAppOverrides").val(overrideEditId);
+        __doPostBack("hf_UpdateUserAppOverrides", "");
+    }
 }
 
 function RemovePlugin(id) {

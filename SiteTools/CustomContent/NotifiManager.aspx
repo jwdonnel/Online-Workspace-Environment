@@ -1,4 +1,4 @@
-﻿<%@ page title="Notification Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_NotifiManager, App_Web_muevkmyy" %>
+﻿<%@ page title="Notification Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_NotifiManager, App_Web_qakpaghm" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -110,9 +110,11 @@
             <ContentTemplate>
                 <div class="table-settings-box" style="margin-bottom: 0px!important;">
                     <div class="td-settings-ctrl">
-                        <a id="aAddNewNoti" runat="server" class="margin-right-big input-buttons" onclick="openWSE.LoadModalWindow(true, 'AddNotification-element', 'Add New Notification');$('#MainContent_txt_uploadNotifiName').focus();return false;"><span class="td-add-btn float-left margin-right-sml" style="padding: 0!important;"></span>Add New Notification</a>
-                        <span class="font-bold pad-right">Total Notifications</span><asp:Label ID="lbl_notifiEnabled"
-                            runat="server" Text="0"></asp:Label>
+                        <a id="aAddNewNoti" runat="server" class="margin-right-big input-buttons-create" onclick="openWSE.LoadModalWindow(true, 'AddNotification-element', 'Add New Notification');$('#MainContent_txt_uploadNotifiName').focus();return false;">Create Notification</a>
+                        <div class="float-right">
+                            <span class="font-bold pad-right">Total Notifications</span><asp:Label ID="lbl_notifiEnabled"
+                                runat="server" Text="0"></asp:Label>
+                        </div>
                         <div class="clear-space">
                         </div>
                         <asp:LinkButton ID="lbtn_Refresh" runat="server" Text="Rebuild Notifications" CssClass="RandomActionBtns"
@@ -175,6 +177,9 @@
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
                             </div>
+                        </div>
+                        <div class="ModalButtonHolder">
+                            <input type="button" class="input-buttons" value="Close" onclick="openWSE.LoadModalWindow(false, 'App-element', ''); RefreshList();" />
                         </div>
                     </div>
                 </div>

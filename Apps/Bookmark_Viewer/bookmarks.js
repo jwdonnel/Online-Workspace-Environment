@@ -410,19 +410,14 @@ function CloseBookmark_YouTube() {
 function embedded_video_bookmark(html, name) {
     CloseBookmark_YouTube();
     name = unescape(name);
-
-    if (name.length > 70) {
-        name = name.substr(0, 70) + "...";
-    }
-
     var x = "<iframe width='587px' height='355px' src='http://www.youtube.com/embed/" + html + "?version=3&autoplay=1' border='0'></iframe>";
     $("#bm-yt-body").html(x);
 
     var inframeName = $("#" + name).find(".bookmark-html-link").html();
-    if (inframeName.length > 70) {
-        inframeName = inframeName.substr(0, 70);
+    if (inframeName.length > 40) {
+        inframeName = inframeName.substr(0, 40) + "..";
     }
 
-    name = "<img alt='favicon' src='http://www.youtube.com/favicon.ico' class='float-left pad-right' />" + inframeName;
+    name = "<span title='" + $("#" + name).find(".bookmark-html-link").html() + "'><img alt='favicon' src='http://www.youtube.com/favicon.ico' class='float-left pad-right' />" + inframeName + "</span>";
     openWSE.LoadModalWindow(true, "youtube-player-element", name);
 }

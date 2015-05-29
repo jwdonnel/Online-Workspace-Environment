@@ -14,11 +14,17 @@ function BuildLinks() {
         $(".sitemenu-selection").append("<li><a href='#?tab=" + id + "'>" + $(this).attr("data-title") + "</a></li>");
     });
 
-    $(".sitemenu-selection").find("li").find("a").on("click", function () {
-        load($(this).attr("href"));
-        return false;
+    $(".sitemenu-selection").find("li").on("click", function () {
+        load($(this).find("a").attr("href"));
     });
 }
+
+$(function () {
+    $(window).hashchange(function () {
+        var url = location.href;
+        load(url == "" ? "1" : url);
+    });
+});
 
 var prm = Sys.WebForms.PageRequestManager.getInstance();
 prm.add_endRequest(function () {
@@ -215,6 +221,18 @@ $(document.body).on("change", "#MainContent_FileUpload2", function () {
     }
 });
 
+$(document.body).on("change", "#MainContent_FileUpload1", function () {
+    var fu = $("#MainContent_FileUpload1").val().toLowerCase();
+    if ((fu.indexOf(".png") != -1) || (fu.indexOf(".jpg") != -1) || (fu.indexOf(".jpeg") != -1) || (fu.indexOf(".gif") != -1)) {
+        $("#MainContent_btn_alternativeuploadlogo").removeAttr("disabled");
+        $("#fu_error_message_alt").html("");
+    }
+    else {
+        $("#MainContent_btn_alternativeuploadlogo").attr("disabled", "disabled");
+        $("#fu_error_message_alt").html("File type not valid");
+    }
+});
+
 $(document.body).on("change", "#MainContent_FileUpload4", function () {
     var fu = $("#MainContent_FileUpload4").val().toLowerCase();
     if ((fu.indexOf(".png") != -1) || (fu.indexOf(".jpg") != -1) || (fu.indexOf(".jpeg") != -1) || (fu.indexOf(".gif") != -1) || (fu.indexOf(".ico") != -1)) {
@@ -299,7 +317,7 @@ function load(num) {
 
     var arg1 = num.split("tab=");
     if (arg1.length > 1) {
-        var arg2 = arg1[1].split("#");
+        var arg2 = arg1[arg1.length - 1].split("#");
         if (arg2.length == 1) {
             index = GetPnlSectionIndex(arg2[0]);
         }

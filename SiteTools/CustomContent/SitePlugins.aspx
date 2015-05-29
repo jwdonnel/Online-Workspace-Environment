@@ -1,4 +1,4 @@
-﻿<%@ page title="Site Plugins" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_SitePlugins, App_Web_muevkmyy" %>
+﻿<%@ page title="Site Plugins" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_SitePlugins, App_Web_qakpaghm" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -36,15 +36,15 @@
         <asp:Panel ID="pnl_AddControls" runat="server" ClientIDMode="Static">
             <div class="table-settings-box">
                 <div class="td-settings-ctrl">
+                    <asp:CheckBox ID="cb_enableUpload" runat="server" Text="&nbsp;Enable Plugin after upload" />
+                    <div class="clear-space-five"></div>
+                    <asp:CheckBox ID="cb_installAfter" ClientIDMode="Static" runat="server" Text="&nbsp;Install Plugin after upload" />
+                    <div class="clear" style="height: 20px;"></div>
                     <div id="UploadPlugin">
                         <div class="float-left settings-name-column">
-                            Upload Plugin
+                            Plugin Name
                         </div>
-                        <asp:TextBox ID="txt_uploadPluginName" runat="server" CssClass="textEntry margin-right"
-                            Text="Plugin Name" Width="150px" onfocus="if(this.value=='Plugin Name')this.value=''"
-                            onblur="if(this.value=='')this.value='Plugin Name'" MaxLength="250"></asp:TextBox>
-                        <asp:CheckBox ID="cb_enableUpload" runat="server" Text="&nbsp;Enable Plugin" CssClass="margin-right-big" />
-                        <asp:CheckBox ID="cb_installAfter" ClientIDMode="Static" runat="server" Text="&nbsp;Install after upload" />
+                        <asp:TextBox ID="txt_uploadPluginName" runat="server" CssClass="textEntry" Width="150px" MaxLength="250"></asp:TextBox>
                         <asp:UpdatePanel ID="updatepnl_Add" runat="server">
                             <ContentTemplate>
                                 <asp:HiddenField ID="hf_deletePlugin" runat="server" ClientIDMode="Static" OnValueChanged="hf_deletePlugin_Changed" />
@@ -101,7 +101,7 @@
                     <div class="clear-space">
                     </div>
                     <div class="float-left settings-name-column"></div>
-                    <asp:Button ID="btn_uploadPlugin" runat="server" Text="Upload Plugin" CssClass="input-buttons Upload-Button-Action"
+                    <asp:Button ID="btn_uploadPlugin" runat="server" Text="Upload Plugin" CssClass="input-buttons-create Upload-Button-Action"
                         OnClick="btn_uploadPlugin_Clicked" />
                     <div class="pad-top-big">
                         <div class="float-left settings-name-column"></div>

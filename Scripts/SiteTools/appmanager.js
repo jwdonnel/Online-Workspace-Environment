@@ -1,6 +1,7 @@
 ﻿var _editmode = 0; // 0 = no edit, 1 = edit, 2 = reset
 var canLoadEditorText = 0; // 0 = false, 1 = true
 var dbType = "";
+var aceMode = "ace/mode/php";
 
 $(window).load(function () {
     LoadSourceCode();
@@ -12,6 +13,18 @@ $(window).load(function () {
     $(".sitemenu-selection").find("li").on("click", function () {
         openWSE.LoadingMessage1("Loading...");
     });
+});
+
+$(document).ready(function () {
+    $(window).resize();
+});
+
+$(window).resize(function () {
+    try {
+        var h = $(window).height();
+        $("#editor").css("height", h - 380);
+    }
+    catch (evt) { }
 });
 
 function ConfirmLoaderFileCancel(_this) {
@@ -28,41 +41,14 @@ function ConfirmLoaderFileCancel(_this) {
 $(document.body).on("change", "#MainContent_dd_allowpopout_create", function () {
     if ($(this).val() == "1") {
         $("#popoutlocdiv").show();
+        if ($.trim($("#MainContent_tb_popoutLoc_create").val()) == "") {
+            $("#MainContent_tb_popoutLoc_create").val("~/ExternalAppHolder.aspx?appId=app-" + $.trim($("#MainContent_tb_filename_create").val()));
+        }
     }
     else {
         $("#popoutlocdiv").hide();
     }
 });
-
-function PerformAppCleanUp() {
-    var x = "<div id='ConfirmCleanup-element' class='Modal-element' style='display: none;'>";
-    x += "<div class='Modal-overlay'>";
-    x += "<div class='Modal-element-align'>";
-    x += "<div class='Modal-element-modal' style='width: 400px; min-width: 400px;'>";
-    x += "<div class='ModalHeader'><div><span class='Modal-title'></span></div></div>";
-
-    x += "<div align='center' class='pad-all'>Do you want to delete any files found as well? Doing so will permanently delete these app files.";
-    x += "<div class='clear-space'></div><div class='clear-space-five'></div>";
-    x += "<input type='button' class='input-buttons' value='Yes' onclick=\"StartAppCleanUp('true');return false;\" style='width: 65px;' />";
-    x += "<input type='button' class='input-buttons' value='No' onclick=\"StartAppCleanUp('false'); return false;\" style='width: 65px; margin-left: 10px!important;' />";
-    x += "<input type='button' class='input-buttons no-margin' value='Cancel' onclick=\"StartAppCleanUp('cancel'); return false;\" style='width: 65px; margin-left: 10px!important;' />";
-    x += "<div class='clear-space'></div>";
-    x += "</div></div></div></div></div></div>";
-
-    $("body").append(x);
-    openWSE.LoadModalWindow(true, "ConfirmCleanup-element", "Perform App Clean Up?");
-}
-
-function StartAppCleanUp(deleteFiles) {
-    if (deleteFiles != "cancel") {
-        openWSE.LoadingMessage1("Cleaning up...");
-        $("#hf_performCleanup").val(deleteFiles);
-        __doPostBack("hf_performCleanup", "");
-    }
-    else {
-        $("#ConfirmCleanup-element").remove();
-    }
-}
 
 function LoadDefaultPageSelector() {
     openWSE.LoadModalWindow(true, "LoaderApp-element", "App Loader File");
@@ -207,41 +193,16 @@ function ChangeIconUploadTypeEdit(x) {
     }
 }
 
-function UnescapeCode(text) {
-    setTimeout(function () {
-        if ((tinyMCE != null) && (tinyMCE != undefined)) {
-            try {
-                if (canLoadEditorText == 1) {
-                    tinyMCE.activeEditor.setContent(unescape(text));
-                    openWSE.RemoveUpdateModal();
-                }
-                else {
-                    UnescapeCode(text);
-                }
-            }
-            catch (evt) {
-                UnescapeCode(text);
-            }
-        }
-        else {
-            UnescapeCode(text);
-        }
-    }, 50);
-}
-
 function UnescapeJavascriptCode(text) {
     var path = "../../Scripts/AceEditor";
     ace.config.set("workerPath", path);
     var editor = ace.edit('editor');
     editor.setTheme('ace/theme/chrome');
-    if ($('#HTMLCODE').css("display") == "none") {
-        editor.getSession().setMode('ace/mode/html');
-    }
-    else {
-        editor.getSession().setMode('ace/mode/javascript');
-    }
+    editor.getSession().setMode(aceMode);
     editor.getSession().setUseWrapMode(false);
-    editor.getSession().setValue(unescape(text))
+    editor.setShowPrintMargin(false);
+    editor.getSession().setValue(unescape(text));
+    $(window).resize();
 }
 
 function ViewCode() {
@@ -329,7 +290,6 @@ prm.add_endRequest(function () {
     GetAppsInCategory();
     canLoadEditorText = 0;
     $("#app-editor-holder").show();
-    LoadTinyMCEControls_Full("htmlEditor");
     ReapplyViewMode();
     LoadSourceCode();
     try {
@@ -362,13 +322,6 @@ var params = "";
 var iframeDownloadurl = "";
 var wlmd_holder = "";
 prm.add_beginRequest(function (sender, args) {
-    try {
-        if (tinyMCE.activeEditor.getContent() != null) {
-            $("#hidden_temp_html").val(escape(tinyMCE.activeEditor.getContent()));
-        }
-    }
-    catch (evt1) { }
-
     try {
         var elem = args.get_postBackElement();
         if (elem != null) {
@@ -437,22 +390,13 @@ function LoadSourceCode() {
         ace.config.set("workerPath", path);
         var editor = ace.edit('editor');
         editor.setTheme('ace/theme/chrome');
-        if ($('#HTMLCODE').css("display") == "none") {
-            editor.getSession().setMode('ace/mode/html');
-        }
-        else {
-            editor.getSession().setMode('ace/mode/javascript');
-        }
+        editor.getSession().setMode(aceMode);
         editor.getSession().setUseWrapMode(false);
+        editor.setShowPrintMargin(false);
 
         if (_editmode == 0) {
             var temp = $("#hidden_temp_script").val();
             editor.getSession().setValue(unescape(temp));
-            var temp2 = $("#hidden_temp_html").val();
-            tinyMCE.activeEditor.setContent(unescape(temp2));
-        }
-        else if (_editmode == 2) {
-            editor.getSession().setValue("$(document).ready(function () {  });");
         }
 
         editor.getSession().on('change', function (e) {
@@ -460,6 +404,8 @@ function LoadSourceCode() {
             x = x.replace(/\+/g, "%2B");
             $("#hidden_temp_script").val(escape(x));
         });
+
+        $(window).resize();
     }
     catch (evt) { }
 }
@@ -474,13 +420,9 @@ function ReLoadAceEditor() {
     ace.config.set("workerPath", path);
     var editor = ace.edit('editor');
     editor.setTheme('ace/theme/chrome');
-    if ($('#HTMLCODE').css("display") == "none") {
-        editor.getSession().setMode('ace/mode/html');
-    }
-    else {
-        editor.getSession().setMode('ace/mode/javascript');
-    }
+    editor.getSession().setMode(aceMode);
     editor.getSession().setUseWrapMode(false);
+    editor.setShowPrintMargin(false);
     if (_editmode == 1) {
         var x = editor.getSession().getValue();
         x = x.replace(/\+/g, "%2B");
@@ -490,6 +432,8 @@ function ReLoadAceEditor() {
         temp = temp.replace(/\+/g, "%2B");
         $("#hidden_editor").val(escape(temp));
     }
+
+    $(window).resize();
 }
 
 $(document.body).on("click", ".rbbuttons, .app-category-div", function () {
@@ -527,99 +471,16 @@ function PostErrorMessage() {
     }
 }
 
-function CreateApp_Click() {
-    if (PostErrorMessage()) {
-        ReLoadAceEditor();
-        if (tinyMCE.activeEditor.getContent() != null) {
-            var text = tinyMCE.activeEditor.getContent();
-            if (text == "") {
-                text = new Date().toString();
-            }
-            document.getElementById("hf_createapp").value = escape(text);
-            __doPostBack("hf_createapp", "");
-        }
-    }
-}
-
 function SaveApp_Click() {
     openWSE.ConfirmWindow("Are you sure you want to save this file? Any changes will overwrite the original.",
       function () {
           ReLoadAceEditor();
-          if (tinyMCE.activeEditor.getContent() != null) {
-              var text = tinyMCE.activeEditor.getContent();
-              if (text == "") {
-                  text = new Date().toString();
-              }
-              openWSE.LoadingMessage1("Saving App...");
-              document.getElementById("hf_saveapp").value = escape(text);
-              document.getElementById("hidden_temp_script").value = "";
-              __doPostBack("hf_saveapp", "");
-          }
+          openWSE.LoadingMessage1("Saving App...");
+          $("#hf_saveapp").val(new Date().toString());
+          $("#hidden_temp_script").val("");
+          __doPostBack("hf_saveapp", "");
       }, null);
 }
-
-$(document.body).on("change", "#dd_filename_ext", function () {
-    var path = "../../Scripts/AceEditor";
-    ace.config.set("workerPath", path);
-    var editor = ace.edit('editor');
-    if ($(this).val() == ".html") {
-        $("#span-autocreate,#dd_autocreate_create,#ascxNote").fadeOut(openWSE_Config.animationSpeed);
-        $('#HTMLCODE').show();
-        $("#MainContent_cb_wrapIntoIFrame").show();
-        $("label[for='MainContent_cb_wrapIntoIFrame']").show();
-        $('#javascriptcode_Title').html('Javascript File Editor');
-        editor.getSession().setMode('ace/mode/javascript');
-        editor.getSession().setValue("$(document).ready(function () {  });");
-    }
-    else {
-        $("#span-autocreate,#dd_autocreate_create,#ascxNote").fadeIn(openWSE_Config.animationSpeed);
-        $('#HTMLCODE').hide();
-        $("#MainContent_cb_wrapIntoIFrame").hide();
-        $("label[for='MainContent_cb_wrapIntoIFrame']").hide();
-        $('#javascriptcode_Title').html('Source File Editor');
-        editor.getSession().setMode('ace/mode/html');
-        editor.getSession().setValue("");
-    }
-});
-
-
-/*TinyMCE*/
-function LoadTinyMCEControls_Simple(id) {
-    if (document.getElementById("pnl_htmleditor") != null) {
-        window.tinymce.dom.Event.domLoaded = true;
-        var ed = new tinymce.Editor(id, {
-            selector: "#" + id,
-            theme: "modern",
-            height: 400,
-            plugins: ["advlist autolink lists link image charmap print preview anchor", "searchreplace visualblocks code fullscreen", "insertdatetime media table contextmenu paste moxiemanager", "autoresize"],
-            autoresize_min_height: 400,
-            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-        }, tinymce.EditorManager);
-        ed.render();
-
-        canLoadEditorText = 1;
-    }
-}
-
-function LoadTinyMCEControls_Full(id) {
-    if (document.getElementById("pnl_htmleditor") != null) {
-        window.tinymce.dom.Event.domLoaded = true;
-        // Creates a new editor instance
-        var ed = new tinymce.Editor(id, {
-            selector: "#" + id,
-            theme: "modern",
-            height: 400,
-            plugins: ["advlist autolink lists link image charmap print preview hr anchor pagebreak", "searchreplace wordcount visualblocks visualchars code fullscreen", "insertdatetime media nonbreaking save table contextmenu directionality", "emoticons template paste", "autoresize"],
-            toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-            toolbar2: "print preview media | forecolor backcolor emoticons",
-            autoresize_min_height: 400,
-            templates: [{ title: 'Test template 1', content: 'Test 1' }, { title: 'Test template 2', content: 'Test 2'}]
-        }, tinymce.EditorManager);
-        ed.render();
-        canLoadEditorText = 1;
-    }
-}
-
 
 /*App Paramaters*/
 function EditParameter(id) {

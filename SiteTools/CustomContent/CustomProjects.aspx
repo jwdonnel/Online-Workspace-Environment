@@ -1,4 +1,4 @@
-﻿<%@ page title="Custom Projects" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_CustomProjects, App_Web_muevkmyy" %>
+﻿<%@ page title="Custom Projects" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_CustomProjects, App_Web_qakpaghm" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
 </asp:Content>
@@ -8,7 +8,7 @@
             <ContentTemplate>
                 <div class="table-settings-box">
                     <div class="td-settings-ctrl">
-                        <a href="#iframecontent" id="createcustompage" class="margin-right-big input-buttons" runat="server" onclick="openWSE.LoadIFrameContent('SiteTools/iframes/ProjectExplorer.aspx', this);return false;"><span class="td-add-btn float-left margin-right-sml" style="padding: 0!important;"></span>Create Custom Project</a>
+                        <a href="#iframecontent" id="createcustompage" class="margin-right-big input-buttons-create" runat="server" onclick="openWSE.LoadIFrameContent('SiteTools/iframes/ProjectExplorer.aspx', this);return false;">Create Project</a>
                         <asp:Label ID="lbl_TotalWebServices" runat="server"></asp:Label>
                         <div class="clear-space"></div>
                         <asp:LinkButton ID="lbtn_refresh" runat="server" Text="" CssClass="img-refresh float-right RandomActionBtns"
@@ -69,7 +69,7 @@
                     <div class="clear-space"></div>
                     <span class="settings-name-column float-left"></span>
                     <input id="btn_ftpUpload" type="button" class="input-buttons" value="Connect" onclick="TryFTPConnect();" style="display: none;" />
-                    <asp:Button ID="btn_uploadFile" runat="server" CssClass="input-buttons RandomActionBtns"
+                    <asp:Button ID="btn_uploadFile" runat="server" CssClass="input-buttons-create RandomActionBtns"
                         OnClick="btn_uploadFile_Clicked" Text="Upload" />
                     <div class="clear-space">
                     </div>

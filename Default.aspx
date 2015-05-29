@@ -1,12 +1,11 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="Default, App_Web_iv0v2cts" %>
+﻿<%@ page language="C#" autoeventwireup="true" inherits="Default, App_Web_ravcmota" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Login Portal</title>
-    <meta name="description" content="" />
-    <meta name="keywords" content="apps,app,social,jquery draggables,john donnelly,workspace,workspaces,chat,messenger,so source,gemicon.net,iconfinder.com,media,file upload,file share,customize,social networking,groups,friend chat,friend hangout" />
     <meta name="author" content="John Donnelly" />
+    <meta name="revisit-after" content="10 days" />
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <meta name="viewport" content="user-scalable = yes" />
     <link id="Link1" runat="server" rel="shortcut icon" href="~/Standard_Images/favicon.ico"
@@ -40,7 +39,7 @@
                                         <img id="groupLoginLogo" runat="server" alt="Logo" visible="false" />
                                         <div id="mainLoginLogo" runat="server" class="main-logo"></div>
                                     </div>
-                                    <div class="clear"></div>
+                                    <div class="clear-space"></div>
                                     <asp:Label ID="lbl_LoginMessage" runat="server" Text=""></asp:Label>
                                     <div class="clear"></div>
                                     <span id="account_active" style="text-align: center"></span>
@@ -380,7 +379,13 @@
             UpdateContainerHeight();
 
             if ($("#iframe-content-src").length > 0) {
-                $("#iframe-content-src").css("height", $(window).height());
+                var fullScreen = GetUrlParameterByName("iframeFullScreen");
+                var iframeHeight = $(window).height();
+
+                if (fullScreen == "false") {
+                    iframeHeight -= ($("#always-visible").height() + $("#container-footer").height());
+                }
+                $("#iframe-content-src").css("height", iframeHeight);
             }
 
             if (currentEle != null && currentEle != "") {
@@ -672,6 +677,21 @@
                 return "";
             else
                 return decodeURIComponent(r[1].replace(/\+/g, " "));
+        }
+
+        function AddBackgroundColorToLogo(color) {
+            if (color == "" || color == null) {
+                color = "0,0,0";
+            }
+
+            if ($("#groupLoginLogo").length > 0) {
+                $("#groupLoginLogo").addClass("logo-backgroundcolor");
+                $(".logo-backgroundcolor").css("background-color", "rgba(" + color + ",0.4)");
+            }
+            else if ($("#mainLoginLogo").length > 0) {
+                $("#mainLoginLogo").addClass("logo-backgroundcolor");
+                $(".logo-backgroundcolor").css("background-color", "rgba(" + color + ",0.4)");
+            }
         }
 
 

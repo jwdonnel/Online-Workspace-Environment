@@ -1,32 +1,31 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_PersonalCalendar_PersonalCalendar, App_Web_slk2dliv" clientidmode="Static" %>
-<div id="personalcalendar-load" class="main-div-app-bg">
-    <div id="pCal-titlebar" class="pad-all app-title-bg-color" style="height: 40px">
-        <div class="float-left">
-            <asp:Image ID="img_Title" runat="server" CssClass="float-left pad-right" Height="38px" />
-            <asp:Label ID="lbl_Title" runat="server" Text="" Font-Size="30px" CssClass="float-left"></asp:Label>
-        </div>
-        <div class="float-right">
-            <div id="searchwrapper" style="width: 300px;">
-                <input id="tb_search_pcal" type="text" class="searchbox" onfocus="if(this.value=='Search Current Month')this.value=''"
-                    onblur="if(this.value=='')this.value='Search Current Month'" onkeypress="KeyPressSearch_pc(event)"
-                    value="Search Current Month" />
-                <a href="#" title="Clear search" class="searchbox_clear" onclick="$('#tb_search_pcal').val('Search Current Month');onCalendarLoad();return false;"></a><a href="#" class="searchbox_submit" onclick="onCalendarLoad();return false;"></a>
-            </div>
+﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_PersonalCalendar_PersonalCalendar, App_Web_mkinpfpw" clientidmode="Static" %>
+<div id="pCal-titlebar" class="pad-all app-title-bg-color" style="min-height: 40px">
+    <div class="float-left">
+        <asp:Image ID="img_Title" runat="server" CssClass="float-left pad-right" Height="38px" />
+        <asp:Label ID="lbl_Title" runat="server" Text="" Font-Size="30px" CssClass="float-left"></asp:Label>
+    </div>
+    <div class="float-right">
+        <div class="searchwrapper" style="width: 300px;">
+            <input id="tb_search_pcal" type="text" class="searchbox" onfocus="if(this.value=='Search Current Month')this.value=''"
+                onblur="if(this.value=='')this.value='Search Current Month'" onkeypress="KeyPressSearch_pc(event)"
+                value="Search Current Month" />
+            <a href="#" title="Clear search" class="searchbox_clear" onclick="$('#tb_search_pcal').val('Search Current Month');onCalendarLoad();return false;"></a><a href="#" class="searchbox_submit" onclick="onCalendarLoad();return false;"></a>
         </div>
     </div>
-    <input id="dateselected_pc" type="hidden" value="" />
-    <input id="hidden_date_pc" name="sdate" type="hidden" value="" />
-    <div class="pc-menu-bar">
-        <a href="#" class="menu-btns" onclick="AddNewCalendarEvent_pc('', false);return false;">Add Event</a> <a href="#" class="menu-btns" onclick="HideTitleSearch_PC(this);return false;">Hide Title/Search</a>
-        <div id="currmonthBtns_pc" class="currmonthBtns">
-        </div>
-    </div>
-    <div id="usercalendar_pc" style="position: relative;">
-    </div>
-    <div id="hidden-div-holder-pc" style="display: none;">
-    </div>
-    <input type="hidden" id="hf_editmode-pc" />
+    <div class="clear"></div>
 </div>
+<input id="dateselected_pc" type="hidden" value="" />
+<input id="hidden_date_pc" name="sdate" type="hidden" value="" />
+<div class="pc-menu-bar">
+    <a href="#" class="menu-btns" onclick="AddNewCalendarEvent_pc('', false);return false;">Add Event</a> <a href="#" class="menu-btns" onclick="HideTitleSearch_PC(this);return false;">Hide Title/Search</a>
+    <div id="currmonthBtns_pc" class="currmonthBtns">
+    </div>
+</div>
+<div id="usercalendar_pc" style="position: relative;">
+</div>
+<div id="hidden-div-holder-pc" style="display: none;">
+</div>
+<input type="hidden" id="hf_editmode-pc" />
 <div id="ViewCalEvent-element" class="Modal-element outside-main-app-div">
     <div class="Modal-overlay">
         <div class="Modal-element-align">

@@ -1,4 +1,4 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="SiteTools_UsersAndApps, App_Web_ghiantit" %>
+﻿<%@ page language="C#" autoeventwireup="true" inherits="SiteTools_UsersAndApps, App_Web_1sq1bxip" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -41,7 +41,7 @@
                             <div class="clear-space"></div>
                         </div>
                         <div class="td-settings-desc">
-                            This is a non-detailed page of user apps and plugins.
+                            This page will show the current installed user apps and plugins. If viewing individual users, you can add and remove apps and plugins or install an app package.
                         </div>
                     </div>
                 </div>
@@ -58,8 +58,6 @@
         <script type="text/javascript">
             $(document).ready(function () {
                 openWSE_Config.siteRootFolder = "<%=ResolveUrl("~/").Replace("/", "") %>";
-                openWSE_Config.defaultBackgroundColor = "<%=MemberDatabase.DefaultBackgroundColor %>";
-                openWSE_Config.defaultBackgroundPosition = "<%=MemberDatabase.DefaultBackgroundPosition %>";
             });
 
             function RemovePlugin(id) {

@@ -1,12 +1,14 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="DatabaseSelection, App_Web_iv0v2cts" %>
+﻿<%@ page language="C#" autoeventwireup="true" inherits="DatabaseSelection, App_Web_ravcmota" %>
 
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Database Selection</title>
-    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <meta name="author" content="John Donnelly" />
+    <meta name="revisit-after" content="10 days" />
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+        <meta name="viewport" content="width=device-width, user-scalable=no" />
     <link id="Link1" runat="server" rel="shortcut icon" href="Standard_Images/favicon.ico"
         type="image/x-icon" />
     <link id="Link2" runat="server" rel="icon" href="Standard_Images/favicon.ico"
@@ -70,6 +72,7 @@
             background-position: bottom center;
             background-attachment: fixed;
             background-color: #2D2D2D;
+            background-size: cover;
         }
 
         h3
@@ -122,6 +125,7 @@
             top: 0;
             width: 100%;
             z-index: 12000;
+            background: rgba(0,0,0,0.5);
         }
 
         .update-element-modal

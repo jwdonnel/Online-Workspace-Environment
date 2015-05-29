@@ -1,4 +1,4 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="SiteTools_ProjectExplorer, App_Web_ghiantit" %>
+﻿<%@ page language="C#" autoeventwireup="true" inherits="SiteTools_ProjectExplorer, App_Web_1sq1bxip" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -111,7 +111,7 @@
                                     <div class="clear-space"></div>
                                     <div class="font-bold pad-right float-left pad-top-sml" style="width: 95px;">Project Name:</div>
                                     <asp:TextBox ID="tb_projectName" runat="server" MaxLength="250" CssClass="TextBoxControls margin-right-big" Width="150px"></asp:TextBox>
-                                    <asp:Button ID="btn_saveProject" runat="server" CssClass="input-buttons RandomActionBtns no-margin" Text="Save Info" OnClick="btn_saveProject_Click" />
+                                    <asp:Button ID="btn_saveProject" runat="server" CssClass="input-buttons-create RandomActionBtns no-margin" Text="Save" Width="80px" OnClick="btn_saveProject_Click" />
                                     <div class="clear-space"></div>
                                     <div class="font-bold pad-right float-left pad-top-sml" style="width: 95px;">Description:</div>
                                     <asp:TextBox ID="tb_description" runat="server" CssClass="TextBoxControls margin-right-big" Width="240px"></asp:TextBox>
@@ -250,8 +250,6 @@
         <script type="text/javascript">
             $(document).ready(function () {
                 openWSE_Config.siteRootFolder = "<%=ResolveUrl("~/").Replace("/", "") %>";
-                openWSE_Config.defaultBackgroundColor = "<%=MemberDatabase.DefaultBackgroundColor %>";
-                openWSE_Config.defaultBackgroundPosition = "<%=MemberDatabase.DefaultBackgroundPosition %>";
             });
         </script>
     </form>

@@ -1,4 +1,4 @@
-﻿<%@ page title="Custom Tables" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_CustomTables, App_Web_muevkmyy" %>
+﻿<%@ page title="Custom Tables" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_CustomTables, App_Web_qakpaghm" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -16,79 +16,27 @@
         {
             cursor: default;
         }
+
+        .settings-name-column
+        {
+            width: 100px!important;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
     <div class="maincontent-padding margin-top">
         <asp:Literal ID="ltl_locked" runat="server"></asp:Literal>
         <asp:Panel ID="pnl_columnEditor" runat="server">
-            <div class="table-settings-box no-border">
+            <div class="table-settings-box no-border" style="margin-bottom: 0px!important;">
                 <div class="td-settings-ctrl">
-                    <div id="Divcb_installHolder">
-                        <asp:CheckBox ID="cb_InstallAfterLoad" runat="server" Text="&nbsp;Install app for current user after creation"
-                            Checked="true" />
-                        <div class="clear-space-five">
-                        </div>
-                        <div id="div_isPrivate">
-                            <asp:CheckBox ID="cb_isPrivate" runat="server" Text="&nbsp;Make this app private (Only for me)"
-                                ClientIDMode="Static" Checked="false" />
-                            <div class="clear-space-five">
-                            </div>
-                        </div>
-                        <asp:CheckBox ID="cb_showSidebar" runat="server" Text="&nbsp;Show sidebar with month selector"
-                            ClientIDMode="Static" Checked="true" />
-                        <div class="clear-space-five">
-                        </div>
-                        <asp:CheckBox ID="cb_addChart" runat="server" Text="&nbsp;Enable Data Chart"
-                            ClientIDMode="Static" Checked="true" />
-                        <div class="clear-space-five">
-                        </div>
-                        <asp:CheckBox ID="cb_allowNotifi" runat="server" Text="&nbsp;Enable Notifications - Notify users upon change"
-                            ClientIDMode="Static" Checked="true" />
-                        <div class="clear-space">
-                        </div>
-                        <div id="chart_selector">
-                            <table>
-                                <tr>
-                                    <td class="settings-name-column">Chart Type
-                                    </td>
-                                    <td>
-                                        <asp:DropDownList ID="ddl_ChartType" runat="server" CssClass="margin-left margin-right" ClientIDMode="Static">
-                                        </asp:DropDownList>
-                                    </td>
-                                    <td>
-                                        <img id="img_charttype" alt="charttype" src="../../Standard_Images/ChartTypes/area.png" class="margin-left-big margin-right" style="max-height: 80px;" />
-
-                                    </td>
-                                    <td>
-                                        <small>This chart image will be used as the main App Icon.<br />
-                                            Click <a id="lnk_chartTypeSetup" href="https://google-developers.appspot.com/chart/interactive/docs/gallery/areachart" target="_blank">HERE</a> to see how the data should be setup for this chart type.
-                                        </small>
-                                    </td>
-                                </tr>
-                            </table>
-                            <div class="clear-space">
-                            </div>
-                        </div>
-                    </div>
                     <table>
-                        <tr id="tr-chart-title">
-                            <td class="settings-name-column">Chart Title
-                        <div class="clear-space"></div>
-                            </td>
-                            <td>
-                                <asp:TextBox ID="tb_chartTitle" runat="server" CssClass="textEntry margin-left float-left"
-                                    MaxLength="250" Width="400px" ClientIDMode="Static"></asp:TextBox>
-                                <div class="clear-space"></div>
-                            </td>
-                        </tr>
                         <tr>
                             <td class="settings-name-column">Table Name
-                        <div class="clear-space"></div>
+                                <div class="clear-space"></div>
                             </td>
                             <td>
-                                <asp:TextBox ID="tb_tablename" runat="server" CssClass="textEntry margin-left float-left"
-                                    MaxLength="100" AutoCompleteType="Search" Width="175px" ClientIDMode="Static"></asp:TextBox>
+                                <asp:TextBox ID="tb_tablename" runat="server" CssClass="textEntry"
+                                    MaxLength="100" AutoCompleteType="Search" ClientIDMode="Static"></asp:TextBox>
                                 <div class="clear-space"></div>
                             </td>
                         </tr>
@@ -97,7 +45,7 @@
                                 <div class="clear-space"></div>
                             </td>
                             <td>
-                                <a href="#" class="margin-left input-buttons" onclick="openWSE.LoadModalWindow(true, 'UsersAllowed-element', 'Users Allowed To Edit');return false;"><span class="img-users float-left margin-right-sml"></span>Select Users</a>
+                                <a href="#" class="input-buttons" onclick="openWSE.LoadModalWindow(true, 'UsersAllowed-element', 'Users Allowed To Edit');return false;"><span class="img-users float-left margin-right-sml"></span>Select Users</a>
                                 <div id="UsersAllowed-element" class="Modal-element">
                                     <div class="Modal-overlay">
                                         <div class="Modal-element-align">
@@ -139,9 +87,10 @@
                             </td>
                         </tr>
                     </table>
+                    <div id="chart-title-edit-holder"></div>
                 </div>
             </div>
-            <div class="table-settings-box">
+            <div class="table-settings-box" style="margin-top: 0px!important;">
                 <div class="td-settings-title">
                     Column Editor
                 </div>
@@ -207,13 +156,87 @@
                     </table>
                     <div class="clear" style="height: 20px;"></div>
                     <div id="createBtns" style="width: 625px;">
-                        <a href="#" onclick="ClearControls();return false;" class="float-left">Clear Entries</a>
-                        <input type="button" id="btn_createtable" class="input-buttons float-right no-margin" onclick="CreateTable()"
+                        <input type="button" id="btn_createtable" class="input-buttons-create margin-right" onclick="CreateTable()"
                             value="Create Table" />
+                        <a href="#" onclick="ClearControls();return false;">Clear Entries</a>
+                        <div id="Divcb_installHolder" class="float-right pad-top">
+                            <a href="#" class="margin-left" onclick="ViewOptions();return false;">View Custom Table Options</a>
+                            <div id="CreateOptions-element" class="Modal-element">
+                                <div class="Modal-overlay">
+                                    <div class="Modal-element-align">
+                                        <div class="Modal-element-modal" data-setwidth="490">
+                                            <div class='ModalHeader'>
+                                                <div>
+                                                    <div class="app-head-button-holder-admin">
+                                                        <a href="#close" onclick="CloseOptions();return false;" class="ModalExitButton"></a>
+                                                    </div>
+                                                    <span class='Modal-title'></span>
+                                                </div>
+                                            </div>
+                                            <div class="ModalScrollContent">
+                                                <div class="ModalPadContent">
+                                                    <asp:CheckBox ID="cb_InstallAfterLoad" runat="server" Text="&nbsp;Install app for current user after creation"
+                                                        Checked="true" />
+                                                    <div class="clear-space-five">
+                                                    </div>
+                                                    <div id="div_isPrivate">
+                                                        <asp:CheckBox ID="cb_isPrivate" runat="server" Text="&nbsp;Make this app private (Only for me)"
+                                                            ClientIDMode="Static" Checked="false" />
+                                                        <div class="clear-space-five">
+                                                        </div>
+                                                    </div>
+                                                    <asp:CheckBox ID="cb_addChart" runat="server" Text="&nbsp;Enable Data Chart"
+                                                        ClientIDMode="Static" Checked="true" />
+                                                    <div class="clear-space-five">
+                                                    </div>
+                                                    <asp:CheckBox ID="cb_allowNotifi" runat="server" Text="&nbsp;Enable Notifications - Notify users upon change"
+                                                        ClientIDMode="Static" Checked="true" />
+                                                    <div class="clear-space">
+                                                    </div>
+                                                    <div id="chart_selector">
+                                                        <table>
+                                                            <tr>
+                                                                <td class="settings-name-column">Chart Type
+                                                                </td>
+                                                                <td>
+                                                                    <asp:DropDownList ID="ddl_ChartType" runat="server" CssClass="margin-right-big" ClientIDMode="Static">
+                                                                    </asp:DropDownList>
+                                                                    <div class="clear-space-five"></div>
+                                                                    <img id="img_charttype" alt="charttype" src="../../Standard_Images/ChartTypes/area.png" class="margin-right-big" style="max-height: 50px;" />
+                                                                </td>
+                                                                <td>
+                                                                    <small>This chart image will be used as the main App Icon.<br />
+                                                                        Click <a id="lnk_chartTypeSetup" href="https://google-developers.appspot.com/chart/interactive/docs/gallery/areachart" target="_blank">HERE</a> to see how the data should be setup for this chart type.</small>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <div class="clear-space"></div>
+                                                        <div id="chart-title-holder">
+                                                            <table id="tr-chart-title">
+                                                                <tr>
+                                                                    <td class="settings-name-column">Chart Title
+                                                                    </td>
+                                                                    <td>
+                                                                        <asp:TextBox ID="tb_chartTitle" runat="server" CssClass="textEntry" MaxLength="150" ClientIDMode="Static"></asp:TextBox>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="ModalButtonHolder">
+                                                <input type="button" class="input-buttons no-margin" value="Close" onclick="CloseOptions();" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div id="editBtns" style="width: 625px; display: none;">
-                        <input type="button" class="input-buttons" onclick="CancelUpdate()" value="Cancel" />
-                        <input type="button" class="input-buttons float-right no-margin" onclick="UpdateTable()" value="Update Table" />
+                        <input type="button" class="input-buttons-create" onclick="UpdateTable()" value="Update Table" />
+                        <input type="button" class="input-buttons-create margin-left" onclick="CancelUpdate()" value="Cancel" />
                     </div>
                     <div class="clear-space"></div>
                 </div>
@@ -243,8 +266,6 @@
                             <td align="center" width="180px">Created By
                             </td>
                             <td align="center" width="180px">Date Created
-                            </td>
-                            <td align="center" width="60px">Sidebar
                             </td>
                             <td align="center" width="60px">Notify
                             </td>

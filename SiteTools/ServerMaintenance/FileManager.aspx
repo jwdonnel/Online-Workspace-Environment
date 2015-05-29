@@ -1,8 +1,6 @@
-﻿<%@ page title="File Manager" async="true" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_FileManager, App_Web_i1ijfqeu" %>
+﻿<%@ page title="File Manager" async="true" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_FileManager, App_Web_ogqsad33" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
-    <link type="text/css" rel="stylesheet" href='<%=ResolveUrl("~/Scripts/SyntaxHighlighter/Styles/shCore.css")%>' />
-    <link type="text/css" rel="stylesheet" href='<%=ResolveUrl("~/Scripts/SyntaxHighlighter/Styles/shThemeDefault.css")%>' />
     <style type="text/css">
         #editor
         {
@@ -23,7 +21,7 @@
                     <asp:Panel ID="pnl1" runat="server">
                         <div class="clear-space"></div>
                         <div class="float-left" style="width: 475px;">
-                            <div id="searchwrapper" style="width: 444px;">
+                            <div class="searchwrapper" style="width: 444px;">
                                 <asp:Panel ID="Panel1_FileManager" runat="server" DefaultButton="imgbtn_search">
                                     <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
                                         onfocus="if(this.value=='Search Files')this.value=''" onblur="if(this.value=='')this.value='Search Files'"
@@ -127,13 +125,11 @@
             <h3 class="float-left pad-top-sml">File Editor/Viewer&nbsp;&nbsp;-</h3>
             <asp:Label ID="lbl_currfile" runat="server" CssClass="float-left pad-top margin-left"
                 Text=""></asp:Label>
+            <div class="clear-space"></div>
+            <asp:HyperLink ID="lbtn_close" NavigateUrl="FileManager.aspx" CssClass="float-left input-buttons-create margin-right"
+                runat="server" ToolTip="Back">Back</asp:HyperLink>
             <asp:LinkButton ID="lbtn_save" runat="server" OnClientClick=" return ConfirmSaveFile(this); "
-                CssClass="float-right input-buttons no-margin" ToolTip="Save" style="margin-left: 16px !important;">
-                <span class="img-backup float-left margin-right-sml"></span>Save</asp:LinkButton>
-            <asp:HyperLink ID="lbtn_close" NavigateUrl="FileManager.aspx" CssClass="float-right input-buttons no-margin"
-                runat="server" ToolTip="Back">
-                <span class="pg-prev-btn float-left margin-right-sml" style="padding: 0px!important;"></span>Back
-            </asp:HyperLink>
+                CssClass="float-left input-buttons-create margin-left" ToolTip="Save">Save</asp:LinkButton>
             <div class="clear-space">
             </div>
             <div class="clear-margin">
@@ -142,29 +138,22 @@
             </div>
             <div class="clear-space">
             </div>
-            <asp:Literal ID="ltl_code" runat="server"></asp:Literal>
             <div id="editor" style="display: none;">
             </div>
             <asp:HiddenField ID="hidden_editor" runat="server" ClientIDMode="Static" />
         </asp:Panel>
-        <script src="//d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js" type="text/javascript"
-            charset="utf-8"> </script>
+        <script src='<%=ResolveUrl("~/Scripts/AceEditor/ace.js")%>' type="text/javascript" charset="utf-8"></script>
         <script type="text/javascript" src='<%=ResolveUrl("~/Scripts/SiteTools/filemanager.js")%>'> </script>
-        <script type="text/javascript" language="javascript" src='<%=ResolveUrl("~/Scripts/SyntaxHighlighter/Scripts/shCore.js")%>'> </script>
-        <script type="text/javascript" language="javascript" src='<%=ResolveUrl("~/Scripts/SyntaxHighlighter/Scripts/shBrushJScript.js")%>'> </script>
-        <script type="text/javascript" language="javascript" src='<%=ResolveUrl("~/Scripts/SyntaxHighlighter/Scripts/shBrushXml.js")%>'> </script>
         <script type="text/javascript">
             $(document).ready(function () {
                 $(document).tooltip({ disabled: true });
-                SyntaxHighlighter.all()
                 $(window).resize();
             });
 
             $(window).resize(function () {
-                try
-                {
+                try {
                     var h = $(window).height();
-                    $("#editor, #ace_scroller").css("height", h - 245);
+                    $("#editor, #ace_scroller").css("height", h - 290);
                     $("#editor, #ace_scroller").css("width", $("#MainContent_pnl2").outerWith());
                 }
                 catch (evt) { }

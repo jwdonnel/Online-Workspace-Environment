@@ -1,4 +1,4 @@
-﻿<%@ page title="App Packages" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppPackages, App_Web_wwykq1g1" %>
+﻿<%@ page title="App Packages" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppPackages, App_Web_nh1ggown" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -35,9 +35,11 @@
             <ContentTemplate>
                 <div class="table-settings-box no-border" style="padding-bottom: 0px!important;">
                     <div class="td-settings-ctrl">
-                        <a href="#" class="margin-right-big input-buttons" onclick="openWSE.LoadModalWindow(true, 'NewPackage-element', 'Create New App Package');$('#MainContent_tb_packagename').focus();return false;">
-                            <span class="td-add-btn float-left margin-right-sml" style="padding: 0!important;"></span>Create a Package</a> <b class="pad-right">Package Count</b><asp:Label ID="lbl_packagecount"
+                        <a href="#" class="margin-right-big input-buttons-create" onclick="openWSE.LoadModalWindow(true, 'NewPackage-element', 'Create New App Package');$('#MainContent_tb_packagename').focus();return false;">Create Package</a>
+                        <div class="float-right pad-top">
+                            <b class="pad-right">Package Count</b><asp:Label ID="lbl_packagecount"
                                 runat="server" Text="0"></asp:Label>
+                        </div>
                     </div>
                     <div class="td-settings-desc">
                         These app packages are used for the app installer
@@ -83,9 +85,24 @@
                 </div>
                 <div class="clear-space">
                 </div>
+                <div class="searchwrapper" style="width: 350px;">
+                    <asp:Panel ID="Panel1_Installer" runat="server" DefaultButton="imgbtn_search">
+                        <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
+                            onfocus="if(this.value=='Search Packages')this.value=''" onblur="if(this.value=='')this.value='Search Packages'"
+                            Text="Search Packages"></asp:TextBox>
+                        <asp:LinkButton ID="imgbtn_clearsearch" runat="server" ToolTip="Clear search" CssClass="searchbox_clear RandomActionBtns"
+                            OnClick="imgbtn_clearsearch_Click" />
+                        <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
+                            OnClick="imgbtn_search_Click" />
+                    </asp:Panel>
+                </div>
                 <asp:Panel ID="pnl_packageholder" runat="server">
                 </asp:Panel>
             </ContentTemplate>
+            <Triggers>
+                <asp:AsyncPostBackTrigger ControlID="imgbtn_clearsearch" />
+                <asp:AsyncPostBackTrigger ControlID="imgbtn_search" />
+            </Triggers>
         </asp:UpdatePanel>
         <div id="PackageEdit-element" class="Modal-element">
             <div class="Modal-overlay">
@@ -136,6 +153,9 @@
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
                             </div>
+                        </div>
+                        <div class="ModalButtonHolder">
+                            <input type="button" class="input-buttons" value="Close" onclick="openWSE.LoadModalWindow(false, 'PackageEdit-element', ''); RefreshList();" />
                         </div>
                     </div>
                 </div>

@@ -1,41 +1,41 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_Bookmark_Viewer_BookmarkViewer, App_Web_ucmd1ayt" clientidmode="Static" %>
-<div id="bookmarkviewer-load" class="main-div-app-bg">
-    <div id="bookmarkviewer_scroller" class="pad-all app-title-bg-color"
-        style="min-height: 70px">
-        <div class="float-left">
-            <asp:Image ID="img_Title" runat="server" CssClass="float-left pad-right" Height="38px" />
-            <asp:Label ID="lbl_Title" runat="server" Text="" Font-Size="30px"></asp:Label>
+﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_Bookmark_Viewer_BookmarkViewer, App_Web_5551fl03" clientidmode="Static" %>
+<div id="bookmarkviewer_scroller" class="pad-all app-title-bg-color"
+    style="min-height: 70px">
+    <div class="float-left">
+        <asp:Image ID="img_Title" runat="server" CssClass="float-left pad-right" Height="38px" />
+        <asp:Label ID="lbl_Title" runat="server" Text="" Font-Size="30px"></asp:Label>
+    </div>
+    <div class="pad-top" align="right">
+        <div class="searchwrapper" style="width: 400px;">
+            <input type="text" id="tb_search_bookmarks" class="searchbox" onfocus="if(this.value=='Search for bookmark')this.value=''"
+                onblur="if(this.value=='')this.value='Search for bookmark'" value="Search for bookmark" />
+            <a href="#" onclick="ClearSearchBookmarks(); return false;" title="Clear search"
+                class="searchbox_clear"></a><a href="#" class="searchbox_submit" onclick="SearchBookmarks(); return false;"></a>
         </div>
-        <div class="pad-top" align="right">
-            <div id="searchwrapper" style="width: 400px;">
-                <input type="text" id="tb_search_bookmarks" class="searchbox" onfocus="if(this.value=='Search for bookmark')this.value=''"
-                    onblur="if(this.value=='')this.value='Search for bookmark'" value="Search for bookmark" />
-                <a href="#" onclick="ClearSearchBookmarks(); return false;" title="Clear search"
-                    class="searchbox_clear"></a><a href="#" class="searchbox_submit" onclick="SearchBookmarks(); return false;"></a>
-            </div>
-        </div>
-        <div class="clear-space-five">
-        </div>
-        <div class="float-right pad-left-big">
-            <b class="pad-right">Sort By:</b>
-            <select id="sortby_bookmarkviewer" onchange="OnSortChange_Bookmark()">
-                <option value="1">Date (Descending)</option>
-                <option value="2">Date (Ascending)</option>
-                <option value="3">Alphabetically (Descending)</option>
-                <option value="4">Alphabetically (Ascending)</option>
-            </select>
-        </div>
-        <div class="pad-bottom">
-            <b class="pad-right">Bookmarks:</b><span id="bookmarkCount"></span>
-        </div>
+    </div>
+    <div class="clear-space-five">
+    </div>
+    <div class="float-right pad-left-big">
+        <b class="pad-right">Sort By:</b>
+        <select id="sortby_bookmarkviewer" onchange="OnSortChange_Bookmark()">
+            <option value="1">Date (Descending)</option>
+            <option value="2">Date (Ascending)</option>
+            <option value="3">Alphabetically (Descending)</option>
+            <option value="4">Alphabetically (Ascending)</option>
+        </select>
+    </div>
+    <div class="pad-bottom">
+        <b class="pad-right">Bookmarks:</b><span id="bookmarkCount"></span>
+    </div>
+    <asp:Panel ID="pnl_BookmarkPnlBtns" runat="server">
         <input type="button" value="Import" class="input-buttons" onclick="ImportBookmark();"
             style="width: 65px;" />
         <input type="button" value="Add" class="input-buttons" onclick="openWSE.LoadModalWindow(true, 'bookmark-add-element', 'Add New Bookmark'); $('#tb_addbookmarkname_bookmarkviewer').val(''); $('#tb_addbookmarkhtml_bookmarkviewer').val(''); $('#lbl_errormessage_bookmarkviewer').html(''); $('#tb_addbookmarkhtml_bookmarkviewer').focus();" style="width: 65px;" />
-    </div>
-    <div id="showbookmarks_bookmarkviewer">
-    </div>
-    <div id="iframeHolder_bookmarkviewer">
-    </div>
+    </asp:Panel>
+</div>
+<div id="showbookmarks_bookmarkviewer">
+</div>
+<div id="iframeHolder_bookmarkviewer">
 </div>
 <div id="bookmark-share-edit-element" class="Modal-element outside-main-app-div">
     <div class="Modal-overlay">

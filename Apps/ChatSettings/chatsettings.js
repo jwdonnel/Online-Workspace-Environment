@@ -49,7 +49,7 @@ function LoadBlockedUsers() {
 }
 
 function UpdateScreen_MyMessages() {
-    $.LoadingMessage("#chatlog-load");
+    $.LoadingMessage("#chatsettings-load");
 }
 
 function CheckIfAnyLogs() {

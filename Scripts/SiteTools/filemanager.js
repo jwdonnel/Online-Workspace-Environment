@@ -6,6 +6,8 @@
     }, 1500);
 });
 
+var aceMode = "ace/mode/javascript";
+
 var prm = Sys.WebForms.PageRequestManager.getInstance();
 
 prm.add_endRequest(function () {
@@ -48,8 +50,9 @@ $(document.body).on("click", "#MainContent_lbtn_save", function () {
     if ($("#editor").css("display") == "block") {
         var editor = ace.edit('editor');
         editor.setTheme('ace/theme/chrome');
-        editor.getSession().setMode('ace/mode/javascript');
+        editor.getSession().setMode(aceMode);
         editor.getSession().setUseWrapMode(true);
+        editor.setShowPrintMargin(false);
         var x = editor.getSession().getValue();
         x = x.replace(/\+/g, "%2B");
         $("#hidden_editor").val(escape(x));
@@ -63,13 +66,9 @@ function LoadEditor() {
             ace.config.set("workerPath", path);
             var editor = ace.edit('editor');
             editor.setTheme('ace/theme/chrome');
-            if ($('#HTMLCODE').css("display") == "none") {
-                editor.getSession().setMode('ace/mode/html');
-            }
-            else {
-                editor.getSession().setMode('ace/mode/javascript');
-            }
+            editor.getSession().setMode(aceMode);
             editor.getSession().setUseWrapMode(false);
+            editor.setShowPrintMargin(false);
 
             editor.getSession().on('change', function (e) {
                 $("#hidden_temp_script").val(escape(editor.getSession().getValue()));
@@ -84,13 +83,21 @@ function UnescapeJavascriptCode(text) {
     ace.config.set("workerPath", path);
     var editor = ace.edit('editor');
     editor.setTheme('ace/theme/chrome');
-    if ($('#HTMLCODE').css("display") == "none") {
-        editor.getSession().setMode('ace/mode/html');
-    }
-    else {
-        editor.getSession().setMode('ace/mode/javascript');
-    }
+    editor.getSession().setMode(aceMode);
     editor.getSession().setUseWrapMode(false);
+    editor.setShowPrintMargin(false);
+    editor.getSession().setValue(unescape(text))
+}
+
+function UnescapeJavascriptCodeReadOnly(text) {
+    var path = "../../Scripts/AceEditor";
+    ace.config.set("workerPath", path);
+    var editor = ace.edit('editor');
+    editor.setTheme('ace/theme/chrome');
+    editor.setReadOnly(true);
+    editor.getSession().setMode(aceMode);
+    editor.getSession().setUseWrapMode(false);
+    editor.setShowPrintMargin(false);
     editor.getSession().setValue(unescape(text))
 }
 

@@ -55,6 +55,10 @@ function RefreshList() {
     }
 }
 
+$(document.body).on("change", "#MainContent_cb_ShowUserOverrides", function () {
+    openWSE.LoadingMessage1("Updating List...");
+});
+
 function DeletePackageCategory(id, type) {
     openWSE.ConfirmWindow("Are you sure you want to delete this " + type + "?",
        function () {

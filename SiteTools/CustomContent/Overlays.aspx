@@ -1,4 +1,4 @@
-﻿<%@ page title="Overlay Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_Overlays, App_Web_muevkmyy" %>
+﻿<%@ page title="Overlay Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_Overlays, App_Web_qakpaghm" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -103,10 +103,10 @@
                             </div>
                         </div>
                         <div class="ModalButtonHolder">
-                                                                <asp:Button ID="btn_uploadOverlay" runat="server" Text="Upload" CssClass="input-buttons Upload-Button-Action"
-                                        disabled="disabled" OnClick="btn_uploadOverlay_Clicked" />
-                                    <input type="button" class="input-buttons no-margin" value="Cancel" onclick="openWSE.LoadModalWindow(false, 'AddOverlay-element', '');" />
-                            </div>
+                            <asp:Button ID="btn_uploadOverlay" runat="server" Text="Upload" CssClass="input-buttons Upload-Button-Action"
+                                disabled="disabled" OnClick="btn_uploadOverlay_Clicked" />
+                            <input type="button" class="input-buttons no-margin" value="Cancel" onclick="openWSE.LoadModalWindow(false, 'AddOverlay-element', '');" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -115,9 +115,11 @@
             <ContentTemplate>
                 <div class="table-settings-box" style="margin-bottom: 0px!important;">
                     <div class="td-settings-ctrl">
-                        <a id="aAddNewOverlay" runat="server" class="margin-right-big input-buttons" onclick="openWSE.LoadModalWindow(true, 'AddOverlay-element', 'Add New Overlay');$('#MainContent_txt_uploadNotifiName').focus();return false;"><span class="td-add-btn float-left margin-right-sml" style="padding: 0!important;"></span>Add New Overlay</a>
-                        <span class="font-bold pad-right">Total Overlays</span><asp:Label ID="lbl_overlaysEnabled"
-                            runat="server" Text="0"></asp:Label>
+                        <a id="aAddNewOverlay" runat="server" class="margin-right-big input-buttons-create" onclick="openWSE.LoadModalWindow(true, 'AddOverlay-element', 'Add New Overlay');$('#MainContent_txt_uploadNotifiName').focus();return false;">Upload Overlay</a>
+                        <div class="float-right">
+                            <span class="font-bold pad-right">Total Overlays</span><asp:Label ID="lbl_overlaysEnabled"
+                                runat="server" Text="0"></asp:Label>
+                        </div>
                         <div class="clear-space">
                         </div>
                         <asp:Panel ID="pnl_overlays" runat="server" CssClass="pad-top-big">
@@ -176,6 +178,9 @@
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
                             </div>
+                        </div>
+                        <div class="ModalButtonHolder">
+                            <input type="button" class="input-buttons" value="Close" onclick="openWSE.LoadModalWindow(false, 'App-element', ''); RefreshList();" />
                         </div>
                     </div>
                 </div>

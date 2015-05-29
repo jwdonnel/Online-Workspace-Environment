@@ -313,9 +313,15 @@ $(document).ready(function () {
 });
 
 $(function () {
-    $(".sitemenu-selection").find("li").find("a").on("click", function () {
-        load($(this).attr("href"));
-        return false;
+    $(".sitemenu-selection").find("li").on("click", function () {
+        load($(this).find("a").attr("href"));
+    });
+});
+
+$(function () {
+    $(window).hashchange(function () {
+        var url = location.href;
+        load(url == "" ? "1" : url);
     });
 });
 

@@ -41,6 +41,13 @@ $(document).ready(function () {
     });
 });
 
+$(function () {
+    $(window).hashchange(function () {
+        var url = location.href;
+        load(url == "" ? "1" : url);
+    });
+});
+
 function ConfirmClearLogAll(_this) {
     openWSE.ConfirmWindow("Are you sure you want to clear all errors?",
         function () {
@@ -420,9 +427,8 @@ function DeleteEvent(id) {
 }
 
 $(function () {
-    $(".sitemenu-selection").find("li").find("a").on("click", function () {
-        load($(this).attr("href"));
-        return false;
+    $(".sitemenu-selection").find("li").on("click", function () {
+        load($(this).find("a").attr("href"));
     });
 });
 
@@ -438,7 +444,7 @@ function load(num) {
 
     var arg1 = num.split("?tab=");
     if (arg1.length > 1) {
-        var arg2 = arg1[1].split("#");
+        var arg2 = arg1[arg1.length - 1].split("#");
         if (arg2.length == 1) {
             index = GetPnlSectionIndex(arg2[0]);
         }

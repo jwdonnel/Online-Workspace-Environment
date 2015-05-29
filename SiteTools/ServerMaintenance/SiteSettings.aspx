@@ -1,4 +1,4 @@
-﻿<%@ page title="Site Settings" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_SiteSettings, App_Web_i1ijfqeu" %>
+﻿<%@ page title="Site Settings" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_SiteSettings, App_Web_ogqsad33" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -561,7 +561,7 @@
                                     </div>
                                 </div>
                                 <div class="td-settings-desc">
-                                    Set this to Yes to lock apps, plugins, custom tables, database imports, and anything that is specific to groups. This is done by taking the creator and matching the group they are in.
+                                    Set this to Yes to lock apps, plugins, custom tables, table imports, and anything that is specific to groups. This is done by taking the creator and matching the group they are in.
                                 </div>
                             </div>
                             <div class="table-settings-box">
@@ -574,163 +574,6 @@
                                 </div>
                                 <div class="td-settings-desc">
                                     Click here to clear all group session states stored in memory. This will kick any user currently logged into a group off.
-                                </div>
-                            </div>
-                            <div class="table-settings-box">
-                                <div class="td-settings-title">Lock File Manager</div>
-                                <div class="title-line"></div>
-                                <div class="td-settings-ctrl">
-                                    <div class="field switch inline-block">
-                                        <asp:RadioButton ID="rb_LockFileManager_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                            OnCheckedChanged="rb_LockFileManager_on_CheckedChanged" AutoPostBack="True" />
-                                        <asp:RadioButton ID="rb_LockFileManager_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                            OnCheckedChanged="rb_LockFileManager_off_CheckedChanged" AutoPostBack="True" />
-                                    </div>
-                                </div>
-                                <div class="td-settings-desc">
-                                    Lock the File Manager so no other user can view the source
-                                                code.
-                                </div>
-                            </div>
-                            <div class="table-settings-box">
-                                <div class="td-settings-title">
-                                    Lock Site Plugins
-                                </div>
-                                <div class="title-line"></div>
-                                <div class="td-settings-ctrl">
-                                    <div class="field switch inline-block">
-                                        <asp:RadioButton ID="rb_siteplugins_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                            OnCheckedChanged="rb_siteplugins_on_CheckedChanged" AutoPostBack="True" />
-                                        <asp:RadioButton ID="rb_siteplugins_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                            OnCheckedChanged="rb_siteplugins_off_CheckedChanged" AutoPostBack="True" />
-                                    </div>
-                                </div>
-                                <div class="td-settings-desc">
-                                    Lock the Site Plugins feature so no user can upload, install
-                                                them, or edit them.
-                                </div>
-                            </div>
-                            <div class="table-settings-box">
-                                <div class="td-settings-title">
-                                    Lock Notifications Manager
-                                </div>
-                                <div class="title-line"></div>
-                                <div class="td-settings-ctrl">
-                                    <div class="field switch inline-block">
-                                        <asp:RadioButton ID="rb_sitenotifi_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                            OnCheckedChanged="rb_sitenotifi_on_CheckedChanged" AutoPostBack="True" />
-                                        <asp:RadioButton ID="rb_sitenotifi_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                            OnCheckedChanged="rb_sitenotifi_off_CheckedChanged" AutoPostBack="True" />
-                                    </div>
-                                </div>
-                                <div class="td-settings-desc">
-                                    Lock the Site Notifications feature so no user can upload,
-                                                install, or edit them.
-                                </div>
-                            </div>
-                            <div class="table-settings-box">
-                                <div class="td-settings-title">
-                                    Lock Overlay Manager
-                                </div>
-                                <div class="title-line"></div>
-                                <div class="td-settings-ctrl">
-                                    <div class="field switch inline-block">
-                                        <asp:RadioButton ID="rb_siteoverlay_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                            OnCheckedChanged="rb_siteoverlay_on_CheckedChanged" AutoPostBack="True" />
-                                        <asp:RadioButton ID="rb_siteoverlay_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                            OnCheckedChanged="rb_siteoverlay_off_CheckedChanged" AutoPostBack="True" />
-                                    </div>
-                                </div>
-                                <div class="td-settings-desc">
-                                    Lock the Site Overlay feature so no user can upload, install,
-                                                or edit them.
-                                </div>
-                            </div>
-                            <div class="table-settings-box">
-                                <div class="td-settings-title">
-                                    Lock .ASCX App Create/Edit
-                                </div>
-                                <div class="title-line"></div>
-                                <div class="td-settings-ctrl">
-                                    <div class="field switch inline-block">
-                                        <asp:RadioButton ID="rb_lockascx_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                            OnCheckedChanged="rb_lockascx_on_CheckedChanged" AutoPostBack="True" />
-                                        <asp:RadioButton ID="rb_lockascx_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                            OnCheckedChanged="rb_lockascx_off_CheckedChanged" AutoPostBack="True" />
-                                    </div>
-                                </div>
-                                <div class="td-settings-desc">
-                                    Prevent anyone from creating
-                                                and editing any .ascx file extension apps. Applies to the App Editor.
-                                </div>
-                            </div>
-                            <div class="table-settings-box">
-                                <div class="td-settings-title">
-                                    Lock Custom Tables
-                                </div>
-                                <div class="title-line"></div>
-                                <div class="td-settings-ctrl">
-                                    <div class="field switch inline-block">
-                                        <asp:RadioButton ID="rb_lockcustomtables_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                            OnCheckedChanged="rb_lockcustomtables_on_CheckedChanged" AutoPostBack="True" />
-                                        <asp:RadioButton ID="rb_lockcustomtables_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                            OnCheckedChanged="rb_lockcustomtables_off_CheckedChanged" AutoPostBack="True" />
-                                    </div>
-                                </div>
-                                <div class="td-settings-desc">
-                                    Prevent anyone from creating
-                                                a custom table.
-                                </div>
-                            </div>
-                            <div class="table-settings-box">
-                                <div class="td-settings-title">
-                                    Lock Startup Scripts
-                                </div>
-                                <div class="title-line"></div>
-                                <div class="td-settings-ctrl">
-                                    <div class="field switch inline-block">
-                                        <asp:RadioButton ID="rb_Lockstartupscripts_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                            OnCheckedChanged="rb_Lockstartupscripts_on_CheckedChanged" AutoPostBack="True" />
-                                        <asp:RadioButton ID="rb_Lockstartupscripts_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                            OnCheckedChanged="rb_Lockstartupscripts_off_CheckedChanged" AutoPostBack="True" />
-                                    </div>
-                                </div>
-                                <div class="td-settings-desc">
-                                    Lock the Startup Scripts so no other user can edit.
-                                </div>
-                            </div>
-                            <div class="table-settings-box">
-                                <div class="td-settings-title">
-                                    Lock IP Listener and WatchList
-                                </div>
-                                <div class="title-line"></div>
-                                <div class="td-settings-ctrl">
-                                    <div class="field switch inline-block">
-                                        <asp:RadioButton ID="rb_Lockiplisteneron" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                            OnCheckedChanged="rb_Lockiplisteneron_CheckedChanged" AutoPostBack="True" />
-                                        <asp:RadioButton ID="rb_Lockiplisteneroff" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                            OnCheckedChanged="rb_Lockiplisteneroff_CheckedChanged" AutoPostBack="True" />
-                                    </div>
-                                </div>
-                                <div class="td-settings-desc">
-                                    Lock the IP Listener and IP WatchList so no other user can edit.
-                                </div>
-                            </div>
-                            <div class="table-settings-box">
-                                <div class="td-settings-title">
-                                    Lock Site Customizations
-                                </div>
-                                <div class="title-line"></div>
-                                <div class="td-settings-ctrl">
-                                    <div class="field switch inline-block">
-                                        <asp:RadioButton ID="rb_siteCustomizations_On" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                            OnCheckedChanged="rb_siteCustomizations_On_CheckedChanged" AutoPostBack="True" />
-                                        <asp:RadioButton ID="rb_siteCustomizations_Off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                            OnCheckedChanged="rb_siteCustomizations_Off_CheckedChanged" AutoPostBack="True" />
-                                    </div>
-                                </div>
-                                <div class="td-settings-desc">
-                                    Lock the Site Customizations so no other user can edit.
                                 </div>
                             </div>
                             <div class="table-settings-box">
@@ -906,6 +749,154 @@
                             </asp:Panel>
                             <div class="clear" style="height: 50px;">
                             </div>
+                            <asp:Panel ID="Panel1" CssClass="pnl-section-child" runat="server">
+                                <div class="editor_titles">
+                                    <div class="title-line"></div>
+                                    <h3>System Lock Settings</h3>
+                                </div>
+                                The Administrator can lock all users (including the Administrator) from accessing certain features of the site.
+                                <div class="clear-space">
+                                </div>
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">Lock File Manager</div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <div class="field switch inline-block">
+                                            <asp:RadioButton ID="rb_LockFileManager_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                                OnCheckedChanged="rb_LockFileManager_on_CheckedChanged" AutoPostBack="True" />
+                                            <asp:RadioButton ID="rb_LockFileManager_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                                OnCheckedChanged="rb_LockFileManager_off_CheckedChanged" AutoPostBack="True" />
+                                        </div>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        Lock the File Manager so no other user can view the source
+                                                code.
+                                    </div>
+                                </div>
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">
+                                        Lock Site Plugins
+                                    </div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <div class="field switch inline-block">
+                                            <asp:RadioButton ID="rb_siteplugins_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                                OnCheckedChanged="rb_siteplugins_on_CheckedChanged" AutoPostBack="True" />
+                                            <asp:RadioButton ID="rb_siteplugins_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                                OnCheckedChanged="rb_siteplugins_off_CheckedChanged" AutoPostBack="True" />
+                                        </div>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        Lock the Site Plugins feature so no user can upload, install
+                                                them, or edit them.
+                                    </div>
+                                </div>
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">
+                                        Lock Notifications Manager
+                                    </div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <div class="field switch inline-block">
+                                            <asp:RadioButton ID="rb_sitenotifi_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                                OnCheckedChanged="rb_sitenotifi_on_CheckedChanged" AutoPostBack="True" />
+                                            <asp:RadioButton ID="rb_sitenotifi_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                                OnCheckedChanged="rb_sitenotifi_off_CheckedChanged" AutoPostBack="True" />
+                                        </div>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        Lock the Site Notifications feature so no user can upload,
+                                                install, or edit them.
+                                    </div>
+                                </div>
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">
+                                        Lock Overlay Manager
+                                    </div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <div class="field switch inline-block">
+                                            <asp:RadioButton ID="rb_siteoverlay_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                                OnCheckedChanged="rb_siteoverlay_on_CheckedChanged" AutoPostBack="True" />
+                                            <asp:RadioButton ID="rb_siteoverlay_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                                OnCheckedChanged="rb_siteoverlay_off_CheckedChanged" AutoPostBack="True" />
+                                        </div>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        Lock the Site Overlay feature so no user can upload, install,
+                                                or edit them.
+                                    </div>
+                                </div>
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">
+                                        Lock Custom Tables
+                                    </div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <div class="field switch inline-block">
+                                            <asp:RadioButton ID="rb_lockcustomtables_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                                OnCheckedChanged="rb_lockcustomtables_on_CheckedChanged" AutoPostBack="True" />
+                                            <asp:RadioButton ID="rb_lockcustomtables_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                                OnCheckedChanged="rb_lockcustomtables_off_CheckedChanged" AutoPostBack="True" />
+                                        </div>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        Prevent anyone from creating
+                                                a custom table.
+                                    </div>
+                                </div>
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">
+                                        Lock Startup Scripts
+                                    </div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <div class="field switch inline-block">
+                                            <asp:RadioButton ID="rb_Lockstartupscripts_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                                OnCheckedChanged="rb_Lockstartupscripts_on_CheckedChanged" AutoPostBack="True" />
+                                            <asp:RadioButton ID="rb_Lockstartupscripts_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                                OnCheckedChanged="rb_Lockstartupscripts_off_CheckedChanged" AutoPostBack="True" />
+                                        </div>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        Lock the Startup Scripts so no other user can edit.
+                                    </div>
+                                </div>
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">
+                                        Lock IP Listener and WatchList
+                                    </div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <div class="field switch inline-block">
+                                            <asp:RadioButton ID="rb_Lockiplisteneron" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                                OnCheckedChanged="rb_Lockiplisteneron_CheckedChanged" AutoPostBack="True" />
+                                            <asp:RadioButton ID="rb_Lockiplisteneroff" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                                OnCheckedChanged="rb_Lockiplisteneroff_CheckedChanged" AutoPostBack="True" />
+                                        </div>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        Lock the IP Listener and IP WatchList so no other user can edit.
+                                    </div>
+                                </div>
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">
+                                        Lock Site Customizations
+                                    </div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <div class="field switch inline-block">
+                                            <asp:RadioButton ID="rb_siteCustomizations_On" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                                OnCheckedChanged="rb_siteCustomizations_On_CheckedChanged" AutoPostBack="True" />
+                                            <asp:RadioButton ID="rb_siteCustomizations_Off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                                OnCheckedChanged="rb_siteCustomizations_Off_CheckedChanged" AutoPostBack="True" />
+                                        </div>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        Lock the Site Customizations so no other user can edit.
+                                    </div>
+                                </div>
+                            </asp:Panel>
                             <asp:Panel ID="pnl_twitterSettings" CssClass="pnl-section-child" runat="server">
                                 <div class="editor_titles">
                                     <div class="title-line"></div>
@@ -1314,6 +1305,8 @@
                                             <asp:Label ID="lbl_workspaceLogo" runat="server"></asp:Label>
                                             <asp:Image ID="img_workspaceLogo" runat="server" Width="175px" />
                                         </div>
+                                        <div class="clear-space">
+                                        </div>
                                         <asp:Panel ID="pnl_MainSiteLogoUpload" runat="server" Enabled="false" Visible="false">
                                             <asp:FileUpload ID="FileUpload2" runat="server" />
                                             <div class="clear-space">
@@ -1335,12 +1328,44 @@
                                 </div>
                                 <div class="table-settings-box">
                                     <div class="td-settings-title">
+                                        Alternative Site Logo (Used on Login Pages)
+                                    </div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <div class="pad-all-sml inline-block margin-right-big">
+                                            <asp:Image ID="img_altworkspaceLogo" runat="server" Width="175px" />
+                                        </div>
+                                        <div class="clear-space">
+                                        </div>
+                                        <asp:Panel ID="pnl_AltSiteLogoUpload" runat="server" Enabled="false" Visible="false">
+                                            <asp:FileUpload ID="FileUpload1" runat="server" />
+                                            <div class="clear-space">
+                                            </div>
+                                            <asp:Button ID="btn_alternativeuploadlogo" runat="server" CssClass="input-buttons" Text="Update"
+                                                OnClick="btn_alternativeuploadlogo_Click" disabled="disabled" />
+                                            <div class="clear">
+                                            </div>
+                                            <div id="fu_error_message_alt" style="color: Red">
+                                            </div>
+                                        </asp:Panel>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        <asp:Panel ID="pnl_AltSiteLogoDesc" runat="server" Enabled="false" Visible="false">
+                                            Upload an alternative logo to display on the login screens. This logo will be centered
+                                                    on the page. Uploading a new alternative logo will overwrite previous alternative logo. (.png, .jpg, .jpeg, .gif ONLY)
+                                        </asp:Panel>
+                                    </div>
+                                </div>
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">
                                         Fav Icon
                                     </div>
                                     <div class="title-line"></div>
                                     <div class="td-settings-ctrl">
                                         <div class="pad-all-sml inline-block margin-right-big">
                                             <asp:Image ID="img_Favicon" runat="server" Style="max-height: 65px" />
+                                        </div>
+                                        <div class="clear-space">
                                         </div>
                                         <asp:FileUpload ID="FileUpload4" runat="server" />
                                         <div class="clear-space">
@@ -1380,6 +1405,40 @@
                                 </div>
                                 <div class="table-settings-box">
                                     <div class="td-settings-title">
+                                        Add a background to the logo
+                                    </div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <div class="field switch inline-block">
+                                            <asp:RadioButton ID="rb_AddBackgroundToLogo_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                                OnCheckedChanged="rb_AddBackgroundToLogo_on_Checked" AutoPostBack="true" />
+                                            <asp:RadioButton ID="rb_AddBackgroundToLogo_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                                OnCheckedChanged="rb_AddBackgroundToLogo_off_Checked" AutoPostBack="true" />
+                                        </div>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        Add a transparent background color to the logo.
+                                    </div>
+                                </div>
+                                <asp:Panel ID="pnl_logobackgroundColor" runat="server">
+                                    <div class="table-settings-box">
+                                        <div class="td-settings-title">
+                                            Logo Background Color
+                                        </div>
+                                        <div class="title-line"></div>
+                                        <div class="td-settings-ctrl">
+                                            <asp:TextBox ID="tb_logoBgColor" runat="server" CssClass="textEntry float-left color" AutoPostBack="False" MaxLength="6" Width="75px"></asp:TextBox>
+                                            <div class="clear-space"></div>
+                                            <asp:Button ID="btn_logoBgColor" runat="server" CssClass="RandomActionBtns input-buttons"
+                                                Text="Update" OnClick="btn_logoBgColor_Click" />
+                                        </div>
+                                        <div class="td-settings-desc">
+                                            Add a color to your logo's background.
+                                        </div>
+                                    </div>
+                                </asp:Panel>
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">
                                         Sidebar Category Icons
                                     </div>
                                     <div class="title-line"></div>
@@ -1395,7 +1454,7 @@
                             </asp:Panel>
                             <div class="table-settings-box">
                                 <div class="td-settings-title">
-                                    Background Photos
+                                    Public Background Photos
                                 </div>
                                 <div class="title-line"></div>
                                 <div class="td-settings-ctrl">
@@ -1438,6 +1497,7 @@
         </div>
         <div class="clear-space">
         </div>
+        <script type="text/javascript" src='<%=ResolveUrl("~/WebControls/jscolor/jscolor.js")%>'></script>
         <script type="text/javascript" src='<%=ResolveUrl("~/Scripts/SiteTools/sitesettings.js")%>'></script>
     </div>
 </asp:Content>

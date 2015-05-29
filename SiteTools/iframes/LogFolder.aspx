@@ -1,4 +1,4 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="SiteTools_iframes_LogFolder, App_Web_ghiantit" %>
+﻿<%@ page language="C#" autoeventwireup="true" inherits="SiteTools_iframes_LogFolder, App_Web_1sq1bxip" %>
 
 <!DOCTYPE html>
 
@@ -120,6 +120,8 @@
         <script type="text/javascript" src="//code.jquery.com/jquery-1.11.2.min.js"></script>
         <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
         <script type="text/javascript" src="//code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="<%=ResolveUrl("~/Scripts/jquery/combined-scripts.min.js") %>"></script>
+        <script type="text/javascript" src="<%=ResolveUrl("~/Scripts/SiteCalls/Min/openwse.min.js") %>"></script>
         <script type="text/javascript">
             function OnFileClick(file) {
                 LoadingMessage1("Loading File...");

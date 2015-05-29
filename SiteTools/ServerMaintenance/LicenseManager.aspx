@@ -1,4 +1,4 @@
-﻿<%@ page title="License Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_LicenseManager, App_Web_i1ijfqeu" %>
+﻿<%@ page title="License Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_LicenseManager, App_Web_ogqsad33" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -258,7 +258,7 @@
                 <asp:FileUpload ID="fu_newLicenseFile" runat="server" />
                 <div class="clear-space">
                 </div>
-                <asp:Button ID="btn_uploadFile" runat="server" CssClass="input-buttons" OnClientClick="return ConfirmUploadLicense(this);" Text="Upload License" />
+                <asp:Button ID="btn_uploadFile" runat="server" CssClass="input-buttons-create" OnClientClick="return ConfirmUploadLicense(this);" Text="Upload License" />
             </div>
             <div class="td-settings-desc">
                 You only need to upload a License

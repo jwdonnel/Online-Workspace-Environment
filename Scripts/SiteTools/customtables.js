@@ -51,6 +51,18 @@ $(document.body).on("change", "#cb_addChart", function () {
     }
 });
 
+function ViewOptions() {
+    if ($("#chart-title-holder").find("#tr-chart-title").length == 0) {
+        $("#chart-title-holder").append($("#tr-chart-title"));
+    }
+
+    $("#tr-chart-title").show();
+    openWSE.LoadModalWindow(true, "CreateOptions-element", "Custom Table Options");
+}
+function CloseOptions() {
+    openWSE.LoadModalWindow(false, "CreateOptions-element", "");
+}
+
 $(document.body).on("change", "#ddl_ChartType", function () {
     $("#img_charttype").attr("src", "../../Standard_Images/ChartTypes/" + $(this).val().replace(/ /g, "").toLowerCase() + ".png");
     $("#lnk_chartTypeSetup").attr("href", "https://google-developers.appspot.com/chart/interactive/docs/gallery/" + $(this).val().replace(/ /g, "").toLowerCase() + "chart");
@@ -111,6 +123,10 @@ function EditTable(table, name) {
 
                 $("#tb_chartTitle").val(chartTitle);
 
+                if ($("#chart-title-edit-holder").find("#tr-chart-title").length == 0) {
+                    $("#chart-title-edit-holder").html($("#tr-chart-title"));
+                }
+
                 $("#tr-chart-title").hide();
                 if ($("#" + id + "-charttype-select").val() != "None") {
                     $("#tr-chart-title").show();
@@ -154,6 +170,10 @@ function CancelUpdate() {
     $("#tb_columnName").val("");
     $("#ddl_datatypes").val("nvarchar");
     $("#cb_nullable").prop("checked", false);
+
+    if ($("#chart-title-holder").find("#tr-chart-title").length == 0) {
+        $("#chart-title-holder").append($("#tr-chart-title"));
+    }
 
     $("#tb_chartTitle").val("");
     $("#tr-chart-title").hide();
@@ -216,6 +236,10 @@ function UpdateTable() {
                                $("#tb_columnName").val("");
                                $("#ddl_datatypes").val("nvarchar");
                                $("#cb_nullable").prop("checked", false);
+
+                               if ($("#chart-title-holder").find("#tr-chart-title").length == 0) {
+                                   $("#chart-title-holder").append($("#tr-chart-title"));
+                               }
 
                                $("#tb_chartTitle").val("");
                                $("#tr-chart-title").hide();
@@ -598,7 +622,7 @@ function UpdateSidebarChartType(id) {
     $.ajax({
         type: "POST",
         url: openWSE.siteRoot() + "WebServices/CustomTableCreator.asmx/UpdateSidebarChartType",
-        data: "{ 'id': '" + id + "','sidebar': '" + $("#" + id + "-sidebar-cb").prop("checked") + "','notifyUsers': '" + $("#" + id + "-notifi-cb").prop("checked") + "','chartType': '" + $("#" + id + "-charttype-select").val() + "' }",
+        data: "{ 'id': '" + id + "','sidebar': '" + true + "','notifyUsers': '" + $("#" + id + "-notifi-cb").prop("checked") + "','chartType': '" + $("#" + id + "-charttype-select").val() + "' }",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         cache: false,
@@ -612,12 +636,12 @@ function UpdateSidebarChartType(id) {
     });
 }
 
-function RecreateApp(appid, tableName, sidebar, chartType) {
+function RecreateApp(appid, tableName, chartType) {
     openWSE.LoadingMessage1("Creating Table. Please Wait...");
     $.ajax({
         type: "POST",
         url: openWSE.siteRoot() + "WebServices/CustomTableCreator.asmx/RecreateApp",
-        data: "{ 'appId': '" + appid + "','tableName': '" + tableName + "','showSidebar': '" + sidebar + "','chartType': '" + chartType + "' }",
+        data: "{ 'appId': '" + appid + "','tableName': '" + tableName + "','showSidebar': '" + true + "','chartType': '" + chartType + "' }",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         cache: false,
@@ -668,7 +692,7 @@ function CreateTable() {
         $.ajax({
             type: "POST",
             url: openWSE.siteRoot() + "WebServices/CustomTableCreator.asmx/Create",
-            data: JSON.stringify({ "columns": columns, "tableName": tableName, "installForUser": $("#MainContent_cb_InstallAfterLoad").is(":checked"), "showSidebar": $("#cb_showSidebar").is(":checked"), "notifyUsers": $("#cb_allowNotifi").is(":checked"), "isPrivate": $("#cb_isPrivate").is(":checked"), "chartType": chartType, "chartTitle": chartTitle, "usersAllowed": usersAllowed }),
+            data: JSON.stringify({ "columns": columns, "tableName": tableName, "installForUser": $("#MainContent_cb_InstallAfterLoad").is(":checked"), "showSidebar": true, "notifyUsers": $("#cb_allowNotifi").is(":checked"), "isPrivate": $("#cb_isPrivate").is(":checked"), "chartType": chartType, "chartTitle": chartTitle, "usersAllowed": usersAllowed }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             cache: false,

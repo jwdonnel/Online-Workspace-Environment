@@ -1,4 +1,4 @@
-﻿<%@ page title="Network Log" async="true" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_NetworkLog, App_Web_i1ijfqeu" %>
+﻿<%@ page title="Network Log" async="true" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_NetworkLog, App_Web_ogqsad33" %>
 
 <asp:Content ID="HeaderContent" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -117,7 +117,7 @@
         <asp:UpdatePanel ID="UpdatePanel1" runat="server">
             <ContentTemplate>
                 <div id="search_box">
-                    <div id="searchwrapper" style="min-width: 385px; width: 50%">
+                    <div class="searchwrapper" style="min-width: 385px; width: 50%">
                         <asp:Panel ID="Panel1_applog" runat="server" DefaultButton="imgbtn_search">
                             <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
                                 onfocus="if(this.value=='Search Events')this.value=''" onblur="if(this.value=='')this.value='Search Events'"

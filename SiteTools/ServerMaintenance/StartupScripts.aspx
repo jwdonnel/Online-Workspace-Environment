@@ -1,4 +1,4 @@
-﻿<%@ page title="Startup Scripts" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_StartupScripts, App_Web_i1ijfqeu" %>
+﻿<%@ page title="Startup Scripts" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_StartupScripts, App_Web_ogqsad33" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
 </asp:Content>

@@ -57,6 +57,7 @@ function BuildGroupArray() {
 }
 
 function ResetControls() {
+    openWSE.LoadingMessage1("Please Wait...");
     if (!openWSE.ConvertBitToBoolean(document.getElementById("hf_reset").value)) {
         document.getElementById("hf_reset").value = "1";
     }

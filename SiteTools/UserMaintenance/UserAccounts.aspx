@@ -1,4 +1,4 @@
-﻿<%@ page title="User Accounts" async="true" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_UserAccounts, App_Web_o42ostsu" %>
+﻿<%@ page title="User Accounts" async="true" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_UserAccounts, App_Web_rrukwxwl" %>
 
 <asp:Content ID="HeaderContent" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -16,22 +16,21 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="Server">
     <div class="maincontent-padding pad-top-big margin-top">
         <div id="useraccounts">
-            <asp:Panel ID="pnl_admin_tools" runat="server" CssClass="float-left">
-                <a href="#" class="float-left input-buttons" onclick="ClearNewUserFields();openWSE.LoadModalWindow(true, 'NewUser-element', 'Create New User');return false;">
-                    <span class="td-add-btn float-left margin-right-sml" style="padding: 0!important;"></span>Create a User</a>
-                <div id="customizeBtns" class="float-left">
-                    <a id="btn_customizeua" href="#iframecontent" class="display-inline input-buttons" onclick="openWSE.LoadIFrameContent('SiteTools/UserMaintenance/AcctSettings.aspx?toolview=true&u=NewUserDefaults', this);return false;">
+            <asp:Panel ID="pnl_admin_tools" runat="server">
+                <a href="#" class="float-left input-buttons-create" onclick="ClearNewUserFields();openWSE.LoadModalWindow(true, 'NewUser-element', 'Create New User');return false;">Create User</a>
+                <div id="customizeBtns" class="float-right">
+                    <a id="btn_customizeua" href="#iframecontent" class="display-inline margin-left-big" onclick="openWSE.LoadIFrameContent('SiteTools/UserMaintenance/AcctSettings.aspx?toolview=true&u=NewUserDefaults', this);return false;">
                         <span class="img-customize margin-right-sml float-left"></span>Customize New Users</a>
-                    <a id="btn_appsusers" href="#iframecontent" class="input-buttons"
+                    <a id="btn_appsusers" href="#iframecontent" class="margin-left-big"
                         onclick="openWSE.LoadIFrameContent('SiteTools/iframes/UsersAndApps.aspx', this);return false;">
                         <span class="img-app-dark margin-right-sml float-left"></span>User Apps and Plugins</a>
                 </div>
-                <div class="float-left">
+                <div class="float-right">
                     <asp:UpdatePanel ID="UpdatePanel3" runat="server">
                         <ContentTemplate>
-                            <asp:LinkButton ID="btn_manageRoles" runat="server" CssClass="RandomActionBtns input-buttons"
+                            <asp:LinkButton ID="btn_manageRoles" runat="server" CssClass="RandomActionBtns margin-left-big"
                                 OnClick="btn_manageRoles_Click"><span class="td-edit-btn float-left margin-right-sml" style="padding: 0!important;"></span>Manage Custom Roles</asp:LinkButton>
-                            <asp:LinkButton ID="btn_rebuild_uc" runat="server" CssClass="RandomActionBtns input-buttons"
+                            <asp:LinkButton ID="btn_rebuild_uc" runat="server" CssClass="RandomActionBtns margin-left-big"
                                 OnClick="btn_rebuild_uc_Clicked"><span class="img-refresh float-left margin-right-sml"></span>Rebuild Users</asp:LinkButton>
                         </ContentTemplate>
                     </asp:UpdatePanel>
@@ -123,7 +122,8 @@
                     </div>
                 </div>
             </asp:Panel>
-            <div id="ddlPagesize_holder" class="float-right">
+            <div class="clear-space"></div>
+            <div id="ddlPagesize_holder" class="float-right margin-top">
                 <span class="font-bold pad-right">Page Size</span>
                 <asp:DropDownList ID="ddl_pageSize" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddl_pageSize_Changed">
                     <asp:ListItem Text="3" Value="3"></asp:ListItem>
@@ -134,8 +134,7 @@
                     <asp:ListItem Text="All" Value="0"></asp:ListItem>
                 </asp:DropDownList>
             </div>
-            <div class="clear-space"></div>
-            <div class="float-right">
+            <div class="float-left margin-top">
                 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                     <ContentTemplate>
                         <span class="font-bold pad-right">Sort By</span>
@@ -150,8 +149,7 @@
                     </ContentTemplate>
                 </asp:UpdatePanel>
             </div>
-            <div class="clear" style="height: 30px">
-            </div>
+            <div class="clear-space"></div>
             <div class="clear-margin">
                 <asp:Label ID="lbl_totalUsers" runat="server"></asp:Label>
             </div>
@@ -159,7 +157,7 @@
                 <asp:UpdatePanel ID="updatepnl_Users" runat="server">
                     <ContentTemplate>
                         <div class="float-left">
-                            <div id="searchwrapper">
+                            <div class="searchwrapper">
                                 <asp:Panel ID="Panel1_usersearch" runat="server" DefaultButton="imgbtn_search">
                                     <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
                                         onfocus="if(this.value=='Search Users')this.value=''" onblur="if(this.value=='')this.value='Search Users'"
@@ -338,6 +336,9 @@
                                 <a href="#" style="font-size: 12px;" onclick="CreateMultipleUsers();return false;">Click Here to Create Multiple Users</a>
                             </div>
                         </div>
+                        <div class="ModalButtonHolder">
+                            <input type="button" class="input-buttons" value="Cancel" onclick="openWSE.LoadModalWindow(false, 'NewUser-element', ''); ClearNewUserFields();" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -395,6 +396,9 @@
                                 <div class="clear-space-five"></div>
                             </div>
                         </div>
+                        <div class="ModalButtonHolder">
+                            <input type="button" class="input-buttons" value="Cancel" onclick="openWSE.LoadModalWindow(false, 'Multiple-User-Create-element', ''); ClearMultiUserFields();" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -409,8 +413,7 @@
                                 <div class="ModalHeader">
                                     <div>
                                         <div class="app-head-button-holder-admin">
-                                            <asp:LinkButton ID="btn_closepwreset" runat="server" Text="" OnClick="btn_closepwreset_Click"
-                                                CssClass="ModalExitButton RandomActionBtns" OnClientClick="$('#MainContent_pwreset_overlay').hide();" />
+                                            <a href="#" onclick="openWSE.LoadModalWindow(false, 'MainContent_pwreset_overlay', '');return false;" class="ModalExitButton"></a>
                                         </div>
                                         <span class="Modal-title">Password Reset</span>
                                     </div>

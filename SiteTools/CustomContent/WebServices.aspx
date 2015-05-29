@@ -1,4 +1,4 @@
-﻿<%@ page title="Web Services" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_WebServices, App_Web_muevkmyy" %>
+﻿<%@ page title="Web Services" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_WebServices, App_Web_qakpaghm" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
 </asp:Content>
@@ -71,7 +71,7 @@
                     <div class="clear-space">
                     </div>
                     <span class="settings-name-column float-left"></span>
-                    <asp:Button ID="btn_uploadFile" runat="server" CssClass="input-buttons RandomActionBtns"
+                    <asp:Button ID="btn_uploadFile" runat="server" CssClass="input-buttons-create RandomActionBtns"
                         OnClick="btn_uploadFile_Clicked" Text="Upload" />
                     <div class="clear-space">
                     </div>

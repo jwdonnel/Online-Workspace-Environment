@@ -1,4 +1,4 @@
-﻿<%@ page title="App Installer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppInstaller, App_Web_wwykq1g1" %>
+﻿<%@ page title="App Installer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppInstaller, App_Web_nh1ggown" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
 </asp:Content>
@@ -6,7 +6,7 @@
     <div class="maincontent-padding margin-top">
         <div class="table-settings-box">
             <div class="td-settings-title">
-                <div id="searchwrapper" style="width: 300px;">
+                <div class="searchwrapper" style="width: 350px;">
                     <asp:Panel ID="Panel1_Installer" runat="server" DefaultButton="imgbtn_search">
                         <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
                             onfocus="if(this.value=='Search Apps')this.value=''" onblur="if(this.value=='')this.value='Search Apps'"

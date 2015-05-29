@@ -1,4 +1,4 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="Apps_FileDrive, App_Web_bnxx0mlm" %>
+﻿<%@ page language="C#" autoeventwireup="true" inherits="Apps_FileDrive, App_Web_0qufspxz" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -21,22 +21,28 @@
             opacity: 1.0!important;
             filter: alpha(opacity=100)!important;
         }
+
+        .folder-checkboxlist input
+        {
+            float: left;
+            margin-right: 4px;
+        }
     </style>
 </head>
-<body style="background: #F5F5F5 !important">
+<body>
     <div id="mydocuments-load" class="main-div-app-bg">
         <form id="form_mydocuments" runat="server" enctype="multipart/form-data" method="post">
             <asp:ScriptManager ID="ScriptManager_deliverypickups" runat="server" AsyncPostBackTimeout="360000">
             </asp:ScriptManager>
             <input id="hf_editing" type="hidden" value="false" />
             <input id="hf_currexp" type="hidden" value="expand_View_All_Documents" />
-            <div class="pad-all app-title-bg-color" style="height: 40px">
+            <div class="pad-all app-title-bg-color" style="min-height: 40px">
                 <div class="float-left">
                     <asp:Image ID="img_Title" runat="server" CssClass="float-left pad-right" Height="38px" />
                     <asp:Label ID="lbl_Title" runat="server" Text="" Font-Size="30px"></asp:Label>
                 </div>
                 <div class="pad-left pad-right pad-top float-right">
-                    <div id="searchwrapper" style="width: 350px;">
+                    <div class="searchwrapper" style="width: 350px;">
                         <asp:UpdatePanel ID="updatePanel2_documents" runat="server">
                             <ContentTemplate>
                                 <asp:Panel ID="Panel1_documents" runat="server" DefaultButton="imgbtn_search_documents">
@@ -52,6 +58,7 @@
                         </asp:UpdatePanel>
                     </div>
                 </div>
+                <div class="clear"></div>
             </div>
             <table class="content-table" cellpadding="0" cellspacing="0">
                 <tbody>
@@ -61,30 +68,33 @@
                                 <div class="sidebar-scroll-app">
                                     <asp:Panel ID="pnl_ect_documents" runat="server" Width="230px">
                                         <div class="clear-margin">
-                                            <h3>Groups & Folders</h3>
-                                            <div class="clear-space">
-                                            </div>
                                             <asp:UpdatePanel ID="updatepnl_groups" runat="server">
                                                 <ContentTemplate>
                                                     <asp:HiddenField ID="hf_UpdateAll" runat="server" OnValueChanged="hf_UpdateAll_ValueChanged" />
                                                     <asp:HiddenField ID="hf_AutoUpdateInterval_Main" runat="server" />
-                                                    <div class="clear-margin">
-                                                        <asp:HiddenField ID="hf_ddgroups" runat="server" ClientIDMode="Static" />
-                                                        <asp:DropDownList ID="dd_groups" runat="server" CssClass="textEntry margin-right" ClientIDMode="Static">
-                                                        </asp:DropDownList>
-                                                        <asp:Button ID="btn_groups" runat="server" CssClass="input-buttons RandomActionBtns" OnClick="dd_groups_Changed" Text="Update" />
-                                                    </div>
+                                                    <asp:Panel ID="pnl_grouplist" runat="server">
+                                                        <h3>Select a Group</h3>
+                                                        <div class="clear-space">
+                                                        </div>
+                                                        <div class="clear-margin">
+                                                            <asp:HiddenField ID="hf_ddgroups" runat="server" ClientIDMode="Static" />
+                                                            <asp:DropDownList ID="dd_groups" runat="server" CssClass="textEntry margin-right" ClientIDMode="Static">
+                                                            </asp:DropDownList>
+                                                            <div class="clear-space-five"></div>
+                                                            <asp:Button ID="btn_groups" runat="server" CssClass="input-buttons RandomActionBtns" OnClick="dd_groups_Changed" Text="Update" />
+                                                            <div class="clear-space">
+                                                            </div>
+                                                            <div class="sidebar-divider">
+                                                            </div>
+                                                            <div class="clear-space">
+                                                            </div>
+                                                        </div>
+                                                    </asp:Panel>
                                                 </ContentTemplate>
                                                 <Triggers>
                                                     <asp:AsyncPostBackTrigger ControlID="btn_groups" />
                                                 </Triggers>
                                             </asp:UpdatePanel>
-                                            <div class="clear-space">
-                                            </div>
-                                            <div class="sidebar-divider">
-                                            </div>
-                                            <div class="clear-space">
-                                            </div>
                                             <a class="ajaxCall_Modal_documents input-buttons margin-top" href="#Contact_Modal_documents">
                                                 <span class="float-left margin-right-sml td-add-btn" style="padding: 0px 0px 0px 5px!important;"></span><span class="pad-right-sml float-left" style="margin-top: 2px;">Add Files</span></a>
                                             <div class="clear-space">
@@ -100,7 +110,7 @@
                             </div>
                         </td>
                         <td class="td-content">
-                            <div class="content-main" style="min-width: 700px;">
+                            <div class="content-main">
                                 <table width="100%" cellspacing="0" cellpadding="0">
                                     <tbody>
                                         <tr>
@@ -130,7 +140,7 @@
                                                                         CssClass="margin-left RandomActionBtns-docs margin-right-big" OnClick="lbtn_moveFile_Click">Move Selected</asp:LinkButton>
                                                                 </div>
                                                                 <asp:LinkButton ID="lbtn_selectAll_documents" runat="server" CssClass="RandomActionBtns-docs float-left"
-                                                                    OnClick="lbtn_selectAll_Click" Style="margin-top: 1px">Select All</asp:LinkButton>
+                                                                    OnClick="lbtn_selectAll_Click" Style="margin-top: 5px">Select All</asp:LinkButton>
                                                                 <asp:LinkButton ID="refresh_Click_documents" runat="server" CssClass="float-right margin-left margin-top-sml RandomActionBtns-docs margin-right img-refresh"
                                                                     ToolTip="Refresh Files" OnClick="btn_refresh_Click" />
                                                                 <asp:Label ID="lbl_fileNoti_documents" runat="server" CssClass="float-right pad-top"
@@ -160,7 +170,7 @@
                                                                                 <tr>
                                                                                     <td width="24px" align="center">
                                                                                         <asp:LinkButton ID="imgbtn_del" runat="server" ToolTip="Delete selected items" OnClick="imgbtn_del_Click"
-                                                                                            CssClass="td-delete-light-btn" OnClientClick="return window.confirm('Are you sure you want to delete the selected files?');"></asp:LinkButton>
+                                                                                            CssClass="td-delete-btn" OnClientClick="return window.confirm('Are you sure you want to delete the selected files?');"></asp:LinkButton>
                                                                                     </td>
                                                                                     <td id="td_filename" runat="server" align="center" class="td-sort-click" style="min-width: 150px;">
                                                                                         <asp:LinkButton ID="lbtn_filename" runat="server" OnClick="lbtn_filename_Click" CssClass="RandomActionBtns-docs">Filename</asp:LinkButton>
@@ -174,8 +184,8 @@
                                                                                     <td id="td_date" runat="server" width="115px" class="td-sort-click" align="center">
                                                                                         <asp:LinkButton ID="lbtn_date" runat="server" OnClick="lbtn_date_Click" CssClass="RandomActionBtns-docs">Upload Date</asp:LinkButton>
                                                                                     </td>
-                                                                                    <td id="td_album" runat="server" width="150px" class="td-sort-click" align="center">
-                                                                                        <asp:LinkButton ID="lbtn_album" runat="server" OnClick="lbtn_album_Click" CssClass="RandomActionBtns-docs">Folder</asp:LinkButton>
+                                                                                    <td id="td_album" runat="server" width="150px" align="center">
+                                                                                        <asp:Label ID="lbl_album" runat="server" Text="Folder"></asp:Label>
                                                                                     </td>
                                                                                     <td width="110px" align="center">Actions
                                                                                     </td>
@@ -204,9 +214,6 @@
                                                                                         <td width="115px" align="left" class="border-right">
                                                                                             <%#Eval("UploadDate")%>
                                                                                         </td>
-                                                                                        <td width="150px" align="left" class="border-right">
-                                                                                            <%#Eval("Album")%>
-                                                                                        </td>
                                                                                         <td width="110px" align="center" class="border-right">
                                                                                             <asp:LinkButton ID="LinkButton1" CssClass="td-edit-btn margin-right-sml margin-left-sml RandomActionBtns-docs"
                                                                                                 runat="server" CommandName="Edit" ToolTip="Edit"></asp:LinkButton>
@@ -225,6 +232,7 @@
                                                                             <asp:HiddenField ID="hf_editID" runat="server" Value='<%#Eval("ID") %>' />
                                                                             <asp:HiddenField ID="hf_editFileName" runat="server" Value='<%#Eval("TitleEdit") %>' />
                                                                             <asp:HiddenField ID="hf_editFolderName" runat="server" Value='<%#Eval("Album") %>' />
+                                                                            <asp:HiddenField ID="hf_editGroupList" runat="server" Value='<%#Eval("GroupList") %>' />
                                                                             <asp:HiddenField ID="hf_editExt" runat="server" Value='<%#Eval("Type") %>' />
                                                                             <table cellpadding="5" cellspacing="0" class="myItemStyle" style="font-size: 0.95em;">
                                                                                 <tr>
@@ -244,8 +252,11 @@
                                                                                         <%#Eval("UploadDate")%>
                                                                                     </td>
                                                                                     <td width="150px" align="center" class="border-right">
-                                                                                        <asp:DropDownList ID="dd_editFolderName" runat="server" Width="95%" Height="25px">
-                                                                                        </asp:DropDownList>
+                                                                                        <asp:DropdownList ID="dd_editFolderName1" runat="server">
+                                                                                        </asp:DropdownList>
+                                                                                        <div class="clear-space-five"></div>
+                                                                                        <asp:CheckboxList ID="dd_editFolderName" CssClass="folder-checkboxlist" runat="server" CellPadding="0" CellSpacing="2">
+                                                                                        </asp:CheckboxList>
                                                                                     </td>
                                                                                     <td width="110px" align="center" class="border-right">
                                                                                         <asp:LinkButton ID="lbtn_update" CssClass="td-update-btn margin-right-sml margin-left-sml RandomActionBtns-docs"
@@ -290,16 +301,17 @@
                                 <asp:FileUpload ID="FileUploadControl" runat="server" AllowMultiple="true" />
                                 <div class="clear-space"></div>
                                 <div align="right">
-                                    <asp:Button ID="btnFileUpload" runat="server" Text="Upload Files" CssClass="RandomActionBtns input-buttons float-left" OnClick="btnFileUpload_OnClick" />
+                                    <asp:Button ID="btnFileUpload" runat="server" Text="Upload Files" Width="95px" CssClass="RandomActionBtns input-buttons float-left" OnClick="btnFileUpload_OnClick" />
                                     <input type="button" id="btn_close_uploader" class="input-buttons" value="Close"
                                         onclick="openWSE.LoadModalWindow(false, 'FileUpload-element', '');"
-                                        style="margin-right: 0px" />
+                                        style="margin-right: 0px; width: 95px;" />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <input type="hidden" id="continue_play_hidden" value="true" />
         </form>
     </div>
     <noscript>

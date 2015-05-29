@@ -111,7 +111,6 @@
             <Column id="CacheHomePage" type="bit" nullable="true"></Column>
             <Column id="LockFileManager" type="bit" nullable="true"></Column>
             <Column id="LockStartupScripts" type="bit" nullable="true"></Column>
-            <Column id="LockASCXEdit" type="bit" nullable="true"></Column>
             <Column id="LockCustomTables" type="bit" nullable="true"></Column>
             <Column id="AllowUserSignUp" type="bit" nullable="true"></Column>
             <Column id="UserSignUpEmailChecker" type="bit" nullable="true"></Column>
@@ -162,12 +161,56 @@
             <Column id="HideSiteSettingIcons" type="bit" nullable="true"></Column>
             <Column id="SidebarToolCategoryIcons" type="nvarchar" length="4000" nullable="true"></Column>
             <Column id="ForceGroupLogin" type="bit" nullable="true"></Column>
+            <Column id="AddBackgroundToLogo" type="bit" nullable="true"></Column>
+            <Column id="LogoBackgroundColor" type="nvarchar" length="10" nullable="true"></Column>
         </Columns>
     </Table>
     <Table name="aspnet_ShowUpdates">
         <Columns>
             <Column id="UserName" type="nvarchar" length="256" nullable="false"></Column>
             <Column id="ShowPopup" type="bit" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_TableImports" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="TableID" type="nvarchar" length="10" nullable="false"></Column>
+            <Column id="Date" type="datetime" nullable="false"></Column>
+            <Column id="TableName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="ConnString" type="nvarchar" length="4000" nullable="false"></Column>
+            <Column id="SelectCommand" type="nvarchar" length="4000" nullable="false"></Column>
+            <Column id="Provider" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="ImportedBy" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="AllowEdit" type="bit" nullable="true"></Column>
+            <Column id="ChartType" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="ChartTitle" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="UsersAllowedToEdit" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="NotifyUsers" type="bit" nullable="true"></Column>
+            <Column id="ColumnOverrides" type="nvarchar" length="4000" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_SavedConnections" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="ConnectionString" type="nvarchar" length="4000" nullable="false"></Column>
+            <Column id="ConnectionName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="DatabaseProvider" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="Date" type="datetime" nullable="false"></Column>
+            <Column id="Username" type="nvarchar" length="250" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_MailSettings" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="Username" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="SMTP_Address" type="nvarchar" length="1000" nullable="true"></Column>
+            <Column id="PortNumber" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="SSL" type="bit" nullable="true"></Column>
+            <Column id="EmailAddress" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="Password" type="nvarchar" length="250" nullable="true"></Column>
+            <Column id="HeaderString" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="FooterString" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="Date" type="datetime" nullable="false"></Column>
         </Columns>
     </Table>
     <Table name="aspnet_Users" for="System.Data.SqlClient" primaryKey="UserId">
@@ -264,6 +307,14 @@
             <Column id="UserAppStyle" type="nvarchar" length="500" nullable="true"></Column>
             <Column id="SidebarAccordionMutliOpenAllowed" type="bit" nullable="true"></Column>
             <Column id="DefaultLoginGroup" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="MobileAutoSync" type="bit" nullable="true"></Column>
+            <Column id="BackgroundLoopTimer" type="nvarchar" length="100" nullable="true"></Column>
+            <Column id="BackgroundPosition" type="nvarchar" length="100" nullable="true"></Column>
+            <Column id="BackgroundSize" type="nvarchar" length="100" nullable="true"></Column>
+            <Column id="BackgroundRepeat" type="bit" nullable="true"></Column>
+            <Column id="BackgroundColor" type="nvarchar" length="10" nullable="true"></Column>
+            <Column id="SidebarAccordion" type="bit" nullable="true"></Column>
+            <Column id="ShowTopSearch" type="bit" nullable="true"></Column>
         </Columns>
     </Table>
     <Table name="aspnet_UserNotificationMessages" primaryKey="ID">
@@ -402,12 +453,7 @@
         <Columns>
             <Column id="GroupID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="GroupName" type="nvarchar" length="500" nullable="false"></Column>
-            <Column id="Address" type="nvarchar" length="500" nullable="true"></Column>
-            <Column id="City" type="nvarchar" length="500" nullable="true"></Column>
-            <Column id="State" type="nvarchar" length="2" nullable="true"></Column>
-            <Column id="Country" type="nvarchar" length="50" nullable="true"></Column>
-            <Column id="PostalCode" type="nvarchar" length="10" nullable="true"></Column>
-            <Column id="PhoneNumber" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="Description" type="nvarchar" length="4000" nullable="true"></Column>
             <Column id="Date" type="datetime" nullable="false"></Column>
             <Column id="CreatedBy" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="Image" type="nvarchar" length="4000" nullable="true"></Column>
@@ -514,6 +560,14 @@
             <Column id="UserAppStyle" type="nvarchar" length="500" nullable="true"></Column>
             <Column id="SidebarAccordionMutliOpenAllowed" type="bit" nullable="true"></Column>
             <Column id="DefaultLoginGroup" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="MobileAutoSync" type="bit" nullable="true"></Column>
+            <Column id="BackgroundLoopTimer" type="nvarchar" length="100" nullable="true"></Column>
+            <Column id="BackgroundPosition" type="nvarchar" length="100" nullable="true"></Column>
+            <Column id="BackgroundSize" type="nvarchar" length="100" nullable="true"></Column>
+            <Column id="BackgroundRepeat" type="bit" nullable="true"></Column>
+            <Column id="BackgroundColor" type="nvarchar" length="10" nullable="true"></Column>
+            <Column id="SidebarAccordion" type="bit" nullable="true"></Column>
+            <Column id="ShowTopSearch" type="bit" nullable="true"></Column>
             <Column id="DateUpdated" type="datetime" nullable="true"></Column>
         </Columns>
     </Table>
@@ -661,7 +715,7 @@
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="AppID" type="nvarchar" length="50" nullable="false"></Column>
             <Column id="Name" type="nvarchar" length="50" nullable="false"></Column>
-            <Column id="Filename" type="nvarchar" length="500" nullable="false"></Column>
+            <Column id="Filename" type="nvarchar" length="4000" nullable="false"></Column>
             <Column id="Icon" type="nvarchar" length="500" nullable="true"></Column>
             <Column id="AllowResize" type="bit" nullable="true"></Column>
             <Column id="AllowMaximize" type="bit" nullable="true"></Column>
@@ -670,7 +724,7 @@
             <Column id="CssClass" type="nvarchar" length="50" nullable="true"></Column>
             <Column id="AutoLoad" type="bit" nullable="true"></Column>
             <Column id="AutoFullScreen" type="bit" nullable="true"></Column>
-            <Column id="Category" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="Category" type="nvarchar" length="4000" nullable="true"></Column>
             <Column id="MinHeight" type="int" nullable="true"></Column>
             <Column id="MinWidth" type="int" nullable="true"></Column>
             <Column id="CreatedBy" type="nvarchar" length="250" nullable="true"></Column>
@@ -682,6 +736,7 @@
             <Column id="AutoOpen" type="bit" nullable="true"></Column>
             <Column id="DefaultWorkspace" type="int" nullable="true"></Column>
             <Column id="IsPrivate" type="bit" nullable="true"></Column>
+            <Column id="AllowUserOverrides" type="bit" nullable="true"></Column>
         </Columns>
     </Table>
     <Table name="AppPackages" primaryKey="ID">
@@ -713,6 +768,24 @@
             <Column id="Rating" type="int" nullable="false"></Column>
             <Column id="Description" type="nvarchar" length="500" nullable="true"></Column>
             <Column id="DateRated" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_UserAppSettings" primaryKey="ID">
+        <Columns>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="AppID" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="Username" type="nvarchar" length="256" nullable="false"></Column>
+            <Column id="AllowResize" type="bit" nullable="true"></Column>
+            <Column id="AllowMaximize" type="bit" nullable="true"></Column>
+            <Column id="CssClass" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="AutoFullScreen" type="bit" nullable="true"></Column>
+            <Column id="MinHeight" type="int" nullable="true"></Column>
+            <Column id="MinWidth" type="int" nullable="true"></Column>
+            <Column id="AllowPopOut" type="bit" nullable="true"></Column>
+            <Column id="PopOutLoc" type="nvarchar" length="2000" nullable="true"></Column>
+            <Column id="AutoOpen" type="bit" nullable="true"></Column>
+            <Column id="DefaultWorkspace" type="int" nullable="true"></Column>
+            <Column id="Category" type="nvarchar" length="4000" nullable="true"></Column>
         </Columns>
     </Table>
 </Tables>

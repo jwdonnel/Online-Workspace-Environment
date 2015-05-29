@@ -27,7 +27,18 @@ public class BookmarkViewer : IHttpHandler {
         _response.ContentType = "application/json";
 
         if (userId.IsAuthenticated) {
-            _bookmarks = new Bookmarks(userId.Name);
+
+            bool canEdit = true;
+            string _username = userId.Name;
+            if (OpenWSE_Tools.Apps.AppInitializer.IsGroupAdminSession(userId.Name)) {
+                _username = GroupSessions.GetUserGroupSessionName(userId.Name);
+            }
+            else if (GroupSessions.DoesUserHaveGroupLoginSessionKey(_username)) {
+                _username = GroupSessions.GetUserGroupSessionName(_username);
+                canEdit = false;
+            }
+
+            _bookmarks = new Bookmarks(_username);
             _member = new MemberDatabase(userId.Name);
             string sortBystr = "DateAdded DESC";
 
@@ -65,15 +76,19 @@ public class BookmarkViewer : IHttpHandler {
                     result = _bookmarks.bookmarks_dt.Count.ToString();
                     break;
                 case "edit":
-                    if (!string.IsNullOrEmpty(_request.QueryString["id"])) {
-                        result = Edit(_request.QueryString["id"], sortBystr);
+                    if (canEdit) {
+                        if (!string.IsNullOrEmpty(_request.QueryString["id"])) {
+                            result = Edit(_request.QueryString["id"], sortBystr);
+                        }
                     }
                     break;
                 case "finishEdit":
-                    if ((!string.IsNullOrEmpty(_request.QueryString["id"])) && (!string.IsNullOrEmpty(_request.QueryString["name"])) && (!string.IsNullOrEmpty(_request.QueryString["html"]))) {
-                        _bookmarks.UpdateBookmark(HttpUtility.UrlDecode(_request.QueryString["id"]), HttpUtility.UrlDecode(_request.QueryString["name"]), HttpUtility.UrlDecode(_request.QueryString["html"]));
-                        _bookmarks.GetBookmarks(sortBystr);
-                        result = LoadBookmarks();
+                    if (canEdit) {
+                        if ((!string.IsNullOrEmpty(_request.QueryString["id"])) && (!string.IsNullOrEmpty(_request.QueryString["name"])) && (!string.IsNullOrEmpty(_request.QueryString["html"]))) {
+                            _bookmarks.UpdateBookmark(HttpUtility.UrlDecode(_request.QueryString["id"]), HttpUtility.UrlDecode(_request.QueryString["name"]), HttpUtility.UrlDecode(_request.QueryString["html"]));
+                            _bookmarks.GetBookmarks(sortBystr);
+                            result = LoadBookmarks();
+                        }
                     }
                     break;
                 case "share":
@@ -87,8 +102,10 @@ public class BookmarkViewer : IHttpHandler {
                     }
                     break;
                 case "remove":
-                    if (!string.IsNullOrEmpty(_request.QueryString["id"])) {
-                        result = Remove(_request.QueryString["id"]);
+                    if (canEdit) {
+                        if (!string.IsNullOrEmpty(_request.QueryString["id"])) {
+                            result = Remove(_request.QueryString["id"]);
+                        }
                     }
                     break;
                 case "search":
@@ -103,25 +120,27 @@ public class BookmarkViewer : IHttpHandler {
                     }
                     break;
                 case "import":
-                    HttpPostedFile oFile = _request.Files["Filedata"];
-                    if ((oFile != null) && (oFile.ContentLength > 0)) {
-                        try {
-                            System.IO.FileInfo fi = new System.IO.FileInfo(oFile.FileName);
-                            if (fi.Extension.ToLower() == ".html") {
-                                System.IO.StreamReader reader = new System.IO.StreamReader(oFile.InputStream);
-                                string sText;
-                                while ((sText = reader.ReadLine()) != null) {
-                                    string dt = sText.ToLower().Trim().Substring(0, 4);
-                                    if (dt == "<dt>") {
-                                        string link = sText.Trim().Substring(4);
-                                        string beginA = link.ToLower().Trim().Substring(0, 8);
-                                        if (beginA == "<a href=")
-                                            ParseLink(link);
+                    if (canEdit) {
+                        HttpPostedFile oFile = _request.Files["Filedata"];
+                        if ((oFile != null) && (oFile.ContentLength > 0)) {
+                            try {
+                                System.IO.FileInfo fi = new System.IO.FileInfo(oFile.FileName);
+                                if (fi.Extension.ToLower() == ".html") {
+                                    System.IO.StreamReader reader = new System.IO.StreamReader(oFile.InputStream);
+                                    string sText;
+                                    while ((sText = reader.ReadLine()) != null) {
+                                        string dt = sText.ToLower().Trim().Substring(0, 4);
+                                        if (dt == "<dt>") {
+                                            string link = sText.Trim().Substring(4);
+                                            string beginA = link.ToLower().Trim().Substring(0, 8);
+                                            if (beginA == "<a href=")
+                                                ParseLink(link);
+                                        }
                                     }
                                 }
                             }
+                            catch { }
                         }
-                        catch { }
                     }
                     break;
             }
@@ -150,8 +169,7 @@ public class BookmarkViewer : IHttpHandler {
         }
 
         if ((!string.IsNullOrEmpty(html)) && (!string.IsNullOrEmpty(name))) {
-            Bookmarks bookmarks = new Bookmarks(HttpContext.Current.User.Identity.Name);
-            bookmarks.AddItem(name, html);
+            _bookmarks.AddItem(name, html);
         }
     }
 
@@ -300,6 +318,15 @@ public class BookmarkViewer : IHttpHandler {
         string share = "<a href='#Share' class='td-add-btn margin-right float-right' onclick='share_in_iFrame(\"" + id + "\");return false;' title='Share'></a>";
         string edit = "<a href='#Edit' class='td-edit-btn margin-right float-right' onclick='edit_in_iFrame(\"" + id + "\");return false;' title='Edit'></a>";
 
+        if (OpenWSE_Tools.Apps.AppInitializer.IsGroupAdminSession(HttpContext.Current.User.Identity.Name) && GroupSessions.DoesUserHaveGroupLoginSessionKey(HttpContext.Current.User.Identity.Name)) {
+            share = string.Empty;
+        }
+        else if (GroupSessions.DoesUserHaveGroupLoginSessionKey(HttpContext.Current.User.Identity.Name)) {
+            remove = string.Empty;
+            share = string.Empty;
+            edit = string.Empty;
+        }
+        
         str.Append("<td class='bookmark-edit-btn-holder'>" + remove + share + edit + "</td></tr></tbody></table>");
 
         return str.ToString();
@@ -321,6 +348,9 @@ public class BookmarkViewer : IHttpHandler {
             string[] vidid = msg.Split(del, StringSplitOptions.RemoveEmptyEntries);
             if (vidid.Length > 0) {
                 msg = vidid[1];
+                if (msg.Contains("&")) {
+                    msg = msg.Replace(msg.Substring(msg.IndexOf("&")), string.Empty);
+                }
             }
         }
         catch {

@@ -1,10 +1,48 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Items>
-    <version>ver. 4.3.3</version>
+    <version>ver. 4.4.2</version>
+    <log name="5/27/2015">
+        Fixed issue with Events To Keep in Network Log - Log Files were not being deleted and could produce possible failures due to the number of files created.<br />
+        Bug fixes to the Site Requests and clearing the queue.<br />
+        Help Pages added to About page.
+    </log>
+    <log name="5/19/2015">
+        Table Importer now can override column names so users can assign messy column names to what they want.<br />
+        Table Importer edit mode updated to show more information.<br />
+        Apps can now be Url based. (File doesn't have to be stored locally anymore)<br />
+        Table Imports, Saved Connections, and Mail Settings are no longer stored in an encrypted file in the App_Data folder. Items are now stored in the local database with encrypted strings for the connection string and passwords.<br />
+        Minor CSS fixes for Modal Style 2.<br />
+        New Table Import Wizard on the Table Import page.<br />
+        App Remote re-styled to use the use backgrounds and colors.
+    </log>
+    <log name="5/12/2015">
+        <h3 class="font-bold">
+            New to Version 4.4
+        </h3>
+        Security update to creating mulitple users in the User Settings page.<br />
+        Account Settings now allows for users to override certain settings of an installed app.<br />
+        Fixes to creating default user customizations and new user defaults.<br />
+        Administrators can now customize overlays for Demo users as well as new user defaults.<br />
+        Selecting Mobile from the bottom right footer will take you to the mobile version of the page your on.<br />
+        Users can now select multiple backgrounds for a single workspace and have a timer set to loop through the selected backgrounds.<br />
+        Users can also upload their own backgrounds that will only be visible to that person.<br />
+        Settings links can now be found in the Notification drop down and Group List dropdown.<br />
+        KeyValues fix for missing keys in static variables.<br />
+        Removed the LockASCXEdit feature under Administrator.<br />
+        Removed Basic Create from AppManager. Users can no longer create an app from scratch.<br />
+        The SyntaxHighlighter code has been completely removed and has been replaced with Ace Editor.<br />
+        Custom Tables and Table Import apps now support a mobile view.<br />
+        AppRemote has an updated layout that features a sidebar for selecting your tabs (Apps, Chat, Links, ...).
+    </log>
+    <log name="4/26/2015">
+        Updated top bar layout. Group login now available through a dropdown menu on the top bar.<br />
+        Simplified app layouts for code.<br />
+        You can turn off auto workspace connect for the AppRemote your Account Settings.
+    </log>
     <log name="4/15/2015">
         Group login session fix.<br />
-        Social login while attempting to log into a group will result in the user not being logged into the group fix.<br />
-        Chat Client group session login fix.
+        Social login while attempting to log into a group will result in the user not being logged into the group has been fixed.<br />
+        Chat Client group session login has been fixed.
     </log>
     <log name="4/2/2015">
         Removed the Login Theme selector from the Site Customizations.<br />
@@ -14,9 +52,9 @@
         <b class="pad-right-sml">Group login change:</b>You must be apart of a group in order to login. Once logged in, all default settings for that group will be applied to your account. These settings will be removed once you log out of the group. Your Apps, Overlays, and Notifications will be overridden with the group's settings.
     </log>
     <log name="3/23/2015">
-        Fixes to social network users and deleting custom tables, database imports, and apps.<br />
+        Fixes to social network users and deleting custom tables, table imports, and apps.<br />
         Various CSS and Javascript changes for appearance.<br />
-        Fixed issue in Database Importer that hides the Data Chart options after click Use Local Database.<br />
+        Fixed issue in Table Importer that hides the Data Chart options after click Use Local Database.<br />
         Updated Add/Remove Overlay window.<br />
         Changed notification style from showing number of notifications to just an image.
     </log>
@@ -68,9 +106,9 @@
         Apps can now be placed into multiple categories.
     </log>
     <log name="1/26/2015">
-        Custom Tables and Database Imports now have an alert system to notify users upon a change (Add, Edit, Delete).<br />
+        Custom Tables and Table Imports now have an alert system to notify users upon a change (Add, Edit, Delete).<br />
         Site Monitor overlay and app have been removed.<br />
-        Custom Tables and Database Imports can now display the information in Google Charts.<br />
+        Custom Tables and Table Imports can now display the information in Google Charts.<br />
         Removed settings Allow Stats and Display Nav for all apps. (No longer used)
     </log>
     <log name="1/19/2015">
@@ -96,7 +134,7 @@
         </h3>
         Database Viewer now features a schema table for the selected table.<br />
         You can now set the default background image from the Site Customizations section of the Server Settings page.<br />
-        Database Imports are now fixed for updating.<br />
+        Table Imports are now fixed for updating.<br />
         Database has been updated to support bit data types as well as integers for representing boolean values.<br />
         Fixed some issues when first deploying the site. After user selects their database, the Administrator is automatically logged in and prompted to change their password.<br />
         New feature under Site Customizations that allows you to edit the site description meta tag and keywords meta tag.<br />
@@ -163,7 +201,7 @@
         Faster load times with apps.
     </log>
     <log name="9/4/2014">
-        Major bug fix to deleting dlls when deleting any app/database import/overlay/custom projects. If folder isn't found, it would delete the Bin directory instead.<br />
+        Major bug fix to deleting dlls when deleting any app/table import/overlay/custom projects. If folder isn't found, it would delete the Bin directory instead.<br />
         Added new feature to Group Organizer - Users can now setup the IP Listener for a specific group.<br />
         Security fixes to Group Organizer and IP Listener.
     </log>
@@ -174,7 +212,7 @@
         New Custom Project Editor available under the Custom Projects screen.<br />
         New setting under Account Settings that allows you to access the app list anywhere on the workspace by clicking the right mouse button.<br />
         Increased upload file size to max.<br />
-        Database Import app updated to automatically fill in any unique ID fields.
+        Table Import app updated to automatically fill in any unique ID fields.
     </log>
     <log name="7/2/2014">
         <h3 class="font-bold">
@@ -264,7 +302,7 @@
         Fixes to some images not showing up due to folder changes.
     </log>
     <log name="1/31/2014">
-        Bug fix for the Database Importer and the recreating of a app.<br />
+        Bug fix for the Table Importer and the recreating of a app.<br />
         Change made in the User Manage page that will hide the Chat Client status if the chat client is turned off for entire site.
     </log>
     <log name="1/28/2014">
@@ -294,7 +332,7 @@
         New notification alert for Add/Removed groups.<br />
         Improvements to site organization. Links under user menu dropdown are categorized.<br />
         New Custom Table creator.<br />
-        Database imports can be set to edit or read only modes.<br />
+        Table imports can be set to edit or read only modes.<br />
         Startup Scripts simplified. No longer have option between base, load, and iframe options.<br />
         Stylesheets merged for slightly faster load times.<br />
         All action button words are replaced with images now.<br />
@@ -339,7 +377,7 @@
         <b>New Feature: </b>Users can select their background from the workspace.
     </log>
     <log name="8/5/2013">
-        Password protected deletes for the Database Importer and App Editor have been added.<br />
+        Password protected deletes for the Table Importer and App Editor have been added.<br />
         Updated Loading box look.<br />
         Site folder structure has been redesigned to work for the automatic backup system. (Previously could not work due to folder proection)
     </log>
@@ -404,7 +442,7 @@
     </log>
     <log name="5/17/2013">
         Added support for SSL. New option that allows for site redirect for https.<br />
-        Fixes to the App Editor: If database import is deleted from the App Editor,
+        Fixes to the App Editor: If table import is deleted from the App Editor,
         it will delete the values in the dbImporter table<br />
         Animation speeds for app panel quicker.
     </log>
@@ -443,7 +481,7 @@
         Fixes to Work Calendar app, Database Backup System, and various other bugs.<br />
         New Twitter Station app that allows you to create a layout of your favorite people/companies.
         Updates every minute<br />
-        Redesigned Database Import apps. The new version includes an auto update system
+        Redesigned Table Import apps. The new version includes an auto update system
         that will update viewable records every given interval.<br />
         Multiple backgrounds allowed on workspace. Each workspace/workspace can be assigned
         a different background image/color.
@@ -460,7 +498,7 @@
         New Javascript/CSS Startup Scripts added.<br />
         New Theme selector in the Account Settings<br />
         New Admin Pages feature added to the Standard users that allows for users to create
-        their own apps, groups, categories, packages, and database imports.
+        their own apps, groups, categories, packages, and table imports.
     </log>
     <log name="2/25/2013">
         <h3 class="font-bold">

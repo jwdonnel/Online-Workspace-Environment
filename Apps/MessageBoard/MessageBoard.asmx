@@ -28,7 +28,7 @@ public class MessageBoard : WebService
     private readonly AppLog _applog = new AppLog(false);
     private readonly SiteMessageBoard _siteMessageboard;
     private readonly IIdentity _userId;
-    private readonly App _apps = new App();
+    private readonly App _apps = new App(string.Empty);
 
     private string _username;
     private string _message;

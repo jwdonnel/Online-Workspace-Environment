@@ -225,9 +225,9 @@ function editfolder(_this, folder) {
     var currEdit = $(_this).attr('id');
     document.getElementById(currEdit).style.display = 'none';
     var element = $(_this).closest('div');
-    element.append("<input id='tb_editfolderentry' maxlength='15' type='text' value='" + folder.replace(/_/g, " ") + "' class='textEntry margin-right-sml' style='width: 105px;' />");
-    element.append("<small><a href='#canceledit' onclick='canceleditfolder();return false;' class='RandomActionBtns-docs margin-right-sml float-right'>Cancel</a></small>");
-    element.append("<small><a href='#updatefolder' onclick=\"updatefolder('" + folder + "');return false;\" class='RandomActionBtns-docs margin-right-sml float-right'>Update</a></small>");
+    element.append("<br /><input id='tb_editfolderentry' maxlength='15' type='text' value='" + folder.replace(/_/g, " ") + "' class='textEntry margin-right-sml' style='width: 105px;' />");
+    element.append("<small><a href='#updatefolder' onclick=\"updatefolder('" + folder + "');return false;\" class='RandomActionBtns-docs margin-left margin-right'>Update</a></small>");
+    element.append("<small><a href='#canceledit' onclick='canceleditfolder();return false;' class='RandomActionBtns-docs'>Cancel</a></small>");
     window.setTimeout(function () { openWSE.RemoveUpdateModal(); }, 500);
 }
 
@@ -292,8 +292,8 @@ function PlaySong(_this, tagType, mediaType, path, height) {
                     srcPrev = srcPrev.replace("stop.png", "play.png");
                     $_currPlaying.attr("src", srcPrev);
                     $_currPlaying.parent().find(".equalizer").html("");
-                    $("#audioPlayer_view").remove();
-                    $("#audioPlayer").css("height", "0px");
+                    $("#audioPlayer").html("");
+                    $("#audioPlayer").css("min-height", "0px");
                     currPlaying_ID = "";
                 }
             }
@@ -303,8 +303,8 @@ function PlaySong(_this, tagType, mediaType, path, height) {
     else {
         src = src.replace("stop.png", "play.png");
         $_playButton.parent().find(".equalizer").html("");
-        $("#audioPlayer_view").remove();
-        $("#audioPlayer").css("height", "0px");
+        $("#audioPlayer").html("");
+        $("#audioPlayer").css("min-height", "0px");
         currPlaying_ID = "";
     }
 
@@ -322,7 +322,7 @@ function PlaySong(_this, tagType, mediaType, path, height) {
         iframe.setAttribute("scrolling", "no");
 
         $("#audioPlayer").html(iframe);
-        $("#audioPlayer").css("height", height + "px");
+        $("#audioPlayer").css("min-height", height + "px");
 
         var x = "<script src='audiojs/audiojs/audio.min.js'></script>";
         x += "<script type='text/javascript' src='//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>";
@@ -337,9 +337,29 @@ function PlaySong(_this, tagType, mediaType, path, height) {
         } else if (iframe.contentWindow) {
             doc = iframe.contentWindow.document; // For IE5.5 and IE6
         }
-        doc.open();
-        doc.writeln(x);
-        doc.close();
+
+        if (doc) {
+            doc.open();
+            doc.writeln(x);
+            doc.close();
+
+            var checked = "";
+            if ($("#continue_play_hidden").val() == "true") {
+                checked = " checked='checked'";
+            }
+            $("#audioPlayer").append("<div class='clear-space-five'></div><div class='pad-left pad-right float-left'><b class='pad-right'>Now Playing</b>" + $_playButton.parent().find(".audio-file").html() + "</div>");
+            $("#audioPlayer").append("<div class='pad-left pad-right float-right'><input type='checkbox' id='cb_cont_play' onchange='ContinuousPlay_Changed();' value='false'" + checked + " /><label for='cb_cont_play'>&nbsp;Continuous Play</label></div><div class='clear-space-five'></div>");
+            $("#audioPlayer").append("<div class='border-bottom'></div>");
+        }
+    }
+}
+
+function ContinuousPlay_Changed() {
+    if ($("#cb_cont_play").prop("checked")) {
+        $("#continue_play_hidden").val("true");
+    }
+    else {
+        $("#continue_play_hidden").val("false");
     }
 }
 

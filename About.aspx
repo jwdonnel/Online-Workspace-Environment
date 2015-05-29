@@ -1,10 +1,15 @@
-﻿<%@ page title="" language="C#" autoeventwireup="true" inherits="SiteTools_About, App_Web_iv0v2cts" %>
+﻿<%@ page title="" language="C#" autoeventwireup="true" inherits="SiteTools_About, App_Web_ravcmota" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
     <title>About</title>
+    <meta name="author" content="John Donnelly" />
+    <meta name="revisit-after" content="10 days" />
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="initial-scale=0.95, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <link id="Link1" runat="server" rel="shortcut icon" href="Standard_Images/favicon.ico"
         type="image/x-icon" />
     <link id="Link2" runat="server" rel="icon" href="Standard_Images/favicon.ico" type="image/ico" />
@@ -27,7 +32,14 @@
             text-align: center;
             width: 90px;
             border-right: 1px solid #DFDFDF;
+            border-bottom: 1px solid #DFDFDF;
             color: #888;
+            background: #FCFCFC;
+        }
+
+        .logentry
+        {
+            border-bottom: 1px solid #DFDFDF;
         }
 
         #changeLog
@@ -35,14 +47,14 @@
             font-size: 14px;
         }
 
-        #siteInfo, #changeLog
+        #siteInfo, #changeLog, #helppages
         {
             padding: 20px 35px;
             line-height: normal;
             position: relative;
         }
 
-        #siteInfo, #changeLog, #forkmeInfo, .pnlLinkBtns_Holder
+        #siteInfo, #changeLog, #helppage-select-holder, #forkmeInfo, .pnlLinkBtns_Holder
         {
             margin: 0 auto;
             width: 1000px;
@@ -185,8 +197,9 @@
         <asp:Panel ID="pnlLinkBtns" runat="server">
             <div class="pnlLinkBtns_Holder">
                 <ul class="sitemenu-selection">
-                    <li id="hdl1" class="active"><a href="#" onclick="$('#changeLog').hide();$('#siteInfo').show();$('.sitemenu-selection').find('li').removeClass('active');$('.sitemenu-selection').find('li').eq(0).addClass('active');return false;">Site Information</a></li>
-                    <li id="hdl2"><a href="#" onclick="$('#siteInfo').hide();$('#changeLog').show();$('.sitemenu-selection').find('li').removeClass('active');$('.sitemenu-selection').find('li').eq(1).addClass('active');return false;">Change Log</a></li>
+                    <li id="hdl1" class="active"><a href="#" onclick="$('#changeLog, #helppages').hide();$('#siteInfo').show();$('.sitemenu-selection').find('li').removeClass('active');$('.sitemenu-selection').find('li').eq(0).addClass('active');return false;">Site Information</a></li>
+                    <li id="hdl2"><a href="#" onclick="$('#siteInfo, #helppages').hide();$('#changeLog').show();$('.sitemenu-selection').find('li').removeClass('active');$('.sitemenu-selection').find('li').eq(1).addClass('active');return false;">Change Log</a></li>
+                    <li id="hdl3"><a href="#" onclick="$('#siteInfo, #changeLog').hide();$('#helppages').show();$('.sitemenu-selection').find('li').removeClass('active');$('.sitemenu-selection').find('li').eq(2).addClass('active');return false;">Help Pages</a></li>
                 </ul>
             </div>
         </asp:Panel>
@@ -227,7 +240,7 @@
                         <li><b>Site Plugins</b> that allow you to upload enhancements that you can make yourself.</li>
                         <li><b>Overlays</b> that are like apps but are more stationary and are only available with certain apps.</li>
                         <li>Install/Remove any app as you please. If available, the <b>App Installer</b> can allow you to install new apps and/or plugins.</li>
-                        <li><b>Database Integration and Custom Table builder</b> - If you have another database you want to integrate with, you can use the simple Database Importer tool under the site settings. Furthermore, you can also create your own custom tables that are stored in the sites database. Imports and Custom tables create their own apps for you to interact with.</li>
+                        <li><b>Database Integration and Custom Table builder</b> - If you have another database you want to integrate with, you can use the simple Table Importer tool under the site settings. Furthermore, you can also create your own custom tables that are stored in the sites database. Imports and Custom tables create their own apps for you to interact with.</li>
                         <li>Custom just about anything on your workspace from the background to the taskbar. Make your workspace different from everyone else.</li>
                         <li><b>Chat Client</b> that allows you to live chat with other users. (All chat sessions are encrypted and cannot be read within the database)</li>
                         <li><b>Groups</b> that you can join that allow you to install different apps and chat with users in that group.</li>
@@ -276,8 +289,8 @@
                             or by pressing Alt + O</li>
                     </ul>
                     <div class="clear-space"></div>
-                    <img alt="Workspace" src="Standard_Images/About Logos/openwse_v4.3.png" class="screenshot-img margin-right-big float-left" style="width: 480px;" />
-                    <img alt="Workspace" src="Standard_Images/About Logos/openwse_v4.3_overlays.png" class="screenshot-img float-left" style="width: 480px;" />
+                    <img alt="Workspace" src="Standard_Images/About Logos/openwse_v4.4.png" class="screenshot-img margin-right-big float-left" style="width: 480px;" />
+                    <img alt="Workspace" src="Standard_Images/About Logos/openwse_v4.4_overlays.png" class="screenshot-img float-left" style="width: 480px;" />
                     <div class="clear-space"></div>
                 </div>
                 <div class="about-section">
@@ -317,8 +330,8 @@
                         <li>There are 20 different site tools to play with.</li>
                         <li>Customize user defaults for new users, create, edit, delete existing users. </li>
                         <li>Create/Import your own database tables which also creates its own app for you to interact with.</li>
-                        <li>Setup notifications that can alert users when a custom table or database import has been updated.</li>
-                        <li>Add data charts to the custom tables and/or database imports.</li>
+                        <li>Setup notifications that can alert users when a custom table or table import has been updated.</li>
+                        <li>Add data charts to the custom tables and/or table imports.</li>
                         <li>Upload custom projects such as full web sites that can be hosted from this site.</li>
                         <li>Host web services.</li>
                         <li>Create and upload Site Plugins that can give the workspace extra functionality.</li>
@@ -362,6 +375,7 @@
                     <div class="clear-space"></div>
                     <img alt="Chat Client" src="Standard_Images/About Logos/chatclient.png" class="boxshadow" class="screenshot-img" />
                 </div>
+                <div id="IWantThis" class="about-section"></div>
                 <div class="about-section">
                     <h2>Wiki and Documentation</h2>
                     <div class="clear-space-five"></div>
@@ -379,12 +393,10 @@
                                 <li>Microsoft ASP.NET 4.5</li>
                                 <li>JQuery <i>(<a href="http://www.jquery.com" target="_blank">www.jquery.com</a>)</i></li>
                                 <li>JQuery UI <i>(<a href="http://jqueryui.com" target="_blank">www.jqueryui.com</a>)</i></li>
-                                <li>TinyMCE - Javascript WYSIWYG editor <i>(<a href="WebControls/TinyMCE/license.txt"
-                                    target="_blank">View License</a>)</i></li>
+                                <li>TinyMCE - Javascript WYSIWYG editor</li>
                                 <li>SharpZipLib - The Zip, GZip, BZip2 and Tar Implementation For .NET <i>(<a href="http://www.icsharpcode.net/opensource/sharpziplib"
                                     target="_blank">www.icsharpcode.net</a>)</i></li>
-                                <li>SyntaxHighlighter - JavaScript code syntax highlighter <i>(<a href="http://alexgorbatchev.com/SyntaxHighlighter"
-                                    target="_blank">www.alexgorbatchev.com/SyntaxHighlighter</a>)</i></li>
+                                <li>Ace Editor <i>(<a href="http://ace.c9.io/" target="_blank">http://ace.c9.io/</a>)</i></li>
                                 <li>Google APIs</li>
                             </ul>
                         </div>
@@ -397,7 +409,7 @@
                                         <li><a href="http://www.microsoft.com/windows/internet-explorer/default.aspx" target="_blank">Internet Explorer (Version 9 and up)</a></li>
                                         <li><a href="http://www.mozilla.com/firefox" target="_blank">Firefox (Version 3.6.27
                                 and up)</a></li>
-                                        <li><a href="http://www.opera.com/download" target="_blank">Opera</a></li>
+                                        <li><a href="https://www.apple.com/safari/" target="_blank">Safari</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -444,12 +456,46 @@
         <div id="changeLog" style="display: none;">
             <asp:Literal ID="ltl_changeLog" runat="server"></asp:Literal>
         </div>
+        <div id="helppages" style="display: none;">
+            <div id="helppage-select-holder">
+                <span class="pad-right font-bold">Pages</span>
+                <select id="helppage-select" onchange="helpPageChange();">
+                    <option value="Workspace">Workspace</option>
+                    <option value="acctsettings">Account Settings</option>
+                    <option value="appeditor">App Manager</option>
+                    <option value="apppackages">App Packages</option>
+                    <option value="customprojects">Custom Projects</option>
+                    <option value="customtables">Custom Tables</option>
+                    <option value="dbimporter">Table Importer</option>
+                    <option value="dbmanager">Database Manager</option>
+                    <option value="dbviewer">Table Viewer</option>
+                    <option value="fileeditor">File Editor</option>
+                    <option value="grouporg">Group Organizer</option>
+                    <option value="licensemanager">license Manager</option>
+                    <option value="networklog">Network Log</option>
+                    <option value="notifimanager">Notification Manager</option>
+                    <option value="overlays">Overlay Manager</option>
+                    <option value="servermanage">Site Settings</option>
+                    <option value="siteplugins">Site Plugins</option>
+                    <option value="startupscripts">Startup Scripts</option>
+                    <option value="useraccounts">User Accounts</option>
+                    <option value="webservices">Webservices</option>
+                </select>
+            </div>
+            <div class="clear-space"></div>
+            <div id="helpdiv_pageholder">
+            </div>
+        </div>
         <script type="text/javascript" src="//code.jquery.com/jquery-1.11.2.min.js"></script>
         <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-        <script type="text/javascript" src="//code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
         <script type="text/javascript" src="Scripts/jquery/combined-scripts.min.js"></script>
+        <script type="text/javascript" src="Scripts/SiteCalls/Min/openwse.min.js"></script>
         <script type="text/javascript">
+            var availableHelpPages = "-";
             $(document).ready(function () {
+                openWSE_Config.siteRootFolder = "<%=ResolveUrl("~/").Replace("/", "") %>";
+
                 if (!inIframe()) {
                     var height = $("#always-visible").height();
                     $("#app_title_bg").css("margin-top", height);
@@ -459,13 +505,80 @@
                 else {
                     $("#always-visible").hide();
                 }
+
+                var redirect = getParameterByName("redirect");
+                if (redirect != null && redirect != "") {
+                    $("#iframe-container-close-btn").find("a").attr("href", redirect);
+                }
+
+                if (availableHelpPages == "") {
+                    $("#helppage-select-holder").remove();
+                    $("#helpdiv_pageholder").html("<h3 align='center' class='pad-all'>There are no help pages available.</h3>");
+                }
+                else {
+                    if (availableHelpPages != "-") {
+                        $("#helppage-select").find("option").each(function () {
+                            if (!containsHelpPage($(this).val())) {
+                                $(this).remove();
+                            }
+                        });
+                    }
+
+                    helpPageChange();
+                }
             });
+
+            function containsHelpPage(page) {
+                var availableHelpPageArray = availableHelpPages.split(';');
+                for (var i = 0; i < availableHelpPageArray.length; i++) {
+                    if (availableHelpPageArray[i] == page) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
 
             function inIframe() {
                 try {
                     return window.self !== window.top;
                 } catch (evt) {
                     return true;
+                }
+            }
+
+            function helpPageChange() {
+                $("#helpdiv_pageholder").removeClass("pad-top-big");
+                $("#helpdiv_pageholder").removeClass("margin-top-big");
+
+                var val = $("#helppage-select").val();
+                if (val == "Workspace") {
+                    openWSE.HelpMenuPageLoadWorkspace();
+                    $("#helpdiv_pageholder").addClass("pad-top-big");
+                    $("#helpdiv_pageholder").addClass("margin-top-big");
+                }
+                else {
+                    var fullurl = openWSE.siteRoot() + "WebServices/SaveControls.asmx" + "/GetTotalHelpPages";
+                    $("#helpdiv_pageholder").html("<h3 align='center' class='pad-all'>Loading. Please Wait...</h3>");
+                    $.ajax({
+                        url: fullurl,
+                        type: "POST",
+                        data: '{ "currentPage": "' + val + '" }',
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            var count = parseInt(data.d);
+                            if (count > 0) {
+                                totalHelpPages = count;
+                                HelpMenuPageLoad(0, false);
+                            }
+                            else {
+                                $("#helpdiv_pageholder").html("<h3 align='center' class='pad-all'>There are no help pages available for this webpage.</h3>");
+                            }
+                        },
+                        error: function () {
+                            $("#helpdiv_pageholder").html("<h3 align='center' class='pad-all' style='color: Red;'>There was an error retrieving the help pages. Please try again.</h3>");
+                        }
+                    });
                 }
             }
         </script>

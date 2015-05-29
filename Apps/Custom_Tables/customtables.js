@@ -1,14 +1,16 @@
 ﻿/* Custom Table Functions
 ----------------------------------*/
 function pageLoad() {
-    $(".custom-table-timermarker").each(function () {
-        var id = $(this).attr("id").replace("-load", "");
-        var innerHolder = $.trim($("#data-holder-" + id).html());
-        if (innerHolder == "") {
-            customTables.Load(id);
-        }
-    });
+    customTables.TablePageLoad();
 }
+
+var resizeId_CustomTables;
+$(window).resize(function () {
+    clearTimeout(resizeId_CustomTables);
+    resizeId_CustomTables = setTimeout(function () {
+        customTables.ResizeChartData();
+    }, 500);
+});
 
 var customTables = function () {
     var arrSortColCustomTables = new Array();
@@ -19,15 +21,29 @@ var customTables = function () {
     var timerIntveral = 1000 * 60;
     var timerCustomTables;
 
+    function TablePageLoad() {
+        $(".custom-table-timermarker").each(function () {
+            var id = $(this).find(".custom-table-tableView-holder").attr("id").replace("pnl_", "").replace("_tableView", "");
+            var innerHolder = $.trim($("#data-holder-" + id).html());
+            if (innerHolder == "") {
+                Load(id);
+            }
+        });
+    }
+
     function Load(id) {
         InitJquery(id);
-        var innerHolder = $.trim($("#data-holder-" + id).html());
-
         $(document.body).on("click", "#app-" + id + " .exit-button-app, #app-" + id + "-min-bar .exit-button-app-min", function () {
             cookie.del(id + "-fontsize");
+            cookie.del(id + "-customtable-viewmode");
         });
 
-        if (innerHolder == "") {
+        var viewMode = cookie.get(id + "-customtable-viewmode");
+        if (viewMode != null && viewMode != undefined && viewMode == "mobile") {
+            $("#pnl_" + id + "_tableView").addClass("mobile-view");
+        }
+
+        if ($.trim($("#data-holder-" + id).html()) == "") {
             GetRecords(id, false);
         }
     }
@@ -36,7 +52,7 @@ var customTables = function () {
         timerIsRunning = true;
         timerCustomTables = setTimeout(function () {
             $(".custom-table-timermarker").each(function (index) {
-                var id = $(this).attr("id").replace("-load", "");
+                var id = $(this).find(".custom-table-tableView-holder").attr("id").replace("pnl_", "").replace("_tableView", "");
                 if (id != "") {
                     GetRecords(id, true);
                 }
@@ -66,20 +82,28 @@ var customTables = function () {
             contentType: "application/json; charset=utf-8",
             success: function (data) {
                 if (data.d.length > 0) {
-                    var dataArray = data.d[0];
-                    if (dataArray.length > 0) {
+                    if (data.d[0].length > 0) {
+                        var innerHeader = data.d[0][0];
+                        var innerAddRow = data.d[0][1];
+                        var innerItemRow = data.d[0][2];
                         var allowEdit = data.d[1] == "true";
 
-                        $("#data-holder-" + id).html(BuildTable(dataArray[0], dataArray[1], id, dataArray[2], false, allowEdit));
-                        LoadFontSizes(id);
+                        if ($.trim($("#cblist_" + id + "_holder").html()) == "") {
+                            $("#cblist_" + id + "_holder").html(BuildColumnCheckList(id, innerHeader));
+                        }
 
+                        $("#data-holder-" + id).html(BuildTable(id, innerHeader, innerAddRow, innerItemRow, false, allowEdit));
+
+                        LoadFontSizes(id);
                         AutoCompleteAddEdit(id, false);
                         RestoreInputAddValues(id, false);
+                        RefreshColumnsToShow(id);
                     }
                     else {
                         $("#data-holder-" + id).html("<h4>Error pulling records! Please try again.</h4>");
                     }
 
+                    SetupViewModeForTable(id);
                     openWSE.RemoveUpdateModal();
 
                     if (!timerIsRunning) {
@@ -141,41 +165,215 @@ var customTables = function () {
         });
     }
 
-    function BuildTable(innerHeader, innerAddRow, id, arr, editMode, allowEdit) {
+    function BuildColumnCheckList(id, innerHeader) {
+        var cbList = "";
+        var totalShown = 0;
+        if (innerHeader.length > 0) {
+            $("#li_cblist_" + id).show();
+            for (var i = 0; i < innerHeader.length; i++) {
+                var columnName = innerHeader[i][1];
+                var cbInput = "<input type=\"checkbox\" id=\"cb_" + id + "_" + columnName + "\" value=\"" + columnName + "\" checked=\"checked\" onchange=\"customTables.UpdateColumnsToShow('" + id + "', this, true);\" />";
+                cbInput += "<label for=\"cb_" + id + "_" + columnName + "\">&nbsp;" + columnName.replace(/_/g, " ") + "</label>";
+                cbInput += "<div class='clear-space-five'></div>";
+                if (innerHeader[i][3] == "false") {
+                    cbList += "<div style='display: none;'>" + cbInput + "</div>";
+                }
+                else {
+                    cbList += cbInput;
+                    totalShown++;
+                }
+            }
+        }
+
+        if (cbList == "" || totalShown == 0) {
+            $("#li_cblist_" + id).hide();
+        }
+
+        return cbList;
+    }
+
+    function UpdateColumnsToShow(id, _this, checkTotal) {
+        var val = $(_this).val();
+        if ($(_this).is(":checked")) {
+            if (!IsViewMobileMode(id)) {
+                $("#pnl_" + id + "_tableView").find("td[data-columnname='" + val + "']").show();
+            }
+            else {
+                $("#pnl_" + id + "_tableView").find("td[data-columnname='" + val + "']").parent().show();
+            }
+        }
+        else {
+            if (!IsViewMobileMode(id)) {
+                $("#pnl_" + id + "_tableView").find("td[data-columnname='" + val + "']").hide();
+            }
+            else {
+                $("#pnl_" + id + "_tableView").find("td[data-columnname='" + val + "']").parent().hide();
+            }
+        }
+
+        if (checkTotal) {
+            CheckTotalColumnsChecked(id);
+        }
+    }
+
+    function CheckTotalColumnsChecked(id) {
+        var totalChecked = 0;
+        $("#cblist_" + id + "_holder").find("input[type='checkbox']").each(function () {
+            $(this).prop("disabled", false);
+            if ($(this).is(":checked")) {
+                totalChecked++;
+            }
+        });
+
+        if (totalChecked <= 1) {
+            $("#cblist_" + id + "_holder").find("input[type='checkbox']").each(function () {
+                if ($(this).is(":checked")) {
+                    $(this).prop("disabled", true);
+                }
+            });
+        }
+    }
+
+    function RefreshColumnsToShow(id) {
+        $("#cblist_" + id + "_holder").find("input[type='checkbox']").each(function () {
+            UpdateColumnsToShow(id, this, false);
+        });
+
+        CheckTotalColumnsChecked(id);
+    }
+
+    function IsViewMobileMode(id) {
+        var viewMode = cookie.get(id + "-customtable-viewmode");
+        if (viewMode != null && viewMode != undefined && viewMode == "desktop") {
+            return false;
+        }
+        else if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i) || $("#pnl_" + id + "_tableView").hasClass("mobile-view")) {
+            return true;
+        }
+
+        return false;
+    }
+
+    function BuildTable(id, innerHeader, innerAddRow, innerItemRow, editMode, allowEdit) {
+        if (IsViewMobileMode(id)) {
+            return BuildMobileView(id, innerHeader, innerAddRow, innerItemRow, editMode, allowEdit);
+        }
+        else {
+            return BuildDesktopView(id, innerHeader, innerAddRow, innerItemRow, editMode, allowEdit);
+        }
+    }
+
+    function BuildMobileView(id, innerHeader, innerAddRow, innerItemRow, editMode, allowEdit) {
+        var addDiv = "";
+        if (allowEdit && !editMode) {
+            addDiv = "<table id='" + id + "-addRow'>";
+            for (var i = 0; i < innerAddRow.length; i++) {
+                addDiv += "<tr>";
+                addDiv += "<td class='headerName'>" + innerAddRow[i][0].replace(/_/g, " ") + "</td>";
+                addDiv += "<td data-columnname=\"" + innerAddRow[i][0] + "\" class='data-td addRow'>";
+                addDiv += "<input type='text' class='textEntry-noWidth' maxlength='" + innerAddRow[i][1] + "' onkeyup=\"customTables.AddRecordKeyPress(event, '" + innerAddRow[i][2] + "');\" data-type='" + innerAddRow[i][3] + "' style='width: 92%;' />" + innerAddRow[i][4];
+                addDiv += "</td></tr>";
+            }
+            addDiv += "</table><div class='addBtn'><input type='button' class='input-buttons-create' value='Add Entry' onclick=\"customTables.AddRecord('" + id + "');return false;\" /></div>";
+        }
+
+        var itemDiv = "";
+        if (innerItemRow.length > 0) {
+            for (var i = 0; i < innerItemRow.length; i++) {
+                if (!editMode) {
+                    itemDiv += "<div class=\"item-row\">";
+                }
+                else {
+                    if (openWSE.ConvertBitToBoolean(innerItemRow[i][2])) {
+                        itemDiv += "<div id=\"" + id + "-editRow\" class=\"item-row\">";
+                    }
+                    else {
+                        itemDiv += "<div class=\"item-row\">";
+                    }
+                }
+
+                itemDiv += "<table>";
+                for (var j = 0; j < innerItemRow[i][1].length; j++) {
+                    var colName = innerHeader[j][1].replace(/_/g, " ");
+                    itemDiv += "<tr>";
+                    itemDiv += "<td data-columnname=\"" + innerHeader[j][1] + "\" class=\"headerName td-sort-click" + innerHeader[j][0] + "\" onclick=\"customTables.OnSortClick(this,'" + innerHeader[j][1] + "','" + innerHeader[j][2] + "');\" title=\"Sort by " + colName + "\">" + colName + "</td>";
+                    itemDiv += "<td class=\"data-td dataItem\" data-type=\"" + innerItemRow[i][1][j][1].toString() + "\">" + innerItemRow[i][1][j][0].toString() + "</td>";
+                    itemDiv += "</tr>";
+                }
+                itemDiv += "</table>";
+
+                if (allowEdit) {
+                    var entryID = innerItemRow[i][0].toString();
+                    var editBtn = "";
+                    var delBtn = "";
+                    if (!editMode) {
+                        editBtn = "<input type=\"button\" class=\"input-buttons\" onclick=\"customTables.EditRecord('" + id + "', '" + entryID + "');return false;\" value=\"Edit\" />";
+                        delBtn = "<input type=\"button\" class=\"input-buttons no-margin\" onclick=\"customTables.DeleteRecord('" + id + "', '" + entryID + "');return false;\" value=\"Delete\" />";
+                    }
+                    else {
+                        if (openWSE.ConvertBitToBoolean(innerItemRow[i][2])) {
+                            editBtn = "<input type=\"button\" class=\"input-buttons\" onclick=\"customTables.UpdateRecord('" + id + "', '" + entryID + "');return false;\" value=\"Update\" />";
+                            delBtn = "<input type=\"button\" class=\"input-buttons no-margin\" onclick=\"customTables.CancelRecord('" + id + "');return false;\" value=\"Cancel\" />";
+                        }
+                    }
+                    itemDiv += "<div class=\"edit-buttons\" align=\"center\">" + editBtn + delBtn + "</div>";
+                }
+                itemDiv += "</div>";
+            }
+        }
+        else {
+            itemDiv = "<div class='emptyGridView'>No data found</div>";
+        }
+
+        if (addDiv == "" && itemDiv == "") {
+            return "<div id=\"" + id + "-complete-table\"><div class='emptyGridView'>No data found</div></div>";
+        }
+        else {
+            return "<div id=\"" + id + "-complete-table\"><div class='custom-table-add-mobile'>" + addDiv + "</div><div class='custom-table-data-mobile'>" + itemDiv + "</div></div>";
+        }
+    }
+
+    function BuildDesktopView(id, innerHeader, innerAddRow, innerItemRow, editMode, allowEdit) {
         var xHeader = "<table cellpadding=\"5\" cellspacing=\"0\" style=\"width: 100%;\">";
         xHeader += "<tbody><tr class=\"myHeaderStyle\">";
         xHeader += "<td style=\"width: 40px;\"></td>";
-        xHeader += innerHeader;
+        for (var i = 0; i < innerHeader.length; i++) {
+            var colName = innerHeader[i][1].replace(/_/g, " ");
+            xHeader += "<td data-columnname=\"" + innerHeader[i][1] + "\" class=\"td-sort-click" + innerHeader[i][0] + "\" onclick=\"customTables.OnSortClick(this,'" + innerHeader[i][1] + "','" + innerHeader[i][2] + "');\" title=\"Sort by " + colName + "\">" + colName + "</td>";
+        }
 
         if (allowEdit) {
             xHeader += "<td class=\"edit-buttons\" style=\"width: 70px;\"></td></tr>";
         }
 
         var xAddRow = "";
-
         if (allowEdit) {
             xAddRow = "<tr id=\"" + id + "-addRow\" class=\"GridNormalRow myItemStyle\">";
             xAddRow += "<td class=\"GridViewNumRow border-bottom\" style=\"width: 40px;\"><div class=\"pad-top-sml pad-bottom-sml\"></div></td>";
-            xAddRow += innerAddRow;
-            if (allowEdit) {
-                if (!editMode) {
-                    xAddRow += "<td class=\"edit-buttons border-bottom\" align=\"center\" style='width: 70px;'><a href=\"#Add\" class=\"td-add-btn\" onclick=\"customTables.AddRecord('" + id + "');return false;\" title=\"Add Row\"></a></td>";
+            if (!editMode) {
+                for (var i = 0; i < innerAddRow.length; i++) {
+                    xAddRow += "<td data-columnname=\"" + innerAddRow[i][0] + "\" class=\"data-td border-right border-bottom\" align=\"center\">";
+                    xAddRow += "<input type='text' class='textEntry-noWidth' maxlength='" + innerAddRow[i][1] + "' onkeyup=\"customTables.AddRecordKeyPress(event, '" + innerAddRow[i][2] + "');\" data-type='" + innerAddRow[i][3] + "' style='width: 85%;' />" + innerAddRow[i][4] + "</td>";
                 }
-                else {
-                    xAddRow += "<td class=\"edit-buttons border-bottom\" align=\"center\" style='width: 70px; height: 27px;'></td>";
+                xAddRow += "<td class=\"edit-buttons border-bottom\" align=\"center\" style='width: 70px;'><a href=\"#Add\" class=\"td-add-btn\" onclick=\"customTables.AddRecord('" + id + "');return false;\" title=\"Add Row\"></a></td>";
+            }
+            else {
+                for (var i = 0; i < innerAddRow.length; i++) {
+                    xAddRow += "<td data-columnname=\"" + innerAddRow[i][0] + "\" class=\"border-right border-bottom\"></td>";
                 }
+                xAddRow += "<td class=\"edit-buttons border-bottom\" align=\"center\" style='width: 70px; height: 27px;'></td>";
             }
 
             xAddRow += "</tr>";
         }
 
         var xItem = "";
-        for (var i = 0; i < arr.length; i++) {
+        for (var i = 0; i < innerItemRow.length; i++) {
             if (!editMode) {
                 xItem += "<tr class=\"GridNormalRow myItemStyle item-row\">";
             }
             else {
-                if (openWSE.ConvertBitToBoolean(arr[i][2])) {
+                if (openWSE.ConvertBitToBoolean(innerItemRow[i][2])) {
                     xItem += "<tr id=\"" + id + "-editRow\" class=\"GridNormalRow myItemStyle item-row\">";
                 }
                 else {
@@ -183,12 +381,12 @@ var customTables = function () {
                 }
             }
             xItem += "<td class=\"GridViewNumRow border-bottom\" style=\"width: 40px;\"><div class=\"pad-top-sml pad-bottom-sml\">" + (i + 1).toString() + "</div></td>";
-            for (var j = 0; j < arr[i][1].length; j++) {
-                xItem += "<td class=\"border-right border-bottom\" data-type=\"" + arr[i][1][j][1].toString() + "\">" + arr[i][1][j][0].toString() + "</td>";
+            for (var j = 0; j < innerItemRow[i][1].length; j++) {
+                xItem += "<td data-columnname=\"" + innerHeader[j][1] + "\" class=\"data-td border-right border-bottom\" data-type=\"" + innerItemRow[i][1][j][1].toString() + "\">" + innerItemRow[i][1][j][0].toString() + "</td>";
             }
 
             if (allowEdit) {
-                var entryID = arr[i][0].toString();
+                var entryID = innerItemRow[i][0].toString();
                 var editBtn = "";
                 var delBtn = "";
                 if (!editMode) {
@@ -196,7 +394,7 @@ var customTables = function () {
                     delBtn = "<a href=\"#Delete\" class=\"td-delete-btn\" onclick=\"customTables.DeleteRecord('" + id + "', '" + entryID + "');return false;\" title=\"Delete Row\"></a>";
                 }
                 else {
-                    if (openWSE.ConvertBitToBoolean(arr[i][2])) {
+                    if (openWSE.ConvertBitToBoolean(innerItemRow[i][2])) {
                         editBtn = "<a href=\"#Update\" class=\"margin-right td-update-btn\" onclick=\"customTables.UpdateRecord('" + id + "', '" + entryID + "');return false;\" title=\"Update Row\"></a>";
                         delBtn = "<a href=\"#Cancel\" class=\"td-cancel-btn\" onclick=\"customTables.CancelRecord('" + id + "');return false;\" title=\"Cancel Edit\"></a>";
                     }
@@ -211,6 +409,105 @@ var customTables = function () {
         }
         else {
             return "<div id=\"" + id + "-complete-table\">" + xHeader + xAddRow + xItem + "</tbody></table></div>";
+        }
+    }
+
+    function SetupViewModeForTable(id) {
+        if (IsViewMobileMode(id)) {
+            $("#" + id + "-sidebar-menu-viewallrecords").show();
+            $("#search_" + id + "_holder").removeClass("float-right");
+            $("#search_" + id + "_holder").find(".searchwrapper").css("width", "100%");
+            $("#search_" + id + "_divider").show();
+            if (!$("#pnl_" + id + "_tableView").hasClass("mobile-view")) {
+                $("#pnl_" + id + "_tableView").addClass("mobile-view");
+            }
+
+            $("#viewmode-selector-" + id).val("mobile");
+
+            if ($.trim($("#" + id + "-complete-table").find(".custom-table-add-mobile").html()) != "") {
+                var viewMode = $("#pnl_" + id + "_tableView").attr("data-viewmode");
+                if (viewMode == "" || viewMode == null || viewMode == "mobile-add") {
+                    $("#btn_" + id + "_addRecord").hide();
+                    $("#btn_" + id + "_viewRecords").show();
+                    $("#" + id + "-complete-table").find(".custom-table-data-mobile").hide();
+                    $("#" + id + "-complete-table").find(".custom-table-add-mobile").show();
+                }
+                else {
+                    $("#btn_" + id + "_viewRecords").hide();
+                    $("#btn_" + id + "_addRecord").show();
+                    $("#" + id + "-complete-table").find(".custom-table-add-mobile").hide();
+                    $("#" + id + "-complete-table").find(".custom-table-data-mobile").show();
+                }
+            }
+            else {
+                $("#pnl_" + id + "_tableView").attr("data-viewmode", "mobile-view")
+                $("#btn_" + id + "_viewRecords").hide();
+                $("#btn_" + id + "_addRecord").hide();
+                $("#" + id + "-sidebar-menu-viewallrecords").hide();
+                $("#" + id + "-complete-table").find(".custom-table-add-mobile").hide();
+                $("#" + id + "-complete-table").find(".custom-table-data-mobile").show();
+            }
+        }
+        else {
+            $("#" + id + "-sidebar-menu-viewallrecords").hide();
+            $("#search_" + id + "_holder").addClass("float-right");
+            $("#search_" + id + "_holder").find(".searchwrapper").css("width", "375px");
+            $("#search_" + id + "_divider").hide();
+            if ($("#pnl_" + id + "_tableView").hasClass("mobile-view")) {
+                $("#pnl_" + id + "_tableView").removeClass("mobile-view");
+            }
+
+            $("#viewmode-selector-" + id).val("desktop");
+        }
+    }
+
+    function AddRecord_MenuClick(id) {
+        $("#pnl_" + id + "_tableView").attr("data-viewmode", "mobile-add");
+        $("#btn_" + id + "_addRecord").hide();
+        $("#btn_" + id + "_viewRecords").show();
+        $("#" + id + "-complete-table").find(".custom-table-data-mobile").hide();
+        $("#" + id + "-complete-table").find(".custom-table-add-mobile").show();
+
+        $("#pnl_" + id + "_chartView").hide();
+        $("#pnl_" + id + "_tableView").show();
+
+        MenuClick(id);
+    }
+
+    function ViewRecords_MenuClick(id) {
+        $("#pnl_" + id + "_tableView").attr("data-viewmode", "mobile-view");
+        $("#btn_" + id + "_viewRecords").hide();
+        $("#btn_" + id + "_addRecord").show();
+        $("#" + id + "-complete-table").find(".custom-table-add-mobile").hide();
+        $("#" + id + "-complete-table").find(".custom-table-data-mobile").show();
+
+        $("#pnl_" + id + "_chartView").hide();
+        $("#pnl_" + id + "_tableView").show();
+
+        MenuClick(id);
+    }
+
+    function MenuClick(id) {
+        var $menu = $("#" + id + "-sidebar-menu");
+        if ($menu.length > 0) {
+            if (!$menu.hasClass("showmenu")) {
+                $menu.show();
+                $menu.addClass("showmenu");
+                $menu.animate({
+                    width: $("#" + id + "-load").outerWidth() - 50
+                }, openWSE_Config.animationSpeed, function () {
+                    $menu.find(".customtable-sidebar-innercontent").show();
+                });
+            }
+            else {
+                $menu.removeClass("showmenu");
+                $menu.find(".customtable-sidebar-innercontent").hide();
+                $menu.animate({
+                    width: 0
+                }, openWSE_Config.animationSpeed, function () {
+                    $menu.hide();
+                });
+            }
         }
     }
 
@@ -278,10 +575,6 @@ var customTables = function () {
         $("#tb_exportDateTo_" + id).val(new Date().toLocaleDateString());
 
         if ($(".app-main-external").length == 0) {
-            $("#app-" + id).on("resizestop", function (event, ui) {
-                ReBuildChartData(id);
-            });
-
             $(document.body).on("click", "#app-" + id + " .maximize-button-app", function () {
                 ReBuildChartData(id);
             });
@@ -297,10 +590,13 @@ var customTables = function () {
         if (editMode) {
             rowType = "edit";
         }
-        $("#" + id + "-" + rowType + "Row").find(".border-right").each(function (index) {
+        $("#" + id + "-" + rowType + "Row").find(".data-td").each(function (index) {
             var $input = $(this).find("input");
-            var columnName = $(this).find(".td-columnName-" + rowType).html();
-            var columnType = $(this).find("input").attr("data-type");
+            var columnName = $(this).attr("data-columnname");
+            if (editMode) {
+                columnName = $(this).find(".td-columnName-" + rowType).html();
+            }
+            var columnType = $input.attr("data-type");
 
             if ($.trim(columnType) == "datetime") {
                 $input.datepicker({
@@ -429,7 +725,11 @@ var customTables = function () {
             contentType: "application/json; charset=utf-8",
             success: function (data) {
                 if (data.d.length > 0) {
-                    $("#data-holder-" + id).html(BuildTable(data.d[0], data.d[1], id, data.d[2], true, true));
+                    var innerHeader = data.d[0];
+                    var innerAddRow = data.d[1];
+                    var innerItemRow = data.d[2];
+
+                    $("#data-holder-" + id).html(BuildTable(id, innerHeader, innerAddRow, innerItemRow, true, true));
                     LoadFontSizes(id);
                     SetEditMode(id, true, cid);
 
@@ -438,6 +738,7 @@ var customTables = function () {
 
                     timerIsRunning = false;
                     clearTimeout(timerCustomTables);
+                    RefreshColumnsToShow(id);
 
                     if ($("#data-holder-" + id).find(".td-columnValue-edit").length > 0) {
                         $("#data-holder-" + id).find(".td-columnValue-edit").each(function () {
@@ -448,6 +749,11 @@ var customTables = function () {
                 }
                 else {
                     openWSE.AlertWindow("Error pulling records.");
+                }
+
+                SetupViewModeForTable(id);
+                if (IsViewMobileMode(id)) {
+                    $("#btn_" + id + "_addRecord").hide();
                 }
 
                 openWSE.RemoveUpdateModal();
@@ -498,7 +804,7 @@ var customTables = function () {
         SetEditMode(id, false, "");
         var recordVals = new Array();
         var error = false;
-        $("#" + id + "-editRow").find(".border-right").each(function (index) {
+        $("#" + id + "-editRow").find(".data-td").each(function (index) {
             if (!error) {
                 var $input = $(this).find("input");
                 var $div = $(this).find(".td-columnName-edit");
@@ -579,14 +885,13 @@ var customTables = function () {
     function AddRecord(id) {
         var recordVals = new Array();
         var error = false;
-        $("#" + id + "-addRow").find(".border-right").each(function (index) {
+        $("#" + id + "-addRow").find(".data-td").each(function (index) {
             if (!error) {
                 var $input = $(this).find("input");
-                var $div = $(this).find(".td-columnName-add");
                 if ($input.attr("type") == "checkbox") {
                     if ($input.length > 0) {
                         var recordCols = new Array();
-                        recordCols[0] = $.trim($div.text());
+                        recordCols[0] = $(this).attr("data-columnname");
 
                         var isChecked = "0";
                         if ($input.prop("checked")) {
@@ -603,7 +908,7 @@ var customTables = function () {
                 else {
                     if ($input.length > 0) {
                         var recordCols = new Array();
-                        recordCols[0] = $.trim($div.text());
+                        recordCols[0] = $.trim($(this).attr("data-columnname"));
                         recordCols[1] = $.trim($input.val())
                         recordVals[index] = recordCols;
                     }
@@ -622,12 +927,17 @@ var customTables = function () {
                 success: function (data) {
                     openWSE.RemoveUpdateModal();
                     if (data.d[0] == "Success") {
-                        $("#" + id + "-addRow").find(".border-right").each(function (index) {
+                        $("#" + id + "-addRow").find(".data-td").each(function (index) {
                             $(this).find("input").val("");
                         });
 
                         SaveInputAddValues(id, false);
                         GetRecords(id, false);
+                        setTimeout(function () {
+                            if ($("#" + id + "-addRow").find(".textEntry-noWidth").length > 0) {
+                                $("#" + id + "-addRow").find(".textEntry-noWidth").eq(0).focus();
+                            }
+                        }, 250);
                     }
                     else {
                         openWSE.AlertWindow(data.d[1]);
@@ -646,13 +956,9 @@ var customTables = function () {
             rowType = "editRow";
         }
 
-        var count = 0;
-        $("#" + id + "-" + rowType).find("input").each(function (index) {
-            if (count == 0) {
-                $(this).focus();
-                count++;
-            }
-        });
+        if ($("#" + id + "-" + rowType).find("input").length > 0) {
+            $("#" + id + "-" + rowType).find("input").eq(0).focus();
+        }
     }
 
     function SaveInputAddValues(id, editMode) {
@@ -768,15 +1074,13 @@ var customTables = function () {
         catch (evt) { }
     }
 
-    $(document.body).on("change", ".custom-table-font-selector", function () {
-        var $select = $(this);
-        var fontsize = $select.val();
-        var id = $select.attr("id").replace("font-size-selector-", "");
+    function ChangeFont(id) {
+        var fontsize = $("#font-size-selector-" + id).val();
         $("." + id + "-record-font").css("font-size", fontsize);
         $("#data-holder-" + id).css("font-size", fontsize);
         $("#data-holder-" + id).find("input").css("font-size", fontsize);
         cookie.set(id + "-fontsize", fontsize, "30");
-    });
+    }
 
     function KeyPressSearch(event, id) {
         try {
@@ -795,6 +1099,9 @@ var customTables = function () {
     }
 
     function Search(id) {
+        if (IsViewMobileMode(id)) {
+            $("#pnl_" + id + "_tableView").attr("data-viewmode", "mobile-view");
+        }
         SetEditMode(id, false, "");
         GetRecords(id, false);
     }
@@ -804,6 +1111,7 @@ var customTables = function () {
 
         if (chartType != "" && chartType != null) {
             // Get Chart Data
+            MenuClick(id);
             openWSE.LoadingMessage1("Loading Chart Data...");
             $.ajax({
                 url: openWSE.siteRoot() + "WebServices/CustomTableService.asmx/SetChartView",
@@ -829,11 +1137,11 @@ var customTables = function () {
         try {
             if ($("#pnl_" + id + "_chartView").length == 1) {
                 $.getScript("//www.google.com/jsapi").done(function (script, textStatus) {
-                    var _innerHtml = "<a href='#' onclick=\"customTables.ViewTableData('" + id + "');return false;\"><span class='pg-prev-btn float-left pad-right-sml' style='padding-top: 0px; margin-top: -3px;'></span>Back to Table</a>";
-                    _innerHtml += "<a href='#' class='float-right margin-right img-refresh' title='Refresh Data' onclick=\"customTables.Refresh('" + id + "');return false;\"></a>";
-                    _innerHtml += "</div><div class='google-chart-holder'>";
+                    var _innerHtml = "<a href='#' onclick=\"customTables.ViewTableData('" + id + "');return false;\" class=\"customtables-chart-topbtns float-left pg-prev-btn pad-all\"></a>";
+                    _innerHtml += "<a href='#' class='customtables-chart-topbtns float-right pad-all img-refresh' title='Refresh Data' onclick=\"customTables.Refresh('" + id + "');return false;\"></a>";
+                    _innerHtml += "<div class='google-chart-holder'></div>";
 
-                    $("#pnl_" + id + "_chartView").html("<div class='pad-all'>" + _innerHtml + "</div>");
+                    $("#pnl_" + id + "_chartView").html(_innerHtml);
 
                     var chartTitle = $.trim($("#hf_" + id + "_chartTitle").val());
 
@@ -843,23 +1151,39 @@ var customTables = function () {
                     var $mainAppDiv = $("#" + id + "-load").closest(".app-body");
                     if ($mainAppDiv.length > 0) {
                         chartWidth = $mainAppDiv.width();
-                        chartHeight = $mainAppDiv.height();
+                        chartHeight = $mainAppDiv.height() - $("#pnl_" + id + "_chartView").find(".customtables-chart-topbtns").outerHeight();
+                    }
+                    else {
+                        chartHeight = chartHeight - ($("#always-visible").outerHeight() + $("#pnl_" + id + "_chartView").find(".customtables-chart-topbtns").outerHeight());
                     }
 
                     var docEle = $("#pnl_" + id + "_chartView").find(".google-chart-holder")[0];
                     var options = {
                         title: chartTitle,
-                        width: chartWidth - 30,
-                        height: chartHeight - 65
+                        width: chartWidth - 20,
+                        height: chartHeight - 10
                     };
 
                     var chart = null;
                     var dataCollection = new Array();
 
                     var columnNames = new Array();
-                    $("#" + id + "-complete-table").find(".myHeaderStyle").find(".td-sort-click").each(function () {
-                        columnNames.push($.trim($(this).html()));
-                    });
+                    if (IsViewMobileMode(id)) {
+                        if ($(".item-row").length > 0) {
+                            $("#" + id + "-complete-table").find(".item-row").eq(0).find(".headerName").each(function () {
+                                if ($(this).parent().css("display") != "none") {
+                                    columnNames.push($.trim($(this).html()));
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        $("#" + id + "-complete-table").find(".myHeaderStyle").find(".td-sort-click").each(function () {
+                            if ($(this).css("display") != "none") {
+                                columnNames.push($.trim($(this).html()));
+                            }
+                        });
+                    }
 
                     dataCollection.push(columnNames);
 
@@ -867,8 +1191,20 @@ var customTables = function () {
                         var $itemRow = $(this);
                         var rowData = new Array();
 
-                        $itemRow.find("td").each(function () {
-                            if (!$(this).hasClass("GridViewNumRow") && !$(this).hasClass("edit-buttons")) {
+                        $itemRow.find(".data-td").each(function () {
+                            var canAdd = true;
+                            if (IsViewMobileMode(id)) {
+                                if ($(this).parent().css("display") == "none") {
+                                    canAdd = false;
+                                }
+                            }
+                            else {
+                                if ($(this).css("display") == "none") {
+                                    canAdd = false;
+                                }
+                            }
+
+                            if (canAdd) {
                                 var x = $.trim($(this).html());
                                 if ($(this).attr("data-type") == "int32") {
                                     x = parseInt(x);
@@ -991,7 +1327,32 @@ var customTables = function () {
         });
     }
 
+    function ChangeViewMode(id) {
+        var selectedMode = $("#viewmode-selector-" + id).val();
+        if (selectedMode == "mobile") {
+            $("#pnl_" + id + "_tableView").addClass("mobile-view");
+            cookie.set(id + "-customtable-viewmode", "mobile", "30");
+        }
+        else {
+            $("#pnl_" + id + "_tableView").removeClass("mobile-view");
+            cookie.set(id + "-customtable-viewmode", "desktop", "30");
+        }
+
+        GetRecords(id, false);
+        MenuClick(id);
+    }
+
+    function ResizeChartData() {
+        $(".custom-table-timermarker").each(function () {
+            var id = $(this).find(".custom-table-tableView-holder").attr("id").replace("pnl_", "").replace("_tableView", "");
+            if ($("#pnl_" + id + "_chartView").css("display") != "none") {
+                ReBuildChartData(id);
+            }
+        });
+    }
+
     return {
+        TablePageLoad: TablePageLoad,
         Load: Load,
         Refresh: Refresh,
         KeyPressSearch: KeyPressSearch,
@@ -1008,6 +1369,13 @@ var customTables = function () {
         CancelRecord: CancelRecord,
         OnSortClick: OnSortClick,
         AddRecordKeyPress: AddRecordKeyPress,
-        UpdateRecordKeyPress: UpdateRecordKeyPress
+        UpdateRecordKeyPress: UpdateRecordKeyPress,
+        MenuClick: MenuClick,
+        AddRecord_MenuClick: AddRecord_MenuClick,
+        ViewRecords_MenuClick: ViewRecords_MenuClick,
+        ChangeFont: ChangeFont,
+        ChangeViewMode: ChangeViewMode,
+        UpdateColumnsToShow: UpdateColumnsToShow,
+        ResizeChartData: ResizeChartData
     }
 }();

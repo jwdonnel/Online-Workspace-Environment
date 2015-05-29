@@ -1,4 +1,4 @@
-﻿<%@ page title="Account Settings" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AcctSettings, App_Web_o42ostsu" clientidmode="Static" %>
+﻿<%@ page title="Account Settings" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AcctSettings, App_Web_rrukwxwl" clientidmode="Static" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -10,10 +10,10 @@
 
         #pnl_images
         {
-            min-height: 400px !important;
+            min-height: 335px !important;
         }
 
-        .image-selector-acct
+        .image-selector-acct, .image-selector-active
         {
             cursor: pointer;
         }
@@ -41,6 +41,11 @@
         #pnl_overlayList .item-column
         {
             padding: 5px 10px;
+        }
+
+        #dd_category_edit td
+        {
+            padding: 1px 0;
         }
     </style>
 </asp:Content>
@@ -422,6 +427,176 @@
             </asp:UpdatePanel>
         </asp:Panel>
 
+        <asp:Panel ID="pnl_UserAppOverrides" CssClass="pnl-section" runat="server" data-title="App Overrides">
+            <asp:UpdatePanel ID="updatepnl_UserAppOverrides" runat="server" UpdateMode="Conditional">
+                <ContentTemplate>
+                    <div class="table-settings-box">
+                        <div class="td-settings-ctrl">
+                            <div class="float-left">
+                                <a id="lbtn_DeleteAllOverrides" runat="server" href="#" onclick="DeleteAllOverrides();return false;" class="margin-right-big">Delete All Overrides</a>
+                                <asp:LinkButton ID="lbtn_RefreshOverrides" runat="server" Text="Refresh" CssClass="RandomActionBtns" OnClick="lbtn_RefreshOverrides_Click"></asp:LinkButton>
+                                <asp:HiddenField ID="hf_DeleteUserAppOverrides" runat="server" ClientIDMode="Static" OnValueChanged="hf_DeleteUserAppOverrides_ValueChanged" />
+                                <asp:HiddenField ID="hf_EditUserAppOverrides" runat="server" ClientIDMode="Static" OnValueChanged="hf_EditUserAppOverrides_ValueChanged" />
+                                <asp:HiddenField ID="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" runat="server" ClientIDMode="Static" OnValueChanged="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_ValueChanged" />
+                                <asp:HiddenField ID="hf_UpdateUserAppOverrides" runat="server" ClientIDMode="Static" OnValueChanged="hf_UpdateUserAppOverrides_ValueChanged" />
+                            </div>
+                            <div class="float-right">
+                                <span class="font-bold pad-right">Apps Overridden</span><asp:Label ID="lbl_TotalOverridenApps"
+                                    runat="server" Text="0"></asp:Label>
+                            </div>
+                            <div class="clear-space">
+                            </div>
+                            <asp:Panel ID="pnl_UserAppOverrideList" runat="server">
+                            </asp:Panel>
+                        </div>
+                        <div class="td-settings-desc">
+                            You can override certain settings to each of your apps installed. Apps must have the Allow User Overrides property set to true on the app in order for users to override the settings.
+                        </div>
+                    </div>
+                </ContentTemplate>
+                <Triggers>
+                    <asp:AsyncPostBackTrigger ControlID="hf_DeleteUserAppOverrides" />
+                    <asp:AsyncPostBackTrigger ControlID="lbtn_RefreshOverrides" />
+                </Triggers>
+            </asp:UpdatePanel>
+            <div id="App-element" class="Modal-element">
+                <div class="Modal-overlay">
+                    <div class="Modal-element-align">
+                        <div class="Modal-element-modal" data-setwidth="700">
+                            <div class="ModalHeader">
+                                <div>
+                                    <div class="app-head-button-holder-admin">
+                                        <a href="#" onclick="openWSE.LoadModalWindow(false, 'App-element', '');return false;"
+                                            class="ModalExitButton"></a>
+                                    </div>
+                                    <span class="Modal-title"></span>
+                                </div>
+                            </div>
+                            <div class="ModalScrollContent">
+                                <div class="ModalPadContent">
+                                    <asp:Panel ID="pnl_appeditor" runat="server">
+                                        <asp:UpdatePanel ID="UpdatePanel3" runat="server">
+                                            <ContentTemplate>
+                                                <asp:Image ID="img_edit" ImageUrl="" runat="server" CssClass='pad-right-big float-left'
+                                                    Style='height: 50px;' />
+                                                <div class="float-left">
+                                                    <asp:Label ID="lbl_appId" runat="server" Font-Size="Large"></asp:Label>
+                                                    <div class="clear-space">
+                                                    </div>
+                                                    <b class='float-left pad-top-sml pad-right'>Category</b>
+                                                    <asp:CheckBoxList ID="dd_category_edit" runat="server">
+                                                    </asp:CheckBoxList>
+                                                </div>
+                                            </ContentTemplate>
+                                        </asp:UpdatePanel>
+                                        <div class='clear-space'>
+                                        </div>
+                                        <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                                            <ContentTemplate>
+                                                <div class="float-left">
+                                                    <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
+                                                        Min Width
+                                                    </div>
+                                                    <asp:TextBox ID="tb_minwidth_edit" runat="server" CssClass="TextBoxEdit" Width="50px"></asp:TextBox><span
+                                                        class="pad-left">px</span>
+                                                    <div class="clear-space">
+                                                    </div>
+                                                    <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
+                                                        Min Height
+                                                    </div>
+                                                    <asp:TextBox ID="tb_minheight_edit" runat="server" CssClass="TextBoxEdit" Width="50px"></asp:TextBox><span
+                                                        class="pad-left">px</span>
+                                                    <div class="clear-space">
+                                                    </div>
+                                                    <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
+                                                        Background
+                                                    </div>
+                                                    <asp:DropDownList ID="dd_enablebg_edit" runat="server">
+                                                        <asp:ListItem Text="Visible" Value="app-main"></asp:ListItem>
+                                                        <asp:ListItem Text="Hidden" Value="app-main-nobg"></asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <div class="clear-space">
+                                                    </div>
+                                                    <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
+                                                        Allow Maximize
+                                                    </div>
+                                                    <asp:DropDownList ID="dd_allowmax_edit" runat="server">
+                                                        <asp:ListItem Text="True" Value="1"></asp:ListItem>
+                                                        <asp:ListItem Text="False" Value="0"></asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <div class="clear-space">
+                                                    </div>
+                                                    <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
+                                                        Allow Pop Out
+                                                    </div>
+                                                    <asp:DropDownList ID="dd_allowpopout_edit" runat="server">
+                                                        <asp:ListItem Text="True" Value="1"></asp:ListItem>
+                                                        <asp:ListItem Text="False" Value="0" Selected="True"></asp:ListItem>
+                                                    </asp:DropDownList>
+                                                </div>
+                                                <div class="float-left" style="padding-left: 75px;">
+                                                    <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
+                                                        Max on Load
+                                                    </div>
+                                                    <asp:DropDownList ID="dd_maxonload_edit" runat="server">
+                                                        <asp:ListItem Text="True" Value="1"></asp:ListItem>
+                                                        <asp:ListItem Text="False" Value="0"></asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <div class="clear-space">
+                                                    </div>
+                                                    <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
+                                                        Allow Resize
+                                                    </div>
+                                                    <asp:DropDownList ID="dd_allowresize_edit" runat="server">
+                                                        <asp:ListItem Text="True" Value="1"></asp:ListItem>
+                                                        <asp:ListItem Text="False" Value="0"></asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <div class="clear-space">
+                                                    </div>
+                                                    <div class="float-left">
+                                                        <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
+                                                            Default Workspace
+                                                        </div>
+                                                        <asp:DropDownList ID="dd_defaultworkspace_edit" runat="server" Style="width: 65px;">
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                    <div class="clear-space">
+                                                    </div>
+                                                    <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
+                                                        Auto Open
+                                                    </div>
+                                                    <asp:DropDownList ID="dd_autoOpen_edit" runat="server">
+                                                        <asp:ListItem Text="True" Value="1"></asp:ListItem>
+                                                        <asp:ListItem Text="False" Value="0"></asp:ListItem>
+                                                    </asp:DropDownList>
+                                                </div>
+                                                <div class="clear-space">
+                                                </div>
+                                                <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
+                                                    Pop Out Location
+                                                </div>
+                                                <asp:TextBox ID="tb_allowpopout_edit" runat="server" CssClass="TextBoxEdit" Width="345px"></asp:TextBox>
+                                                <div class="clear-space"></div>
+                                            </ContentTemplate>
+                                        </asp:UpdatePanel>
+                                        <div class="clear-space">
+                                        </div>
+                                    </asp:Panel>
+                                </div>
+                            </div>
+                            <div class="ModalButtonHolder">
+                                <input type="button" class="input-buttons" onclick="UpdateOverrides();" value="Save" style="width: 75px;" />
+                                <input id="btn_undoOverrides" type="button" class="input-buttons" onclick="DeleteOverrides('');"
+                                    value="Reset" style="width: 75px;" />
+                                <input type="button" class="input-buttons" onclick="openWSE.LoadModalWindow(false, 'App-element', '');"
+                                    value="Close" style="width: 75px; margin-right: 5px!important;" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </asp:Panel>
+
         <asp:Panel ID="pnl_WorkspaceContainer" CssClass="pnl-section" runat="server" data-title="Workspace">
             <asp:UpdatePanel ID="updatepnl_WorkspaceContainer" runat="server" UpdateMode="Conditional">
                 <ContentTemplate>
@@ -595,7 +770,7 @@
                     <ContentTemplate>
                         <div class="table-settings-box">
                             <div class="td-settings-title">
-                                Dasboard Background
+                                Workspace Background
                             </div>
                             <div class="title-line"></div>
                             <div class="td-settings-ctrl">
@@ -604,53 +779,149 @@
                                         <td valign="top">
                                             <div id="CurrentBackground">
                                             </div>
-                                            <div class="clear-space-two">
-                                            </div>
-                                            <div class="pad-left">
-                                                <a href="#" onclick="BackgroundSelector();return false;" class="input-buttons margin-left-sml">Select a Background</a>
-                                            </div>
-                                            <div class="pad-top pad-bottom" style="padding-left: 14px;">
-                                                <small>
-                                                    <asp:LinkButton ID="lb_clearbackground" runat="server" OnClick="lb_clearbackground_Click">Clear Background</asp:LinkButton>
-                                                </small>
-                                            </div>
+                                            <asp:Panel ID="pnl_backgroundSelector" runat="server">
+                                                <div class="clear-space"></div>
+                                                <span class="font-bold pad-right">Workspace</span>
+                                                <asp:DropDownList ID="dd_backgroundSelector" runat="server" AutoPostBack="true" OnSelectedIndexChanged="dd_backgroundSelector_Changed">
+                                                </asp:DropDownList>
+                                                <div class="pad-top pad-bottom">
+                                                    <small>Select a workspace to edit the background for.</small>
+                                                </div>
+                                            </asp:Panel>
                                         </td>
+                                    </tr>
+                                    <tr>
                                         <td valign="top">
-                                            <div class="pad-top-big" style="padding-left: 30px;">
+                                            <div class="pad-top-big">
+                                                <asp:HiddenField ID="hf_refreshbackgroundList" runat="server" OnValueChanged="hf_refreshbackgroundList_Changed" ClientIDMode="Static" />
                                                 <asp:HiddenField ID="hf_backgroundimg" runat="server" OnValueChanged="hf_backgroundimg_Changed" />
+                                                <asp:HiddenField ID="hf_removebackgroundimgEdit" runat="server" OnValueChanged="hf_removebackgroundimgEdit_Changed" ClientIDMode="Static" />
+                                                <asp:HiddenField ID="hf_removebackgroundimg" runat="server" OnValueChanged="hf_removebackgroundimg_Changed" ClientIDMode="Static" />
                                                 <div class="float-left">
                                                     <asp:TextBox runat="server" ID="txt_bgColor" CssClass="textEntry float-left margin-right color"
                                                         MaxLength="6" AutoCompleteType="None" Width="75px" />
                                                 </div>
-                                                <asp:Button ID="btn_updateBGcolor" runat="server" CssClass="input-buttons margin-left RandomActionBtns" Text="Update Color" OnClick="btn_updateBGcolor_Clicked" Style="margin-top: 2px;" />
-                                                <asp:LinkButton ID="btn_clearBGcolor" runat="server" CssClass="RandomActionBtns" Text="Clear" OnClick="btn_clearBGcolor_Clicked" Style="font-size: 11px;" />
+                                                <asp:Button ID="btn_updateBGcolor" runat="server" CssClass="input-buttons margin-left RandomActionBtns" Text="Add Color" OnClick="btn_updateBGcolor_Clicked" Style="margin-top: 2px;" />
                                             </div>
                                             <div class="clear-space"></div>
-                                            <div class="pad-left-big margin-left">
-                                                <asp:TextBox ID="tb_imageurl" runat="server" CssClass="textEntry" onfocus="if(this.value=='Link to image')this.value=''"
-                                                    onblur="if(this.value=='')this.value='Link to image'" Text="Link to image" Width="355px"></asp:TextBox>
-                                                <asp:Button ID="btn_urlupdate" runat="server" Text="Update Url" CssClass="input-buttons margin-left updatesettings"
-                                                    OnClick="btn_urlupdate_Click" />
-                                                <div class="pad-top pad-bottom">
-                                                    <small>Copy and paste any link that contains an image. </small>
-                                                </div>
+                                            <div class="clear-space"></div>
+                                            <asp:TextBox ID="tb_imageurl" runat="server" CssClass="textEntry" onfocus="if(this.value=='Link to image')this.value=''"
+                                                onblur="if(this.value=='')this.value='Link to image'" Text="Link to image" Width="355px"></asp:TextBox>
+                                            <asp:Button ID="btn_urlupdate" runat="server" Text="Add Url" CssClass="input-buttons margin-left updatesettings"
+                                                OnClick="btn_urlupdate_Click" />
+                                            <div class="pad-top pad-bottom">
+                                                <small>Copy and paste any link that contains an image. </small>
                                             </div>
+                                            <div class="clear-space"></div>
+                                            <div class="clear-space"></div>
+                                            <asp:Panel ID="pnl_iframeUserImageUpload" runat="server"></asp:Panel>
+                                            <div class="clear-space"></div>
+                                            <div class="clear-space"></div>
+                                            <a href="#" onclick="BackgroundSelector();return false;" class="input-buttons" style="padding-right: 15px!important;"><span class="img-background float-left pad-right"></span>Select a Background</a>
+                                            <asp:LinkButton ID="lb_clearbackground" runat="server" OnClick="lb_clearbackground_Click" Text="Clear All Backgrounds" Font-Size="11px"></asp:LinkButton>
                                         </td>
                                     </tr>
                                 </table>
                                 <span class="font-color-black" id="backgroundsaved"></span>
                             </div>
                             <div class="td-settings-desc">
-                                All backgrounds will repeat on the workspace.
                                 Your connection speed will slow down with the larger images. Each image has
                                 the size details when you hover over them. Solid color backgrounds will be the quickest
                                 if you have a slower internet connection.
                             </div>
                         </div>
+                        <div class="table-settings-box">
+                            <div class="td-settings-title">
+                                Background Position
+                            </div>
+                            <div class="title-line"></div>
+                            <div class="td-settings-ctrl">
+                                <asp:DropDownList ID="dd_backgroundposition" runat="server">
+                                    <asp:ListItem Text="Left Top" Value="left top"></asp:ListItem>
+                                    <asp:ListItem Text="Left Center" Value="left center"></asp:ListItem>
+                                    <asp:ListItem Text="Left Bottom" Value="left bottom"></asp:ListItem>
+                                    <asp:ListItem Text="Right Top" Value="right top"></asp:ListItem>
+                                    <asp:ListItem Text="Right Center" Value="right center"></asp:ListItem>
+                                    <asp:ListItem Text="Right Bottom" Value="right bottom"></asp:ListItem>
+                                    <asp:ListItem Text="Center Top" Value="center top"></asp:ListItem>
+                                    <asp:ListItem Text="Center Center" Value="center center"></asp:ListItem>
+                                    <asp:ListItem Text="Center Bottom" Value="center bottom"></asp:ListItem>
+                                </asp:DropDownList>
+                                <asp:Button ID="btn_backgroundposition" runat="server" Text="Update" OnClick="btn_backgroundposition_Click"
+                                    CssClass="RandomActionBtns input-buttons margin-left-big" />
+                            </div>
+                            <div class="td-settings-desc">Select the position of the background. Applys for all workspaces and background images.</div>
+                        </div>
+                        <div class="table-settings-box">
+                            <div class="td-settings-title">
+                                Background Size
+                            </div>
+                            <div class="title-line"></div>
+                            <div class="td-settings-ctrl">
+                                <asp:DropDownList ID="dd_backgroundsize" runat="server">
+                                    <asp:ListItem Text="Normal" Value="auto"></asp:ListItem>
+                                    <asp:ListItem Text="Stretch" Value="100% 100%"></asp:ListItem>
+                                    <asp:ListItem Text="Cover" Value="cover"></asp:ListItem>
+                                    <asp:ListItem Text="Contain" Value="contain"></asp:ListItem>
+                                </asp:DropDownList>
+                                <asp:Button ID="btn_backgroundsize" runat="server" Text="Update" OnClick="btn_backgroundsize_Click"
+                                    CssClass="RandomActionBtns input-buttons margin-left-big" />
+                            </div>
+                            <div class="td-settings-desc">Select the size of the background. Applys for all workspaces and background images.</div>
+                        </div>
+                        <div class="table-settings-box">
+                            <div class="td-settings-title">
+                                Repeat Background
+                            </div>
+                            <div class="title-line"></div>
+                            <div class="td-settings-ctrl">
+                                <div class="field switch inline-block">
+                                    <asp:RadioButton ID="rb_backgroundrepeat_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                        OnCheckedChanged="rb_backgroundrepeat_on_CheckedChanged" AutoPostBack="True" />
+                                    <asp:RadioButton ID="rb_backgroundrepeat_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                        OnCheckedChanged="rb_backgroundrepeat_off_CheckedChanged" AutoPostBack="True" />
+                                </div>
+                            </div>
+                            <div class="td-settings-desc">
+                                Turn on/off repeating the background image. Applys for all workspaces and background images.
+                            </div>
+                        </div>
+                        <div class="table-settings-box">
+                            <div class="td-settings-title">
+                                Default Background Color
+                            </div>
+                            <div class="title-line"></div>
+                            <div class="td-settings-ctrl">
+                                <asp:Panel ID="pnl_defaultbackgroundcolor" runat="server" DefaultButton="btn_defaultbackgroundcolor">
+                                    <div class="float-left">
+                                        <asp:TextBox runat="server" ID="tb_defaultbackgroundcolor" CssClass="textEntry float-left margin-right color"
+                                            MaxLength="6" AutoCompleteType="None" Width="75px" />
+                                    </div>
+                                    <asp:Button ID="btn_defaultbackgroundcolor" runat="server" CssClass="input-buttons margin-left RandomActionBtns" Text="Update" OnClick="btn_defaultbackgroundcolor_Clicked" Style="margin-top: 2px;" />
+                                </asp:Panel>
+                            </div>
+                            <div class="td-settings-desc">
+                                Set the default background color. Applys for all workspaces and background images.
+                            </div>
+                        </div>
+                        <asp:Panel ID="pnl_BackgroundLoopTimer" runat="server" DefaultButton="btn_backgroundlooptimer">
+                            <div class="table-settings-box">
+                                <div class="td-settings-title">
+                                    Background Loop Timer
+                                </div>
+                                <div class="title-line"></div>
+                                <div class="td-settings-ctrl">
+                                    <asp:TextBox ID="tb_backgroundlooptimer" runat="server" TextMode="Number" CssClass="textEntry" Width="60px"></asp:TextBox>&nbsp;Second(s)
+                                        <asp:Button ID="btn_backgroundlooptimer" runat="server" Text="Update" OnClick="btn_backgroundlooptimer_Click"
+                                            CssClass="RandomActionBtns input-buttons margin-left-big" />
+                                </div>
+                                <div class="td-settings-desc">Change the amount of time to loop through each background you have selected.</div>
+                            </div>
+                        </asp:Panel>
                         <asp:Panel ID="pnl_backgroundurl" runat="server">
                             <div class="table-settings-box">
                                 <div class="td-settings-title">
-                                    Multiple Backgrounds
+                                    Individual Workspace Backgrounds
                                 </div>
                                 <div class="title-line"></div>
                                 <div class="td-settings-ctrl">
@@ -662,21 +933,8 @@
                                     </div>
                                 </div>
                                 <div class="td-settings-desc">
-                                    Allows the use of multiple backgrounds. One for each workspace/workspace.
+                                    Allows the use of multiple backgrounds, one for each workspace.
                                 </div>
-                            </div>
-                        </asp:Panel>
-                        <asp:Panel ID="pnl_backgroundSelector" runat="server">
-                            <div class="table-settings-box">
-                                <div class="td-settings-title">
-                                    Select Workspace
-                                </div>
-                                <div class="title-line"></div>
-                                <div class="td-settings-ctrl">
-                                    <asp:DropDownList ID="dd_backgroundSelector" runat="server" AutoPostBack="true" OnSelectedIndexChanged="dd_backgroundSelector_Changed">
-                                    </asp:DropDownList>
-                                </div>
-                                <div class="td-settings-desc">Select the workspace you want to change.</div>
                             </div>
                         </asp:Panel>
                         <div id="Background-element" class="Modal-element">
@@ -696,11 +954,17 @@
                                             <div class="ModalPadContent">
                                                 <div class="clear-space-five">
                                                 </div>
-                                                Click on the background that you would like to apply to your workspace.
+                                                <small class="float-right">Click on the background that you would like to apply to your workspace.</small>
+                                                <span class="font-bold pad-right">Folder</span>
+                                                <asp:DropDownList ID="dd_imageFolder" runat="server" ClientIDMode="Static" OnSelectedIndexChanged="dd_imageFolder_SelectedIndexChanged" AutoPostBack="true">
+                                                    <asp:ListItem Text="User Uploads" Value="user"></asp:ListItem>
+                                                    <asp:ListItem Text="Public" Value="public"></asp:ListItem>
+                                                </asp:DropDownList>
                                                 <div class="clear-space">
                                                 </div>
                                                 <asp:HiddenField ID="hf_backgroundselector" runat="server" OnValueChanged="hf_backgroundselector_ValueChanged"
                                                     Value="" />
+                                                <asp:HiddenField ID="hf_deleteUploadedImage" runat="server" OnValueChanged="hf_deleteUploadedImage_ValueChanged" ClientIDMode="Static" />
                                                 <div id="pnl_images" align="center">
                                                 </div>
                                             </div>
@@ -714,37 +978,79 @@
                         <asp:AsyncPostBackTrigger ControlID="hf_backgroundimg" />
                         <asp:AsyncPostBackTrigger ControlID="lb_clearbackground" />
                         <asp:AsyncPostBackTrigger ControlID="btn_updateBGcolor" />
-                        <asp:AsyncPostBackTrigger ControlID="btn_clearBGcolor" />
+                        <asp:AsyncPostBackTrigger ControlID="btn_backgroundlooptimer" />
                         <asp:AsyncPostBackTrigger ControlID="rb_enablebackgrounds_on" />
                         <asp:AsyncPostBackTrigger ControlID="rb_enablebackgrounds_off" />
                         <asp:AsyncPostBackTrigger ControlID="dd_backgroundSelector" />
                         <asp:AsyncPostBackTrigger ControlID="btn_urlupdate" />
                         <asp:AsyncPostBackTrigger ControlID="hf_backgroundselector" />
+                        <asp:AsyncPostBackTrigger ControlID="hf_removebackgroundimgEdit" />
+                        <asp:AsyncPostBackTrigger ControlID="hf_removebackgroundimg" />
+                        <asp:AsyncPostBackTrigger ControlID="btn_backgroundposition" />
+                        <asp:AsyncPostBackTrigger ControlID="btn_backgroundsize" />
+                        <asp:AsyncPostBackTrigger ControlID="rb_backgroundrepeat_on" />
+                        <asp:AsyncPostBackTrigger ControlID="rb_backgroundrepeat_off" />
+                        <asp:AsyncPostBackTrigger ControlID="btn_defaultbackgroundcolor" />
                     </Triggers>
                 </asp:UpdatePanel>
             </asp:Panel>
         </asp:Panel>
 
-        <asp:Panel ID="pnl_TopSideMenuBar" CssClass="pnl-section" runat="server" data-title="Top/Side Menu Bar">
+        <asp:Panel ID="pnl_TopSideMenuBar" CssClass="pnl-section" runat="server" data-title="Top/Left Menu">
             <asp:UpdatePanel ID="updatepnl_TopSideMenuBar" runat="server" UpdateMode="Conditional">
                 <ContentTemplate>
                     <div class="table-settings-box">
                         <div class="td-settings-title">
-                            Date/Time
+                            Show Date/Time
                         </div>
                         <div class="title-line"></div>
                         <div class="td-settings-ctrl">
                             <div class="field switch inline-block">
-                                <asp:RadioButton ID="rb_showdatetime_on" runat="server" Text="Show" CssClass="RandomActionBtns cb-enable"
+                                <asp:RadioButton ID="rb_showdatetime_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
                                     OnCheckedChanged="rb_showdatetime_on_CheckedChanged" AutoPostBack="True" />
-                                <asp:RadioButton ID="rb_showdatetime_off" runat="server" Text="Hide" CssClass="RandomActionBtns cb-disable"
+                                <asp:RadioButton ID="rb_showdatetime_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
                                     OnCheckedChanged="rb_showdatetime_off_CheckedChanged" AutoPostBack="True" />
                             </div>
                         </div>
                         <div class="td-settings-desc">
-                            Select Hide if you dont want to see the date/time in the top tool bar.
+                            Select No if you dont want to see the date/time in the top tool bar.
                         </div>
                     </div>
+                    <div class="table-settings-box">
+                        <div class="td-settings-title">
+                            Show Search Button
+                        </div>
+                        <div class="title-line"></div>
+                        <div class="td-settings-ctrl">
+                            <div class="field switch inline-block">
+                                <asp:RadioButton ID="rb_showtopsearch_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                    OnCheckedChanged="rb_showtopsearch_on_CheckedChanged" AutoPostBack="True" />
+                                <asp:RadioButton ID="rb_showtopsearch_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                    OnCheckedChanged="rb_showtopsearch_off_CheckedChanged" AutoPostBack="True" />
+                            </div>
+                        </div>
+                        <div class="td-settings-desc">
+                            Select No if you dont want to see the search button at the top right.
+                        </div>
+                    </div>
+                    <div class="table-settings-box">
+                        <div class="td-settings-title">
+                            Sidebar Accordion Sections
+                        </div>
+                        <div class="title-line"></div>
+                        <div class="td-settings-ctrl">
+                            <div class="field switch inline-block">
+                                <asp:RadioButton ID="rb_SidebarAccordion_on" runat="server" Text="On" CssClass="RandomActionBtns cb-enable"
+                                    OnCheckedChanged="rb_SidebarAccordion_on_CheckedChanged" AutoPostBack="True" />
+                                <asp:RadioButton ID="rb_SidebarAccordion_off" runat="server" Text="Off" CssClass="RandomActionBtns cb-disable"
+                                    OnCheckedChanged="rb_SidebarAccordion_off_CheckedChanged" AutoPostBack="True" />
+                            </div>
+                        </div>
+                        <div class="td-settings-desc">
+                            Select Off to turn off the sidebar accordion and keep all sections open. (You must refresh the page when updated)
+                        </div>
+                    </div>
+                    <asp:Panel ID="pnl_AccordianOpen" runat="server">
                     <div class="table-settings-box">
                         <div class="td-settings-title">
                             Only Allow One Sidebar Accordion to be Open
@@ -762,6 +1068,7 @@
                             Select no to allow any dropdown accordion to be open without minimizing another. (You must refresh the page when updated)
                         </div>
                     </div>
+                        </asp:Panel>
                     <asp:Panel ID="pnl_loadLinksOnNewPage" runat="server">
                         <div class="table-settings-box">
                             <div class="td-settings-title">
@@ -863,8 +1170,12 @@
                     <asp:AsyncPostBackTrigger ControlID="rb_showWorkspacePreview_off" />
                     <asp:AsyncPostBackTrigger ControlID="rb_showdatetime_on" />
                     <asp:AsyncPostBackTrigger ControlID="rb_showdatetime_off" />
+                    <asp:AsyncPostBackTrigger ControlID="rb_showtopsearch_on" />
+                    <asp:AsyncPostBackTrigger ControlID="rb_showtopsearch_off" />
                     <asp:AsyncPostBackTrigger ControlID="rb_SidebarAccordionMutliOpenAllowed_on" />
                     <asp:AsyncPostBackTrigger ControlID="rb_SidebarAccordionMutliOpenAllowed_on" />
+                    <asp:AsyncPostBackTrigger ControlID="rb_SidebarAccordion_on" />
+                    <asp:AsyncPostBackTrigger ControlID="rb_SidebarAccordion_off" />
                     <asp:AsyncPostBackTrigger ControlID="rb_linksnewpage_on" />
                     <asp:AsyncPostBackTrigger ControlID="rb_linksnewpage_off" />
                     <asp:AsyncPostBackTrigger ControlID="rb_autohidemode_on" />
@@ -1043,6 +1354,25 @@
                             </div>
                             <div class="td-settings-desc">
                                 Switch to Simple mode if you do not like the use of the apps. This will turn your workspace into a more generic looking website.
+                            </div>
+                        </div>
+                    </asp:Panel>
+                    <asp:Panel ID="pnl_MobileAutoSync" runat="server">
+                        <div class="table-settings-box">
+                            <div class="td-settings-title">
+                                Try to Auto Connect to Workspace when using AppRemote
+                            </div>
+                            <div class="title-line"></div>
+                            <div class="td-settings-ctrl">
+                                <div class="field switch inline-block">
+                                    <asp:RadioButton ID="rb_MobileAutoSync_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                        OnCheckedChanged="rb_MobileAutoSync_on_CheckedChanged" AutoPostBack="True" />
+                                    <asp:RadioButton ID="rb_MobileAutoSync_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                        OnCheckedChanged="rb_MobileAutoSync_off_CheckedChanged" AutoPostBack="True" />
+                                </div>
+                            </div>
+                            <div class="td-settings-desc">
+                                Set this to Yes to automatically sync your workspace with your AppRemote when using the AppRemote(Mobile).
                             </div>
                         </div>
                     </asp:Panel>

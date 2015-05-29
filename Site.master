@@ -1,9 +1,11 @@
-﻿<%@ master language="C#" autoeventwireup="true" inherits="SiteMaster, App_Web_iv0v2cts" %>
+﻿<%@ master language="C#" autoeventwireup="true" inherits="SiteMaster, App_Web_ravcmota" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head runat="server">
     <title>OnlineWSE - Online Workspace Environment</title>
+    <meta name="author" content="John Donnelly" />
+    <meta name="revisit-after" content="10 days" />
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <link id="Link1" runat="server" rel="shortcut icon" href="~/Standard_Images/favicon.ico"
         type="image/x-icon" />
@@ -25,6 +27,120 @@
                 <table class="top-options" cellpadding="0" cellspacing="0">
                     <tbody>
                         <tr>
+                            <td id="overlay_tab" runat="server">
+                                <ul>
+                                    <li class="a">
+                                        <div class="sidebar-pnlBtn-tab" title="Toggle Overlays">
+                                            <div class="img-overlay">
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td id="notifications_tab" runat="server">
+                                <ul>
+                                    <li class="a li-notification-padding" onclick="setTimeout('openWSE.GetUserNotifications(true)', openWSE_Config.animationSpeed)">
+                                        <asp:UpdatePanel ID="updatepnl_notifications" runat="server">
+                                            <ContentTemplate>
+                                                <asp:Label ID="lbl_notifications" runat="server" Text=""></asp:Label>
+                                            </ContentTemplate>
+                                        </asp:UpdatePanel>
+                                    </li>
+                                    <li id="notification-tab-b" class="b">
+                                        <div class="li-header">
+                                            Notifications <a id="lb_clearNoti" href="#clear" class="float-right margin-right margin-left-big"
+                                                onclick="openWSE.NotiActionsClearAll();return false;" style="display: none;">Clear All</a>
+                                            <a href="~/SiteTools/UserMaintenance/AcctSettings.aspx?tab=NotificationSettings" id="lb_acctNotifications" runat="server" class="float-right" title="Manage your notification settings" onclick="openWSE.CloseTopDropDowns();">Settings</a>
+                                        </div>
+                                        <div class="pad-all-sml">
+                                            <div id="table-notiMessages-div-id" class="table-notiMessages-div">
+                                                <div style="padding: 0 15px">
+                                                    <div id="NotificationHolder">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td id="group_tab" runat="server">
+                                <ul>
+                                    <li class="a" onclick="openWSE.GroupLoginModal();">
+                                        <div class="sidebar-pnlBtn-tab" title="View and log into a group">
+                                            <div class="img-group-alt">
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="b">
+                                        <div class="li-header">
+                                            Group List
+                                            <a href="~/SiteTools/UserMaintenance/GroupOrg.aspx" id="lb_manageGroups" runat="server" class="float-right" visible="false" title="Manage your groups" onclick="openWSE.CloseTopDropDowns();">Manage</a>
+                                        </div>
+                                        <div id="grouplistdiv" class="pad-all-sml">
+                                        </div>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td id="app_search_tab" runat="server" style="display: none;">
+                                <ul>
+                                    <li class="a">
+                                        <div class="sidebar-pnlBtn-tab" title="Search">
+                                            <div class="pnlBtn-ShowSearch">
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="b">
+                                        <div class="li-header">
+                                            Search
+                                        </div>
+                                        <div class="pad-all-sml">
+                                            <div id="searchwrapper-app-search">
+                                                <input type="text" id="searchbox-app-search" value="" />
+                                                <a href="#clear" onclick="openWSE.ClearAppSearch();return false;"
+                                                    class="searchbox_clear"></a><a href="#run" id="searchbox-app-submit" onclick="openWSE.SearchSite();return false;"></a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td id="user_profile_tab" runat="server">
+                                <ul>
+                                    <li class="a">
+                                        <asp:Label ID="lbl_UserName" runat="server" CssClass="username-top-info" ToolTip="Account Options"></asp:Label></li>
+                                    <li class="b">
+                                        <div class="li-header">
+                                            My Account
+                                        </div>
+                                        <div class="pad-all">
+                                            <div class="pad-all">
+                                                <div class="float-left margin-right profile-tab-acctimg">
+                                                    <asp:Image ID="img_Profile" runat="server" CssClass="acct-image"></asp:Image>
+                                                    <div class="btn_changephoto" onclick="openWSE.ChangeUserProfileImage();">
+                                                        Update
+                                                    </div>
+                                                </div>
+                                                <div class="float-left pad-left">
+                                                    <asp:Label ID="lbl_UserFullName" runat="server" Text="" CssClass="title-dd-name"></asp:Label>
+                                                    <div class="clear-space-two">
+                                                    </div>
+                                                    <asp:Label ID="lbl_UserEmail" runat="server" Text=""></asp:Label>
+                                                    <div class="clear-space-five"></div>
+                                                    <div class="clear-space-two"></div>
+                                                    <asp:HyperLink ID="hyp_accountSettings" runat="server" Text="Account" NavigateUrl="~/SiteTools/UserMaintenance/AcctSettings.aspx" CssClass="account-link-style" Target="_blank"></asp:HyperLink>
+                                                    <span class="account-link-style-seperator">-</span>
+                                                    <asp:HyperLink ID="hyp_accountCustomizations" runat="server" Text="Customize" NavigateUrl="~/SiteTools/UserMaintenance/AcctSettings.aspx?tab=SiteCustomizations" CssClass="account-link-style" Target="_blank"></asp:HyperLink>
+                                                </div>
+                                            </div>
+                                            <div class="clear">
+                                            </div>
+                                        </div>
+                                        <div id="profile_tab_Buttons">
+                                            <asp:LinkButton ID="aGroupLogoff" runat="server" OnClick="aGroupLogoff_Click" CssClass="RandomActionBtns margin-left margin-right" Enabled="false" Visible="false">Log out of Group</asp:LinkButton>
+                                            <asp:LinkButton ID="lbtn_signoff" runat="server" OnClick="lbtn_signoff_Click" CssClass="margin-left margin-right"><span class="img-logoff"></span>Log Out</asp:LinkButton>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </td>
                             <td id="pnl_Login_NonAuth" runat="server" visible="false">
                                 <ul>
                                     <li class="a"><span id="span_signinText" runat="server" class="signin-text">Login</span></li>
@@ -38,7 +154,7 @@
                                                     <tr>
                                                         <td valign="top">
                                                             <div id="SocialLogin_borderSep">
-                                                                <div class="loginwith-api-text">
+                                                                <div class="loginwith-account">
                                                                     <div><span class="inline-block">Log Into Your Account</span></div>
                                                                     <hr class="soften" />
                                                                 </div>
@@ -121,7 +237,6 @@
                                                     </tr>
                                                 </table>
                                                 <div align="center">
-                                                    <a href="#" class="margin-left margin-right margin-top-big" onclick="openWSE.GroupLoginModal();return false;">Select a Group to Login To</a>
                                                     <a href="#" id="lnk_forgotpassword" class="margin-left margin-right margin-top-big" onclick="openWSE.LoadRecoveryPassword();return false;">Forgot your Password?</a>
                                                     <a href="#" id="login_register_link" class="margin-left margin-right margin-top-big" onclick="openWSE.LoadCreateAccountHolder();return false;">Create a new account</a>
                                                 </div>
@@ -153,98 +268,6 @@
                                             <div style="text-align: center;">
                                                 <a href="#" id="register_password_cancel" onclick="openWSE.LoadCreateAccountHolder();return false;" style="display: none;">Cancel</a>
                                                 <div class="clear-space"></div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </td>
-                            <td id="user_profile_tab" runat="server">
-                                <ul>
-                                    <li class="a">
-                                        <asp:Label ID="lbl_UserName" runat="server" CssClass="username-top-info" ToolTip="Account Options"></asp:Label></li>
-                                    <li class="b">
-                                        <div class="li-header">
-                                            My Account
-                                        </div>
-                                        <div class="pad-all">
-                                            <div class="pad-all">
-                                                <asp:Image ID="img_Profile" runat="server" CssClass="float-left acct-image margin-right"></asp:Image>
-                                                <div class="float-left pad-left">
-                                                    <asp:Label ID="lbl_UserFullName" runat="server" Text="" CssClass="title-dd-name"></asp:Label>
-                                                    <div class="clear-space-two">
-                                                    </div>
-                                                    <asp:Label ID="lbl_UserEmail" runat="server" Text=""></asp:Label>
-                                                    <div class="clear-space-five"></div>
-                                                    <div class="clear-space-two"></div>
-                                                    <asp:HyperLink ID="hyp_accountSettings" runat="server" Text="Account" NavigateUrl="~/SiteTools/UserMaintenance/AcctSettings.aspx" CssClass="account-link-style" Target="_blank"></asp:HyperLink>
-                                                    <span class="account-link-style-seperator">-</span>
-                                                    <asp:HyperLink ID="hyp_accountCustomizations" runat="server" Text="Customize" NavigateUrl="~/SiteTools/UserMaintenance/AcctSettings.aspx?tab=SiteCustomizations" CssClass="account-link-style" Target="_blank"></asp:HyperLink>
-                                                </div>
-                                            </div>
-                                            <div class="clear">
-                                            </div>
-                                        </div>
-                                        <div id="profile_tab_Buttons">
-                                            <a id="aGroupLogin" runat="server" href="#" onclick="openWSE.GroupLoginModal();return false;" class="margin-left margin-right">Group Login</a>
-                                            <a id="aChangeGroupLogin" runat="server" href="#" onclick="openWSE.GroupLoginModal();return false;" class="margin-left margin-right" visible="false">Change Group</a>
-                                            <asp:LinkButton ID="aGroupLogoff" runat="server" OnClick="aGroupLogoff_Click" CssClass="RandomActionBtns margin-left margin-right" Enabled="false" Visible="false">Log out of Group</asp:LinkButton>
-                                            <asp:LinkButton ID="lbtn_signoff" runat="server" OnClick="lbtn_signoff_Click" CssClass="margin-left margin-right">Log Out</asp:LinkButton>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </td>
-                            <td id="notifications_tab" runat="server">
-                                <ul>
-                                    <li class="a li-notification-padding" onclick="setTimeout('openWSE.GetUserNotifications(true)', openWSE_Config.animationSpeed)">
-                                        <asp:UpdatePanel ID="updatepnl_notifications" runat="server">
-                                            <ContentTemplate>
-                                                <asp:Label ID="lbl_notifications" runat="server" Text=""></asp:Label>
-                                            </ContentTemplate>
-                                        </asp:UpdatePanel>
-                                    </li>
-                                    <li id="notification-tab-b" class="b">
-                                        <div class="li-header">
-                                            Notifications <a id="lb_clearNoti" href="#clear" class="float-right margin-right-big"
-                                                onclick="openWSE.NotiActionsClearAll();return false;" style="display: none;">Clear All</a>
-                                        </div>
-                                        <div class="pad-all-sml">
-                                            <div id="table-notiMessages-div-id" class="table-notiMessages-div">
-                                                <div style="padding: 0 15px">
-                                                    <div id="NotificationHolder">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </td>
-                            <td id="overlay_tab" runat="server">
-                                <ul>
-                                    <li class="a">
-                                        <div class="sidebar-pnlBtn-tab" title="Toggle Overlays">
-                                            <div class="img-overlay">
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </td>
-                            <td id="app_search_tab" runat="server">
-                                <ul>
-                                    <li class="a">
-                                        <div class="sidebar-pnlBtn-tab" title="Search">
-                                            <div class="pnlBtn-ShowSearch">
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="b">
-                                        <div class="li-header">
-                                            Search
-                                        </div>
-                                        <div class="pad-all-sml">
-                                            <div id="searchwrapper-app-search">
-                                                <input type="text" id="searchbox-app-search" value="" />
-                                                <a href="#clear" onclick="openWSE.ClearAppSearch();return false;"
-                                                    class="searchbox_clear"></a><a href="#run" id="searchbox-app-submit" onclick="openWSE.SearchSite();return false;"></a>
                                             </div>
                                         </div>
                                     </li>
@@ -401,7 +424,7 @@
         <div id="BackgroundSelector-element" class="Modal-element">
             <div class="Modal-overlay">
                 <div class="Modal-element-align">
-                    <div class="Modal-element-modal" data-setwidth="800" style="height: 500px;">
+                    <div class="Modal-element-modal" data-setwidth="800">
                         <div class="ModalHeader">
                             <div>
                                 <div class="app-head-button-holder-admin">
@@ -410,9 +433,9 @@
                                 <span class="Modal-title"></span>
                             </div>
                         </div>
-                        <div class="ModalScrollContent">
+                        <div class="ModalScrollContent" style="min-height: 500px;">
                             <div class="ModalPadContent">
-                                <div id="background-selector-holder" align="center">
+                                <div id="background-selector-holder">
                                 </div>
                             </div>
                         </div>

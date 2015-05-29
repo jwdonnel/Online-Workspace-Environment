@@ -1,4 +1,4 @@
-﻿<%@ page title="App Categories" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppCategory, App_Web_wwykq1g1" %>
+﻿<%@ page title="App Categories" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppCategory, App_Web_nh1ggown" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -35,17 +35,37 @@
             <ContentTemplate>
                 <div class="table-settings-box no-border" style="padding-bottom: 0px!important;">
                     <div class="td-settings-ctrl">
-                        <a href="#" class="margin-right-big input-buttons" onclick="openWSE.LoadModalWindow(true, 'NewCategory-element', 'Create New App Category');$('#MainContent_tb_categoryname').focus();return false;">
-                            <span class="td-add-btn float-left margin-right-sml" style="padding: 0!important;"></span>Create a Category</a> <b class="pad-right">Category Count</b><asp:Label ID="lbl_packagecount"
+                        <a href="#" class="margin-right-big input-buttons-create" onclick="openWSE.LoadModalWindow(true, 'NewCategory-element', 'Create New App Category');$('#MainContent_tb_categoryname').focus();return false;">Create Category</a>
+                        <div class="float-right pad-top">
+                            <b class="pad-right">Category Count</b><asp:Label ID="lbl_packagecount"
                                 runat="server" Text="0"></asp:Label>
+                        </div>
+                        <div class="clear-space"></div>
+                        <asp:CheckBox ID="cb_ShowUserOverrides" runat="server" Text="&nbsp;View User Apps and Overrides" OnCheckedChanged="cb_ShowUserOverrides_CheckedChanged" AutoPostBack="true" />
                     </div>
                     <div class="td-settings-desc">
-                        Apps can be in as many categories as you want. Adding a app to a category will remove it from the previous category.
+                        Apps can be in as many categories as you want. If you select "View User Apps and Overrides", only apps you have installed will be shown and changes made will only apply to your account.
                     </div>
+                </div>
+                <div class="searchwrapper" style="width: 350px;">
+                    <asp:Panel ID="Panel1_Installer" runat="server" DefaultButton="imgbtn_search">
+                        <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
+                            onfocus="if(this.value=='Search Categories')this.value=''" onblur="if(this.value=='')this.value='Search Categories'"
+                            Text="Search Categories"></asp:TextBox>
+                        <asp:LinkButton ID="imgbtn_clearsearch" runat="server" ToolTip="Clear search" CssClass="searchbox_clear RandomActionBtns"
+                            OnClick="imgbtn_clearsearch_Click" />
+                        <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
+                            OnClick="imgbtn_search_Click" />
+                    </asp:Panel>
                 </div>
                 <asp:Panel ID="pnl_packageholder" runat="server">
                 </asp:Panel>
             </ContentTemplate>
+            <Triggers>
+                <asp:AsyncPostBackTrigger ControlID="cb_ShowUserOverrides" />
+                <asp:AsyncPostBackTrigger ControlID="imgbtn_clearsearch" />
+                <asp:AsyncPostBackTrigger ControlID="imgbtn_search" />
+            </Triggers>
         </asp:UpdatePanel>
         <div id="CategoryEdit-element" class="Modal-element">
             <div class="Modal-overlay">
@@ -81,7 +101,7 @@
                                 <div class="clear-space-two">
                                 </div>
                                 <div class="clear-margin">
-                                        Add or remove apps for this category by selecting the plus or minus image next to the app name and icon.
+                                    Add or remove apps for this category by selecting the plus or minus image next to the app name and icon.
                                     <div class="clear-space">
                                     </div>
                                 </div>
@@ -94,6 +114,9 @@
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
                             </div>
+                        </div>
+                        <div class="ModalButtonHolder">
+                            <input type="button" class="input-buttons" value="Close" onclick="openWSE.LoadModalWindow(false, 'CategoryEdit-element', ''); RefreshList();" />
                         </div>
                     </div>
                 </div>

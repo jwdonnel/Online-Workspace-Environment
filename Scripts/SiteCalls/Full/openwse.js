@@ -2,7 +2,7 @@
 //
 //	openWSE v4.1
 //	by John Donnelly
-//	Last Modification: 4/19/2015
+//	Last Modification: 5/25/2015
 //
 //	Licensed under the Creative Commons Attribution 2.5 License - http://creativecommons.org/licenses/by/2.5/
 //  	- Free for use in both personal and commercial projects
@@ -35,10 +35,13 @@ var openWSE_Config = {
     displayLoadingOnRedirect: true,
     saveCookiesAsSessions: false,
     defaultBackgroundColor: "#FFFFFF",
-    defaultBackgroundPosition: "center right",
+    defaultBackgroundPosition: "right center",
+    defaultBackgroundSize: "auto",
+    defaultBackgroundRepeat: "repeat",
     appSnapHelper: false,
     appStyle: "Style_1",
-    onlyAllowOneAccordionOpen: false
+    onlyAllowOneAccordionOpen: false,
+    sidebarAccordionOn: true
 };
 
 var openWSE = function () {
@@ -56,6 +59,7 @@ var openWSE = function () {
     var runningMoreNoti = false;
     var innerModalContent = new Array();
     var ddNotiLoading = "<div class='ddLoadingMessage'>" + loadingImg + "<h3>Loading Notifications. Please Wait...</h3></div>";
+    var ddGroupsLoading = "<div class='ddLoadingMessage'>" + loadingImg + "<h3>Loading Groups. Please Wait...</h3></div>";
     var totalHelpPages = 0;
     var canSortMyAppOverlay = false;
     var canSaveSortedMyAppOverlay = false;
@@ -69,7 +73,6 @@ var openWSE = function () {
     var maxBtn_InProgress = false;
     var minBtn_InProgress = false;
     var exitBtn_InProgress = false;
-    var previousWidth = 0;
     var _topAboutPos = 0;
     var _leftAboutPos = 0;
     var canSaveSort = false;
@@ -81,6 +84,7 @@ var openWSE = function () {
     var widgtIconOptionsOn = false;
     var pagedIconClicked = false;
     var outsideAppModal = "-outside-modal-window";
+    var resizingAppInProgress = false;
 
     function init() {
         console.log(openWSE_Config);
@@ -92,16 +96,20 @@ var openWSE = function () {
         GetCurrentPage();
         LoadSidebarShowHideCookie();
 
-        $("#accordian-sidebar").AccordianTab({
-            allowCloseAll: true,
-            oneOpen: openWSE_Config.onlyAllowOneAccordionOpen,
-            startCollapsed: true,
-            animationSpeed: openWSE_Config.animationSpeed,
-            createCookie: true
-        });
-
-        if ($("#user_profile_tab").length > 0) {
-            $("#user_profile_tab").find(".b").css("min-width", $(".top-options").outerWidth());
+        if (openWSE_Config.sidebarAccordionOn) {
+            $("#accordian-sidebar").AccordianTab({
+                allowCloseAll: true,
+                oneOpen: openWSE_Config.onlyAllowOneAccordionOpen,
+                startCollapsed: true,
+                animationSpeed: openWSE_Config.animationSpeed,
+                createCookie: true
+            });
+        }
+        else {
+            $("#accordian-sidebar").addClass("accordion-off");
+            $("#accordian-sidebar").find(".menu-title").each(function () {
+                $(this).attr("title", "");
+            });
         }
 
         if (!openWSE.CheckIfWorkspaceLinkAvailable()) {
@@ -156,6 +164,7 @@ var openWSE = function () {
             }
 
             openWSE.SetNoticiationsMaxHeight();
+            openWSE.SetMaxHeightGroupLogin();
             openWSE.SetDropDownMaxHeight();
         }
     }
@@ -235,10 +244,45 @@ var openWSE = function () {
     }
 
     function OpenMobileWorkspace() {
-        window.open(openWSE.siteRoot() + 'AppRemote.aspx', '_blank', 'toolbar=no, scrollbars=yes, resizable=yes, width=340, height=550');
+        var loc = openWSE.siteRoot() + 'AppRemote.aspx';
+        if (location.href.indexOf('SiteTools/') > 0) {
+            var locPath = location.pathname;
+            if (location.search == '') {
+                locPath += '?mobileMode=true';
+            }
+            else {
+                locPath += '?' + location.search + '&mobileMode=true';
+            }
+            loc += '#?id=adminPages&category=' + escape(locPath);
+        }
+        window.open(loc, '_blank', 'toolbar=no, scrollbars=yes, resizable=yes, width=340, height=550');
         return false;
     }
 
+    function AddBackgroundColorToLogo(color) {
+        if (color == "" || color == null) {
+            color = "0,0,0";
+        }
+
+        if ($("#pnl_groupHolder").length > 0) {
+            $("#pnl_groupHolder").find("img").addClass("logo-backgroundcolor");
+            $(".logo-backgroundcolor").css("background-color", "rgba(" + color + ",0.4)");
+        }
+        else if ($("#container_logo").length > 0) {
+            $("#container_logo").addClass("logo-backgroundcolor");
+            $(".logo-backgroundcolor").css("background-color", "rgba(" + color + ",0.4)");
+        }
+    }
+    function RemoveBackgroundColorToLogo() {
+        if ($("#pnl_groupHolder").length > 0) {
+            $("#pnl_groupHolder").find("img").removeClass("logo-backgroundcolor");
+            $("#pnl_groupHolder").find("img").css("background-color", "");
+        }
+        else if ($("#container_logo").length > 0) {
+            $("#container_logo").removeClass("logo-backgroundcolor");
+            $("#container_logo").css("background-color", "");
+        }
+    }
 
     /* Set Trial Text */
     function SetTrialText(exp) {
@@ -356,7 +400,7 @@ var openWSE = function () {
     }
 
     $(document.body).on("click", ".RandomActionBtns", function () {
-        if ($(this).closest("#searchwrapper").length != 0) {
+        if ($(this).closest(".searchwrapper").length != 0) {
             LoadingMessage1("Searching...");
         }
         else {
@@ -364,7 +408,7 @@ var openWSE = function () {
         }
     });
     $(document.body).on("click", "#lbtn_signoff", function () {
-        LoadingMessage1("Signing Off. Please Wait...");
+        LoadingMessage1("Logging Off. Please Wait...");
     });
     $(document.body).on("keypress", "#searchbox-app-search", function (e) {
         if (e.which == 13) {
@@ -374,11 +418,7 @@ var openWSE = function () {
         }
     });
     $(document.body).on("click", "#container, #container_logo, .workspace-holder, .content-main, .Modal-overlay, #iframe-container-helper", function (e) {
-        $(".top-options li.a").removeClass("active");
-        $(".top-options li.b").hide();
-        openWSE.RemoveWorkspaceSelectorActive();
-        CloseNoti();
-        cookie.del("top_menu");
+        CloseTopDropDowns();
     });
     $(document.body).on("click", ".top-options li.a", function () {
         var $b = $(this).next();
@@ -569,6 +609,9 @@ var openWSE = function () {
         if (!exitBtn_InProgress) {
             exitBtn_InProgress = true;
             var id = $(this).attr("href").replace("#", "");
+
+            $(".app-snap-helper[data-appid='" + id + "']").remove();
+
             var $_id = $(".app-main-holder[data-appid='" + id + "']");
 
             if ($(".app-min-bar[data-appid='" + id + "']").length > 0) {
@@ -864,6 +907,15 @@ var openWSE = function () {
             }
         }
     });
+
+    function CloseTopDropDowns() {
+        $(".top-options li.a").removeClass("active");
+        $(".top-options li.b").hide();
+        openWSE.RemoveWorkspaceSelectorActive();
+        CloseNoti();
+        CloseGroupLoginModal();
+        cookie.del("top_menu");
+    }
 
 
     /* Admin Online Information */
@@ -1348,7 +1400,7 @@ var openWSE = function () {
 
         if (openWSE.IsComplexWorkspaceMode()) {
             if ($("#workspace_holder").length > 0) {
-                if ($('#' + id).css('display') == 'none') {
+                if ($(".app-main-holder[data-appid='" + id + "']").css('display') == 'none') {
                     needpostback = 1;
                     var workspace = Getworkspace();
                     LoadApp($(".app-main-holder[data-appid='" + id + "']"), workspace);
@@ -1660,6 +1712,8 @@ var openWSE = function () {
     var newUserHelp = false;
     var needEmailChange = false;
     var adminPasswordChange = false;
+    var showIntroPage = true;
+    var introPageNumber = 0;
     function HelpOverlay(NewUser) {
         if ($("#help_main_holder").css("display") == "none") {
 
@@ -1682,7 +1736,12 @@ var openWSE = function () {
                     fullUrl = "?";
                 }
 
-                fullUrl += "help";
+                if (tempUrl.indexOf("help") == -1) {
+                    fullUrl += "help";
+                }
+                else {
+                    fullUrl = "";
+                }
 
                 window.location += fullUrl;
             }, openWSE_Config.animationSpeed);
@@ -1693,21 +1752,37 @@ var openWSE = function () {
     }
     function HelpOverlayHistory() {
         var fullurl = saveHandler + "/GetTotalHelpPages";
-        $.ajax({
-            url: fullurl,
-            type: "POST",
-            data: '{ "currentPage": "' + document.location.href + '" }',
-            contentType: "application/json; charset=utf-8",
-            success: function (data) {
-                var count = parseInt(data.d);
-                if (count > 0) {
-                    totalHelpPages = count;
-                    HelpMenuPageLoad(0, newUserHelp);
-                    $("#help_main_holder").fadeIn(openWSE_Config.animationSpeed);
-                }
-                else {
+        if (!newUserHelp && document.location.href.toLowerCase().indexOf("workspace.aspx") != -1) {
+            HelpMenuPageLoadWorkspace();
+            $("#help_main_holder").fadeIn(openWSE_Config.animationSpeed);
+        }
+        else {
+            $.ajax({
+                url: fullurl,
+                type: "POST",
+                data: '{ "currentPage": "' + document.location.href + '" }',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    var count = parseInt(data.d);
+                    if (count > 0) {
+                        totalHelpPages = count;
+                        HelpMenuPageLoad(0, newUserHelp);
+                        $("#help_main_holder").fadeIn(openWSE_Config.animationSpeed);
+                    }
+                    else {
+                        if (!newUserHelp) {
+                            openWSE.AlertWindow("There are no help pages available for this webpage.");
+                            CloseHelpOverlay();
+                        }
+                        else {
+                            NewUserPageLoad();
+                            $("#help_main_holder").fadeIn(openWSE_Config.animationSpeed);
+                        }
+                    }
+                },
+                error: function () {
                     if (!newUserHelp) {
-                        openWSE.AlertWindow("There are no help pages available for this webpage.");
+                        openWSE.AlertWindow("There was an error retrieving the help pages. Please try again.");
                         CloseHelpOverlay();
                     }
                     else {
@@ -1715,18 +1790,8 @@ var openWSE = function () {
                         $("#help_main_holder").fadeIn(openWSE_Config.animationSpeed);
                     }
                 }
-            },
-            error: function () {
-                if (!newUserHelp) {
-                    openWSE.AlertWindow("There was an error retrieving the help pages. Please try again.");
-                    CloseHelpOverlay();
-                }
-                else {
-                    NewUserPageLoad();
-                    $("#help_main_holder").fadeIn(openWSE_Config.animationSpeed);
-                }
-            }
-        });
+            });
+        }
     }
     function HelpMenuPageLoad(pagenum, NewUser) {
         var titleHeader = "<span class='pad-left'>Welecome to " + openWSE_Config.siteName + "</span>";
@@ -1736,17 +1801,17 @@ var openWSE = function () {
 
         var btns = "";
         if (!NewUser) {
-            btns += "<input type='button' class='input-buttons float-left' onclick='openWSE.HelpOverlay(false, " + adminPasswordChange + ")' value='Close' />";
+            btns += "<input type='button' class='input-buttons-create float-right' onclick='openWSE.HelpOverlay(false, " + adminPasswordChange + ")' value='Close' />";
         }
         if ((pagenum + 1) < totalHelpPages) {
-            btns += "<input type='button' class='input-buttons float-right' onclick='openWSE.HelpMenuPageLoad(" + (pagenum + 1).toString() + "," + NewUser + ")' value='Next' />";
+            btns += "<input type='button' class='input-buttons-create float-right margin-left' onclick='openWSE.HelpMenuPageLoad(" + (pagenum + 1).toString() + "," + NewUser + ")' value='Next' />";
         }
         else if (((pagenum + 1) == totalHelpPages) && (NewUser)) {
-            btns += "<input type='button' class='input-buttons float-right' onclick='openWSE.NewUserPageLoad()' value='Next' />";
+            btns += "<input type='button' class='input-buttons-create float-right margin-left' onclick='openWSE.NewUserPageLoad()' value='Next' />";
         }
 
         if (pagenum > 0) {
-            btns += "<input type='button' class='input-buttons float-right' onclick='openWSE.HelpMenuPageLoad(" + (pagenum - 1).toString() + "," + NewUser + ")' value='Back' />";
+            btns += "<input type='button' class='input-buttons-create float-right margin-left' onclick='openWSE.HelpMenuPageLoad(" + (pagenum - 1).toString() + "," + NewUser + ")' value='Back' />";
         }
 
         $("#helpmenu_title").html("<div class='help-Title-Top'>" + titleHeader + btns + "</div>");
@@ -1766,12 +1831,18 @@ var openWSE = function () {
             });
         });
     }
+    function HelpMenuPageLoadWorkspace() {
+        var titleHeader = "<span class='pad-left'>" + openWSE_Config.siteName + " Help Pages</span>";
+        var btns = "<input type='button' class='input-buttons-create float-right' onclick='openWSE.HelpOverlay(false, " + adminPasswordChange + ")' value='Close' />";
+        $("#helpmenu_title").html("<div class='help-Title-Top'>" + titleHeader + btns + "</div>");
+        $("#helpdiv_pageholder").html(BuildHelpIntro());
+    }
     function NewUserPageLoad() {
         var titleHeader = "<span class='pad-left'>Welecome to " + openWSE_Config.siteName + "</span>";
         var btns = "";
-        btns += "<input id='btnFinish' type='button' class='input-buttons float-right display-none' onclick='openWSE.NewUserfinsh()' value='Finish' />";
+        btns += "<input id='btnFinish' type='button' class='input-buttons-create float-right display-none' onclick='openWSE.NewUserfinsh()' value='Finish' />";
         if (totalHelpPages > 0) {
-            btns += "<input type='button' class='input-buttons float-right' onclick='openWSE.HelpMenuPageLoad(" + (totalHelpPages - 1).toString() + ",true)' value='Back' />";
+            btns += "<input type='button' class='input-buttons-create float-right margin-left' onclick='openWSE.HelpMenuPageLoad(" + (totalHelpPages - 1).toString() + ",true)' value='Back' />";
         }
 
         $("#helpmenu_title").html("<div class='help-Title-Top'>" + titleHeader + btns + "</div>");
@@ -1937,11 +2008,20 @@ var openWSE = function () {
     }
     function UserSetupContainer() {
         var newmember_text = "";
-        newmember_text = "<div class='pad-all' align='center'>";
-        newmember_text += "<h3>You are now setup. Please click finish to load your workspace. You can change your email address within your 'Account Settings' page. If you need help in the future, click on the help icon at the bottom left hand corner of the workspace.</h3>";
-        newmember_text += "<h3>By using this site you agree that OpenWSE can save cookies to your device. These cookies contain no information regarding your personal information.</h3>";
-        newmember_text += "</div>";
-        $("#btnFinish").removeClass("display-none");
+
+        if (showIntroPage) {
+            newmember_text = BuildHelpIntro();
+        }
+        else {
+            newmember_text = "<div class='pad-all' align='center'>";
+            newmember_text += "<h3>You are now setup. Please click finish to load your workspace. You can change your email address within your 'Account Settings' page. If you need help in the future, click on the help icon at the bottom left hand corner of the workspace.</h3>";
+            newmember_text += "<h3>By using this site you agree that OpenWSE can save cookies to your device. These cookies contain no information regarding your personal information.</h3>";
+            newmember_text += "<div class='clear-space'></div>";
+            newmember_text += "<a href='#' onclick='openWSE.HelpIntroRestart();return false;'>Go back to the Intro Pages</a>";
+            newmember_text += "<div class='clear-space'></div>";
+            newmember_text += "</div>";
+            $("#btnFinish").removeClass("display-none");
+        }
 
         return newmember_text;
     }
@@ -1998,6 +2078,152 @@ var openWSE = function () {
             }
         }
         catch (evt) { }
+    }
+    function BuildHelpIntro() {
+        var newmember_text = "";
+
+        if (newUserHelp) {
+            newmember_text += "<input type='button' class='input-buttons float-right' value='Next' onclick='openWSE.HelpIntroNext();' style='margin-top:-20px; margin-right: 7%;' />";
+            if (introPageNumber > 0) {
+                newmember_text += "<input type='button' class='input-buttons float-left' value='Back' onclick='openWSE.HelpIntroBack();' style='margin-top:-20px; margin-left: 7%;' />";
+            }
+            else {
+                newmember_text += "<input type='button' class='input-buttons float-left' value='Back' onclick='openWSE.HelpIntroBack();' style='margin-top:-20px; margin-left: 7%; visibility: hidden;' />";
+            }
+        }
+        else {
+            if (introPageNumber > 3) {
+                newmember_text += "<input type='button' class='input-buttons float-right' value='Next' onclick='openWSE.HelpIntroNext();' style='margin-top:-20px; margin-right: 7%; visibility: hidden;' />";
+            }
+            else {
+                newmember_text += "<input type='button' class='input-buttons float-right' value='Next' onclick='openWSE.HelpIntroNext();' style='margin-top:-20px; margin-right: 7%;' />";
+            }
+            if (introPageNumber > 0) {
+                newmember_text += "<input type='button' class='input-buttons float-left' value='Back' onclick='openWSE.HelpIntroBack();' style='margin-top:-20px; margin-left: 7%;' />";
+            }
+            else {
+                newmember_text += "<input type='button' class='input-buttons float-left' value='Back' onclick='openWSE.HelpIntroBack();' style='margin-top:-20px; margin-left: 7%; visibility: hidden;' />";
+            }
+        }
+
+        switch (introPageNumber) {
+            case 0: // Workspace
+                newmember_text += "<span class='intro-title'>Workspace App List</span>";
+                newmember_text += "<div class='clear-space'></div>";
+                newmember_text += "<div class='workspace-intro'>";
+                newmember_text += "<img alt='workspace' src='" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/workspace.png' />";
+                newmember_text += "<div class='help-intro-overlay'>";
+                newmember_text += "<div class='help-intro-circle' style='top: 7%; left: 0px; height: 62%; width: 9%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/app-selector.png\");'></div>";
+                newmember_text += "<div class='help-intro-text' style='top: 10%; left: 15%;'><ul>";
+                newmember_text += "<li>All your available apps will open in the workspace portion of the page (where your custom background appears).</li>";
+                newmember_text += "<li>You can load as many apps as you want and move them anywhere you like. The site will record the position and save it to the database where it can retrieve it on page loads.</li>";
+                newmember_text += "<li>If you are logged into a group, you only see the apps availble to that group. Once you log out of that group, all your apps will appear again.</li>";
+                newmember_text += "<li>If you have more than 1 total workspaces, When hovering over an app, you will see a box to the right that you can select. This will bring up a dropdown that will allow you to pick which workspace to load that app on.</li>";
+                newmember_text += "</ul></div>";
+                newmember_text += "</div>";
+                newmember_text += "</div>";
+                break;
+
+            case 1: // Workspace Buttons
+                newmember_text += "<span class='intro-title'>Workspace Controls</span>";
+                newmember_text += "<div class='clear-space'></div>";
+                newmember_text += "<div class='workspace-intro'>";
+                newmember_text += "<img alt='workspace' src='" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/workspace.png' />";
+                newmember_text += "<div class='help-intro-overlay'>";
+                newmember_text += "<div class='help-intro-circle' style='top: 0%; left: 0px; height: 18%; width: 5%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/workspace-selector.png\");'></div>";
+                newmember_text += "<div class='help-intro-circle' style='top: 0%; right: 0px; height: 47%; width: 27.5%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/top-right-btns.png\");'></div>";
+                newmember_text += "<div class='help-intro-text' style='top: 5%; left: 14%; width: 25%;'>You can select the workspace you want to work on. Apps can be placed in each workspace anyway you want.</div>";
+                newmember_text += "<div class='help-intro-text' style='top: 5%; right: 30%; width: 15%;'>The top buttons to the left will show you different features such as:<br /><ul class='pad-left-big'><li>Group Login</li><li>Login/Logout</li><li>Overlay View</li><li>Notifications</li><li>Search</li></ul></div>";
+                newmember_text += "</div>";
+                newmember_text += "</div>";
+                break;
+
+            case 2: // Workspace App
+                newmember_text += "<span class='intro-title'>Workspace Opened App</span>";
+                newmember_text += "<div class='clear-space'></div>";
+                newmember_text += "<div class='workspace-intro'>";
+                newmember_text += "<img alt='workspace' src='" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/workspace.png' />";
+                newmember_text += "<div class='help-intro-overlay'>";
+                newmember_text += "<div class='help-intro-circle' style='top: 7%; left: 0px; height: 62%; width: 9%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/app-selector-with-openapp.png\");'></div>";
+                newmember_text += "<div class='help-intro-circle' style='top: 7%; left: 15%; height: 63%; width: 51%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/app.png\");'></div>";
+                newmember_text += "<div class='help-intro-text' style='bottom: 5%; left: 15%;'><ul>";
+                newmember_text += "<li>All apps are configurable to your liking. Each app will also come with option buttons, which can be found at the top right of the app header (If App Style is Style 2)</li>";
+                newmember_text += "<li>Moving, resizing, minimizing, maximizing, and closing will be saved to your profile. This way each time you login, these settings will be applied to make it look and feel like you never left.</li>";
+                newmember_text += "</ul></div>";
+                newmember_text += "</div>";
+                newmember_text += "</div>";
+                break;
+
+            case 3: // App Options
+                newmember_text += "<span class='intro-title'>App Options</span>";
+                newmember_text += "<div class='clear-space'></div>";
+                newmember_text += "<div class='workspace-intro'>";
+                newmember_text += "<img alt='workspace' src='" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/workspace.png' />";
+                newmember_text += "<div class='help-intro-overlay'>";
+                newmember_text += "<div class='help-intro-no-circle' style='top: 7%; left: 0px; height: 62%; width: 9%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/app-selector-with-openapp.png\");'><div class='help-intro-overlay'></div></div>";
+                newmember_text += "<div class='help-intro-no-circle' style='top: 7%; left: 15%; height: 63%; width: 51%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/app.png\");'><div class='help-intro-overlay'></div></div>";
+                newmember_text += "<div class='help-intro-circle' style='top: 6%; left: 46%; height: 19%; width: 20%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/app-options.png\");'></div>";
+                newmember_text += "<div class='help-intro-text' style='bottom: 5%; left: 15%;'><ul>";
+                newmember_text += "<li>Each app will have the options menu at the top right of app header bar.</li>";
+                newmember_text += "<li>You will have up to 4 options to choose from: Refresh, Pop app out, About, and Move to Workspace Number.</li>";
+                newmember_text += "</ul></div>";
+                newmember_text += "</div>";
+                newmember_text += "</div>";
+                break;
+
+            case 4: // Minimized App
+                newmember_text += "<span class='intro-title'>Minimized App</span>";
+                newmember_text += "<div class='clear-space'></div>";
+                newmember_text += "<div class='workspace-intro'>";
+                newmember_text += "<img alt='workspace' src='" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/workspace.png' />";
+                newmember_text += "<div class='help-intro-overlay'>";
+                newmember_text += "<div class='help-intro-no-circle' style='top: 7%; left: 0px; height: 62%; width: 9%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/app-selector-with-openapp.png\");'><div class='help-intro-overlay'></div></div>";
+                newmember_text += "<div class='help-intro-circle' style='top: 0; left: 7%; height: 1%; width: 3%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/app-minimized.png\");'></div>";
+                newmember_text += "<div class='help-intro-text' style='top: 10%; left: 15%;'><ul>";
+                newmember_text += "<li>When apps are minimized, they will be moved completely off the screen.</li>";
+                newmember_text += "<li>If you hover over the minimized app, a preview will be shown with the exact place the app was before being minimized. (Only if option is on in settings)</li>";
+                newmember_text += "<li>You can close out of the app by clicking on the 'x' to the right of the minimized button.</li>";
+                newmember_text += "<li>To restore the app, simply click on the minimized button at the top. You can also click on the app icon under your Available Apps.</li>";
+                newmember_text += "</ul></div>";
+                newmember_text += "</div>";
+                newmember_text += "</div>";
+                break;
+
+            default:
+                if (newUserHelp) {
+                    showIntroPage = false;
+                    NewUserPageLoad();
+                }
+                break;
+        }
+
+        return newmember_text;
+    }
+    function HelpIntroRestart() {
+        introPageNumber = 0;
+        showIntroPage = true;
+        NewUserPageLoad();
+    }
+    function HelpIntroNext() {
+        introPageNumber++;
+        if (newUserHelp) {
+            NewUserPageLoad();
+        }
+        else {
+            $("#helpdiv_pageholder").html(BuildHelpIntro());
+        }
+    }
+    function HelpIntroBack() {
+        introPageNumber--;
+        if (introPageNumber < 0) {
+            introPageNumber = 0;
+        }
+        if (newUserHelp) {
+            NewUserPageLoad();
+        }
+        else {
+            $("#helpdiv_pageholder").html(BuildHelpIntro());
+        }
     }
 
 
@@ -2442,6 +2668,7 @@ var openWSE = function () {
                     if (openWSE.ConvertBitToBoolean(data.d)) {
                         RemoveUpdateModal();
                         ResetNoti();
+                        CloseTopDropDowns();
                     }
                 }
             });
@@ -2536,7 +2763,7 @@ var openWSE = function () {
     function LoadCreateAccountHolder() {
         if ($("#Login-holder").css("display") != "none") {
             $("#Login-holder").hide();
-            $("#iframe-createaccount-holder").html("<iframe id='iframe-demo' src='SiteTools/iframes/CreateAccount.aspx' frameborder='0' width='315px' style='visibility: hidden;'></iframe>");
+            $("#iframe-createaccount-holder").html("<iframe id='iframe-demo' src='" + GetSiteRoot() + "SiteTools/iframes/CreateAccount.aspx' frameborder='0' width='315px' style='visibility: hidden;'></iframe>");
             $("#iframe-createaccount-holder").append("<div style='text-align: center;'><h3 id='loadingControls'>Loading Controls. Please Wait...</h3></div>");
             $("#CreateAccount-holder").fadeIn(openWSE_Config.animationSpeed);
             $("#iframe-demo").load(function () {
@@ -2595,7 +2822,7 @@ var openWSE = function () {
         var link = "//builder.zoomradar.net/weather_builder/widget.page.php?s=250x250&z=" + postalCode + "&i=1&c=5&ft=Current%20Weather";
         var weatherframe = '<iframe src="' + link + '" width="250" height="250" style="border: 0; opacity: 0.85; filter:alpha(opacity=85);" frameborder="0"></iframe>';
         var postalCode = "<span>Postal Code:</span><input id='tb_weather_postalCode' type='text' class='textEntry margin-left margin-right' maxlength='10' value='" + postalCode + "' style='width: 60px;' />";
-        var refresh = "<a href='#' onclick='openWSE.SetPostalCode();return false;' class='img-refresh pad-all-sml margin-right-sml margin-bottom-sml float-right' title='Refresh weather'></a>";
+        var refresh = "<a href='#' onclick='openWSE.SetPostalCode();return false;' class='img-refresh-alt pad-all-sml margin-right-big margin-bottom-sml float-right' title='Refresh weather'></a>";
         $('#Weather_Overlay_Position').html(weatherframe + "<div class='clear-space-two'></div><div id='weather-button-holder' class='overlay-header' style='height: 25px;'>" + refresh + postalCode + "</div>");
     }
 
@@ -2714,42 +2941,178 @@ var openWSE = function () {
 
 
     /* Workspace Background Modal */
+    var jsColorLoaded = false;
+    var selectedImgFolder = "user";
+    var imgFolderChange = false;
     function BackgroundSelector() {
         try {
             if ($("#background_selector_overlay").length > 0) {
                 $("#background_selector_overlay").remove();
             }
 
+            if (!jsColorLoaded) {
+                $("body").append("<script type='text/javascript' src='" + openWSE.siteRoot() + "WebControls/jscolor/jscolor.js'></script>");
+                jsColorLoaded = true;
+            }
+
             LoadingMessage1("Loading Backgrounds");
             $.ajax({
                 url: openWSE.siteRoot() + "WebServices/AcctSettings.asmx/GetServerImageList",
                 type: "POST",
-                data: '{ "_workspace": "' + Getworkspace() + '" }',
+                data: '{ "_workspace": "' + Getworkspace().replace("workspace_", "") + '", "folder": "' + selectedImgFolder + '" }',
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
-                    if (data.d.length == 2) {
-                        var modal = "<div style='text-align: left'><small><b class='pad-right-sml'>Note:</b>All backgrounds will repeat on the workspace. Your connection speed will slow down with the larger sized images. Each image has the size details when you hover over them. Solid color backgrounds will be the quickest if you have a slower internet.</small></div>";
-                        modal += "<div class='clear' style='height: 20px;'></div><div class='float-left'><span class='pad-right font-bold float-left pad-top-sml'>Url Link</span><input id='tb_imageurl' type='text' value='Link to image' class='textEntry' onfocus='if(this.value==\"Link to image\")this.value=\"\"' onblur='if(this.value==\"\")this.value=\"Link to image\"' style='width:355px;'>";
-                        modal += "<input id='btn_urlupdate' type='button' value='Update Url' class='input-buttons margin-left' onclick='openWSE.updateBackgroundURL()' /><br /><div class='float-left'>Copy and paste any link that contains an image.</div></div>";
-                        modal += "<a href='#' class='float-right' onclick='openWSE.ClearBackground();return false;'>Clear Background</a>";
+                    if (data.d.length == 6) {
+                        $("#background-selector-holder").html("");
+                        var modal = "<div id='background-settings-div'>";
+                        var modal_list = "<div id='background-view-div' align='center' style='display: none;'>";
+                        modal_list += "<a href='#' class='float-left' onclick=\"openWSE.ViewBackgroundList();return false;\"><span class='pg-prev-btn float-left' style='padding: 0px; margin-right: 5px; margin-top: -1px;'></span>Go Back</a>";
+                        modal_list += "<div class='clear-space'></div>";
+
+                        if (data.d[0] != "") {
+                            modal += "<a href='" + GetSiteRoot() + "SiteTools/UserMaintenance/AcctSettings.aspx?tab=BackgroundEditor' class='float-right'>More Background Settings<span class='pg-next-btn float-right' style='padding: 0px; margin-left: 3px;'></span></a>";
+                            modal += "<div class='clear-space-two'></div>";
+                        }
+
+                        modal += "<div class='table-settings-box' style='margin-top: 0px !important;'>";
+                        modal += "<div class='td-settings-title'>Workspace Background</div>";
+                        modal += "<div class='title-line'></div>";
+                        modal += "<div class='td-settings-ctrl'>";
+
+                        // Add Color textbox
+                        modal += "<input id='tb_solidColorBg' type='text' class='textEntry float-left margin-right color' style='width: 75px;' />";
+                        modal += "<input id='btn_urlbgcolor' type='button' value='Add Color' class='input-buttons float-left' onclick='openWSE.updateBackgroundColor()' />";
                         modal += "<div class='clear' style='height: 20px;'></div>";
-                        modal += "<span class='pad-right font-bold float-left pad-top-sml'>Solid Color</span><input id='tb_solidColorBg' type='text' class='textEntry float-left margin-right color' style='width: 75px;' />";
-                        modal += "<input id='btn_urlbgcolor' type='button' value='Update Color' class='input-buttons float-left' onclick='openWSE.updateBackgroundColor()' />";
-                        modal += "<div class='clear' style='height: 30px;'></div>";
-                        modal += data.d[1];
-                        $("#background-selector-holder").html(modal);
+
+                        // Add Url Link textbox
+                        modal += "<input id='tb_imageurl' type='text' value='Link to image' class='textEntry' onfocus=\"if(this.value=='Link to image')this.value=''\" onblur=\"if(this.value=='')this.value='Link to image'\" value='Link to image' style='width:355px;'>";
+                        modal += "<input id='btn_urlupdate' type='button' value='Add Url' class='input-buttons margin-left' onclick='openWSE.updateBackgroundURL()' />";
+                        modal += "<div class='pad-top pad-bottom'><small>Copy and paste any link that contains an image.</small></div>";
+
+                        // Add Upload iframe
+                        if (data.d[0] != "") {
+                            modal += "<div class='clear' style='height: 20px;'></div>";
+                            modal += "<iframe src='" + data.d[0] + "' frameborder='0' style='width: 100%; height: 70px; overflow: hidden;'></iframe>";
+                            modal_list += "<small class='float-right'>Click on the background that you would like to apply to your workspace.</small>";
+                            modal_list += "<div class='float-left'><span class='font-bold pad-right'>Folder</span><select id='dd_userimagefolder' onchange='openWSE.ChangeImageFolder();'><option value='user'>User Uploads</options><option value='public'>Public</option></select></div>";
+                            modal_list += "<div class='clear-space'></div>";
+                        }
+                        else {
+                            selectedImgFolder = "public";
+                        }
+
+                        modal += "<div class='clear' style='height: 20px;'></div>";
+                        modal += "<a href='#' onclick=\"openWSE.ViewBackgroundList();return false;\" class='input-buttons' style='padding-right: 15px!important;'><span class='img-background float-left pad-right'></span>Select a Background</a>";
+                        modal += "<a href='#' class='float-right' onclick='openWSE.ClearBackground();return false;'>Clear All Backgrounds</a>";
+
+                        modal += "</div>";
+                        modal += "<div class='td-settings-desc'>Your connection speed will slow down with the larger images. Each image has the size details when you hover over them. Solid color backgrounds will be the quickest if you have a slower internet connection.</div>";
+                        modal += "</div>";
+
+                        modal_list += "<div class='img-list-selector'>" + data.d[1] + "</div></div>";
+
+                        // Background Position
+                        if (data.d[2] != "") {
+                            modal += "<div class='table-settings-box'>";
+                            modal += "<div class='td-settings-title'>Background Position</div>";
+                            modal += "<div class='title-line'></div>";
+                            modal += "<div class='td-settings-ctrl'>";
+                            modal += "<select class='background-setting-select' onchange=\"openWSE.UpdateBackgroundSetting(this);\" data-name='backgroundposition'>";
+                            modal += "<option value='left top'>Left Top</option>";
+                            modal += "<option value='left center'>Left Center</option>";
+                            modal += "<option value='left bottom'>Left Bottom</option>";
+                            modal += "<option value='right top'>Right Top</option>";
+                            modal += "<option value='right center'>Right Center</option>";
+                            modal += "<option value='right bottom'>Right Bottom</option>";
+                            modal += "<option value='center top'>Center Top</option>";
+                            modal += "<option value='center center'>Center Center</option>";
+                            modal += "<option value='center bottom'>Center Bottom</option>";
+                            modal += "</select>";
+                            modal += "</div>";
+                            modal += "<div class='td-settings-desc'>Select the position of the background. Applys for all workspaces and background images.</div>";
+                            modal += "</div>";
+                        }
+
+                        // Background Size
+                        if (data.d[3] != "") {
+                            modal += "<div class='table-settings-box'>";
+                            modal += "<div class='td-settings-title'>Background Size</div>";
+                            modal += "<div class='title-line'></div>";
+                            modal += "<div class='td-settings-ctrl'>";
+                            modal += "<select class='background-setting-select' onchange=\"openWSE.UpdateBackgroundSetting(this);\" data-name='backgroundsize'>";
+                            modal += "<option value='auto'>Normal</option>";
+                            modal += "<option value='100% 100%'>Stretch</option>";
+                            modal += "<option value='cover'>Cover</option>";
+                            modal += "<option value='contain'>Contain</option>";
+                            modal += "</select>";
+                            modal += "</div>";
+                            modal += "<div class='td-settings-desc'>Select the size of the background. Applys for all workspaces and background images.</div>";
+                            modal += "</div>";
+                        }
+
+                        // Background Repeat
+                        if (data.d[4] != "") {
+                            modal += "<div class='table-settings-box'>";
+                            modal += "<div class='td-settings-title'>Repeat Background</div>";
+                            modal += "<div class='title-line'></div>";
+                            modal += "<div class='td-settings-ctrl'>";
+                            modal += "<select class='background-setting-select' onchange=\"openWSE.UpdateBackgroundSetting(this);\" data-name='backgroundrepeat'>";
+                            modal += "<option value='1'>Yes</option>";
+                            modal += "<option value='0'>No</option>";
+                            modal += "</select>";
+                            modal += "</div>";
+                            modal += "<div class='td-settings-desc'>Turn on/off repeating the background image. Applys for all workspaces and background images.</div>";
+                            modal += "</div>";
+                        }
+
+                        // Background Color
+                        if (data.d[5] != "") {
+                            modal += "<div class='table-settings-box'>";
+                            modal += "<div class='td-settings-title'>Default Background Color</div>";
+                            modal += "<div class='title-line'></div>";
+                            modal += "<div class='td-settings-ctrl'>";
+                            modal += "<div class='float-left'><input id='tb_defaultbackgroundcolor' type='text' class='textEntry float-left margin-right color' style='width: 75px;' /></div>";
+                            modal += "<input id='btn_defaultbackgroundcolor' type='button' value='Update' class='input-buttons float-left background-setting-color' onclick='openWSE.UpdateBackgroundSetting(this)' data-name='backgroundcolor' />";
+                            modal += "<div class='clear'></div>";
+                            modal += "</div>";
+                            modal += "<div class='td-settings-desc'>Set the default background color. Applys for all workspaces and background images.</div>";
+                            modal += "</div>";
+                        }
+
+                        modal += "</div>";
+                        $("#background-selector-holder").html(modal + modal_list);
+                        if (data.d[0] != "") {
+                            $("#background-selector-holder").find("#dd_userimagefolder").val(selectedImgFolder);
+                        }
+
+                        if (data.d[2] != "") {
+                            $(".background-setting-select[data-name='backgroundposition']").val(data.d[2]);
+                        }
+                        if (data.d[3] != "") {
+                            $(".background-setting-select[data-name='backgroundsize']").val(data.d[3]);
+                        }
+                        if (data.d[4] != "") {
+                            if (data.d[4] == "true" || data.d[4] == "1") {
+                                $(".background-setting-select[data-name='backgroundrepeat']").val("1");
+                            }
+                            else {
+                                $(".background-setting-select[data-name='backgroundrepeat']").val("0");
+                            }
+                        }
+                        if (data.d[5] != "") {
+                            $("#tb_defaultbackgroundcolor").val(data.d[5]);
+                        }
+
+                        if (imgFolderChange) {
+                            $("#background-settings-div").hide();
+                            $("#background-view-div").show();
+                            imgFolderChange = false;
+                        }
 
                         try {
                             jscolor.init();
                         }
                         catch (evt) { }
-
-                        if (data.d[0].length > 6) {
-                            $("#tb_imageurl").val(data.d[0]);
-                        }
-                        else if (data.d[0].length == 6) {
-                            $("#tb_solidColorBg").val(data.d[0]);
-                        }
                         LoadModalWindow(true, "BackgroundSelector-element", "Select a new background");
                     }
                     else {
@@ -2762,33 +3125,47 @@ var openWSE = function () {
         catch (evt) { RemoveUpdateModal(); }
     }
     function ClearBackground() {
+        LoadingMessage1("Updating...");
         $.ajax({
             url: openWSE.siteRoot() + "WebServices/AcctSettings.asmx/SaveNewBackground",
             type: "POST",
-            data: '{ "_workspace": "' + Getworkspace() + '","_img": "' + "" + '" }',
+            data: '{ "_workspace": "' + Getworkspace() + '","_img": "' + "" + '","folder": "' + selectedImgFolder + '" }',
             contentType: "application/json; charset=utf-8",
             success: function (data) {
+                var div = "";
                 if ($("#app_title_bg").length == 0) {
                     $("#maincontent_overflow").css("background", "");
                     if (!$("#maincontent_overflow").hasClass("maincontent_overflow-main-bg")) {
                         $("#maincontent_overflow").addClass("maincontent_overflow-main-bg");
                     }
+                    div = "#maincontent_overflow";
                 }
                 else if ($(".workspace-backgrounds-fixed").length > 0) {
-                    $("#MainContent_bg_" + Getworkspace()).css("background", openWSE_Config.defaultBackgroundColor + " url('" + openWSE.siteRoot() + "App_Themes/" + openWSE_Config.siteTheme + "/Body/default-bg.jpg') repeat " + openWSE_Config.defaultBackgroundPosition);
+                    $("#MainContent_bg_" + Getworkspace()).css("background", openWSE_Config.defaultBackgroundColor + " url('" + openWSE.siteRoot() + "App_Themes/" + openWSE_Config.siteTheme + "/Body/default-bg.jpg') " + openWSE_Config.defaultBackgroundRepeat + " " + openWSE_Config.defaultBackgroundPosition);
+                    $("#MainContent_bg_" + Getworkspace()).css("background-size", openWSE_Config.defaultBackgroundSize);
+                    div = "#MainContent_bg_" + Getworkspace();
                 }
                 else {
-                    $("#app_title_bg").css("background", openWSE_Config.defaultBackgroundColor + " url('" + openWSE.siteRoot() + "App_Themes/" + openWSE_Config.siteTheme + "/Body/default-bg.jpg') repeat " + openWSE_Config.defaultBackgroundPosition);
+                    $("#app_title_bg").css("background", openWSE_Config.defaultBackgroundColor + " url('" + openWSE.siteRoot() + "App_Themes/" + openWSE_Config.siteTheme + "/Body/default-bg.jpg') " + openWSE_Config.defaultBackgroundRepeat + " " + openWSE_Config.defaultBackgroundPosition);
+                    $("#app_title_bg").css("background-size", openWSE_Config.defaultBackgroundSize);
+                    div = "#app_title_bg";
                 }
 
-                $("#tb_imageurl").val("");
+                $("#tb_imageurl").val("Link to image");
                 $("#tb_solidColorBg").val("FFFFFF");
                 $("#tb_solidColorBg").attr("style", "width: 75px;");
 
-                $(".image-selector-active").each(function (index) {
-                    $(this).removeClass("image-selector-active");
-                    $(this).addClass("image-selector");
-                });
+                if (data.d.length == 3 && data.d[2].length == 6) {
+                    $("#BackgroundSelector-element").find(".img-list-selector").html(data.d[2][1]);
+                }
+
+                var timerIndex = FindBackgroundLoopTimerIndex(div);
+                if (timerIndex != -1) {
+                    clearInterval(backgroundLoopTimer[timerIndex].obj);
+                }
+
+                openWSE.RemoveUpdateModal();
+                RefreshAcctSettingsBackgrounds();
             }
         });
     }
@@ -2798,8 +3175,8 @@ var openWSE = function () {
         });
     }
     function updateBackgroundURL() {
-        var img = $("#background-selector-holder").find("#tb_imageurl").val();
-        if (img != "Link to image") {
+        var img = $.trim($("#background-selector-holder").find("#tb_imageurl").val());
+        if (img != "") {
             SaveNewBg(img);
         }
     }
@@ -2815,47 +3192,105 @@ var openWSE = function () {
             $.ajax({
                 url: openWSE.siteRoot() + "WebServices/AcctSettings.asmx/SaveNewBackground",
                 type: "POST",
-                data: '{ "_workspace": "' + Getworkspace() + '","_img": "' + img + '" }',
+                data: '{ "_workspace": "' + Getworkspace().replace("workspace_", "") + '","_img": "' + img + '","folder": "' + selectedImgFolder + '" }',
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
-                    if (data.d != "") {
-                        SetNewBackground(img);
+                    $("#background-selector-holder").find("#tb_imageurl").val("Link to image")
+                    $("#background-selector-holder").find("#tb_solidColorBg").val("FFFFFF");
+                    if (data.d.length == 3) {
+                        SetNewBackground(data.d[0], data.d[1]);
+                        if (data.d[2].length == 6) {
+                            $("#BackgroundSelector-element").find(".img-list-selector").html(data.d[2][1]);
+                        }
                     }
-
                     openWSE.RemoveUpdateModal();
+                    RefreshAcctSettingsBackgrounds();
                 }
             });
         }
         else {
-            SetNewBackground(img);
+            SetNewBackground(img, "30000");
         }
     }
-    $(document.body).on("click", ".image-selector", function () {
-        var $this = $(this);
-        var img = $(this).find("img").attr("src");
-        if (!openWSE_Config.demoMode) {
-            LoadingMessage1("Saving Background");
+    $(document.body).on("click", "#BackgroundSelector-element .image-selector", function (e) {
+        if (e.target.className.indexOf("delete-uploadedimg") == -1) {
+            var $this = $(this);
+            var img = "";
+            if ($(this).find(".color-bg-div").length > 0) {
+                img = $(this).find(".color-bg-div").attr("data-color");
+            }
+            else {
+                img = $(this).find("img").attr("data-imgsrc");
+            }
+
+            if (!openWSE_Config.demoMode) {
+                LoadingMessage1("Saving Background");
+                $.ajax({
+                    url: openWSE.siteRoot() + "WebServices/AcctSettings.asmx/SaveNewBackground",
+                    type: "POST",
+                    data: '{ "_workspace": "' + Getworkspace().replace("workspace_", "") + '","_img": "' + img + '","folder": "' + selectedImgFolder + '" }',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.d.length == 3) {
+                            SetNewBackground(data.d[0], data.d[1]);
+                            if (data.d[2].length == 6) {
+                                $("#BackgroundSelector-element").find(".img-list-selector").html(data.d[2][1]);
+                            }
+                        }
+                        openWSE.RemoveUpdateModal();
+                        RefreshAcctSettingsBackgrounds()
+                    }
+                });
+            }
+            else {
+                SetNewBackground(img, "30000");
+            }
+        }
+    });
+    $(document.body).on("click", "#BackgroundSelector-element .delete-uploadedimg", function () {
+        var img = $(this).attr("data-imgsrc");
+
+        if (!openWSE_Config.demoMode && img != "") {
+            LoadingMessage1("Deleting Background");
             $.ajax({
-                url: openWSE.siteRoot() + "WebServices/AcctSettings.asmx/SaveNewBackground",
+                url: openWSE.siteRoot() + "WebServices/AcctSettings.asmx/DeleteUploadedImage",
                 type: "POST",
-                data: '{ "_workspace": "' + Getworkspace() + '","_img": "' + img + '" }',
+                data: '{ "_workspace": "' + Getworkspace().replace("workspace_", "") + '","_img": "' + img + '" }',
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
-                    if (data.d != "") {
-                        SetNewBackground(data.d);
-                        $this.addClass("image-selector-active");
+                    if (data.d.length == 3) {
+                        SetNewBackground(data.d[0], data.d[1]);
+                        if (data.d[2].length == 6) {
+                            $("#BackgroundSelector-element").find(".img-list-selector").html(data.d[2][1]);
+                        }
                     }
                     openWSE.RemoveUpdateModal();
+                    RefreshAcctSettingsBackgrounds()
                 }
             });
         }
-        else {
-            SetNewBackground(img);
-            $this.addClass("image-selector-active");
-        }
     });
-    function SetNewBackground(img) {
-        if ($("#app_title_bg").length == 0) {
+    function SetNewBackground(img, timer) {
+        var div = "";
+
+        var tempImg = img;
+        var imgArray = img.split('|');
+        var tempArray = new Array();
+        for (var i = 0; i < imgArray.length; i++) {
+            if (imgArray[i] != "") {
+                tempArray.push(imgArray[i]);
+            }
+        }
+
+        if (tempArray.length > 0) {
+            img = tempArray[tempArray.length - 1];
+        }
+
+        if (img.length > 6 && img.indexOf("http") == -1 && img.indexOf("www.") == -1) {
+            img = GetSiteRoot() + img;
+        }
+
+        if ($("#app_title_bg").length == 0 && $(".workspace-backgrounds-fixed").length == 0) {
             if ($("#maincontent_overflow").hasClass("maincontent_overflow-main-bg")) {
                 $("#maincontent_overflow").removeClass("maincontent_overflow-main-bg");
             }
@@ -2863,33 +3298,124 @@ var openWSE = function () {
                 $("#maincontent_overflow").css("background-image", "url('" + img + "')");
                 $("#maincontent_overflow").css("background-color", openWSE_Config.defaultBackgroundColor);
                 $("#maincontent_overflow").css("background-position", openWSE_Config.defaultBackgroundPosition);
-                $("#maincontent_overflow").css("background-repeat", "repeat repeat");
+                $("#maincontent_overflow").css("background-repeat", openWSE_Config.defaultBackgroundRepeat);
+                $("#maincontent_overflow").css("background-size", openWSE_Config.defaultBackgroundSize);
             }
             else {
                 $("#maincontent_overflow").css("background", "#" + img);
             }
+
+            div = "#maincontent_overflow";
         }
         else if ($(".workspace-backgrounds-fixed").length > 0) {
             if (img.length > 6) {
-                $("#MainContent_bg_" + Getworkspace()).css("background", openWSE_Config.defaultBackgroundColor + " url('" + img + "') repeat " + openWSE_Config.defaultBackgroundPosition);
+                $("#MainContent_bg_" + Getworkspace()).css("background", openWSE_Config.defaultBackgroundColor + " url('" + img + "') " + openWSE_Config.defaultBackgroundRepeat + " " + openWSE_Config.defaultBackgroundPosition);
+                $("#MainContent_bg_" + Getworkspace()).css("background-size", openWSE_Config.defaultBackgroundSize);
             }
             else {
                 $("#MainContent_bg_" + Getworkspace()).css("background", "#" + img);
             }
+
+            div = "#MainContent_bg_" + Getworkspace();
         }
         else {
             if (img.length > 6) {
-                $("#app_title_bg").css("background", openWSE_Config.defaultBackgroundColor + " url('" + img + "') repeat " + openWSE_Config.defaultBackgroundPosition);
+                $("#app_title_bg").css("background", openWSE_Config.defaultBackgroundColor + " url('" + img + "') " + openWSE_Config.defaultBackgroundRepeat + " " + openWSE_Config.defaultBackgroundPosition);
+                $("#app_title_bg").css("background-size", openWSE_Config.defaultBackgroundSize);
             }
             else {
                 $("#app_title_bg").css("background", "#" + img);
             }
+
+            div = "#app_title_bg";
         }
 
-        $(".image-selector-active").each(function (index) {
-            $(this).removeClass("image-selector-active");
-            $(this).addClass("image-selector");
-        });
+        openWSE.BackgroundLoop(tempImg, timer, div);
+    }
+    function ChangeImageFolder() {
+        selectedImgFolder = $("#background-selector-holder").find("#dd_userimagefolder").val();
+        imgFolderChange = true;
+        BackgroundSelector();
+    }
+    function RefreshAcctSettingsBackgrounds() {
+        if ($("#hf_refreshbackgroundList").length > 0 && !openWSE_Config.demoMode) {
+            LoadingMessage1("Updating...");
+            $("#hf_refreshbackgroundList").val(new Date().toString());
+            __doPostBack('hf_refreshbackgroundList', "");
+        }
+    }
+    function ViewBackgroundList() {
+        if ($("#background-view-div").css("display") == "none") {
+            $("#background-settings-div").hide();
+            $("#background-view-div").show();
+        }
+        else {
+            $("#background-view-div").hide();
+            $("#background-settings-div").show();
+        }
+    }
+    function UpdateBackgroundSetting(_this) {
+        if ($(_this).length > 0) {
+            var name = $(_this).attr("data-name");
+            var value = $(_this).val();
+            if ($(_this).hasClass("background-setting-color")) {
+                value = $.trim($("#tb_defaultbackgroundcolor").val());
+                openWSE_Config.defaultBackgroundColor = "#" + value;
+            }
+
+            switch (name) {
+                case "backgroundposition":
+                    openWSE_Config.defaultBackgroundPosition = value;
+                    break;
+                case "backgroundsize":
+                    openWSE_Config.defaultBackgroundSize = value;
+                    break;
+                case "backgroundrepeat":
+                    if (value == "1") {
+                        openWSE_Config.defaultBackgroundRepeat = "repeat";
+                    }
+                    else {
+                        openWSE_Config.defaultBackgroundRepeat = "no-repeat";
+                    }
+                    break;
+            }
+
+            SetNewBackgroundSettings();
+
+            if (!openWSE_Config.demoMode) {
+                $.ajax({
+                    url: openWSE.siteRoot() + "WebServices/AcctSettings.asmx/SaveBackgroundSetting",
+                    type: "POST",
+                    data: '{ "name": "' + name + '","value": "' + value + '" }',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        RefreshAcctSettingsBackgrounds();
+                    }
+                });
+            }
+        }
+    }
+    function SetNewBackgroundSettings() {
+        if ($("#app_title_bg").length == 0 && $(".workspace-backgrounds-fixed").length == 0) {
+            $("#maincontent_overflow").css("background-color", openWSE_Config.defaultBackgroundColor);
+            $("#maincontent_overflow").css("background-position", openWSE_Config.defaultBackgroundPosition);
+            $("#maincontent_overflow").css("background-repeat", openWSE_Config.defaultBackgroundRepeat);
+            $("#maincontent_overflow").css("background-size", openWSE_Config.defaultBackgroundSize);
+        }
+        else if ($(".workspace-backgrounds-fixed").length > 0) {
+            for (var i = 0; i < $(".workspace-holder").length; i++) {
+                $("#MainContent_bg_" + (i + 1)).css("background-color", openWSE_Config.defaultBackgroundColor);
+                $("#MainContent_bg_" + (i + 1)).css("background-position", openWSE_Config.defaultBackgroundPosition);
+                $("#MainContent_bg_" + (i + 1)).css("background-repeat", openWSE_Config.defaultBackgroundRepeat);
+                $("#MainContent_bg_" + (i + 1)).css("background-size", openWSE_Config.defaultBackgroundSize);
+            }
+        }
+        else {
+            $("#app_title_bg").css("background-color", openWSE_Config.defaultBackgroundColor);
+            $("#app_title_bg").css("background-position", openWSE_Config.defaultBackgroundPosition);
+            $("#app_title_bg").css("background-repeat", openWSE_Config.defaultBackgroundRepeat);
+            $("#app_title_bg").css("background-size", openWSE_Config.defaultBackgroundSize);
+        }
     }
 
 
@@ -3181,6 +3707,7 @@ var openWSE = function () {
     function CreateSOApp(id, title, content, x, y, width, height, min, max) {
         var $_id = $(".app-main-holder[data-appid='" + id + "']");
         if ((content != null) && (content != "")) {
+            content = unescape(content);
             $_id.find(".app-title").text(title);
             if (openWSE.ConvertBitToBoolean(max)) {
                 $_id.addClass("app-maximized");
@@ -3221,7 +3748,7 @@ var openWSE = function () {
                 }
             }
 
-            if (content.indexOf(".ascx") == -1) {
+            if (!IsValidAscxFile(content)) {
                 if (content.indexOf("ChatClient/ChatWindow.html") != -1) {
                     $_id.find(".app-body").html("<iframe class='iFrame-apps' src='" + openWSE.siteRoot() + content + "' width='100%' frameborder='0'></iframe>");
                     ResizeAppBody($_id);
@@ -3233,21 +3760,33 @@ var openWSE = function () {
                     }));
                 }
                 else {
-                    $_id.find(".app-body").load(openWSE.siteRoot() + "Apps/" + content, function () {
-                        if ($_id.find(".app-body").find("iframe").length > 0) {
-                            if ($_id.find(".app-body").find(".loading-background-holder").length <= 0) {
-                                $_id.find(".app-body").append(loadingMessage);
-                            }
-
+                    if (IsValidAspxFile(content) || IsValidHttpBasedAppType(content)) {
+                        $_id.find(".app-body").html("<iframe class='iFrame-apps' src='" + content + "' width='100%' frameborder='0'></iframe>");
+                        ResizeAppBody($_id);
+                        $_id.find("iframe").one('load', (function () {
                             ResizeAppBody($_id);
-                            $_id.find(".app-body").find("iframe").one('load', (function () {
+                            $_id.find(".loading-background-holder").each(function () {
+                                $(this).remove();
+                            });
+                        }));
+                    }
+                    else {
+                        $_id.find(".app-body").load(content, function () {
+                            if ($_id.find(".app-body").find("iframe").length > 0) {
+                                if ($_id.find(".app-body").find(".loading-background-holder").length <= 0) {
+                                    $_id.find(".app-body").append(loadingMessage);
+                                }
+
                                 ResizeAppBody($_id);
-                                $_id.find(".app-body").find(".loading-background-holder").each(function () {
-                                    $(this).remove();
-                                });
-                            }));
-                        }
-                    });
+                                $_id.find(".app-body").find("iframe").one('load', (function () {
+                                    ResizeAppBody($_id);
+                                    $_id.find(".app-body").find(".loading-background-holder").each(function () {
+                                        $(this).remove();
+                                    });
+                                }));
+                            }
+                        });
+                    }
                 }
             }
 
@@ -3348,113 +3887,130 @@ var openWSE = function () {
         if ((_appId != undefined) && (_appId != null) && (_appId != "")) {
             var $_id = $(".app-main-holder[data-appid='" + _appId + "']");
 
-            $.ajax({
-                url: saveHandler + "/App_Open",
-                type: "POST",
-                data: '{ "appId": "' + _appId + '","name": "' + name + '","workspace": "' + workspace + '","width": "' + $_id.width() + '","height": "' + $_id.height() + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
-                contentType: "application/json; charset=utf-8",
-                success: function (data) {
-                    var content = data.d;
-                    if (content != "") {
-                        SetActiveApp($_id);
-                        MoveToCurrworkspace(workspace, _appId);
-                        AddworkspaceAppNum(workspace, _appId);
-
-                        var appWidth = $_id.width();
-                        var appHeight = $_id.height();
-
-                        if (($_id.css("display") != "block") || ($_id.css("visibility") != "visible")) {
-                            if (_appId.indexOf("app-ChatClient-") != -1) {
-                                var chatUser = $_id.attr("chat-username");
-                                content = "ChatClient/ChatWindow.html?user=" + chatUser + "&displayVersion=workspace";
-                            }
-
-                            if ((($_id.css("left") == null) && ($_id.css("top") == null)) || (($_id.css("left") == "auto") && ($_id.css("top") == "auto"))) {
-                                CreateSOApp(_appId, name, content, "50px", "50px", appWidth, appHeight, "1", "0");
-                            }
-                            else {
-                                if (parseInt($_id.css("top")) < 0) {
-                                    $_id.css("top", "50px");
-                                }
-                                if (parseInt($_id.css("left")) < 0) {
-                                    $_id.css("left", "50px");
-                                }
-                                CreateSOApp(_appId, name, content, $_id.css("left"), $_id.css("top"), appWidth, appHeight, "1", "0");
-                            }
-
-                            $_id.css("display", "block");
-                            $_id.css("visibility", "visible");
-                            $_id.css("z-index", "3000");
-
-                            if ($(".app-min-bar[data-appid='" + _appId + "']").length != 0) {
-                                if ($_id.find(".loading-background-holder").length <= 0) {
-                                    $_id.find(".app-body").append(loadingMessage);
-                                }
-                                if ((!$_id.hasClass("auto-full-page")) && (!$_id.hasClass("auto-full-page-min")) && (!$_id.hasClass("app-maximized")) && (!$_id.hasClass("app-maximized-min"))) {
-                                    $_id.find(".maximize-button-app").removeClass("active");
-                                    $_id.css("width", appWidth);
-                                    $_id.css("height", appHeight);
-                                    $_id.css("top", topBarHt);
-                                }
-                                else {
-                                    SetAppMinToMax($_id);
-                                    $_id.find(".maximize-button-app").addClass("active");
-                                    $_id.css("top", "0px");
-                                }
-
-                                var xData = $(".app-min-bar[data-appid='" + _appId + "']").attr("data-x");
-                                var yData = $(".app-min-bar[data-appid='" + _appId + "']").attr("data-y");
-
-                                $_id.css({
-                                    visibility: "visible",
-                                    display: "block"
-                                }).animate({
-                                    opacity: 1.0,
-                                    filter: "alpha(opacity=100)",
-                                    left: xData,
-                                    top: yData
-                                }, openWSE_Config.animationSpeed);
-
-                                $.ajax({
-                                    url: saveHandler + "/App_Move",
-                                    type: "POST",
-                                    data: '{ "appId": "' + _appId + '","name": "' + name + '","x": "' + xData + '","y": "' + yData + '","width": "' + appWidth + '","height": "' + appHeight + '","workspace": "' + workspace + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
-                                    contentType: "application/json; charset=utf-8"
-                                });
-                                ResizeAllAppBody($_id);
-                            }
-                            else {
-                                $_id.css({
-                                    top: topBarHt,
-                                    visibility: "visible",
-                                    display: "block"
-                                }).fadeIn(openWSE_Config.animationSpeed);
-                            }
-
-                                $(".app-min-bar[data-appid='" + _appId + "']").remove();
-
-                            if (needpostback == 1) {
-                                var hf_loadApp1 = document.getElementById("hf_loadApp1");
-                                if (appsToLoad.length == 0) {
-                                    appsToLoad[0] = _appId;
-                                    hf_loadApp1.value = _appId;
-                                    __doPostBack("hf_loadApp1", "");
-                                }
-                                else {
-                                    appsToLoad[appsToLoad.length - 1] = _appId;
-                                }
-                            }
-                            else if ((content.indexOf(".ascx") > 0) && (needpostback == 0)) {
-                                $_id.find(".loading-background-holder").each(function () {
-                                    $(this).remove();
-                                });
-                            }
+            var content = $_id.attr("data-content");
+            if (content == "" || content == null || content == undefined) {
+                $.ajax({
+                    url: saveHandler + "/App_Open",
+                    type: "POST",
+                    data: '{ "appId": "' + _appId + '","name": "' + name + '","workspace": "' + workspace + '","width": "' + $_id.width() + '","height": "' + $_id.height() + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.d != "") {
+                            FinishContentLoad($_id, _appId, workspace, data.d, name);
                         }
                     }
-                }
-            });
+                });
+            }
+            else {
+                FinishContentLoad($_id, _appId, workspace, content, name);
+                $.ajax({
+                    url: saveHandler + "/App_Open_NoContent",
+                    type: "POST",
+                    data: '{ "appId": "' + _appId + '","name": "' + name + '","workspace": "' + workspace + '","width": "' + $_id.width() + '","height": "' + $_id.height() + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
+                    contentType: "application/json; charset=utf-8"
+                });
+            }
         }
     }
+    function FinishContentLoad(_this, _appId, workspace, content, name) {
+        var $_id = $(_this);
+
+        SetActiveApp($_id);
+        MoveToCurrworkspace(workspace, _appId);
+        AddworkspaceAppNum(workspace, _appId);
+
+        var appWidth = $_id.width();
+        var appHeight = $_id.height();
+
+        if (($_id.css("display") != "block") || ($_id.css("visibility") != "visible")) {
+            if (_appId.indexOf("app-ChatClient-") != -1) {
+                var chatUser = $_id.attr("chat-username");
+                content = "ChatClient/ChatWindow.html?user=" + chatUser + "&displayVersion=workspace";
+            }
+
+            if ((($_id.css("left") == null) && ($_id.css("top") == null)) || (($_id.css("left") == "auto") && ($_id.css("top") == "auto"))) {
+                CreateSOApp(_appId, name, content, "50px", "50px", appWidth, appHeight, "1", "0");
+            }
+            else {
+                if (parseInt($_id.css("top")) < 0) {
+                    $_id.css("top", "50px");
+                }
+                if (parseInt($_id.css("left")) < 0) {
+                    $_id.css("left", "50px");
+                }
+                CreateSOApp(_appId, name, content, $_id.css("left"), $_id.css("top"), appWidth, appHeight, "1", "0");
+            }
+
+            $_id.css("display", "block");
+            $_id.css("visibility", "visible");
+            $_id.css("z-index", "3000");
+
+            if ($(".app-min-bar[data-appid='" + _appId + "']").length != 0) {
+                if ($_id.find(".loading-background-holder").length <= 0) {
+                    $_id.find(".app-body").append(loadingMessage);
+                }
+                if ((!$_id.hasClass("auto-full-page")) && (!$_id.hasClass("auto-full-page-min")) && (!$_id.hasClass("app-maximized")) && (!$_id.hasClass("app-maximized-min"))) {
+                    $_id.find(".maximize-button-app").removeClass("active");
+                    $_id.css("width", appWidth);
+                    $_id.css("height", appHeight);
+                    $_id.css("top", topBarHt);
+                }
+                else {
+                    SetAppMinToMax($_id);
+                    $_id.find(".maximize-button-app").addClass("active");
+                    $_id.css("top", "0px");
+                }
+
+                var xData = $(".app-min-bar[data-appid='" + _appId + "']").attr("data-x");
+                var yData = $(".app-min-bar[data-appid='" + _appId + "']").attr("data-y");
+
+                $_id.css({
+                    visibility: "visible",
+                    display: "block"
+                }).animate({
+                    opacity: 1.0,
+                    filter: "alpha(opacity=100)",
+                    left: xData,
+                    top: yData
+                }, openWSE_Config.animationSpeed);
+
+                $.ajax({
+                    url: saveHandler + "/App_Move",
+                    type: "POST",
+                    data: '{ "appId": "' + _appId + '","name": "' + name + '","x": "' + xData + '","y": "' + yData + '","width": "' + appWidth + '","height": "' + appHeight + '","workspace": "' + workspace + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
+                    contentType: "application/json; charset=utf-8"
+                });
+                ResizeAllAppBody($_id);
+            }
+            else {
+                $_id.css({
+                    top: topBarHt,
+                    visibility: "visible",
+                    display: "block"
+                }).fadeIn(openWSE_Config.animationSpeed);
+            }
+
+            $(".app-min-bar[data-appid='" + _appId + "']").remove();
+
+            if (needpostback == 1) {
+                var hf_loadApp1 = document.getElementById("hf_loadApp1");
+                if (appsToLoad.length == 0) {
+                    appsToLoad[0] = _appId;
+                    hf_loadApp1.value = _appId;
+                    __doPostBack("hf_loadApp1", "");
+                }
+                else {
+                    appsToLoad[appsToLoad.length - 1] = _appId;
+                }
+            }
+            else if ((IsValidAscxFile(content)) && (needpostback == 0)) {
+                $_id.find(".loading-background-holder").each(function () {
+                    $(this).remove();
+                });
+            }
+        }
+    }
+
     function LoadAppFromSiteTools(appId, name, workspace) {
         if ((appId != undefined) && (appId != null) && (appId != "")) {
             $('#ConfirmApp-element').remove();
@@ -3503,17 +4059,26 @@ var openWSE = function () {
             $(a).hide().append($('.move-holder').find('.main-div-app-bg')).show();
         }
 
+        var $app = $(".app-main-holder[data-appid='" + id + "']");
+
         var $workspace = $(a).closest(".app-body").parent().parent();
         if ($workspace.length > 0) {
-            $('.move-holder').find('.outside-main-app-div').each(function () {
-                if ($(".app-main-holder[data-appid='" + id + "']").length == 1) {
+            if ($app.length == 1) {
+                $app.find('.outside-main-app-div').each(function () {
                     $(this).addClass(id + outsideAppModal);
                     $workspace.append($(this));
-                }
-            });
-        }
+                });
+            }
 
-        var $app = $(".app-main-holder[data-appid='" + id + "']");
+            if ($('.move-holder').find('.outside-main-app-div').length > 0) {
+                $('.move-holder').find('.outside-main-app-div').each(function () {
+                    if ($app.length == 1) {
+                        $(this).addClass(id + outsideAppModal);
+                        $workspace.append($(this));
+                    }
+                });
+            }
+        }
 
         ResizeAppBody($app);
 
@@ -3547,6 +4112,31 @@ var openWSE = function () {
         });
     }
 
+
+    function IsValidAspxFile(filename) {
+        filename = filename.toLowerCase();
+        if (filename.length > 5 && filename.substring(filename.length - 5) == ".aspx") {
+            return true;
+        }
+
+        return false;
+    }
+    function IsValidAscxFile(filename) {
+        filename = filename.toLowerCase();
+        if (filename.length > 5 && filename.substring(filename.length - 5) == ".ascx") {
+            return true;
+        }
+
+        return false;
+    }
+    function IsValidHttpBasedAppType(filename) {
+        filename = filename.toLowerCase();
+        if (filename.indexOf("http://") != -1 || filename.indexOf("https://") != -1 || filename.indexOf("www.") != -1) {
+            return true;
+        }
+
+        return false;
+    }
 
     /* Fixes, Customizations, and Position */
     function ResizeAllAppBody(_this) {
@@ -3641,6 +4231,7 @@ var openWSE = function () {
             $('#' + newworkspace).prepend($app);
             AddworkspaceAppNum(workspace, app);
             MoveOutSideModalWindowToWorkspace(app);
+            ResizeAppBody($app);
         }
     }
     function SetAppMaxToMin(_this) {
@@ -3813,9 +4404,20 @@ var openWSE = function () {
             var $this = $(".app-main-holder[data-appid='" + appId + "']");
             if ($this.css("display") == "block") {
                 if ($this.find(".exit-button-app").length > 0) {
+                    exitBtn_InProgress = false;
                     $this.find(".exit-button-app").click();
                 }
             }
+        }
+        if (options == "close-all") {
+            $(".app-main-holder").each(function () {
+                if ($(this).css("display") == "block") {
+                    if ($(this).find(".exit-button-app").length > 0) {
+                        exitBtn_InProgress = false;
+                        $(this).find(".exit-button-app").click();
+                    }
+                }
+            });
         }
         else if (appId == "workspace-selector") {
             try {
@@ -4147,6 +4749,11 @@ var openWSE = function () {
         cookie.set("app_category", category, "30");
         cookie.set("app_category_id", id, "30");
     }
+
+    var previousWidth = 0;
+    var previousHeight = 0;
+    var resizeAxis = null;
+
     function ApplyAppDragResize() {
         if (openWSE.IsComplexWorkspaceMode()) {
             $(".app-main-holder").draggable({
@@ -4170,7 +4777,7 @@ var openWSE = function () {
                     event.stopPropagation();
                 }
             }).resizable({
-                handles: "se, s, e, w",
+                handles: "se, s, e",
                 minWidth: 150,
                 minHeight: 150,
                 create: function (event, ui) {
@@ -4259,7 +4866,6 @@ var openWSE = function () {
                     var $this = $(this);
 
                     if (!$this.hasClass('no-resize')) {
-
                         var w = ui.size.width;
                         var minw = parseInt($this.css("min-width"));
                         if (w < minw) {
@@ -4277,13 +4883,24 @@ var openWSE = function () {
                             'height': h
                         });
 
+                        previousWidth = w;
+                        previousHeight = h;
 
-                        ResizeAppBody(this);
-                        previousWidth = $this.height();
+                        ResizeSnapHelper(this, w, h);
                     }
+                    else {
+                        $this.css({
+                            'width': previousWidth,
+                            'height': previousHeight
+                        });
+                    }
+
+                    ResizeAppBody(this);
                 }
             });
             $(".app-main-holder").on("resizestart", function (event, ui) {
+                resizingAppInProgress = true;
+
                 if ($(this).hasClass("app-maximized")) {
                     $(this).removeClass("app-maximized");
                     var $maxBtn = $(this).find(".maximize-button-app");
@@ -4292,7 +4909,12 @@ var openWSE = function () {
                     }
                 }
 
+                if ($(this).data("ui-resizable") != null) {
+                    resizeAxis = $(this).data("ui-resizable").axis;
+                }
+
                 SetActiveApp(this);
+                CreateDragSnapObjects(this);
 
                 // Apply an overlay over app
                 // This fixes the issues when dragging iframes
@@ -4305,9 +4927,11 @@ var openWSE = function () {
                 event.stopPropagation();
             });
             $(".app-main-holder").on("resizestop", function (event, ui) {
+                resizingAppInProgress = false;
                 if (!$(this).hasClass('no-resize')) {
                     ResizeAppBody(this);
                     previousWidth = 0;
+                    previousHeight = 0;
                     RemoveOverlayFix(this);
 
                     $.ajax({
@@ -4320,6 +4944,62 @@ var openWSE = function () {
             });
         }
     }
+    function ResizeSnapHelper(_this, w, h) {
+        if (openWSE_Config.appSnapHelper) {
+            var $this = $(_this);
+            var topPos = $this.position().top;
+            var leftPos = $this.position().left;
+
+            var currWorkspace = Getworkspace();
+            var $workspace = $("#MainContent_" + currWorkspace);
+
+            for (var i = 0; i < $workspace.find(".app-snap-helper").length; i++) {
+                var $snapHelper = $workspace.find(".app-snap-helper").eq(i);
+                if (ResizeSnapHelperLeftRight(_this, $snapHelper, leftPos, w) || ResizeSnapHelperTopBottom(_this, $snapHelper, topPos, h)) {
+                    ResizeSnapHelperActive(_this, $snapHelper);
+                    break;
+                }
+            }
+        }
+    }
+    function ResizeSnapHelperLeftRight(_this, _snapHelper, leftPos, w) {
+        var snapDataType = $(_snapHelper).attr("data-type");
+        var snapPosLeft = $(_snapHelper).position().left;
+        var snapOuterWidth = $(_snapHelper).outerWidth();
+
+        if ((resizeAxis == "se" || resizeAxis == "e") && (snapDataType == "left" || snapDataType == "right")) {
+            var thisPos = leftPos + w;
+            if (thisPos >= (snapPosLeft + snapOuterWidth) - 10 && thisPos <= (snapPosLeft + snapOuterWidth) + 10) {
+                previousWidth = previousWidth - (thisPos - (snapPosLeft - 2));
+                return true;
+            }
+        }
+
+        return false;
+    }
+    function ResizeSnapHelperTopBottom(_this, _snapHelper, topPos, h) {
+        var snapDataType = $(_snapHelper).attr("data-type");
+        var snapPosTop = $(_snapHelper).position().top;
+        var snapOuterHeight = $(_snapHelper).outerHeight();
+
+        if ((resizeAxis == "se" || resizeAxis == "s") && (snapDataType == "top" || snapDataType == "bottom")) {
+            var thisPos = topPos + h;
+            if (thisPos >= (snapPosTop + snapOuterHeight) - 10 && thisPos <= (snapPosTop + snapOuterHeight) + 10) {
+                previousHeight = previousHeight - (thisPos - (snapPosTop - 1));
+                return true;
+            }
+        }
+
+        return false;
+    }
+    function ResizeSnapHelperActive(_this, _snapHelper) {
+        AddSnapHelperClass(_snapHelper);
+        $(_this).addClass("no-resize");
+        setTimeout(function () {
+            $(_this).removeClass("no-resize");
+        }, 200);
+    }
+
     function ReloadApp(_this) {
         var name = $(_this).closest(".app-head-button-holder").parent().find(".app-title").text();
         var $_id = $(_this).closest(".app-head-button-holder").parent();
@@ -4368,6 +5048,10 @@ var openWSE = function () {
             }
         }
         else {
+            if ($("#MainContent_" + id.replace(/-/g, "_") + "_advPanel").length > 0) {
+                $("#MainContent_" + id.replace(/-/g, "_") + "_advPanel").hide();
+            }
+
             if ($_id.find(".app-body").find(".loading-background-holder").length <= 0) {
                 $_id.find(".app-body").append(loadingMessage);
             }
@@ -4689,28 +5373,30 @@ var openWSE = function () {
 
     /* Group Login Modal */
     function GroupLoginModal() {
-        LoadingMessage1("Loading Groups...");
-        $("#GroupLogin-element").remove();
-
-        var modalHtml = "<div id='GroupLogin-element' class='Modal-element'><div class='Modal-overlay'><div class='Modal-element-align'><div class='Modal-element-modal' data-setwidth='600'>";
-        var closeBtn = "<a href='#' onclick='openWSE.CloseGroupLoginModal();return false;' class='ModalExitButton'></a>";
-        modalHtml += "<div class='ModalHeader'><div><div class='app-head-button-holder-admin'>" + closeBtn + "</div><span class='Modal-title'></span></div></div>";
-        modalHtml += "<div class='ModalScrollContent'><div class='ModalPadContent'></div></div></div></div></div></div>";
-
-        if ($("#extra_modal_holder").length > 0) {
-            $("#extra_modal_holder").append(modalHtml);
+        if ($("#group_tab").find(".a").hasClass("active")) {
+            setTimeout(function () {
+                $("#group_tab").find("#grouplistdiv").html("");
+            }, openWSE_Config.animationSpeed);
         }
         else {
-            $("body").append(modalHtml);
+            GetandBuildGroupList();
         }
-
+    }
+    function GroupLoginModalCookieLoad() {
+        if ($("#group_tab").find(".a").hasClass("active")) {
+            GetandBuildGroupList();
+        }
+    }
+    function GetandBuildGroupList() {
+        var $groupListDiv = $("#group_tab").find("#grouplistdiv");
+        $groupListDiv.html(ddGroupsLoading);
         $.ajax({
             url: openWSE.siteRoot() + "WebServices/AcctSettings.asmx/GetUserGroups",
             type: "POST",
             data: '{ }',
             contentType: "application/json; charset=utf-8",
             success: function (data) {
-                var x = "<div class='table-settings-box no-border no-margin no-padding'><div class='td-settings-title'>Select a Group</div><div class='td-settings-ctrl'>";
+                var x = "<div class='table-settings-box no-border no-margin no-padding'><div class='td-settings-ctrl'>";
                 try {
                     for (var i = 0; i < data.d[0].length; i++) {
                         var groupId = data.d[0][i][0];
@@ -4742,15 +5428,9 @@ var openWSE = function () {
                     x += "<div class='td-settings-desc'>You must be apart of that group in order to login. Once logged in, all default settings for that group will be applied to your account. These settings will be removed once you log out of the group. Your Apps, Overlays, and Notifications will be overridden with the group's settings.</div></div>";
                 }
                 catch (evt) { }
-                $("#GroupLogin-element").find(".ModalPadContent").html(x);
-                LoadModalWindow(true, "GroupLogin-element", "Group Login");
-                openWSE.RemoveUpdateModal();
 
-                $(".top-options li.a").removeClass("active");
-                $(".top-options li.b").hide();
-                openWSE.RemoveWorkspaceSelectorActive();
-                CloseNoti();
-                cookie.del("top_menu");
+                $groupListDiv.html(x);
+                SetMaxHeightGroupLogin();
             }
         });
     }
@@ -4761,6 +5441,13 @@ var openWSE = function () {
         else {
             LoadingMessage1("Logging out of Group");
         }
+
+        $(".top-options li.a").removeClass("active");
+        $(".top-options li.b").hide();
+        openWSE.RemoveWorkspaceSelectorActive();
+        CloseGroupLoginModal();
+        cookie.del("top_menu");
+
         $.ajax({
             url: openWSE.siteRoot() + "WebServices/AcctSettings.asmx/LoginUnderGroup",
             type: "POST",
@@ -4780,8 +5467,18 @@ var openWSE = function () {
         });
     }
     function CloseGroupLoginModal() {
-        LoadModalWindow(false, "GroupLogin-element", "");
-        $("#GroupLogin-element").remove();
+        setTimeout(function () {
+            $("#group_tab").find("#grouplistdiv").html("");
+        }, openWSE_Config.animationSpeed);
+    }
+    function SetMaxHeightGroupLogin() {
+        if ($("#group_tab").find(".b").is(":visible")) {
+            var bufferBottom = 65;
+            var extendedHeight = $(window).height() - (bufferBottom + topBarHt);
+            $("#grouplistdiv").css({
+                maxHeight: extendedHeight
+            });
+        }
     }
 
 
@@ -5219,6 +5916,10 @@ var openWSE = function () {
             $("#accordian-sidebar").css("height", (coHeight - 1) + "px");
             $("#maincontent_overflow").css("width", ($(window).width() - $(".sidebar-padding-menulinks").outerWidth()) + "px");
         }
+
+        if (!resizingAppInProgress) {
+            $(".app-snap-helper").remove();
+        }
     }
     function ExpandAdminLinks(_this, div) {
         if ($(_this).hasClass("img-expand-sml")) {
@@ -5546,6 +6247,139 @@ var openWSE = function () {
         }
     }
 
+    function ApplyMobileModeForMenuBar() {
+        if (location.href.indexOf("SiteTools/") > 0 && location.href.indexOf("AppRemote.aspx") == -1 && $(".sitemenu-selection").length > 0) {
+            $(".sitemenu-selection").removeClass("mobile-mode");
+
+            var liWidth = 0;
+            var longestLi = 0;
+            $(".sitemenu-selection").find("li").each(function(){
+                liWidth += $(this).outerWidth();
+                if ($(this).outerWidth() > longestLi) {
+                    longestLi = $(this).outerWidth();
+                }
+            });
+
+            liWidth += longestLi;
+
+            if ($("#maincontent_overflow").outerWidth() < liWidth) {
+                $(".sitemenu-selection").addClass("mobile-mode");
+            }
+        }
+    }
+
+    // Background Loop Timer
+    var backgroundLoopTimer = new Array();
+    function BackgroundLoop(backgrounds, timer, div) {
+        if ($(div).length > 0) {
+            var list = backgrounds.split('|');
+            var modifiedList = new Array();
+            for (var i = 0; i < list.length; i++) {
+                if (list[i] != "") {
+                    modifiedList.push(list[i]);
+                }
+            }
+
+            var timerIndex = FindBackgroundLoopTimerIndex(div);
+            if (timerIndex == -1 && modifiedList.length > 1) {
+                backgroundLoopTimer.push(
+                    {
+                        "obj": null,
+                        "loopIndex": 1,
+                        "div": div,
+                        "list": modifiedList
+                    });
+
+                timerIndex = backgroundLoopTimer.length - 1;
+            }
+            else if (timerIndex != -1) {
+                clearInterval(backgroundLoopTimer[timerIndex].obj);
+                backgroundLoopTimer[timerIndex].obj = null;
+                backgroundLoopTimer[timerIndex].loopIndex = modifiedList.length - 1;
+                backgroundLoopTimer[timerIndex].list = modifiedList;
+            }
+
+            if (backgroundLoopTimer.length > 0 && backgroundLoopTimer[timerIndex] != null && backgroundLoopTimer[timerIndex].list.length > 1) {
+                backgroundLoopTimer[timerIndex].obj = setInterval(function () {
+                    var img = backgroundLoopTimer[timerIndex].list[backgroundLoopTimer[timerIndex].loopIndex];
+                    if (img == null || img == undefined) {
+                        backgroundLoopTimer[timerIndex].loopIndex = 0;
+                        var img = backgroundLoopTimer[timerIndex].list[backgroundLoopTimer[timerIndex].loopIndex];
+                    }
+
+                    if (img != null && img != undefined) {
+                        if (img.length > 6) {
+                            if (img.toLowerCase().indexOf("http") == -1 && img.toLowerCase().indexOf("www.") == -1) {
+                                img = GetSiteRoot() + img;
+                            }
+
+                            $(div).css("background", openWSE_Config.defaultBackgroundColor + " url('" + img + "') " + openWSE_Config.defaultBackgroundRepeat + " " + openWSE_Config.defaultBackgroundPosition);
+                            $(div).css("background-size", openWSE_Config.defaultBackgroundSize);
+                        }
+                        else {
+                            $(div).css("background", "#" + img);
+                        }
+                    }
+
+                    backgroundLoopTimer[timerIndex].loopIndex++;
+                    if (backgroundLoopTimer[timerIndex].loopIndex >= backgroundLoopTimer[timerIndex].list.length) {
+                        backgroundLoopTimer[timerIndex].loopIndex = 0;
+                    }
+                }, timer);
+            }
+        }
+    }
+    function FindBackgroundLoopTimerIndex(div) {
+        for (var i = 0; i < backgroundLoopTimer.length; i++) {
+            if (backgroundLoopTimer[i].div == div) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    function ChangeUserProfileImage() {
+        var div = "<div id='UserProfileImageUpdate-element' class='Modal-element'>";
+        div += "<div class='Modal-overlay'>";
+        div += "<div class='Modal-element-align'>";
+        div += "<div class='Modal-element-modal' data-setwidth='500'>";
+        div += "<div class='ModalHeader'><div>";
+        div += "<div class='app-head-button-holder-admin'>";
+        div += "<a href='#' onclick=\"$('#UserProfileImageUpdate-element').remove();return false;\" class='ModalExitButton'></a>";
+        div += "</div><span class='Modal-title'></span></div></div>";
+        div += "<div class='ModalScrollContent'>";
+        div += "<div class='ModalPadContent'>";
+        div += "<h3 id='UserProfileImageUpload_loading' class='pad-all'>Loading. Please Wait...</h3>";
+        div += "<iframe id='UserProfileImageUpload_frame' src='" + GetSiteRoot() + "SiteTools/iframes/UserProfileImageUpload.aspx' width='100%' height='60px' frameborder='0' style='visibility: hidden;' />";
+        div += "</div></div>";
+        div += "<div class='ModalButtonHolder'><input type='button' class='input-buttons no-margin' value='Close' onclick=\"$('#UserProfileImageUpdate-element').remove();\" /></div>";
+        div += "</div></div></div></div>";
+
+        if ($("#UserProfileImageUpdate-element").length > 0) {
+            $("#UserProfileImageUpdate-element").remove();
+        }
+
+        $("body").append(div);
+
+        $("#UserProfileImageUpload_frame").one("load", (function () {
+            $("#UserProfileImageUpdate-element").find("#UserProfileImageUpload_loading").remove();
+            $("#UserProfileImageUpload_frame").css({
+                visibility: "visible",
+                height: 100
+            });
+        }));
+
+        LoadModalWindow(true, "UserProfileImageUpdate-element", "Update Profile Image");
+
+        $(".top-options li.a").removeClass("active");
+        $(".top-options li.b").hide();
+        openWSE.RemoveWorkspaceSelectorActive();
+        CloseNoti();
+        CloseGroupLoginModal();
+        cookie.del("top_menu");
+    }
+
     return {
         siteRoot: GetSiteRoot,
         loadingImg: loadingImg,
@@ -5587,11 +6421,16 @@ var openWSE = function () {
         LoadSavedInnerModalContent: LoadSavedInnerModalContent,
         LoadTopOptionsCookie: LoadTopOptionsCookie,
         SetDropDownMaxHeight: SetDropDownMaxHeight,
+        SetMaxHeightGroupLogin: SetMaxHeightGroupLogin,
         ExpandAdminLinks: ExpandAdminLinks,
         HelpOverlay: HelpOverlay,
         HelpMenuPageLoad: HelpMenuPageLoad,
         NewUserPageLoad: NewUserPageLoad,
         NewUserfinsh: NewUserfinsh,
+        HelpMenuPageLoadWorkspace: HelpMenuPageLoadWorkspace,
+        HelpIntroRestart: HelpIntroRestart,
+        HelpIntroNext: HelpIntroNext,
+        HelpIntroBack: HelpIntroBack,
         OnEmailUpdate_KeyPress: OnEmailUpdate_KeyPress,
         OnPasswordUpdate_KeyPress: OnPasswordUpdate_KeyPress,
         UpdateEmail: UpdateEmail,
@@ -5675,8 +6514,8 @@ var openWSE = function () {
         getInternetExplorerVersion: getInternetExplorerVersion,
         checkVersion: checkVersion,
         GroupLoginModal: GroupLoginModal,
+        GroupLoginModalCookieLoad: GroupLoginModalCookieLoad,
         LoginAsGroup: LoginAsGroup,
-        CloseGroupLoginModal: CloseGroupLoginModal,
         AutoHideMode: AutoHideMode,
         PresentationMode: PresentationMode,
         HashChange: HashChange,
@@ -5687,7 +6526,16 @@ var openWSE = function () {
         ResizeContainer: ResizeContainer,
         GetElementClassList: GetElementClassList,
         ShowHideAccordianSidebar: ShowHideAccordianSidebar,
-        ReloadPage: ReloadPage
+        ReloadPage: ReloadPage,
+        ApplyMobileModeForMenuBar: ApplyMobileModeForMenuBar,
+        BackgroundLoop: BackgroundLoop,
+        ChangeImageFolder: ChangeImageFolder,
+        ViewBackgroundList: ViewBackgroundList,
+        UpdateBackgroundSetting: UpdateBackgroundSetting,
+        AddBackgroundColorToLogo: AddBackgroundColorToLogo,
+        RemoveBackgroundColorToLogo: RemoveBackgroundColorToLogo,
+        ChangeUserProfileImage: ChangeUserProfileImage,
+        CloseTopDropDowns: CloseTopDropDowns
     }
 }();
 
@@ -5701,6 +6549,8 @@ $(window).resize(function () {
     else {
         openWSE.ResizeAllAppBody($("body"));
     }
+
+    openWSE.ApplyMobileModeForMenuBar();
 });
 
 $(document).ready(function () {
@@ -5710,6 +6560,7 @@ $(document).ready(function () {
     openWSE.LoadTopOptionsCookie();
     openWSE.checkVersion();
     openWSE.GetUserNotifications(true);
+    openWSE.GroupLoginModalCookieLoad();
     openWSE.HashChange();
     openWSE.ResizeContainer();
 
@@ -5772,6 +6623,8 @@ $(function () {
 });
 
 window.onerror = function (errorMsg, url) {
+    openWSE.RemoveUpdateModal();
+
     url = window.location.href;
 
     // Small hack for the Network Log
@@ -5813,6 +6666,7 @@ $(window).load(function () {
     }
 
     openWSE.MoveOutsideModalWindows();
+    openWSE.ApplyMobileModeForMenuBar();
 });
 
 $.extend({

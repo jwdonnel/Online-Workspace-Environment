@@ -1,15 +1,21 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="AppRemote, App_Web_iv0v2cts" %>
+﻿<%@ page language="C#" autoeventwireup="true" inherits="AppRemote, App_Web_ravcmota" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Mobile Workspace</title>
+    <meta name="author" content="John Donnelly" />
+    <meta name="revisit-after" content="10 days" />
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="initial-scale=0.95, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <link id="Link1" runat="server" rel="shortcut icon" href="~/Standard_Images/favicon.ico"
         type="image/x-icon" />
     <link id="Link2" runat="server" rel="icon" href="~/Standard_Images/favicon.ico" type="image/ico" />
+    <script type="text/javascript" src="Scripts/jquery/mootools.js"></script>
 </head>
-<body style="overflow: hidden; background-color: #FFF;">
+<body id="main_body" runat="server" style="overflow: hidden;">
     <form id="form1" runat="server">
         <asp:ScriptManager ID="ScriptManager_Main" runat="server" AsyncPostBackTimeout="360000">
         </asp:ScriptManager>
@@ -18,31 +24,11 @@
                 <table id="workspace_selector" runat="server" class="top-options" cellpadding="0"
                     cellspacing="0">
                     <tr>
-                        <td id="apps_header_btn" runat="server">
+                        <td id="menu_header_btn" runat="server">
                             <ul>
-                                <li id="wl-s" class="a">
-                                    <div class="sidebar-pnlBtn-tab" title="Apps">
-                                        <div class="pnlBtn-ShowApps">
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </td>
-                        <td id="chat_header_btn" runat="server">
-                            <ul>
-                                <li id="cc-s" class="a">
-                                    <div id="SteelmfgHeader" class="sidebar-pnlBtn-tab" title="Chat">
-                                        <div class="pnlBtn-ShowChat">
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </td>
-                        <td id="pages_header_btn" runat="server">
-                            <ul>
-                                <li id="ap-s" class="a">
-                                    <div class="sidebar-pnlBtn-tab" title="Apps">
-                                        <div class="pnlBtn-ShowAdminPages">
+                                <li id="menu-s" class="a">
+                                    <div class="sidebar-pnlBtn-tab" title="Menu">
+                                        <div class="pnlBtn-ShowMenu">
                                         </div>
                                     </div>
                                 </li>
@@ -60,6 +46,13 @@
                         </td>
                         <td id="workspace_selector_btn" runat="server">
                             <ul class="float-left">
+                                <li id="notifications" class="a float-left">
+                                    <div class="sidebar-pnlBtn-tab" title="Notifications">
+                                        <div class="notification-icon notifications-none">
+                                        </div>
+                                        <span id="total-noti">0</span>
+                                    </div>
+                                </li>
                                 <li id="db-b" class="a float-left" style="display: none;">
                                     <div class="sidebar-pnlBtn-tab" title="Back without closing">
                                         <div class="pnlBtn-ShowBack">
@@ -69,12 +62,6 @@
                                 <li id="db-c" class="a float-left" style="display: none;">
                                     <div class="sidebar-pnlBtn-tab" title="Close">
                                         <div class="pnlBtn-ShowClose">
-                                        </div>
-                                    </div>
-                                </li>
-                                <li id="db-s" class="a float-left">
-                                    <div class="sidebar-pnlBtn-tab" title="Workspace Selector">
-                                        <div class="pnlBtn-ShowWorkspace">
                                         </div>
                                     </div>
                                 </li>
@@ -98,13 +85,6 @@
         </div>
         <div id="loadoptions-selector-modal" style="display: none;">
             <h3 id="loading-message" class="pad-top margin-top"></h3>
-        </div>
-        <div id="top-btns-holder">
-            <div id="tryconnect" style="display: none;">Sync with Workspace</div>
-            <div id="groupLogin" runat="server" visible="false">Group Login</div>
-            <div id="changeGroupLogin" runat="server" visible="false">Change Group</div>
-            <div id="groupLogout" runat="server" visible="false"></div>
-            <div id="notifications" class="no-notifications">Notifications:<span id="total-noti" class="pad-left-sml">0</span></div>
         </div>
         <asp:HiddenField ID="hf_LogoutOfGroup" runat="server" OnValueChanged="hf_LogoutOfGroup_ValueChanged" />
         <div id="notifications-viewtable">
@@ -139,6 +119,32 @@
                 </div>
             </div>
         </div>
+        <asp:Panel ID="pnl_AccountInfo" runat="server" Style="display: none;">
+            <div class="pad-top" style="text-align: center;">
+                <div class="pad-all inline-block">
+                    <div class="float-left margin-right profile-tab-acctimg">
+                        <asp:Image ID="img_Profile" runat="server" CssClass="acct-image"></asp:Image>
+                    </div>
+                    <div class="float-left pad-left">
+                        <asp:Label ID="lbl_UserFullName" runat="server" Text="" CssClass="title-dd-name"></asp:Label>
+                        <div class="clear-space-two">
+                        </div>
+                        <asp:Label ID="lbl_UserEmail" runat="server" Text=""></asp:Label>
+                        <div class="clear-space-five"></div>
+                        <div class="clear-space-two"></div>
+                        <asp:HyperLink ID="hyp_accountSettings" runat="server" Text="Account" NavigateUrl="~/SiteTools/UserMaintenance/AcctSettings.aspx?mobileMode=true" CssClass="account-link-style"></asp:HyperLink>
+                        <span class="account-link-style-seperator">-</span>
+                        <asp:HyperLink ID="hyp_accountCustomizations" runat="server" Text="Customize" NavigateUrl="~/SiteTools/UserMaintenance/AcctSettings.aspx?mobileMode=true&tab=SiteCustomizations" CssClass="account-link-style"></asp:HyperLink>
+                    </div>
+                </div>
+            </div>
+            <div class="clear">
+            </div>
+            <div id="profile_tab_Buttons">
+                <asp:LinkButton ID="aGroupLogoff" runat="server" OnClick="aGroupLogoff_Click" CssClass="RandomActionBtns margin-left margin-right" Enabled="false" Visible="false">Log out of Group</asp:LinkButton>
+                <asp:LinkButton ID="lb_signoff" runat="server" OnClick="SignOff_Clicked" CssClass="margin-left margin-right"><span class="img-logoff"></span>Log Out</asp:LinkButton>
+            </div>
+        </asp:Panel>
         <asp:Panel ID="pnl_chat_users" runat="server" Style="display: none;">
             <div id="statusDiv" class="pad-all-big">
                 <b class="float-left pad-right">Your Status:</b><a href="#" class="chatstatus_mid">
@@ -197,21 +203,21 @@
                                 </div>
                                 <div class="clear-space">
                                 </div>
+                                <div id="app-workspace-selector" class="pad-top-sml pad-bottom-big">
+                                    <span class="pad-right">Workspace:</span><asp:DropDownList ID="ddl_appDropdownSelector" runat="server"></asp:DropDownList>
+                                </div>
                                 <table cellpadding="5" cellspacing="5" border="0" width="100%">
                                     <tr>
-                                        <td id="app-workspace-selector" valign="top" style="width: 50%;">
-                                            <span class="pad-right">Workspace:</span><asp:DropDownList ID="ddl_appDropdownSelector" runat="server"></asp:DropDownList>
-                                        </td>
-                                        <td valign="top" style="text-align: left; width: 50%;">
-                                            <div class="pad-all float-left margin-right margin-left">
+                                        <td align="right">
+                                            <div class="pad-right-big">
                                                 <asp:RadioButton ID="rb_norm" runat="server" GroupName="rbminmax" Text="&nbsp;Normal" />
-                                                <div class="clear-space">
-                                                </div>
-                                                <div id="div_max_rb_holder">
-                                                    <asp:RadioButton ID="rb_max" runat="server" GroupName="rbminmax" Text="&nbsp;Maximize" />
-                                                    <div class="clear-space">
-                                                    </div>
-                                                </div>
+                                            </div>
+                                        </td>
+                                        <td id="div_max_rb_holder" align="center">
+                                            <asp:RadioButton ID="rb_max" runat="server" GroupName="rbminmax" Text="&nbsp;Maximize" />
+                                        </td>
+                                        <td align="left">
+                                            <div class="pad-left-big">
                                                 <asp:RadioButton ID="rb_min" runat="server" GroupName="rbminmax" Text="&nbsp;Minimize" />
                                             </div>
                                         </td>
@@ -252,6 +258,10 @@
                             </asp:Panel>
                         </div>
                         <div id="load-option-btn-holder">
+                            <a id="options-btn-device" href="#" class="option-buttons" onclick="appRemote.LoadApp();return false;">
+                                <span class="img-open img-option"></span>Open App</a>
+                            <div class="clear">
+                            </div>
                             <a id="options-btn-open" href="#" class="option-buttons" onclick="appRemote.OpenApp();return false;">
                                 <span class="img-workspace img-option"></span>Load On Workspace</a>
                             <div class="clear">
@@ -260,20 +270,10 @@
                                 style="display: none;"><span class="img-update img-option"></span>Refresh App</a>
                             <div class="clear">
                             </div>
-                            <a id="options-btn-device" href="#" class="option-buttons" onclick="appRemote.LoadApp();return false;">
-                                <span class="img-open img-option"></span>Open App</a>
-                            <div class="clear">
-                            </div>
                             <a href="#" id="options-btn-close" class="option-buttons" onclick="appRemote.CloseApp();return false;">
                                 <span class="img-close img-option"></span>Close App</a>
                             <h3 id="no-options-available" class="pad-all" style="display: none;">No Options Available</h3>
                         </div>
-                    </div>
-                    <h3 id="load-option-about" class="accordion-header">
-                        <span class="about-app" style="float: right!important;"></span>
-                        About
-                    </h3>
-                    <div class="accordion-content pad-all" align="left" style="display: none;">
                     </div>
                 </div>
             </div>
@@ -296,19 +296,25 @@
                             <table cellpadding="5" cellspacing="5" style="margin: 0 auto;">
                                 <tr>
                                     <td>
-                                        <asp:TextBox ID="UserName" runat="server" CssClass="signintextbox" placeholder="Username"></asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="UserNameRequired" runat="server" ControlToValidate="UserName"
-                                            ErrorMessage="User Name is required." Font-Bold="True" ForeColor="Red" ToolTip="User Name is required."
-                                            ValidationGroup="ctl00$Login1">*</asp:RequiredFieldValidator>
-                                        <div class="clear-space"></div>
+                                        <div style="position: relative;">
+                                            <asp:TextBox ID="UserName" runat="server" CssClass="signintextbox" placeholder="Username"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="UserNameRequired" runat="server" ControlToValidate="UserName"
+                                                ErrorMessage="User Name is required." Font-Bold="True" ForeColor="Red" ToolTip="User Name is required."
+                                                ValidationGroup="ctl00$Login1">*</asp:RequiredFieldValidator>
+                                            <div class="username-login-img"></div>
+                                            <div class="clear-space"></div>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <asp:TextBox ID="Password" runat="server" TextMode="Password" CssClass="signintextbox" placeholder="Password"></asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="PasswordRequired" runat="server" ControlToValidate="Password"
-                                            ErrorMessage="Password is required." Font-Bold="True" ForeColor="Red" ToolTip="Password is required."
-                                            ValidationGroup="ctl00$Login1">*</asp:RequiredFieldValidator>
+                                        <div style="position: relative;">
+                                            <asp:TextBox ID="Password" runat="server" TextMode="Password" CssClass="signintextbox" placeholder="Password"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="PasswordRequired" runat="server" ControlToValidate="Password"
+                                                ErrorMessage="Password is required." Font-Bold="True" ForeColor="Red" ToolTip="Password is required."
+                                                ValidationGroup="ctl00$Login1">*</asp:RequiredFieldValidator>
+                                            <div class="password-login-img"></div>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -328,6 +334,7 @@
                                     <div align="center">
                                         <div class="clear-space"></div>
                                         <asp:Literal ID="FailureText" runat="server"></asp:Literal>
+                                        <asp:Literal ID="ltl_logingrouperror" runat="server"></asp:Literal>
                                         <div class="clear-space"></div>
                                     </div>
                                 </ContentTemplate>
@@ -409,12 +416,46 @@
                 </asp:UpdatePanel>
             </div>
         </asp:Panel>
+        <div id="appremote-sidebar-menu">
+            <div class="pad-all appremote-sidebar-innercontent">
+                <ul>
+                    <li id="apps_header_btn" runat="server"></li>
+                    <li id="chat_header_btn" runat="server"></li>
+                    <li id="pages_header_btn" runat="server"></li>
+                    <li id="connect_header_btn" runat="server">
+                        <div id="tryconnect" class="section-pad section-link">
+                            <span class="disconnected-img"></span>Connect to Workspace
+                        </div>
+                    </li>
+                    <li id="workspace_header_btn" runat="server">
+                        <div id="db-s" class="section-pad section-link">
+                            <span class="workspace-img"></span>Workspace Selector
+                        </div>
+                    </li>
+                    <li id="group-btns-holder">
+                        <div class="section-pad section-link">
+                            <div id="groupLogin" runat="server"><span class="grouplogin-img"></span>Group Login</div>
+                            <div id="changeGroupLogin" runat="server" visible="false"><span class="grouplogin-img"></span>Change Group</div>
+                            <div id="groupLogout" runat="server" visible="false"></div>
+                        </div>
+                    </li>
+                    <li id="opened_apps_header" style="display: none;">
+                        <div class="section-pad">
+                            <h3 class="float-left">Opened Apps</h3>
+                            <a href="#" class="close-all-opened" onclick="appRemote.CloseAllOpened();return false;">Close All</a>
+                            <div class="clear-space-five"></div>
+                            <div id="opened_apps_holder"></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="appremote-menu-overlay"></div>
         <div id="container-footer" class="footer">
             <div class="footer-padding" align="center">
                 <div id="footer-signdate">
-                    &copy; 2015 John Donnelly | 
-                    <asp:LinkButton ID="lb_signoff" runat="server" Text="Log Out" CssClass="cursor-pointer"
-                        OnClick="SignOff_Clicked"></asp:LinkButton><asp:Label ID="lblHomePageLink" runat="server" Text=""></asp:Label>
+                    &copy; 2015 John Donnelly | <a href="About.aspx?redirect=AppRemote.aspx">About</a> |
+                    <asp:Label ID="lblHomePageLink" runat="server" Text=""></asp:Label>
                 </div>
             </div>
         </div>
