@@ -103,17 +103,7 @@ public class TwitterStationService  : System.Web.Services.WebService {
                 }
 
                 if (entry["Type"] == "Profile") {
-                    bool hasTitle = false;
-                    bool hasCaption = false;
-                    
-                    if (!string.IsNullOrEmpty(entry["Title"])) {
-                        hasTitle = true;
-                    }
-                    if (!string.IsNullOrEmpty(entry["Caption"])) {
-                        hasCaption = true;
-                    }
-                    
-                    object[] userObject = CallUserTweets(entry["TwitterSearch"], _count, hasTitle, hasCaption);
+                    object[] userObject = CallUserTweets(entry["TwitterSearch"], _count, !string.IsNullOrEmpty(entry["Title"]), !string.IsNullOrEmpty(entry["Caption"]));
 
                     if (!string.IsNullOrEmpty(userObject[1].ToString()) && string.IsNullOrEmpty(obj[1].ToString())) {
                         obj[1] = userObject[1];
@@ -125,6 +115,7 @@ public class TwitterStationService  : System.Web.Services.WebService {
                     
                     obj.Add(userObject[0]);
                     obj.Add(userObject[3]);
+                    obj.Add(userObject[4]);
                 }
                 else {
                     if (string.IsNullOrEmpty(obj[1].ToString())) {
@@ -148,6 +139,7 @@ public class TwitterStationService  : System.Web.Services.WebService {
         string userImage = string.Empty;
         string title = string.Empty;
         string caption = string.Empty;
+        string screenName = string.Empty;
         
         if (user.Length > 0 && user[0] == '@') {
             user = user.Remove(0, 1);
@@ -178,14 +170,19 @@ public class TwitterStationService  : System.Web.Services.WebService {
                             strList.Add(ConvertUrlsToLinks(userStatus.text));
 
                             DateTime createdAt = DateTime.ParseExact(userStatus.created_at, "ddd MMM dd HH:mm:ss zzz yyyy", System.Globalization.CultureInfo.InvariantCulture);
-                            strList.Add(GetPrettyDate(createdAt));
-
+                            strList.Add(HelperMethods.GetPrettyDate(createdAt));
+                            strList.Add(createdAt.Ticks.ToString());
+                            
                             if (!hasTitle && string.IsNullOrEmpty(title)) {
                                 title = userStatus.user.name;
                             }
 
                             if (!hasCaption && string.IsNullOrEmpty(caption)) {
                                 caption = userStatus.user.description;
+                            }
+
+                            if (string.IsNullOrEmpty(screenName)) {
+                                screenName = userStatus.user.screen_name;
                             }
                             
                             if (string.IsNullOrEmpty(userImage)) {
@@ -203,6 +200,7 @@ public class TwitterStationService  : System.Web.Services.WebService {
         newReturnObj.Add(userImage);
         newReturnObj.Add(title);
         newReturnObj.Add(caption);
+        newReturnObj.Add(screenName);
         newReturnObj.Add(returnObj);
         return newReturnObj.ToArray();
     }
@@ -230,10 +228,13 @@ public class TwitterStationService  : System.Web.Services.WebService {
                         strList.Add(ConvertUrlsToLinks(obj.statuses[i].text));
                         
                         DateTime createdAt = DateTime.ParseExact(obj.statuses[i].created_at, "ddd MMM dd HH:mm:ss zzz yyyy", System.Globalization.CultureInfo.InvariantCulture);
-                        strList.Add(GetPrettyDate(createdAt));
+                        strList.Add(HelperMethods.GetPrettyDate(createdAt));
                         
-                        strList.Add(obj.statuses[i].user.screen_name);
+                        strList.Add(obj.statuses[i].user.name);
                         strList.Add(obj.statuses[i].user.profile_image_url);
+                        strList.Add(createdAt.Ticks.ToString());
+                        strList.Add(obj.statuses[i].user.screen_name);
+                        
                         returnObj.Add(strList.ToArray());
                     }
                 }
@@ -242,73 +243,6 @@ public class TwitterStationService  : System.Web.Services.WebService {
         catch { }
 
         return returnObj.ToArray();
-    }
-
-    private static string GetPrettyDate(DateTime d) {
-        // 1.
-        // Get time span elapsed since the date.
-        TimeSpan s = DateTime.Now.Subtract(d);
-
-        // 2.
-        // Get total number of days elapsed.
-        int dayDiff = (int)s.TotalDays;
-
-        // 3.
-        // Get total number of seconds elapsed.
-        int secDiff = (int)s.TotalSeconds;
-
-        // 4.
-        // Don't allow out of range values.
-        if (dayDiff < 0 || dayDiff >= 31) {
-            return null;
-        }
-
-        // 5.
-        // Handle same-day times.
-        if (dayDiff == 0) {
-            // A.
-            // Less than one minute ago.
-            if (secDiff < 60) {
-                return "just now";
-            }
-            // B.
-            // Less than 2 minutes ago.
-            if (secDiff < 120) {
-                return "1 minute ago";
-            }
-            // C.
-            // Less than one hour ago.
-            if (secDiff < 3600) {
-                return string.Format("{0} minutes ago",
-                    Math.Floor((double)secDiff / 60));
-            }
-            // D.
-            // Less than 2 hours ago.
-            if (secDiff < 7200) {
-                return "1 hour ago";
-            }
-            // E.
-            // Less than one day ago.
-            if (secDiff < 86400) {
-                return string.Format("{0} hours ago",
-                    Math.Floor((double)secDiff / 3600));
-            }
-        }
-        // 6.
-        // Handle previous days.
-        if (dayDiff == 1) {
-            return "yesterday";
-        }
-        if (dayDiff < 7) {
-            return string.Format("{0} days ago",
-            dayDiff);
-        }
-        if (dayDiff < 31) {
-            return string.Format("{0} weeks ago",
-            Math.Ceiling((double)dayDiff / 7));
-        }
-        
-        return string.Empty;
     }
 
     private static string ConvertUrlsToLinks(string msg) {

@@ -1,4 +1,4 @@
-﻿<%@ page title="App Packages" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppPackages, App_Web_nh1ggown" %>
+﻿<%@ page title="App Packages" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppPackages, App_Web_emlx5cno" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -16,6 +16,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
     <div class="maincontent-padding margin-top">
+        <div class="clear-space"></div>
         <asp:UpdatePanel ID="updatepnl_refresh" runat="server">
             <ContentTemplate>
                 <asp:HiddenField ID="hf_edit" runat="server" OnValueChanged="hf_edit_ValueChanged"
@@ -33,19 +34,21 @@
         </asp:UpdatePanel>
         <asp:UpdatePanel ID="updatepnl_header" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
-                <div class="table-settings-box no-border" style="padding-bottom: 0px!important;">
-                    <div class="td-settings-ctrl">
-                        <a href="#" class="margin-right-big input-buttons-create" onclick="openWSE.LoadModalWindow(true, 'NewPackage-element', 'Create New App Package');$('#MainContent_tb_packagename').focus();return false;">Create Package</a>
-                        <div class="float-right pad-top">
-                            <b class="pad-right">Package Count</b><asp:Label ID="lbl_packagecount"
-                                runat="server" Text="0"></asp:Label>
-                        </div>
-                    </div>
-                    <div class="td-settings-desc">
-                        These app packages are used for the app installer
-                within the user accounts setup.
-                    </div>
+                <a href="#" class="margin-right-big float-left input-buttons-create" onclick="openWSE.LoadModalWindow(true, 'NewPackage-element', 'Create New App Package');$('#MainContent_tb_packagename').focus();return false;">Create Package</a>
+                <div class="searchwrapper float-left" style="width: 350px; margin-top: 3px;">
+                    <asp:Panel ID="Panel1_Installer" runat="server" DefaultButton="imgbtn_search">
+                        <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
+                            onfocus="if(this.value=='Search Packages')this.value=''" onblur="if(this.value=='')this.value='Search Packages'"
+                            Text="Search Packages"></asp:TextBox>
+                        <asp:LinkButton ID="imgbtn_clearsearch" runat="server" ToolTip="Clear search" CssClass="searchbox_clear RandomActionBtns"
+                            OnClick="imgbtn_clearsearch_Click" />
+                        <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
+                            OnClick="imgbtn_search_Click" />
+                    </asp:Panel>
                 </div>
+                <div class="clear-space"></div>
+                <b class="pad-right">Package Count</b><asp:Label ID="lbl_packagecount" runat="server" Text="0"></asp:Label>
+                <div class="clear-space"></div>
                 <asp:Panel ID="pnl_app_installer" runat="server" DefaultButton="btn_updateinstaller">
                     <div class="table-settings-box">
                         <div class="td-settings-title">
@@ -85,19 +88,15 @@
                 </div>
                 <div class="clear-space">
                 </div>
-                <div class="searchwrapper" style="width: 350px;">
-                    <asp:Panel ID="Panel1_Installer" runat="server" DefaultButton="imgbtn_search">
-                        <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
-                            onfocus="if(this.value=='Search Packages')this.value=''" onblur="if(this.value=='')this.value='Search Packages'"
-                            Text="Search Packages"></asp:TextBox>
-                        <asp:LinkButton ID="imgbtn_clearsearch" runat="server" ToolTip="Clear search" CssClass="searchbox_clear RandomActionBtns"
-                            OnClick="imgbtn_clearsearch_Click" />
-                        <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
-                            OnClick="imgbtn_search_Click" />
-                    </asp:Panel>
+                <div class="table-settings-box no-border">
+                    <div class="td-settings-ctrl">
+                        <asp:Panel ID="pnl_packageholder" runat="server">
+                        </asp:Panel>
+                    </div>
+                    <div class="td-settings-desc">
+                        App packages are used for the app installer within the user accounts setup. They are also used to setup Group logins and Demo users.
+                    </div>
                 </div>
-                <asp:Panel ID="pnl_packageholder" runat="server">
-                </asp:Panel>
             </ContentTemplate>
             <Triggers>
                 <asp:AsyncPostBackTrigger ControlID="imgbtn_clearsearch" />
@@ -155,7 +154,7 @@
                             </div>
                         </div>
                         <div class="ModalButtonHolder">
-                            <input type="button" class="input-buttons" value="Close" onclick="openWSE.LoadModalWindow(false, 'PackageEdit-element', ''); RefreshList();" />
+                            <input type="button" class="input-buttons no-margin" value="Close" onclick="openWSE.LoadModalWindow(false, 'PackageEdit-element', ''); RefreshList();" />
                         </div>
                     </div>
                 </div>
@@ -176,7 +175,6 @@
                         </div>
                         <div class="ModalScrollContent">
                             <div class="ModalPadContent">
-                                <div class="clear-margin">
                                     Enter the app package name and assign the apps to this package.
                                     <div class="clear-space">
                                     </div>
@@ -185,20 +183,23 @@
                                             <asp:Panel ID="pnl_newPackageName" runat="server" DefaultButton="btn_finish_add">
                                                 <asp:TextBox ID="tb_packagename" runat="server" CssClass="textEntry" onfocus="if(this.value=='Package Name')this.value=''"
                                                     onblur="if(this.value=='')this.value='Package Name'" Text="Package Name" MaxLength="100"></asp:TextBox>
-                                                <asp:Button ID="btn_finish_add" runat="server" Text="Save Package" CssClass="input-buttons RandomActionBtns margin-left-big"
-                                                    OnClick="btn_finish_add_Click" CausesValidation="false" />
-                                                <input type="button" value="Cancel" class="input-buttons" onclick="openWSE.LoadModalWindow(false, 'NewPackage-element', ''); $('#MainContent_tb_packagename').val('Package Name'); return false;" />
                                             </asp:Panel>
                                             <div class="clear-space">
                                             </div>
                                             <asp:Label ID="lbl_error" runat="server" ForeColor="Red" Text="" Visible="false"></asp:Label>
                                         </ContentTemplate>
+                                        <Triggers>
+                                            <asp:AsyncPostBackTrigger ControlID="btn_finish_add" />
+                                        </Triggers>
                                     </asp:UpdatePanel>
-                                    <div class="clear-margin">
-                                        This dialog will close upon save. To add apps to this package, click on the edit button in the new package.
-                                    </div>
-                                </div>
+                                    <div class="clear-space"></div>
+                                    This dialog will close upon save. To add apps to this package, click on the edit button in the new package.
                             </div>
+                        </div>
+                        <div class="ModalButtonHolder">
+                            <asp:Button ID="btn_finish_add" runat="server" Text="Create" CssClass="input-buttons RandomActionBtns no-margin float-left" OnClick="btn_finish_add_Click" CausesValidation="false" />
+                            <input type="button" value="Cancel" class="input-buttons float-right no-margin" onclick="openWSE.LoadModalWindow(false, 'NewPackage-element', ''); $('#MainContent_tb_packagename').val('Package Name'); return false;" />
+                            <div class="clear"></div>
                         </div>
                     </div>
                 </div>

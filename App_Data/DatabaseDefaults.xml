@@ -1,7 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Tables>
+    <Table name="aspnet_BackgroundServices" primaryKey="ID">
+        <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="Name" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="Description" type="nvarchar" length="2000" nullable="true"></Column>
+            <Column id="DLL_Location" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="DefaultState" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="Namespace" type="nvarchar" length="1000" nullable="true"></Column>
+            <Column id="LogInformation" type="bit" nullable="true"></Column>
+            <Column id="UpdatedBy" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="DateUpdated" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_BackgroundServicesLog" primaryKey="ID">
+        <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="ServiceNamespace" type="nvarchar" length="1000" nullable="false"></Column>
+            <Column id="Message" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="DateAdded" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
     <Table name="aspnet_BlockedChats" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="ChatUser" type="nvarchar" length="250" nullable="false"></Column>
@@ -10,6 +34,7 @@
     </Table>
     <Table name="aspnet_Chat" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="tUser" type="nvarchar" length="150" nullable="false"></Column>
             <Column id="sUser" type="nvarchar" length="150" nullable="false"></Column>
@@ -20,6 +45,7 @@
     </Table>
     <Table name="aspnet_ChatLogsDeleted" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="LogDate" type="datetime" nullable="false"></Column>
@@ -27,12 +53,14 @@
     </Table>
     <Table name="aspnet_CustomProjectDLLs" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="ProjectFolder" type="nvarchar" length="250" nullable="true"></Column>
         </Columns>
     </Table>
     <Table name="aspnet_GroupIPListener" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="GroupId" type="uniqueidentifier" nullable="false"></Column>
             <Column id="IPAddress" type="nvarchar" length="250" nullable="false"></Column>
@@ -43,6 +71,7 @@
     </Table>
     <Table name="aspnet_LoginActivity" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="IPAddress" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="NameUsed" type="nvarchar" length="250" nullable="true"></Column>
@@ -54,7 +83,7 @@
     </Table>
     <Table name="aspnet_Membership" for="System.Data.SqlClient" primaryKey="UserId">
         <Columns>
-            <Column id="ApplicationId" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="UserId" type="uniqueidentifier" nullable="false"></Column>
             <Column id="Password" type="nvarchar" length="128" nullable="false"></Column>
             <Column id="PasswordFormat" type="int" nullable="false"></Column>
@@ -84,24 +113,25 @@
     </Table>
     <Table name="aspnet_OverlayDLLs" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="OverlayID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="FolderPath" type="nvarchar" length="250" nullable="false"></Column>
         </Columns>
     </Table>
-    <Table name="aspnet_ServerSettings">
+    <Table name="aspnet_ServerSettings" primaryKey="ApplicationId">
         <Columns>
             <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="DocumentsFolder" type="nvarchar" length="4000" nullable="true"></Column>
             <Column id="RecordActivity" type="bit" nullable="true"></Column>
             <Column id="RecordActivityToLogFile" type="bit" nullable="true"></Column>
-            <Column id="AutoUpdates" type="bit" nullable="true"></Column>
             <Column id="LastCacheDate" type="datetime" nullable="true"></Column>
             <Column id="Override1" type="bit" nullable="true"></Column>
             <Column id="Override2" type="bit" nullable="true"></Column>
             <Column id="Override3" type="bit" nullable="true"></Column>
             <Column id="Override4" type="bit" nullable="true"></Column>
             <Column id="Override5" type="bit" nullable="true"></Column>
+            <Column id="Override6" type="bit" nullable="true"></Column>
             <Column id="EmailActivity" type="bit" nullable="true"></Column>
             <Column id="AdminNote" type="nvarchar" length="4000" nullable="true"></Column>
             <Column id="AdminNoteBy" type="nvarchar" length="250" nullable="true"></Column>
@@ -129,7 +159,6 @@
             <Column id="ShowUpdatesPopupDate" type="datetime" nullable="true"></Column>
             <Column id="NotificationsLocked" type="bit" nullable="true"></Column>
             <Column id="OverlaysLocked" type="bit" nullable="true"></Column>
-            <Column id="AutoBackupSystem" type="bit" nullable="true"></Column>
             <Column id="ShowPreviewButtonLogin" type="bit" nullable="true"></Column>
             <Column id="HideAllAppIcons" type="bit" nullable="true"></Column>
             <Column id="LoginMessage" type="nvarchar" length="4000" nullable="true"></Column>
@@ -163,34 +192,47 @@
             <Column id="ForceGroupLogin" type="bit" nullable="true"></Column>
             <Column id="AddBackgroundToLogo" type="bit" nullable="true"></Column>
             <Column id="LogoBackgroundColor" type="nvarchar" length="10" nullable="true"></Column>
+            <Column id="DeleteOldLoginActivity" type="bit" nullable="true"></Column>
+            <Column id="LoginActivityToKeepInDays" type="nvarchar" length="10" nullable="true"></Column>
+            <Column id="ServerTimezone" type="nvarchar" length="100" nullable="true"></Column>
+            <Column id="LockAppCreator" type="bit" nullable="true"></Column>
+            <Column id="LockBackgroundServices" type="bit" nullable="true"></Column>
+            <Column id="DisableJavascriptErrorAlerts" type="bit" nullable="true"></Column>
+            <Column id="DefaultBodyFontFamily" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="DefaultBodyFontSize" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="DefaultBodyFontColor" type="nvarchar" length="10" nullable="true"></Column>
+            <Column id="ShowLoginModalOnDemoMode" type="bit" nullable="true"></Column>
         </Columns>
     </Table>
     <Table name="aspnet_ShowUpdates">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="UserName" type="nvarchar" length="256" nullable="false"></Column>
             <Column id="ShowPopup" type="bit" nullable="false"></Column>
         </Columns>
     </Table>
     <Table name="aspnet_TableImports" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="TableID" type="nvarchar" length="10" nullable="false"></Column>
             <Column id="Date" type="datetime" nullable="false"></Column>
             <Column id="TableName" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="Description" type="nvarchar" length="4000" nullable="false"></Column>
             <Column id="ConnString" type="nvarchar" length="4000" nullable="false"></Column>
             <Column id="SelectCommand" type="nvarchar" length="4000" nullable="false"></Column>
             <Column id="Provider" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="ImportedBy" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="AllowEdit" type="bit" nullable="true"></Column>
-            <Column id="ChartType" type="nvarchar" length="250" nullable="true"></Column>
-            <Column id="ChartTitle" type="nvarchar" length="500" nullable="true"></Column>
             <Column id="UsersAllowedToEdit" type="nvarchar" length="4000" nullable="true"></Column>
             <Column id="NotifyUsers" type="bit" nullable="true"></Column>
             <Column id="ColumnOverrides" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="TableCustomizations" type="nvarchar" length="4000" nullable="true"></Column>
         </Columns>
     </Table>
     <Table name="aspnet_SavedConnections" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="ConnectionString" type="nvarchar" length="4000" nullable="false"></Column>
             <Column id="ConnectionName" type="nvarchar" length="250" nullable="false"></Column>
@@ -201,6 +243,7 @@
     </Table>
     <Table name="aspnet_MailSettings" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="Username" type="nvarchar" length="250" nullable="true"></Column>
             <Column id="SMTP_Address" type="nvarchar" length="1000" nullable="true"></Column>
@@ -215,7 +258,7 @@
     </Table>
     <Table name="aspnet_Users" for="System.Data.SqlClient" primaryKey="UserId">
         <Columns>
-            <Column id="ApplicationId" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="UserId" type="uniqueidentifier" nullable="false"></Column>
             <Column id="UserName" type="nvarchar" length="256" nullable="false"></Column>
             <Column id="LoweredUserName" type="nvarchar" length="256" nullable="false"></Column>
@@ -247,6 +290,7 @@
     </Table>
     <Table name="aspnet_UserBookmarks" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="BookmarkName" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="BookmarkHTML" type="nvarchar" length="1000" nullable="false"></Column>
@@ -256,6 +300,7 @@
     </Table>
     <Table name="aspnet_UserCalendar" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="StartDate" type="datetime" nullable="false"></Column>
@@ -268,6 +313,7 @@
     </Table>
     <Table name="aspnet_UserCustomization" primaryKey="UserId">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="UserId" type="uniqueidentifier" nullable="false"></Column>
             <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="WorkspaceRotate" type="bit" nullable="true"></Column>
@@ -315,10 +361,20 @@
             <Column id="BackgroundColor" type="nvarchar" length="10" nullable="true"></Column>
             <Column id="SidebarAccordion" type="bit" nullable="true"></Column>
             <Column id="ShowTopSearch" type="bit" nullable="true"></Column>
+            <Column id="NoBGOnAppRemote" type="bit" nullable="true"></Column>
+            <Column id="AppRemoteForeColor" type="nvarchar" length="10" nullable="true"></Column>
+            <Column id="SiteTipsOnPageLoad" type="bit" nullable="true"></Column>
+            <Column id="AppSelectorStyle" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="ProfileLinkStyle" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="HideAllOverlays" type="bit" nullable="true"></Column>
+            <Column id="DefaultBodyFontFamily" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="DefaultBodyFontSize" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="DefaultBodyFontColor" type="nvarchar" length="10" nullable="true"></Column>
         </Columns>
     </Table>
     <Table name="aspnet_UserNotificationMessages" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="NotificationID" type="nvarchar" length="500" nullable="false"></Column>
             <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
@@ -328,6 +384,7 @@
     </Table>
     <Table name="aspnet_UserNotifications">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="NotificationID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="Email" type="bit" nullable="true"></Column>
@@ -335,12 +392,14 @@
     </Table>
     <Table name="aspnet_UserOverlays">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="OverlayID" type="uniqueidentifier" nullable="false"></Column>
         </Columns>
     </Table>
     <Table name="aspnet_UserPlugins" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="Plugin" type="nvarchar" length="250" nullable="false"></Column>
@@ -349,6 +408,7 @@
     </Table>
     <Table name="aspnet_UserCustomTableOpenedCharts">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="AppID" type="nvarchar" length="250" nullable="false"></Column>
@@ -356,6 +416,7 @@
     </Table>
     <Table name="aspnet_WebEvent_Events" primaryKey="EventId">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="EventId" type="uniqueidentifier" nullable="false"></Column>
             <Column id="EventName" type="nvarchar" length="500" nullable="false"></Column>
             <Column id="EventComment" type="nvarchar" length="4000" nullable="false"></Column>
@@ -370,6 +431,7 @@
     </Table>
     <Table name="aspnet_WebEvents_Ignored" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="EventComment" type="nvarchar" length="4000" nullable="false"></Column>
             <Column id="TimesHit" type="nvarchar" length="10" nullable="true"></Column>
@@ -379,12 +441,14 @@
     </Table>
     <Table name="aspnet_AppDLLs" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="AppID" type="nvarchar" length="250" nullable="false"></Column>
         </Columns>
     </Table>
     <Table name="AutoBackupSystem" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="BackupDay" type="nvarchar" length="500" nullable="false"></Column>
             <Column id="BackupTime" type="nvarchar" length="500" nullable="false"></Column>
@@ -393,6 +457,7 @@
     </Table>
     <Table name="CustomProjects" primaryKey="ProjectID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ProjectID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="Folder" type="nvarchar" length="2000" nullable="false"></Column>
             <Column id="Description" type="nvarchar" length="500" nullable="true"></Column>
@@ -404,21 +469,23 @@
     </Table>
     <Table name="CustomTables" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
-            <Column id="TableName" type="nvarchar" length="100" nullable="false"></Column>
-            <Column id="CreatedBy" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="TableID" type="nvarchar" length="50" nullable="false"></Column>
-            <Column id="AppID" type="nvarchar" length="500" nullable="true"></Column>
-            <Column id="Sidebar" type="bit" nullable="true"></Column>
+            <Column id="TableName" type="nvarchar" length="100" nullable="false"></Column>
+            <Column id="Description" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="AppID" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="ColumnData" type="nvarchar" length="4000" nullable="true"></Column>
             <Column id="NotifyUsers" type="bit" nullable="true"></Column>
-            <Column id="ChartType" type="nvarchar" length="500" nullable="true"></Column>
-            <Column id="ChartTitle" type="nvarchar" length="500" nullable="true"></Column>
             <Column id="UsersAllowedToEdit" type="nvarchar" length="4000" nullable="true"></Column>
-            <Column id="DateCreated" type="datetime" nullable="false"></Column>
+            <Column id="TableCustomizations" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="UpdatedBy" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="DateUpdated" type="datetime" nullable="false"></Column>
         </Columns>
     </Table>
     <Table name="WorkspaceOverlays" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="OverlayName" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="FileLoc" type="nvarchar" length="250" nullable="false"></Column>
@@ -429,6 +496,7 @@
     </Table>
     <Table name="FileDriveDocuments" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="FileName" type="nvarchar" length="500" nullable="false"></Column>
             <Column id="FileExtension" type="nvarchar" length="50" nullable="false"></Column>
@@ -443,6 +511,7 @@
     </Table>
     <Table name="FileDriveFolders" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="Folder" type="nvarchar" length="500" nullable="false"></Column>
             <Column id="Date" type="datetime" nullable="false"></Column>
@@ -451,6 +520,7 @@
     </Table>
     <Table name="GroupList" primaryKey="GroupID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="GroupID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="GroupName" type="nvarchar" length="500" nullable="false"></Column>
             <Column id="Description" type="nvarchar" length="4000" nullable="true"></Column>
@@ -463,6 +533,7 @@
     </Table>
     <Table name="aspnet_IPListener" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="IPAddress" type="nvarchar" length="150" nullable="false"></Column>
             <Column id="Active" type="bit" nullable="false"></Column>
@@ -472,6 +543,7 @@
     </Table>
     <Table name="aspnet_IPWatchList" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="IPAddress" type="nvarchar" length="150" nullable="false"></Column>
             <Column id="Attempts" type="int" nullable="false"></Column>
@@ -481,8 +553,9 @@
     </Table>
     <Table name="Memberships" for="System.Data.SqlServerCe.4.0" primaryKey="UserId">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="UserId" type="uniqueidentifier" nullable="false"></Column>
-            <Column id="ApplicationId" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="Password" type="nvarchar" length="128" nullable="false"></Column>
             <Column id="PasswordFormat" type="int" nullable="false"></Column>
             <Column id="PasswordSalt" type="nvarchar" length="128" nullable="false"></Column>
@@ -509,6 +582,7 @@
     </Table>
     <Table name="MessageBoard" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="Post" type="nvarchar" length="4000" nullable="false"></Column>
@@ -516,8 +590,9 @@
             <Column id="GroupName" type="nvarchar" length="500" nullable="false"></Column>
         </Columns>
     </Table>
-    <Table name="NewUserDefaults" primaryKey="Role">
+    <Table name="NewUserDefaults">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="Role" type="nvarchar" length="150" nullable="false"></Column>
             <Column id="Theme" type="nvarchar" length="50" nullable="true"></Column>
             <Column id="ShowDateTime" type="bit" nullable="true"></Column>
@@ -568,11 +643,21 @@
             <Column id="BackgroundColor" type="nvarchar" length="10" nullable="true"></Column>
             <Column id="SidebarAccordion" type="bit" nullable="true"></Column>
             <Column id="ShowTopSearch" type="bit" nullable="true"></Column>
+            <Column id="NoBGOnAppRemote" type="bit" nullable="true"></Column>
+            <Column id="AppRemoteForeColor" type="nvarchar" length="10" nullable="true"></Column>
+            <Column id="SiteTipsOnPageLoad" type="bit" nullable="true"></Column>
+            <Column id="AppSelectorStyle" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="ProfileLinkStyle" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="HideAllOverlays" type="bit" nullable="true"></Column>
+            <Column id="DefaultBodyFontFamily" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="DefaultBodyFontSize" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="DefaultBodyFontColor" type="nvarchar" length="10" nullable="true"></Column>
             <Column id="DateUpdated" type="datetime" nullable="true"></Column>
         </Columns>
     </Table>
     <Table name="Notifications" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="NotificationName" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="NotificationImage" type="nvarchar" length="500" nullable="true"></Column>
@@ -582,6 +667,7 @@
     </Table>
     <Table name="RSSFeeds" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="CustomFeed" type="bit" nullable="false"></Column>
@@ -593,6 +679,7 @@
     </Table>
     <Table name="SitePlugins" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="PluginName" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="PluginLocation" type="nvarchar" length="2000" nullable="false"></Column>
@@ -606,6 +693,7 @@
     </Table>
     <Table name="StartupScripts" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="ScriptPath" type="nvarchar" length="500" nullable="false"></Column>
             <Column id="Sequence" type="int" nullable="false"></Column>
@@ -616,6 +704,7 @@
     </Table>
     <Table name="StartupStyleSheets" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="ScriptPath" type="nvarchar" length="500" nullable="false"></Column>
             <Column id="Sequence" type="int" nullable="false"></Column>
@@ -627,6 +716,7 @@
     </Table>
     <Table name="TwitterFeeds" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="Title" type="nvarchar" length="150" nullable="false"></Column>
             <Column id="Caption" type="nvarchar" length="150" nullable="false"></Column>
@@ -640,7 +730,7 @@
     <Table name="Users" for="System.Data.SqlServerCe.4.0" primaryKey="UserId">
         <Columns>
             <Column id="UserId" type="uniqueidentifier" nullable="false"></Column>
-            <Column id="ApplicationId" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="UserName" type="nvarchar" length="50" nullable="false"></Column>
             <Column id="IsAnonymous" type="bit" nullable="false"></Column>
             <Column id="LastActivityDate" type="datetime" nullable="false"></Column>
@@ -669,7 +759,9 @@
     </Table>
     <Table name="UserUpdateFlags" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="SessionID" type="nvarchar" length="500" nullable="true"></Column>
             <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="AppID" type="nvarchar" length="250" nullable="true"></Column>
             <Column id="GroupName" type="nvarchar" length="500" nullable="true"></Column>
@@ -678,6 +770,7 @@
     </Table>
     <Table name="UserApps" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="AppID" type="nvarchar" length="250" nullable="false"></Column>
@@ -695,6 +788,7 @@
     </Table>
     <Table name="WebServices" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="Filename" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="Description" type="nvarchar" length="500" nullable="true"></Column>
@@ -704,6 +798,7 @@
     </Table>
     <Table name="AppCategory" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="Category" type="nvarchar" length="500" nullable="false"></Column>
             <Column id="DateAdded" type="datetime" nullable="false"></Column>
@@ -712,6 +807,7 @@
     </Table>
     <Table name="AppList" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="AppID" type="nvarchar" length="50" nullable="false"></Column>
             <Column id="Name" type="nvarchar" length="50" nullable="false"></Column>
@@ -737,10 +833,13 @@
             <Column id="DefaultWorkspace" type="int" nullable="true"></Column>
             <Column id="IsPrivate" type="bit" nullable="true"></Column>
             <Column id="AllowUserOverrides" type="bit" nullable="true"></Column>
+            <Column id="AppBackgroundColor" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="IconBackgroundColor" type="nvarchar" length="500" nullable="true"></Column>
         </Columns>
     </Table>
     <Table name="AppPackages" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="PackageName" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="AppList" type="nvarchar" length="4000" nullable="true"></Column>
@@ -751,6 +850,7 @@
     </Table>
     <Table name="AppParams" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="AppID" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="UserName" type="nvarchar" length="250" nullable="false"></Column>
@@ -762,6 +862,7 @@
     </Table>
     <Table name="AppRatings" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="AppID" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="UserName" type="nvarchar" length="256" nullable="false"></Column>
@@ -772,6 +873,7 @@
     </Table>
     <Table name="aspnet_UserAppSettings" primaryKey="ID">
         <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
             <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
             <Column id="AppID" type="nvarchar" length="250" nullable="false"></Column>
             <Column id="Username" type="nvarchar" length="256" nullable="false"></Column>
@@ -786,6 +888,8 @@
             <Column id="AutoOpen" type="bit" nullable="true"></Column>
             <Column id="DefaultWorkspace" type="int" nullable="true"></Column>
             <Column id="Category" type="nvarchar" length="4000" nullable="true"></Column>
+            <Column id="AppBackgroundColor" type="nvarchar" length="500" nullable="true"></Column>
+            <Column id="IconBackgroundColor" type="nvarchar" length="500" nullable="true"></Column>
         </Columns>
     </Table>
 </Tables>

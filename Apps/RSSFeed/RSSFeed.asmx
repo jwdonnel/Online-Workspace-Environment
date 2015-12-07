@@ -12,6 +12,8 @@ using System.IO;
 using System.Xml.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.ServiceModel.Syndication;
+using System.Web.Script.Serialization;
 
 [WebService(Namespace = "http://tempuri.org/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
@@ -20,9 +22,12 @@ using System.Text.RegularExpressions;
 public class RSSFeed : System.Web.Services.WebService {
 
     private string _username;
-
+    private int _forceUpdateInterval = 15;
+    
     public RSSFeed() {
         _username = HttpContext.Current.User.Identity.Name;
+        
+        LoadAppParams();
         
         if (OpenWSE_Tools.Apps.AppInitializer.IsGroupAdminSession(HttpContext.Current.User.Identity.Name)) {
             _username = GroupSessions.GetUserGroupSessionName(HttpContext.Current.User.Identity.Name);
@@ -32,240 +37,156 @@ public class RSSFeed : System.Web.Services.WebService {
         }
     }
 
-    [WebMethod]
-    public string GetRSSFeed(string _url, string _show, string search) {
-        StringBuilder sb = new StringBuilder();
-        _url = HttpUtility.UrlDecode(_url);
-        search = HttpUtility.UrlDecode(search);
-        if ((!string.IsNullOrEmpty(_url)) && (_url != "undefined")) {
+    private void LoadAppParams() {
+        AppParams appParams = new AppParams(false);
+        appParams.GetAllParameters_ForApp("app-rssfeed");
+        foreach (Dictionary<string, string> dr in appParams.listdt) {
             try {
-                search = search.ToLower().Trim();
-                if (search == "search feeds")
-                    search = string.Empty;
-
-                int numberToShow = 10;
-                int.TryParse(_show, out numberToShow);
-
-                WebRequest request = WebRequest.Create(_url);
-                WebResponse response = request.GetResponse();
-                Stream rssStream = response.GetResponseStream();
-                XmlDocument rssDoc = new XmlDocument();
-                rssDoc.Load(rssStream);
-
-                XmlNodeList rssItems = rssDoc.SelectNodes("rss/channel/item");
-                if (rssItems.Count == 0) {
-                    var nsmgr = new XmlNamespaceManager(new NameTable());
-                    nsmgr.AddNamespace("atom", "http://www.w3.org/2005/Atom");
-                    rssItems = rssDoc.SelectNodes("/atom:feed/atom:entry/atom:content", nsmgr);
-                    if (rssItems.Count == 0) {
-                        rssItems = rssDoc.SelectNodes("/atom:feed/atom:entry", nsmgr);
-                        if (rssItems.Count == 0) {
-                            for (int i = 0; i < rssDoc.ChildNodes.Count; i++) {
-                                XmlNode x = rssDoc.ChildNodes[i];
-                                if (x.Name.ToLower() == "feed")
-                                    rssItems = rssDoc.ChildNodes[i].ChildNodes;
-                            }
-                        }
-                    }
-                }
-
-                int ii = 0;
-                for (int i = 0; i < rssItems.Count; i++) {
-                    if (ii >= numberToShow)
-                        break;
-
-                    string text = GetRSSChildFeeds(rssItems[i].ChildNodes, search);
-                    if (!string.IsNullOrEmpty(text)) {
-                        sb.Append(text);
-                        ii++;
+                string param = dr["Parameter"];
+                int indexOf = param.IndexOf("=") + 1;
+                string subParam = param.Substring(indexOf);
+                if (param.Replace("=" + subParam, string.Empty) == "OnlyUpdateInteveral") {
+                    int tempOut = 15;
+                    if (int.TryParse(subParam, out tempOut) && tempOut >= 0) {
+                        _forceUpdateInterval = tempOut;
                     }
                 }
             }
-            catch {
-                if ((search.ToLower() == "search feeds") || (string.IsNullOrEmpty(search))) {
-                    if (OpenWSE_Tools.Apps.AppInitializer.IsGroupAdminSession(HttpContext.Current.User.Identity.Name)) {
-                        sb.Append("<li class='remove-rss-li'><div class='pad-all'>Could not load " + _url + ".");
-                        sb.Append("<div class='remove-rss-q pad-top clear'>Would you want to remove it from your list? <input type='button' value='Yes' class='input-buttons margin-left' onclick='RemoveNotFoundRssFeed(this, \"" + _url + "\")' style='width: 50px;' />");
-                        sb.Append("<input type='button' value='No' class='input-buttons' onclick='CancelNotFoundRssFeed(this)' style='width: 50px;' /></div></div></li>");
-                    }
-                }
-            }
+            catch { }
         }
-        return sb.ToString();
     }
 
-    private string GetRSSChildFeeds(XmlNodeList childList, string search) {
-        string title = "";
-        string link = "";
-        string description = "";
-        string summary = "";
-        string content = "";
-        string pubDate = "";
-        string creator = "";
-        string comments = "";
+    [WebMethod]
+    public object[] GetRSSFeed(string category, string search, string feedsToPull, string forOverlay) {
+        object[] returnData = new object[2];
+        List<RSSItem> nodeList = new List<RSSItem>();
+
+        int totalFeedToPull = 0;
+        int.TryParse(feedsToPull, out totalFeedToPull);
+        if (totalFeedToPull == 0) {
+            totalFeedToPull = 50;
+        }
+
+        category = HttpUtility.UrlDecode(category);
+        if (category == "null" || category == "undefined") {
+            category = string.Empty;
+        }
+
+        search = HttpUtility.UrlDecode(search).ToLower().Trim();
+        if (search == "search current feeds") {
+            search = string.Empty;
+        }
+
+        List<string[]> feedUrls = RSSFeeds.GetFeedLinksFromCategory(category, _username);
+
+        RSSFeeds.LoadRSSFeedListFile(feedUrls);
         
-        StringBuilder sb = new StringBuilder();
-        foreach (XmlNode node in childList) {
-            if ((node.HasChildNodes) && (node.FirstChild.Name.ToLower() != "#text") && (DoesntContainSection(node.Name.ToLower()))) {
-                GetRSSChildFeeds(node.ChildNodes, search);
-            }
-            else {
-                string nodeName = node.Name.ToLower();
-                if ((nodeName == "#text") && (node.ParentNode != null) && (!DoesntContainSection(node.ParentNode.Name.ToLower()))) {
-                    nodeName = node.ParentNode.Name.ToLower();
-                }
-                switch (nodeName) {
-                    case "title":
-                        title = node.InnerText;
-                        break;
-                    case "link":
-                        link = node.InnerText;
-                        break;
-                    case "description":
-                        description = node.InnerText;
-                        break;
-                    case "summary":
-                        summary = node.InnerText;
-                        break;
-                    case "pubdate":
-                        pubDate = node.InnerText;
-                        break;
-                    case "published":
-                        pubDate = node.InnerText;
-                        break;
-                    case "dc:date":
-                        pubDate = node.InnerText;
-                        break;
-                    case "content:encoded":
-                        content = node.InnerText;
-                        break;
-                    case "content":
-                        content = node.InnerText;
-                        break;
-                    case "dc:creator":
-                        creator = node.InnerText;
-                        break;
-                    case "creator":
-                        creator = node.InnerText;
-                        break;
-                    case "author":
-                        creator = node.InnerText;
-                        break;
-                    case "comments":
-                        comments = node.InnerText;
-                        break;
-                }
+        bool needToUpdate = true;
+        if (OpenWSE_Tools.AppServices.RSSFeedUpdater.GetCurrentState == OpenWSE_Library.Core.BackgroundServices.BackgroundStates.Running ||
+            OpenWSE_Tools.AppServices.RSSFeedUpdater.GetCurrentState == OpenWSE_Library.Core.BackgroundServices.BackgroundStates.Sleeping) {
+            needToUpdate = false;
+        }
+        else {
+            TimeSpan timeSpan = ServerSettings.ServerDateTime.Subtract(RSSFeeds.FeedListDateUpdated);
+            if (_forceUpdateInterval > 0 && timeSpan.TotalMinutes < _forceUpdateInterval) {
+                needToUpdate = false;
             }
         }
 
-        if (string.IsNullOrEmpty(creator))
-            creator = "N/A";
-
-        if ((!string.IsNullOrEmpty(description)) && (!string.IsNullOrEmpty(summary)) && (description != summary))
-            description = description + "<br />";
-
-        if (description == summary)
-            summary = "";
-
-        if (description == content)
-            content = "";
-
-        if (!string.IsNullOrEmpty(content))
-            content = "<div class='clear-space'></div>" + content;
-
-
-        // Search for match
-        if (!string.IsNullOrEmpty(search)) {
-            if ((!link.ToLower().Contains(search))
-                && (!title.ToLower().Contains(search))
-                && (!pubDate.ToLower().Contains(search))
-                && (!creator.ToLower().Contains(search))
-                && (!description.ToLower().Contains(search))
-                && (!summary.ToLower().Contains(search))
-                && (!content.ToLower().Contains(search)))
-                return string.Empty;
-            else {
-                string replacement = string.Empty;
-                string backcolor = "style='background-color: #FFE97F;'";
-                if (title.ToLower().Contains(search)) {
-                    replacement = title.Substring(title.IndexOf(search, StringComparison.CurrentCultureIgnoreCase), search.Length);
-                    replacement = "<span " + backcolor + ">" + replacement + "</span>";
-                    title = Regex.Replace(title, search, replacement, RegexOptions.IgnoreCase);
+        foreach (string[] strItem in feedUrls) {
+            if (!needToUpdate) {
+                if (RSSFeeds.LoadedFeedList.ContainsKey(strItem[0])) {
+                    RSSFeeds.UpdateNodeList(strItem[0], nodeList, search);
+                    continue;
                 }
-                if (pubDate.ToLower().Contains(search)) {
-                    replacement = pubDate.Substring(pubDate.IndexOf(search, StringComparison.CurrentCultureIgnoreCase), search.Length);
-                    replacement = "<span " + backcolor + ">" + replacement + "</span>";
-                    pubDate = Regex.Replace(pubDate, search, replacement, RegexOptions.IgnoreCase);
-                }
-                if (creator.ToLower().Contains(search)) {
-                    replacement = creator.Substring(creator.IndexOf(search, StringComparison.CurrentCultureIgnoreCase), search.Length);
-                    replacement = "<span " + backcolor + ">" + replacement + "</span>";
-                    creator = Regex.Replace(creator, search, replacement, RegexOptions.IgnoreCase);
-                }
-                if (description.ToLower().Contains(search)) {
-                    replacement = description.Substring(description.IndexOf(search, StringComparison.CurrentCultureIgnoreCase), search.Length);
-                    replacement = "<span " + backcolor + ">" + replacement + "</span>";
-                    description = Regex.Replace(description, search, replacement, RegexOptions.IgnoreCase);
-                }
-                if (summary.ToLower().Contains(search)) {
-                    replacement = summary.Substring(summary.IndexOf(search, StringComparison.CurrentCultureIgnoreCase), search.Length);
-                    replacement = "<span " + backcolor + ">" + replacement + "</span>";
-                    summary = Regex.Replace(summary, search, replacement, RegexOptions.IgnoreCase);
-                }
-                if (content.ToLower().Contains(search)) {
-                    replacement = content.Substring(content.IndexOf(search, StringComparison.CurrentCultureIgnoreCase), search.Length);
-                    replacement = "<span " + backcolor + ">" + replacement + "</span>";
-                    content = Regex.Replace(content, search, replacement, RegexOptions.IgnoreCase);
-                }
+            }
+
+            if (!RSSFeeds.LoadedFeedList.ContainsKey(strItem[0]) && OpenWSE_Tools.AppServices.RSSFeedUpdater.GetCurrentState != OpenWSE_Library.Core.BackgroundServices.BackgroundStates.Running) {
+                RSSFeeds.GetNewFeeds(strItem[0], strItem[1], strItem[2], nodeList, search);
             }
         }
 
-
-        DateTime publishedDate;
-        if (DateTime.TryParse(pubDate, out publishedDate))
-            pubDate = publishedDate.ToString();
-
-        if (!string.IsNullOrEmpty(title)) {
-            if (!string.IsNullOrEmpty(link))
-                sb.Append("<li><a class='rss-title' href='" + link + "' target='_blank'>" + title + "</a><br />");
-            else
-                sb.Append("<li><span class='rss-title'>" + title + "</span><br />");
+        if (needToUpdate) {
+            RSSFeeds.FeedListDateUpdated = ServerSettings.ServerDateTime;
         }
 
-        string commentsStr = string.Empty;
-        if (!string.IsNullOrEmpty(comments)) {
-            commentsStr = "<div class='clear-space'></div><b>Comments</b><div class='clear-space-two'></div>" + comments;
+        if (string.IsNullOrEmpty(forOverlay) || forOverlay.ToLower() == "false") {
+            nodeList.Sort((x, y) => DateTime.Compare(y.PubDate, x.PubDate));
+            if (nodeList.Count > totalFeedToPull) {
+                int totalToRemove = nodeList.Count - totalFeedToPull;
+                nodeList.RemoveRange(totalFeedToPull, totalToRemove);
+            }
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            string jsonFeedList = js.Serialize(nodeList);
+
+            returnData[0] = jsonFeedList;
+            returnData[1] = RSSFeeds.GetFeedSelectionList(_username);
+        }
+        else {
+            if (nodeList.Count > 0) {
+                Random next = new Random();
+                int indexNum = next.Next(0, nodeList.Count - 1);
+
+                RSSItem overlayItem = nodeList[indexNum];
+
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                string jsonFeedList = js.Serialize(new List<RSSItem> { overlayItem });
+
+                returnData[0] = jsonFeedList;
+                returnData[1] = string.Empty;
+            }
         }
 
-        sb.Append("<div class='rss-author'><b class='pad-right-sml'>Posted:</b>" + pubDate + " by " + creator + "</div>");
-        sb.Append("<div class='rss-description'>" + description + summary + "</div>");
-        sb.Append("<div class='rss-content'>" + content + commentsStr + "</div></li>");
-
-        return sb.ToString();
-    }
-
-    private bool DoesntContainSection(string nodeName) {
-        if ((nodeName.Contains("title")) || (nodeName.Contains("link")) || (nodeName.Contains("description")) || (nodeName.Contains("summary"))
-                || (nodeName.Contains("pubdate")) || (nodeName.Contains("published")) || (nodeName.Contains("dc:date"))
-                || (nodeName.Contains("content:encoded")) || (nodeName.Contains("content")) || (nodeName.Contains("dc:creator"))
-                || (nodeName.Contains("creator")) || (nodeName.Contains("author")) || (nodeName.Contains("comments"))) {
-                    return false;
-        }
-        return true;
+        return returnData;
     }
 
     [WebMethod]
-    public string DeleteFeedFromList(string _url) {
+    public object[] GetUserFeeds() {
+        object[] obj = new object[4];
+        List<RSSFeeds_Coll> feedColl = new List<RSSFeeds_Coll>();
+
+        RSSFeeds feeds = null;
+
         if (!string.IsNullOrEmpty(_username)) {
-            _url = HttpUtility.UrlDecode(_url);
-            RSSFeeds feeds = new RSSFeeds(_username);
-            feeds.DeleteRowByURL(_url);
+            feeds = new RSSFeeds(_username);
+            feeds.BuildEntriesAll();
+            feedColl = feeds.RSSFeedCollection;
         }
-        return "true";
+        else {
+            feedColl = RSSFeeds.GetDemoFeeds();
+        }
+
+
+        List<string> list1 = new List<string>();
+        List<string> list2 = new List<string>();
+        List<string> list3 = new List<string>();
+        List<string> list4 = new List<string>();
+        
+        foreach (RSSFeeds_Coll feed in feedColl) {
+            string feedUrl = feed.URL;
+            if ((!feedUrl.StartsWith("http://")) && (!feedUrl.StartsWith("https://"))) {
+                feedUrl = "http:" + feedUrl;
+            }
+
+            if (!list1.Contains(feed.Title)) {
+                list1.Add(feed.Title);
+                list2.Add(feedUrl);
+                list3.Add(feed.IsCustomFeed.ToString().ToLower());
+                list4.Add(feed.RSSID);
+            }
+        }
+
+        obj[0] = list1.ToArray();
+        obj[1] = list2.ToArray();
+        obj[2] = list3.ToArray();
+        obj[3] = list4.ToArray();
+
+        return obj;
     }
 
     [WebMethod]
-    public string AddRemoveFeed(string _title, string _url, string _rssid, string _needAdd) {
+    public void AddRemoveFeed(string _title, string _url, string _rssid, string _needAdd) {
         if (!string.IsNullOrEmpty(_username)) {
             _title = HttpUtility.UrlDecode(_title);
             _url = HttpUtility.UrlDecode(_url);
@@ -275,108 +196,8 @@ public class RSSFeed : System.Web.Services.WebService {
             else
                 feeds.DeleteRowByRSSID(_rssid);
         }
-        return "";
     }
-
-    [WebMethod]
-    public object[] GetUserFeeds() {
-        object[] obj = new object[4];
-        List<RSSFeeds_Coll> feedColl = new List<RSSFeeds_Coll>();
-
-        RSSFeeds feeds = null;
-        
-        if (!string.IsNullOrEmpty(_username)) {
-            feeds = new RSSFeeds(_username);
-            feeds.BuildEntriesAll();
-            feedColl = feeds.RSSFeedCollection;
-        }
-        else {
-            feedColl = GetDemoFeeds();
-        }
-        
-        
-        List<string> list1 = new List<string>();
-        List<string> list2 = new List<string>();
-        List<string> list3 = new List<string>();
-        List<string> list4 = new List<string>();
-
-        try {
-            foreach (RSSFeeds_Coll feed in feedColl) {
-                string feedUrl = feed.URL;
-                if ((!feedUrl.StartsWith("http://")) && (!feedUrl.StartsWith("https://"))) {
-                    feedUrl = "http:" + feedUrl;
-                }
-
-                if (feed.IsCustomFeed) {
-                    try {
-                        bool pageExists = true;
-                        HttpWebResponse response = null;
-
-                        var request = (HttpWebRequest)WebRequest.Create(feedUrl);
-                        request.Method = "HEAD";
-
-                        try {
-                            response = (HttpWebResponse)request.GetResponse();
-                        }
-                        catch (WebException ex) {
-                            pageExists = false;
-                        }
-                        finally {
-                            // Don't forget to close your response.
-                            if (response != null)
-                                response.Close();
-                        }
-
-                        if (!pageExists) {
-                            if (feeds != null) {
-                                feeds.DeleteRowByID(feed.ID);
-                            }
-                        }
-
-                    }
-                    catch { }
-                }
-
-                if (!list1.Contains(feed.Title)) {
-                    list1.Add(feed.Title);
-                    list2.Add(feedUrl);
-                    list3.Add(feed.IsCustomFeed.ToString().ToLower());
-                    list4.Add(feed.RSSID);
-                }
-            }
-        }
-        catch (Exception e) {
-            AppLog.AddError(e);
-        }
-        
-        obj[0] = list1.ToArray();
-        obj[1] = list2.ToArray();
-        obj[2] = list3.ToArray();
-        obj[3] = list4.ToArray();
-        
-        return obj;
-    }
-
-    private List<RSSFeeds_Coll> GetDemoFeeds() {
-        XmlDocument xmlDoc = new XmlDocument();
-        xmlDoc.Load(ServerSettings.GetServerMapLocation + "Apps\\RSSFeed\\RSSFeeds.xml");
-
-        List<RSSFeeds_Coll> coll = new List<RSSFeeds_Coll>();
-        
-        if (xmlDoc != null) {
-            XmlNodeList nodeList = xmlDoc.DocumentElement.FirstChild.ChildNodes;
-            foreach (XmlNode node in nodeList) {
-                if (node.ChildNodes.Count >= 3) {
-                    XmlNodeList childNodes = node.ChildNodes;
-                    RSSFeeds_Coll feed = new RSSFeeds_Coll(Guid.NewGuid().ToString(), string.Empty, "false", childNodes[1].InnerText, childNodes[2].InnerText, childNodes[0].InnerText, DateTime.Now.ToString());
-                    coll.Add(feed);
-                }
-            }
-        }
-
-        return coll;
-    }
-
+    
     [WebMethod]
     public object[] AddCustomFeed(string _url) {
         object[] obj = new object[2];
@@ -412,5 +233,150 @@ public class RSSFeed : System.Web.Services.WebService {
             obj[1] = id;
         }
         return obj;
+    }
+
+    [WebMethod(Description = "Clears the LoadedFeedList used for the RSS Feed app. Note, you must be either the administrator or have the app install in order to complete this service.")]
+    public string RSSFeeds_Clear_LoadedFeedList() {
+        if (HttpContext.Current.User.Identity.IsAuthenticated) {
+            string username = HttpContext.Current.User.Identity.Name;
+            MemberDatabase member = new MemberDatabase(username);
+            if (username.ToLower() == "administrator" || member.UserHasApp("app-rssfeed")) {
+                RSSFeeds.LoadedFeedList.Clear();
+                return "LoadedFeedList has been cleared!";
+            }
+        }
+
+        return "Not authorized to clear the LoadedFeedList.";
+    }
+
+    [WebMethod(Description = "Prints the LoadedFeedList used for the RSS Feed app in JSON format. Note, you must be either the administrator or have the app install in order to complete this service.")]
+    public string RSSFeeds_Print_LoadedFeedList() {
+        if (HttpContext.Current.User.Identity.IsAuthenticated) {
+            string username = HttpContext.Current.User.Identity.Name;
+            MemberDatabase member = new MemberDatabase(username);
+            if (username.ToLower() == "administrator" || member.UserHasApp("app-rssfeed")) {
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                string jsonFeedList = string.Empty;
+                try {
+                    jsonFeedList = js.Serialize(RSSFeeds.LoadedFeedList);
+                }
+                catch (Exception e) {
+                    jsonFeedList = e.Message;
+                }
+
+                return jsonFeedList;
+            }
+        }
+
+        return "Not authorized to print the LoadedFeedList.";
+    }
+
+    [WebMethod(Description = "Updates the LoadedFeedList used for the RSS Feed app by getting all the latest feeds. Note, you must be either the administrator or have the app install in order to complete this service.")]
+    public string RSSFeeds_Update_LoadedFeedList() {
+        if (HttpContext.Current.User.Identity.IsAuthenticated) {
+            string username = HttpContext.Current.User.Identity.Name;
+            MemberDatabase member = new MemberDatabase(username);
+            if (username.ToLower() == "administrator" || member.UserHasApp("app-rssfeed")) {
+                List<string[]> feedUrls = RSSFeeds.GetFeedLinksFromCategory(string.Empty, string.Empty);
+
+                RSSFeeds.FeedListDateUpdated = ServerSettings.ServerDateTime;
+                LoadAppParams();
+                
+                List<RSSItem> nodeList = new List<RSSItem>();
+                foreach (string[] strItem in feedUrls) {
+                    RSSFeeds.GetNewFeeds(strItem[0], strItem[1], strItem[2], nodeList, string.Empty);
+                }
+                
+                return "LoadedFeedList has been updated!";
+            }
+        }
+
+        return "Not authorized to update the LoadedFeedList.";
+    }
+
+    [WebMethod(Description = "Get the total count of the Loaded RSS Feed list.")]
+    public string RSSFeeds_Get_LoadedFeedList_Count() {
+        return "Total feeds saved: " + RSSFeeds.LoadedFeedList.Count.ToString();
+    }
+
+    [WebMethod(Description = "Try to save the RSS Feed List to the data file stored in the Apps folder.")]
+    public string RSSFeeds_Save_LoadedFeedList_ToFile() {
+        string returnMessage = "No file found or no feeds loaded to save.";
+
+        if (HttpContext.Current.User.Identity.IsAuthenticated) {
+            string username = HttpContext.Current.User.Identity.Name;
+            MemberDatabase member = new MemberDatabase(username);
+            if (username.ToLower() == "administrator" || member.UserHasApp("app-rssfeed")) {
+                string FeedListFile = "Apps/RSSFeed/RSSFeedList.data";
+                if (RSSFeeds.LoadedFeedList.Count > 0 && !string.IsNullOrEmpty(FeedListFile)) {
+                    try {
+                        using (var str = new BinaryWriter(File.Create(ServerSettings.GetServerMapLocation + FeedListFile))) {
+                            var bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                            bf.Serialize(str.BaseStream, RSSFeeds.LoadedFeedList);
+                            str.Close();
+
+                            returnMessage = "File has been saved as RSSFeedList.data. Total feeds saved: " + RSSFeeds.LoadedFeedList.Count.ToString();
+                        }
+                    }
+                    catch (Exception e) {
+                        return e.Message;
+                    }
+                }
+
+                return returnMessage;
+            }
+        }
+
+        return "Not authorized to save the LoadedFeedList.";
+    }
+
+    [WebMethod(Description = "Try to load the RSS Feed List from the data file stored in the Apps folder.")]
+    public string RSSFeeds_Load_LoadedFeedList_FromFile() {
+        string returnMessage = "No file found or no feeds loaded.";
+        
+        if (HttpContext.Current.User.Identity.IsAuthenticated) {
+            string username = HttpContext.Current.User.Identity.Name;
+            MemberDatabase member = new MemberDatabase(username);
+            if (username.ToLower() == "administrator" || member.UserHasApp("app-rssfeed")) {
+                string FeedListFile = "Apps/RSSFeed/RSSFeedList.data";
+                if (!string.IsNullOrEmpty(FeedListFile) && File.Exists(ServerSettings.GetServerMapLocation + FeedListFile)) {
+                    try {
+                        FileStream a = new FileStream(ServerSettings.GetServerMapLocation + FeedListFile, FileMode.Open);
+                        using (var str = new BinaryReader(a)) {
+                            var bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                            str.BaseStream.Position = 0;
+                            bf.Binder = new AllowAllAssemblyVersionsDeserializationBinder();
+                            RSSFeeds.LoadedFeedList = (Dictionary<string, KeyValuePair<DateTime, IList<RSSItem>>>)bf.Deserialize(str.BaseStream);
+                            a.Close();
+                            str.Close();
+
+                            returnMessage = "Feeds Loaded: " + RSSFeeds.LoadedFeedList.Count.ToString();
+                        }
+                    }
+                    catch (Exception e) {
+                        return e.Message;
+                    }
+                }
+
+                return returnMessage;
+            }
+        }
+
+        return "Not authorized to load the LoadedFeedList.";
+    }
+    sealed class AllowAllAssemblyVersionsDeserializationBinder : System.Runtime.Serialization.SerializationBinder {
+        public override Type BindToType(string assemblyName, string typeName) {
+            Type typeToDeserialize = null;
+
+            String currentAssembly = System.Reflection.Assembly.GetExecutingAssembly().FullName;
+
+            // In this case we are always using the current assembly
+            assemblyName = currentAssembly;
+
+            // Get the type using the typeName and assemblyName
+            typeToDeserialize = Type.GetType(String.Format("{0}, {1}", typeName, assemblyName));
+
+            return typeToDeserialize;
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿<%@ page title="App Editor" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppManager, App_Web_nh1ggown" %>
+﻿<%@ page title="App Editor" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppManager, App_Web_emlx5cno" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -21,6 +21,11 @@
             padding-bottom: 3px;
             padding-right: 15px;
         }
+
+        .rating-column
+        {
+            background-color: #F9F9F9;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
@@ -30,7 +35,9 @@
         <div class="clear-space"></div>
         <asp:HiddenField ID="hf_isParams" runat="server" ClientIDMode="Static" Value="0" />
         <div class="actions-bg action-margin-fix">
+            <input type="button" class="input-buttons" value="Download App Template" onclick="openWSE.LoadModalWindow(true, 'DownloadAppTemplate-element', 'Select Type');" />
             <asp:Panel ID="pnl_app_params" runat="server" Enabled="false" Visible="false">
+                <div class="clear-space"></div>
                 <table cellpadding="0" cellspacing="0" border="0" width="100%">
                     <tr>
                         <td class="pad-right-big" valign="top" style="min-width: 230px; width: 230px;">
@@ -88,7 +95,7 @@
                 </table>
             </asp:Panel>
             <asp:Panel ID="pnl_app_EditList" runat="server" ClientIDMode="Static">
-                <div class="table-settings-box">
+                <div class="table-settings-box" style="margin-top: 10px!important;">
                     <div class="td-settings-title">
                         <div class="searchwrapper" style="width: 350px;">
                             <asp:Panel ID="Panel1_Installer" runat="server" DefaultButton="imgbtn_search">
@@ -137,25 +144,22 @@
                 </div>
             </asp:Panel>
             <asp:Panel ID="pnl_app_information" runat="server" Enabled="false" Visible="false" ClientIDMode="Static">
+                <div class="clear-space"></div>
                 Use the controls below to create a custom app. The apps will be coded with
                                 html and javascript.
                 <div class="clear-space" style="height: 20px;">
                 </div>
                 <div class="float-left">
-                    <asp:UpdatePanel ID="UpdatePanel4" runat="server">
-                        <ContentTemplate>
-                            <asp:Button ID="btn_create_easy" runat="server" Text="Create App" CssClass="input-buttons-create margin-right float-left"
-                                Enabled="false" Visible="false" OnClick="btn_createEasy_Click" />
-                            <asp:Button ID="btn_uploadnew" runat="server" Text="Upload App" CssClass="input-buttons-create margin-right float-left"
-                                Enabled="false" Visible="false" OnClick="btn_uploadnew_Click" OnClientClick="if (!ValidateForm()){return false;}" />
-                            <asp:Button ID="btn_clear_controls" runat="server" OnClick="btn_clear_controls_Click"
-                                Text="Clear Controls" CssClass="input-buttons-create margin-right margin-left float-left"
-                                OnClientClick="openWSE.LoadingMessage1('Clearing Controls. Please Wait...');" />
-                            <div class="clear-space">
-                            </div>
-                            <span id="lbl_ErrorUpload"></span>
-                        </ContentTemplate>
-                    </asp:UpdatePanel>
+                    <asp:Button ID="btn_create_easy" runat="server" Text="Create App" CssClass="input-buttons-create margin-right float-left"
+                        Enabled="false" Visible="false" OnClick="btn_createEasy_Click" />
+                    <asp:Button ID="btn_uploadnew" runat="server" Text="Upload App" CssClass="input-buttons-create margin-right float-left"
+                        Enabled="false" Visible="false" OnClick="btn_uploadnew_Click" OnClientClick="if (!ValidateForm()){return false;}" />
+                    <asp:Button ID="btn_clear_controls" runat="server" OnClick="btn_clear_controls_Click"
+                        Text="Clear Controls" CssClass="input-buttons-create margin-right margin-left float-left"
+                        OnClientClick="openWSE.LoadingMessage1('Clearing Controls. Please Wait...');" />
+                    <div class="clear-space">
+                    </div>
+                    <span id="lbl_ErrorUpload"></span>
                 </div>
                 <div class="clear-margin">
                     <asp:CheckBox ID="cb_InstallAfterLoad" runat="server" Text="&nbsp;Install app for current user on create"
@@ -185,7 +189,7 @@
                 </table>
                 <div class="clear">
                 </div>
-                <asp:Panel ID="pnl_filename" runat="server" style="display: none;">
+                <asp:Panel ID="pnl_filename" runat="server" Style="display: none;">
                     <table cellpadding="10" cellspacing="10">
                         <tr>
                             <td class="settings-name-column">Filename Ext.
@@ -369,6 +373,20 @@
                 </table>
                 <div class="clear-space-two">
                 </div>
+                <table cellpadding="10" cellspacing="10">
+                    <tr>
+                        <td class="settings-name-column">Icon Background Color
+                        </td>
+                        <td style="width: 200px;">
+                            <asp:TextBox ID="tb_iconColor_create" runat="server" CssClass="TextBoxEdit color" Width="75px"
+                                MaxLength="6"></asp:TextBox>
+                        </td>
+                        <td><small>Set the icon background color that can be used for select App Selector settings.</small>
+                        </td>
+                    </tr>
+                </table>
+                <div class="clear-space-two">
+                </div>
                 <asp:Panel ID="pnl_AppPackage" runat="server">
                     <table cellpadding="10" cellspacing="10">
                         <tr>
@@ -433,6 +451,22 @@
                         </td>
                     </tr>
                 </table>
+                <div id="backgroundcolorholder_create">
+                    <div class="clear-space-two">
+                    </div>
+                    <table cellpadding="10" cellspacing="10">
+                        <tr>
+                            <td class="settings-name-column">Background Color
+                            </td>
+                            <td style="width: 200px;">
+                                <asp:TextBox ID="tb_backgroundColor_create" runat="server" CssClass="TextBoxEdit color" Width="75px"
+                                    MaxLength="6"></asp:TextBox>
+                            </td>
+                            <td><small>Set the app background color.</small>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
                 <div class="clear-space-two">
                 </div>
                 <table cellpadding="10" cellspacing="10">
@@ -752,6 +786,14 @@
                                                         <asp:ListItem Text="Visible" Value="app-main"></asp:ListItem>
                                                         <asp:ListItem Text="Hidden" Value="app-main-nobg"></asp:ListItem>
                                                     </asp:DropDownList>
+                                                    <div id="backgroundcolorholder_edit">
+                                                        <div class="clear-space">
+                                                        </div>
+                                                        <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
+                                                            Background Color
+                                                        </div>
+                                                        <asp:TextBox ID="tb_backgroundColor_edit" runat="server" CssClass="TextBoxEdit color" Width="60px" MaxLength="6"></asp:TextBox>
+                                                    </div>
                                                     <div class="clear-space">
                                                     </div>
                                                     <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
@@ -763,6 +805,12 @@
                                                     </asp:DropDownList>
                                                 </div>
                                                 <div class="float-left" style="padding-left: 75px;">
+                                                    <div class="inline-block font-bold pad-right" align="right" style="width: 115px;">
+                                                        Icon Color
+                                                    </div>
+                                                    <asp:TextBox ID="tb_iconColor_edit" runat="server" CssClass="TextBoxEdit color" Width="60px" MaxLength="6"></asp:TextBox>
+                                                    <div class="clear-space">
+                                                    </div>
                                                     <div class="inline-block font-bold pad-right" align="right" style="width: 115px;">
                                                         Max on Load
                                                     </div>
@@ -830,15 +878,17 @@
                                                     Pop Out Location
                                                 </div>
                                                 <asp:TextBox ID="tb_allowpopout_edit" runat="server" CssClass="TextBoxEdit" Width="345px"></asp:TextBox>
-                                                <div class="clear-space"></div>
-                                                <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
-                                                    Filename
+                                                <div id="changeLoadFile_holder" runat="server">
+                                                    <div class="clear-space"></div>
+                                                    <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
+                                                        Filename
+                                                    </div>
+                                                    <asp:TextBox ID="tb_filename_edit" runat="server" CssClass="TextBoxEdit margin-top" Enabled="False" Visible="false" Width="345px"></asp:TextBox>
+                                                    <span id="changeLoadFile" runat="server">
+                                                        <small><a href="#" onclick="LoadDefaultPageSelector();return false;"
+                                                            style="color: Blue">Change Load File</a></small>
+                                                    </span>
                                                 </div>
-                                                <asp:TextBox ID="tb_filename_edit" runat="server" CssClass="TextBoxEdit margin-top" Enabled="False" Visible="false" Width="345px"></asp:TextBox>
-                                                <span id="changeLoadFile" runat="server">
-                                                    <small><a href="#" onclick="LoadDefaultPageSelector();return false;"
-                                                        style="color: Blue">Change Load File</a></small>
-                                                </span>
                                                 <div class="clear-space">
                                                 </div>
                                             </ContentTemplate>
@@ -855,16 +905,16 @@
                         <div class="ModalButtonHolder">
                             <asp:UpdatePanel ID="updatepnl_btnedit" runat="server">
                                 <ContentTemplate>
-                                    <asp:Button ID="btn_save" Width="75px" runat="server" Text="Save" OnClick="btn_save_Click" CssClass="input-buttons" Enabled="false" Visible="false" OnClientClick="openWSE.LoadingMessage1('Loading. Please Wait...');" />
+                                    <asp:Button ID="btn_save" Width="75px" runat="server" Text="Save" OnClick="btn_save_Click" CssClass="input-buttons float-left" Enabled="false" Visible="false" OnClientClick="openWSE.LoadingMessage1('Loading. Please Wait...');" />
                                     <asp:Button ID="btn_save_2" Width="75px" runat="server" Text="Save" OnClick="btn_save_Click"
-                                        CssClass="input-buttons" Enabled="false" Visible="false" OnClientClick="openWSE.LoadingMessage1('Loading. Please Wait...');"
+                                        CssClass="input-buttons float-left" Enabled="false" Visible="false" OnClientClick="openWSE.LoadingMessage1('Loading. Please Wait...');"
                                         Style="display: none" />
-                                    <asp:Button ID="btn_cancel" Width="75px" runat="server" Text="Cancel" OnClick="btn_cancel_Click" CssClass="input-buttons" Enabled="false" Visible="false" OnClientClick="openWSE.LoadingMessage1('Loading. Please Wait...');" />
+                                    <asp:Button ID="btn_edit" Width="75px" runat="server" Text="Edit" OnClick="btn_edit_Click" CssClass="input-buttons float-left" Enabled="false" Visible="false" OnClientClick="openWSE.LoadingMessage1('Loading. Please Wait...');" />
                                     <asp:Button ID="btn_delete" Width="75px" runat="server" Text="Delete" Visible="false" Enabled="false"
-                                        CssClass="input-buttons" OnClientClick="OnDelete();" />
-                                    <asp:Button ID="btn_edit" Width="75px" runat="server" Text="Edit" OnClick="btn_edit_Click" CssClass="input-buttons" Enabled="false" Visible="false" OnClientClick="openWSE.LoadingMessage1('Loading. Please Wait...');" />
-                                    <input type="button" class="input-buttons" onclick="openWSE.LoadModalWindow(false, 'App-element', ''); $('#wlmd_editor_holder').hide(); $('#MainContent_tb_title_edit').val('');"
-                                        value="Close" style="width: 75px; margin-right: 5px!important;" />
+                                        CssClass="input-buttons float-left" OnClientClick="OnDelete();" />
+                                    <input type="button" class="input-buttons float-right no-margin" onclick="openWSE.LoadModalWindow(false, 'App-element', ''); $('#wlmd_editor_holder').hide(); $('#MainContent_tb_title_edit').val('');"
+                                        value="Close" style="width: 75px; margin-left: 16px!important;" />
+                                    <asp:Button ID="btn_cancel" Width="75px" runat="server" Text="Cancel" OnClick="btn_cancel_Click" CssClass="input-buttons float-right no-margin" Enabled="false" Visible="false" OnClientClick="openWSE.LoadingMessage1('Loading. Please Wait...');" />
                                     <div class="clear-space">
                                     </div>
                                     <asp:HiddenField ID="hf_appchange" runat="server" OnValueChanged="hf_appchange_ValueChanged"
@@ -873,6 +923,7 @@
                                         Visible="false" CssClass="float-left margin-right-sml RandomActionBtns margin-right"><span class="td-edit-btn float-left margin-right-sml" style="padding: 0px!important;"></span>Edit Source Code</asp:LinkButton>
                                     <iframe id="iframe-appDownloader" frameborder="0" height="31px" width="150px"
                                         scrolling="no"></iframe>
+                                    <div class="clear"></div>
                                 </ContentTemplate>
                             </asp:UpdatePanel>
                         </div>
@@ -883,7 +934,7 @@
         <div id="password-element" class="Modal-element">
             <div class="Modal-overlay">
                 <div class="Modal-element-align">
-                    <div class="Modal-element-modal" data-setwidth="490">
+                    <div class="Modal-element-modal" data-setwidth="400">
                         <div class='ModalHeader'>
                             <div>
                                 <div class="app-head-button-holder-admin">
@@ -902,12 +953,12 @@
                                             <div class="clear-space"></div>
                                             <b class="pad-right">Password</b>
                                             <asp:TextBox ID="tb_passwordConfirm" runat="server" TextMode="Password" CssClass="TextBoxControls"></asp:TextBox>
-                                            <asp:Button ID="btn_passwordConfirm" runat="server" CssClass="input-buttons margin-left"
-                                                Text="Confirm" OnClick="btn_passwordConfirm_Clicked" OnClientClick="openWSE.LoadingMessage1('Validating Password...');"
-                                                Style="margin-top: -2px; margin-right: 5px!important" />
-                                            <input type="button" class="input-buttons" value="Cancel" onclick="CancelRequest()"
-                                                style="margin-top: -2px" />
                                             <div class="clear-space"></div>
+                                            <div class="clear-space"></div>
+                                            <input type="button" class="input-buttons no-margin float-right" value="Cancel" onclick="CancelRequest()" />
+                                            <asp:Button ID="btn_passwordConfirm" runat="server" CssClass="input-buttons float-right"
+                                                Text="Confirm" OnClick="btn_passwordConfirm_Clicked" OnClientClick="openWSE.LoadingMessage1('Validating Password...');" />
+                                            <div class="clear"></div>
                                         </asp:Panel>
                                         <asp:HiddenField ID="hf_StartDelete" runat="server" OnValueChanged="hf_StartDelete_Changed"
                                             ClientIDMode="Static" />
@@ -978,9 +1029,40 @@
                 </div>
             </div>
         </div>
+        <div id="DownloadAppTemplate-element" class="Modal-element" style="display: none;">
+            <div class="Modal-overlay">
+                <div class="Modal-element-align">
+                    <div class='Modal-element-modal' data-setwidth="350">
+                        <div class='ModalHeader'>
+                            <div>
+                                <div class="app-head-button-holder-admin">
+                                    <a href="#close" onclick="openWSE.LoadModalWindow(false, 'DownloadAppTemplate-element', '');return false;" class="ModalExitButton"></a>
+                                </div>
+                                <span class='Modal-title'></span>
+                            </div>
+                        </div>
+                        <div class="ModalScrollContent">
+                            <div class="ModalPadContent">
+                                <h4>Select the template type you wish to download. There will be some minor differences between the templates and how they may function on the workspace.</h4>
+                                <div class="clear-space"></div>
+                                <div class="clear-space"></div>
+                                <asp:UpdatePanel ID="updatepnl_templateDownload" runat="server">
+                                    <ContentTemplate>
+                                        <asp:LinkButton ID="lbtn_aspxTemplate" runat="server" OnClick="lbtn_aspxTemplate_Click" PostBackUrl="~/SiteTools/AppMaintenance/AppManager.aspx" Text="Aspx (Asp Page) Template" OnClientClick="openWSE.LoadModalWindow(false, 'DownloadAppTemplate-element', '');"></asp:LinkButton>
+                                        <div class="clear-space"></div>
+                                        <asp:LinkButton ID="lbtn_ascxTemplate" runat="server" OnClick="lbtn_ascxTemplate_Click" PostBackUrl="~/SiteTools/AppMaintenance/AppManager.aspx" Text="Ascx (User Control) Template" OnClientClick="openWSE.LoadModalWindow(false, 'DownloadAppTemplate-element', '');"></asp:LinkButton>
+                                    </ContentTemplate>
+                                </asp:UpdatePanel>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <input id="hidden_temp_script" type="hidden" value="" />
         <script src='<%=ResolveUrl("~/Scripts/AceEditor/ace.js")%>' type="text/javascript" charset="utf-8"></script>
         <script src='<%=ResolveUrl("~/Scripts/SiteTools/appmanager.js")%>' type="text/javascript"></script>
+        <script type="text/javascript" src='<%=ResolveUrl("~/WebControls/jscolor/jscolor.js")%>'></script>
         <script type="text/javascript">
             var canContinue = false;
             var tempId = "";

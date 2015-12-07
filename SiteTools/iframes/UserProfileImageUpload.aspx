@@ -1,4 +1,4 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="SiteTools_iframes_UserProfileImageUpload, App_Web_1sq1bxip" %>
+﻿<%@ page language="C#" autoeventwireup="true" inherits="SiteTools_iframes_UserProfileImageUpload, App_Web_fcqplbhq" %>
 
 <!DOCTYPE html>
 
@@ -22,7 +22,7 @@
                 <td valign="top">
                     <asp:UpdatePanel ID="updatepnl_img" runat="server">
                         <ContentTemplate>
-                            <asp:Image ID="img_UserImage" runat="server" CssClass="acct-image margin-right-big" />
+                            <asp:Image ID="img_UserImage" runat="server" CssClass="acct-image margin-right" />
                             <div id="div_cancelupload" style="display: none;">
                                 <div class="clear-space-two"></div>
                                 <small><a href="#" class="margin-left" onclick="CancelUpload();return false;">Cancel</a></small>
@@ -31,7 +31,7 @@
                     </asp:UpdatePanel>
                 </td>
                 <td valign="top">
-                    <asp:Button ID="btn_UploadImages" runat="server" Text="Upload" CssClass="input-buttons-create float-right" Width="90px" OnClick="btn_UploadImages_Click" />
+                    <asp:Button ID="btn_UploadImages" runat="server" Text="Upload" CssClass="input-buttons-create float-right margin-right" Width="90px" OnClick="btn_UploadImages_Click" />
                     <asp:FileUpload ID="fileUpload_acctImage" runat="server" AllowMultiple="false" />
                     <div class="clear-space-five"></div>
                     <div class="pad-top">

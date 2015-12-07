@@ -7,7 +7,7 @@ function ClearPost() {
     document.getElementById("lbl_errormessage_messageboard").innerText = "";
 }
 
-$(document.body).on("click", "#app-messageboard .exit-button-app, #app-messageboard-min-bar .exit-button-app-min", function () {
+$(document.body).on("click", ".app-main-holder[data-appid='app-messageboard'] .exit-button-app, .app-min-bar[data-appid='app-messageboard'] .exit-button-app-min", function () {
     cookie.del("messageboard-Group");
     cookie.del("messageboard-Controls");
 });
@@ -38,18 +38,18 @@ function GroupChanged_mb() {
     cookie.set("messageboard-Group", currGroup, "30");
 }
 
-$(document.body).on("click", "#app-messageboard-dblclick", function () {
+$(document.body).on("click", ".app-main-holder[data-appid='app-messageboard'] .app-head-dblclick", function () {
     SetMessageBoardScroll();
     CheckIfCanAddMoreMBPosts();
 });
 
-$(document.body).on("click", "#app-messageboard .maximize-button-app", function () {
+$(document.body).on("click", ".app-main-holder[data-appid='app-messageboard'] .maximize-button-app", function () {
     SetMessageBoardScroll();
     CheckIfCanAddMoreMBPosts();
 });
 
 $(function () {
-    $("#app-messageboard").resizable({
+    $(".app-main-holder[data-appid='app-messageboard']").resizable({
         stop: function (event, ui) {
             SetMessageBoardScroll();
             CheckIfCanAddMoreMBPosts();
@@ -188,9 +188,9 @@ function PostMessageQuote(id) {
     var message = $("#" + id).find(".messageText").html();
     var userInfo = $("#" + id).find(".userInfo").html();
     var userInfoDate = $("#" + id).find(".userInfoDate").html();
-    var holder = "<div class='quoting' style='font-size: 12px!important; padding-left: 20px!important; padding-bottom: 10px!important; margin-bottom: 20px!important; border-bottom: 1px solid #DDD;'>";
+    var holder = "<div class='quoting'>";
     holder += "<b>Quoting " + userInfo + "</b> - " + userInfoDate;
-    holder += "<br />" + message + "</div><br />";
+    holder += "<br />" + message + "</div><br /><br />";
     tinyMCE.get('Editor_messageboard').setContent(holder);
 }
 

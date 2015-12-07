@@ -1,4 +1,4 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="DatabaseSelection, App_Web_ravcmota" %>
+﻿<%@ page language="C#" autoeventwireup="true" inherits="DatabaseSelection, App_Web_jtoan5js" %>
 
 <!DOCTYPE html>
 
@@ -8,7 +8,7 @@
     <meta name="author" content="John Donnelly" />
     <meta name="revisit-after" content="10 days" />
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-        <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
     <link id="Link1" runat="server" rel="shortcut icon" href="Standard_Images/favicon.ico"
         type="image/x-icon" />
     <link id="Link2" runat="server" rel="icon" href="Standard_Images/favicon.ico"
@@ -16,7 +16,6 @@
     <style type="text/css">
         .container
         {
-            font-family: Arial;
             font-size: 15px;
             height: 420px;
             left: 50%;
@@ -24,24 +23,53 @@
             margin-top: -220px;
             padding: 15px 15px 5px 15px;
             position: fixed;
+            z-index: 100;
             text-align: center;
             text-shadow: 0 1px rgba(0, 0, 0, 0.15);
             top: 50%;
             width: 850px;
             color: #FFF;
-            background: rgba(0,0,0,0.7);
-            -webkit-border-radius: 40px;
-            -moz-border-radius: 40px;
-            border-radius: 40px;
-            -moz-box-shadow: 5px 5px 10px #101010;
-            -webkit-box-shadow: 5px 5px 10px #101010;
-            box-shadow: 5px 5px 10px #101010;
+            background: rgba(25,25,25,0.7);
+            border: 1px solid rgba(100,100,100,0.8);
+            -webkit-border-radius: 25px;
+            -moz-border-radius: 25px;
+            border-radius: 25px;
+            -webkit-box-shadow: -1px 2px 40px 2px rgba(0,0,0,0.45);
+            -moz-box-shadow: -1px 2px 40px 2px rgba(0,0,0,0.45);
+            box-shadow: -1px 2px 40px 2px rgba(0,0,0,0.45);
             overflow: auto;
+        }
+
+        .container-blur
+        {
+            height: 420px;
+            left: 50%;
+            margin-left: -440px;
+            margin-top: -220px;
+            padding: 15px 15px 5px 15px;
+            position: fixed;
+            z-index: 1;
+            top: 50%;
+            width: 850px;
+            border: 1px solid rgba(100,100,100,0.0);
+            -webkit-border-radius: 25px;
+            -moz-border-radius: 25px;
+            border-radius: 25px;
+            background-image: url('App_Themes/Standard/Body/default-bg.jpg');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+            background-color: #2D2D2D;
+            background-size: cover;
+            -webkit-filter: blur(7px);
+            -moz-filter: blur(7px);
+            -o-filter: blur(7px);
+            filter: blur(7px);
         }
 
         a
         {
-            color: #EFEFEF;
+            color: #84B2FF;
             cursor: pointer;
             padding: 3px;
             text-decoration: underline;
@@ -54,7 +82,6 @@
             font-family: Arial,Helvetica,sans-serif;
             color: #555555;
             -webkit-font-smoothing: antialiased;
-            font-smooth: always;
             overflow: hidden;
             margin: 0!important;
         }
@@ -69,7 +96,7 @@
             z-index: 0;
             background-image: url('App_Themes/Standard/Body/default-bg.jpg');
             background-repeat: no-repeat;
-            background-position: bottom center;
+            background-position: center center;
             background-attachment: fixed;
             background-color: #2D2D2D;
             background-size: cover;
@@ -111,72 +138,13 @@
             max-height: 45px;
         }
 
-        #update-element
-        {
-            display: none;
-        }
-
-        .update-element-overlay
-        {
-            height: 100%;
-            left: 0;
-            position: fixed;
-            text-align: center;
-            top: 0;
-            width: 100%;
-            z-index: 12000;
-            background: rgba(0,0,0,0.5);
-        }
-
-        .update-element-modal
-        {
-            display: block;
-            text-align: center;
-            position: fixed;
-            background-color: rgba(15,15,15,0.8);
-            padding: 20px 40px 17px 40px;
-            left: 50%;
-            top: 50%;
-            min-height: 20px;
-            margin-left: -50px;
-            margin-top: -50px;
-            -moz-box-shadow: -3px 3px 3px rgba(0,0,0,.25);
-            -webkit-box-shadow: 0 5px 7px rgba(0,0,0,.25);
-            box-shadow: 0 5px 7px rgba(0,0,0,.25);
-            z-index: 12000;
-            -moz-border-radius: 5px;
-            -webkit-border-radius: 5px;
-            border-radius: 5px;
-        }
-
-            .update-element-modal .loading-icon-sml
-            {
-                margin-top: -3px;
-            }
-
-            .update-element-modal h3
-            {
-                color: #FFF;
-                font-weight: bold;
-                float: left;
-                margin-top: 1px;
-                margin-left: 10px;
-                font-size: 13px;
-            }
-
-            .update-element-modal .progress
-            {
-                width: 15px;
-                padding-left: 2px;
-                text-align: left;
-            }
-
-        .update-element-align
-        {
-            position: fixed;
-            text-align: left;
-            z-index: 5000;
-        }
+        #update-element{display:none}
+        .update-element-overlay{height:100%;left:0;position:fixed;text-align:center;top:0;width:100%;z-index:12000}
+        .update-element-modal{display:block;text-align:center;position:fixed;padding:5px 20px 7px 20px;left:50%;top:0;min-height:20px;margin-left:-50px;-moz-box-shadow:-3px 3px 3px rgba(0,0,0,.25);-webkit-box-shadow:0 5px 7px rgba(0,0,0,.25);box-shadow:0 5px 7px rgba(0,0,0,.25);z-index:12000}
+        .update-element-modal .loading-icon-sml{margin-top:-3px}
+        .update-element-modal h3{color:#FFF;font-weight:normal;float:left;margin-top:0;margin-left:10px;font-size:15px}
+        .update-element-modal .progress{width:15px;padding-left:2px;text-align:left}
+        .update-element-align{position:fixed;text-align:left;z-index:5000}
 
         .loading-icon-sml
         {
@@ -194,20 +162,6 @@
         .inline-block
         {
             display: inline-block;
-        }
-
-        .trial-version-text
-        {
-            padding: 7px 10px;
-            background: rgba(0,0,0,0.5);
-            color: white;
-            font-weight: bold;
-            position: absolute;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            right: 0;
-            text-align: left;
         }
 
         .float-right
@@ -373,7 +327,6 @@
             cursor: pointer;
             text-align: center;
             padding: 5px 9px;
-            font-size: 12px;
             line-height: normal;
             margin-right: 16px;
             -moz-transition: all .2s ease-in-out;
@@ -402,10 +355,10 @@
             <asp:UpdatePanel ID="updatePnl1" runat="server">
                 <ContentTemplate>
                     <asp:Panel ID="pnl1" runat="server">
-                        <h2><b><u>Select a Database</u></b></h2>
-                        <div style="clear: both; height: 15px;">
+                        <h1><b>Select a Database</b></h1>
+                        <div style="clear: both;">
                         </div>
-                        <table border="0" cellpadding="20" cellspacing="20" width="100%">
+                        <table border="0" cellpadding="18" cellspacing="18" width="100%">
                             <tbody>
                                 <tr>
                                     <td valign="top" width="50%">
@@ -466,6 +419,7 @@
             </asp:UpdatePanel>
             <img alt="logo" src="Standard_Images/About Logos/openwse_alt.png" class="logo" />
         </div>
+        <div class="container-blur"></div>
         <script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
         <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
         <script type="text/javascript" src="//code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
@@ -492,19 +446,46 @@
                 }
 
                 message = message + "<span class='progress inline-block'></span>";
+
                 var x = "<div id='update-element'><div class='update-element-overlay'><div class='update-element-align'>";
                 x += "<div class='update-element-modal'><h3 class='inline-block'>" + message + "</h3></div></div></div></div>";
                 $("body").append(x);
 
-                StartMessageTickInterval(message, $("#update-element").find(".progress")[0]);
-                $("#update-element").show();
+                if ($("#update-element").find(".progress").length > 0) {
+                    StartMessageTickInterval($("#update-element").find(".progress")[0]);
+                }
 
                 var $modalWindow = $("#update-element").find(".update-element-modal");
+                try {
+                    var backgroundClr = "#151515";
+                    var element = document.getElementById("always-visible");
+                    if (element) {
+                        var style = window.getComputedStyle(element);
+                        backgroundClr = style.getPropertyValue("background");
+                        if (backgroundClr == null || backgroundClr == "") {
+                            backgroundClr = style.getPropertyValue("background-color");
+                        }
+                    }
+
+                    if (backgroundClr == null || backgroundClr == "") {
+                        backgroundClr = "#151515";
+                    }
+
+                    $modalWindow.css("background", backgroundClr);
+                }
+                catch (evt) {
+                    $modalWindow.css("background", "#151515");
+                }
+
+                if ($("#always-visible").css("display") != "none") {
+                    $modalWindow.css("top", $("#always-visible").outerHeight());
+                }
+
+                $("#update-element").show();
+
                 var currUpdateWidth = -($modalWindow.outerWidth() / 2);
-                var currUpdateHeight = -($modalWindow.outerHeight() / 2);
                 $modalWindow.css({
-                    marginLeft: currUpdateWidth,
-                    marginTop: currUpdateHeight
+                    marginLeft: currUpdateWidth
                 });
             }
             function StartMessageTickInterval(message, elem) {
@@ -541,12 +522,6 @@
             Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
                 RemoveUpdateModal();
             });
-
-            /* Set Trial Text */
-            function SetTrialText(exp) {
-                var text = "<div class='trial-version-text'><span>Trial Version</span><span class='float-right'>Expires in " + exp + "</span></div>";
-                $("body").prepend(text);
-            }
 
             function ConfirmCompact() {
                 ConfirmWindow("Are you sure you want to create an SQL Server Compact 4 Database? You will not be able to change this later on.", function () {

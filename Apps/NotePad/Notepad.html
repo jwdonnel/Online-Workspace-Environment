@@ -4,34 +4,44 @@
     <title>Sticky Note</title>
 </head>
 <body>
-    <div style="height: 256px; min-height: 256px; min-width: 256px; width: 256px; background: url('Apps/Notepad/notepad.png') no-repeat center center;">
+    <div id="stickynote-image-app" style="height: 256px; min-height: 256px; min-width: 256px; width: 256px;">
         <textarea cols="18" id="textnote_notepad" rows="20" style="background: none; border: 0 solid transparent; font-family: Comic Sans MS; font-size: 13px; height: 159px; outline: 0px solid transparent; width: 225px; margin-left: 15px; margin-top: 50px;"
             maxlength="256"></textarea>
     </div>
     <script type='text/javascript'>
-        $(document).ready(function () {
-            $.ajax({
-                url: openWSE.siteRoot() + "WebServices/SaveControls.asmx/Comment_GetMessage",
-                type: "POST",
-                data: '{ }',
-                contentType: "application/json; charset=utf-8",
-                success: function (data) {
-                    var response = data.d;
-                    if (response != "") {
-                        $("#textnote_notepad").val(unescape(response));
+        startNotePad();
+        function startNotePad() {
+            var rootDir = "../../";
+            try {
+                if (openWSE) {
+                    rootDir = openWSE.siteRoot();
+                }
+            }
+            catch (evt) { }
+
+            document.getElementById("stickynote-image-app").style.background = "url('" + rootDir + "Apps/Notepad/notepad.png') no-repeat center center";
+            document.getElementById("textnote_notepad").onblur = function () {
+                var requestUpdate = new XMLHttpRequest();
+                requestUpdate.open("POST", rootDir + "WebServices/SaveControls.asmx/Comment_UpdateMessage", true);
+                requestUpdate.setRequestHeader("Content-type", "application/json; charset=utf-8");
+                requestUpdate.send('{ "comment": "' + escape(document.getElementById("textnote_notepad").value) + '" }');
+            };
+
+            var requestGet = new XMLHttpRequest();
+            requestGet.open("POST", rootDir + "WebServices/SaveControls.asmx/Comment_GetMessage", true);
+            requestGet.addEventListener("readystatechange", function () {
+                if (requestGet.readyState == 4 && requestGet.status == 200) {
+                    try {
+                        var response = requestGet.responseXML;
+                        if (response && response != null) {
+                            document.getElementById("textnote_notepad").value = unescape(response.childNodes[0].innerHTML);
+                        }
                     }
+                    catch (evt2) { }
                 }
             });
-
-            $("#textnote_notepad").focusout(function () {
-                $.ajax({
-                    url: openWSE.siteRoot() + "WebServices/SaveControls.asmx/Comment_UpdateMessage",
-                    type: "POST",
-                    data: '{ "comment": "' + escape($.trim($("#textnote_notepad").val())) + '" }',
-                    contentType: "application/json; charset=utf-8"
-                });
-            });
-        });
+            requestGet.send();
+        }
     </script>
 </body>
 </html>

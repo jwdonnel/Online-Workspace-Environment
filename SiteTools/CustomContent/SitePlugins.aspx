@@ -1,11 +1,11 @@
-﻿<%@ page title="Site Plugins" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_SitePlugins, App_Web_qakpaghm" %>
+﻿<%@ page title="Site Plugins" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_SitePlugins, App_Web_5emrkdig" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
         #editor
         {
             height: 195px;
-            width: 565px;
+            width: 600px;
             font-size: 14px;
         }
 
@@ -32,104 +32,145 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
     <div class="maincontent-padding margin-top">
+        <div class="clear-space"></div>
         <asp:Literal ID="ltl_locked" runat="server"></asp:Literal>
         <asp:Panel ID="pnl_AddControls" runat="server" ClientIDMode="Static">
-            <div class="table-settings-box">
-                <div class="td-settings-ctrl">
-                    <asp:CheckBox ID="cb_enableUpload" runat="server" Text="&nbsp;Enable Plugin after upload" />
-                    <div class="clear-space-five"></div>
-                    <asp:CheckBox ID="cb_installAfter" ClientIDMode="Static" runat="server" Text="&nbsp;Install Plugin after upload" />
-                    <div class="clear" style="height: 20px;"></div>
-                    <div id="UploadPlugin">
-                        <div class="float-left settings-name-column">
-                            Plugin Name
+            <a href="#" class="margin-right-big input-buttons-create float-left" onclick="openWSE.LoadModalWindow(true, 'UploadService-element', 'JQuery Plugin Upload');return false;">Plugin Upload</a>
+            <div class="searchwrapper float-left" style="width: 350px; margin-top: 3px;">
+                <asp:UpdatePanel ID="updatepnl_search" runat="server" UpdateMode="Conditional">
+                    <ContentTemplate>
+                        <asp:Panel ID="pnl_Search" runat="server" DefaultButton="imgbtn_search">
+                            <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
+                                onfocus="if(this.value=='Search Plugins')this.value=''" onblur="if(this.value=='')this.value='Search Plugins'"
+                                Text="Search Plugins" data-defaultvalue="Search Plugins"></asp:TextBox>
+                            <asp:LinkButton ID="imgbtn_clearsearch" runat="server" ToolTip="Clear search" CssClass="searchbox_clear RandomActionBtns"
+                                OnClick="imgbtn_clearsearch_Click" />
+                            <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
+                                OnClick="imgbtn_search_Click" />
+                        </asp:Panel>
+                    </ContentTemplate>
+                    <Triggers>
+                        <asp:AsyncPostBackTrigger ControlID="imgbtn_clearsearch" />
+                        <asp:AsyncPostBackTrigger ControlID="imgbtn_search" />
+                    </Triggers>
+                </asp:UpdatePanel>
+            </div>
+	    <a href="https://plugins.jquery.com/tag/jquery/" target="_blank" class="float-right">Jquery Plugins Site</a>
+            <div class="clear"></div>
+            <asp:Label ID="lbl_uploadMessage" runat="server" ClientIDMode="Static" CssClass="float-right pad-right"></asp:Label>
+            <div id="UploadService-element" class="Modal-element" style="display: none;">
+                <div class="Modal-overlay">
+                    <div class="Modal-element-align">
+                        <div class="Modal-element-modal" data-setwidth="700">
+                            <div class="ModalHeader">
+                                <div>
+                                    <div class="app-head-button-holder-admin">
+                                        <a href="#" onclick="openWSE.LoadModalWindow(false, 'UploadService-element', '');return false;" class="ModalExitButton"></a>
+                                    </div>
+                                    <span class="Modal-title"></span>
+                                </div>
+                            </div>
+                            <div class="ModalScrollContent">
+                                <div class="ModalPadContent">
+                                    Site Plugins can be uploaded here. These plugins are used for site enhancements
+                                    and customizations. Only javascript (.js) and style sheets (.css) based plugins
+                                    are allowed at the moment. Future plugins will feature asp.net web services and
+                                    more. Users will be able to install the plugins from the
+                                    <asp:Label ID="lbl_appInstaller" runat="server"></asp:Label>.
+                                    <div class="clear-space"></div>
+                                    <div class="clear-space"></div>
+                                    <asp:CheckBox ID="cb_enableUpload" runat="server" Text="&nbsp;Enable Plugin after upload" />
+                                    <div class="clear-space-five"></div>
+                                    <asp:CheckBox ID="cb_installAfter" ClientIDMode="Static" runat="server" Text="&nbsp;Install Plugin after upload" />
+                                    <div class="clear" style="height: 20px;"></div>
+                                    <div id="UploadPlugin">
+                                        <asp:TextBox ID="txt_uploadPluginName" runat="server" CssClass="textEntry" placeholder="Name" MaxLength="250"></asp:TextBox>
+                                        <asp:UpdatePanel ID="updatepnl_Add" runat="server">
+                                            <ContentTemplate>
+                                                <asp:HiddenField ID="hf_deletePlugin" runat="server" ClientIDMode="Static" OnValueChanged="hf_deletePlugin_Changed" />
+                                                <asp:HiddenField ID="hf_editPlugin" runat="server" ClientIDMode="Static" OnValueChanged="hf_editPlugin_Changed" />
+                                                <asp:HiddenField ID="hf_enablePlugin" runat="server" ClientIDMode="Static" OnValueChanged="hf_enablePlugin_Changed" />
+                                                <asp:HiddenField ID="hf_disablePlugin" runat="server" ClientIDMode="Static" OnValueChanged="hf_disablePlugin_Changed" />
+                                                <asp:HiddenField ID="hf_cancelPlugin" runat="server" ClientIDMode="Static" OnValueChanged="hf_cancelPlugin_Changed" />
+                                                <asp:HiddenField ID="hf_updatePlugin" runat="server" ClientIDMode="Static" OnValueChanged="hf_updatePlugin_Changed" />
+                                                <asp:HiddenField ID="hf_InitializeCode" runat="server" ClientIDMode="Static" />
+                                                <asp:HiddenField ID="hf_updateName" runat="server" ClientIDMode="Static" />
+                                                <asp:HiddenField ID="hf_updateLoc" runat="server" ClientIDMode="Static" />
+                                                <asp:HiddenField ID="hf_updateDesc" runat="server" ClientIDMode="Static" />
+                                                <asp:HiddenField ID="hf_updateInitializeCode" runat="server" ClientIDMode="Static" />
+                                                <asp:HiddenField ID="hf_updateaw" runat="server" ClientIDMode="Static" />
+                                            </ContentTemplate>
+                                        </asp:UpdatePanel>
+                                    </div>
+                                    <div class="clear-space">
+                                    </div>
+                                    <div class="clear-space">
+                                    </div>
+                                    <div class="font-bold">
+                                        Files To Upload
+                                    </div>
+                                    <div class="clear-space-two"></div>
+                                    <asp:FileUpload ID="fileupload_Plugin" runat="server" CssClass="margin-right-big" Width="270px" />
+                                    <div class="clear-space">
+                                    </div>
+                                    <div class="clear-space">
+                                    </div>
+                                    <asp:TextBox ID="txt_Description" runat="server" ClientIDMode="Static" Width="600px" CssClass="textEntry" placeholder="Description"></asp:TextBox>
+                                    <div class="clear-space">
+                                    </div>
+                                    <div class="clear-space">
+                                    </div>
+                                    <div class="font-bold">
+                                        Initialize Code<br />
+                                        <small style="font-weight: normal!important;">(Javascript Only)</small>
+                                    </div>
+                                    <div class="clear-space-two"></div>
+                                    <div class="float-left" style="height: 200px">
+                                        <div id="editor">
+                                        </div>
+                                    </div>
+                                    <div class="clear-space">
+                                    </div>
+                                    <div class="clear-space">
+                                    </div>
+                                    <div class="font-bold">
+                                        Associated With
+                                    </div>
+                                    <div class="clear-space-two"></div>
+                                    <asp:UpdatePanel ID="updatePnl_aw" runat="server">
+                                        <ContentTemplate>
+                                            <asp:DropDownList ID="dd_aw" runat="server" CssClass="pad-right-sml">
+                                            </asp:DropDownList>
+                                            <span class="pad-left-big"><small>Select '--- Nothing ---' if plugin is main file.</small></span>
+                                        </ContentTemplate>
+                                    </asp:UpdatePanel>
+                                    <div class="clear-space">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ModalButtonHolder">
+                                <asp:Button ID="btn_uploadPlugin" runat="server" Text="Upload" CssClass="input-buttons float-left no-margin Upload-Button-Action"
+                                    OnClick="btn_uploadPlugin_Clicked" />
+                                <input type="button" value="Close" class="input-buttons float-right no-margin" onclick="openWSE.LoadModalWindow(false, 'UploadService-element', '');" />
+                                <div class="clear"></div>
+                            </div>
                         </div>
-                        <asp:TextBox ID="txt_uploadPluginName" runat="server" CssClass="textEntry" Width="150px" MaxLength="250"></asp:TextBox>
-                        <asp:UpdatePanel ID="updatepnl_Add" runat="server">
-                            <ContentTemplate>
-                                <asp:HiddenField ID="hf_deletePlugin" runat="server" ClientIDMode="Static" OnValueChanged="hf_deletePlugin_Changed" />
-                                <asp:HiddenField ID="hf_editPlugin" runat="server" ClientIDMode="Static" OnValueChanged="hf_editPlugin_Changed" />
-                                <asp:HiddenField ID="hf_enablePlugin" runat="server" ClientIDMode="Static" OnValueChanged="hf_enablePlugin_Changed" />
-                                <asp:HiddenField ID="hf_disablePlugin" runat="server" ClientIDMode="Static" OnValueChanged="hf_disablePlugin_Changed" />
-                                <asp:HiddenField ID="hf_cancelPlugin" runat="server" ClientIDMode="Static" OnValueChanged="hf_cancelPlugin_Changed" />
-                                <asp:HiddenField ID="hf_updatePlugin" runat="server" ClientIDMode="Static" OnValueChanged="hf_updatePlugin_Changed" />
-                                <asp:HiddenField ID="hf_InitializeCode" runat="server" ClientIDMode="Static" />
-                                <asp:HiddenField ID="hf_updateName" runat="server" ClientIDMode="Static" />
-                                <asp:HiddenField ID="hf_updateLoc" runat="server" ClientIDMode="Static" />
-                                <asp:HiddenField ID="hf_updateDesc" runat="server" ClientIDMode="Static" />
-                                <asp:HiddenField ID="hf_updateInitializeCode" runat="server" ClientIDMode="Static" />
-                                <asp:HiddenField ID="hf_updateaw" runat="server" ClientIDMode="Static" />
-                            </ContentTemplate>
-                        </asp:UpdatePanel>
                     </div>
-                    <div class="clear-space">
-                    </div>
-                    <div class="float-left settings-name-column">
-                        Files To Upload
-                    </div>
-                    <asp:FileUpload ID="fileupload_Plugin" runat="server" CssClass="margin-right-big" Width="270px" />
-                    <div class="clear-space">
-                    </div>
-                    <div class="float-left settings-name-column">
-                        Plugin Description
-                    </div>
-                    <asp:TextBox ID="txt_Description" runat="server" ClientIDMode="Static" Width="565px" CssClass="textEntry"></asp:TextBox>
-                    <div class="clear-space">
-                    </div>
-                    <div class="float-left settings-name-column">
-                        Initialize Code<br />
-                        <small style="font-weight: normal!important;">(Javascript Only)</small>
-                    </div>
-                    <div class="float-left" style="height: 200px">
-                        <div id="editor">
-                        </div>
-                    </div>
-                    <div class="clear-space">
-                    </div>
-                    <div class="float-left settings-name-column">
-                        Associated With
-                    </div>
-                    <asp:UpdatePanel ID="updatePnl_aw" runat="server">
-                        <ContentTemplate>
-                            <asp:DropDownList ID="dd_aw" runat="server" CssClass="pad-right-sml">
-                            </asp:DropDownList>
-                            <span class="pad-left-big"><small>Select '--- Nothing ---' if plugin is main file.</small></span>
-                        </ContentTemplate>
-                    </asp:UpdatePanel>
-                    <div class="clear-space">
-                    </div>
-                    <div class="clear-space">
-                    </div>
-                    <div class="float-left settings-name-column"></div>
-                    <asp:Button ID="btn_uploadPlugin" runat="server" Text="Upload Plugin" CssClass="input-buttons-create Upload-Button-Action"
-                        OnClick="btn_uploadPlugin_Clicked" />
-                    <div class="pad-top-big">
-                        <div class="float-left settings-name-column"></div>
-                        <asp:Label ID="lbl_uploadMessage" runat="server" ClientIDMode="Static"></asp:Label>
-                    </div>
-                </div>
-                <div class="td-settings-desc">
-                    Site Plugins can be uploaded here. These plugins are used for site enhancements
-        and customizations. Only javascript (.js) and style sheets (.css) based plugins
-        are allowed at the moment. Future plugins will feature asp.net web services and
-        more. Users will be able to install the plugins from the
-        <asp:Label ID="lbl_appInstaller" runat="server"></asp:Label>.
                 </div>
             </div>
         </asp:Panel>
         <asp:UpdatePanel ID="updatepnl_SitePlugins" runat="server">
             <ContentTemplate>
-                <div class="clear-space"></div>
+                <div class="clear-space-two"></div>
                 <div class="clear-margin">
-                    <div class="float-left pad-right-big">
-                        <b class="pad-right">Total</b><asp:Label ID="lbl_TotalPlugins"
-                            runat="server"></asp:Label>
-                    </div>
-                    <div class="float-left pad-left-big">
-                        <b class="pad-right">Enabled</b><asp:Label ID="lbl_TotalEnabledPlugins" runat="server"></asp:Label>
-                    </div>
-                    <asp:LinkButton ID="lbtn_associationBack" runat="server" OnClick="lbtn_associationBack_Click" CssClass="float-right RandomActionBtns" Text="Back to Main Plugins" Enabled="false" Visible="false"></asp:LinkButton>
+                    <b class="pad-right">Total Plugins</b><asp:Label ID="lbl_TotalPlugins"
+                        runat="server"></asp:Label>
+                    <div class="clear-space-five"></div>
+                    <b class="pad-right">Plugins Enabled</b><asp:Label ID="lbl_TotalEnabledPlugins" runat="server"></asp:Label>
+                    <div class="clear-space"></div>
+                    <asp:LinkButton ID="lbtn_associationBack" runat="server" OnClick="lbtn_associationBack_Click" CssClass="float-left RandomActionBtns" Text="Back to Main Plugins" Enabled="false" Visible="false"></asp:LinkButton>
                 </div>
+                <div class="clear-space"></div>
                 <asp:Panel ID="pnl_siteplugins" runat="server" CssClass="clear-margin">
                 </asp:Panel>
             </ContentTemplate>

@@ -1,11 +1,12 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_PersonalCalendar_PersonalCalendar, App_Web_mkinpfpw" clientidmode="Static" %>
-<div id="pCal-titlebar" class="pad-all app-title-bg-color" style="min-height: 40px">
+﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_PersonalCalendar_PersonalCalendar, App_Web_jkeaai22" clientidmode="Static" %>
+<div id="pCal-titlebar" class="pad-all app-title-bg-color">
     <div class="float-left">
-        <asp:Image ID="img_Title" runat="server" CssClass="float-left pad-right" Height="38px" />
-        <asp:Label ID="lbl_Title" runat="server" Text="" Font-Size="30px" CssClass="float-left"></asp:Label>
+        <asp:Image ID="img_Title" runat="server" CssClass="app-img-titlebar" />
+        <asp:Label ID="lbl_Title" runat="server" Text="" CssClass="app-text-titlebar"></asp:Label>
+        <div class="clear"></div>
     </div>
-    <div class="float-right">
-        <div class="searchwrapper" style="width: 300px;">
+    <div class="pad-left pad-right pad-top">
+        <div class="searchwrapper float-right" style="width: 300px;">
             <input id="tb_search_pcal" type="text" class="searchbox" onfocus="if(this.value=='Search Current Month')this.value=''"
                 onblur="if(this.value=='')this.value='Search Current Month'" onkeypress="KeyPressSearch_pc(event)"
                 value="Search Current Month" />

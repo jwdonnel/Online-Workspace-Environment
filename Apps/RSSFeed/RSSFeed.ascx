@@ -1,53 +1,79 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_RSSFeed_RSSFeed, App_Web_n5xgzr5o" %>
-<div class="pad-all app-title-bg-color" style="min-height: 40px; position: relative;">
-    <div class="float-left">
-        <asp:Image ID="img_Title" runat="server" CssClass="float-left pad-right" Height="38px" />
-        <asp:Label ID="lbl_Title" runat="server" Text="" Font-Size="30px"></asp:Label>
+﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_RSSFeed_RSSFeed, App_Web_5bdcjnne" %>
+<div class="pad-all app-title-bg-color" style="display: none; position: relative;">
+    <div class="float-left pad-bottom">
+        <asp:Image ID="img_Title" runat="server" CssClass="app-img-titlebar" />
+        <asp:Label ID="lbl_Title" runat="server" Text="" CssClass="app-text-titlebar"></asp:Label>
     </div>
-    <div class="pad-top" align="right">
-        <span class="font-bold pad-right">Saved Feeds</span>
-        <select id="Saved-RSSFeeds" class="margin-right">
-        </select>
-    </div>
+    <div class="clear"></div>
 </div>
-<div id="rssfeed_overflow" class="pad-all">
-    <div class="pad-top-big pad-left pad-right pad-bottom">
-        <div class="searchwrapper" style="width: 100%;">
-            <input id="tb_search_rssfeed" type="text" class="searchbox" onfocus="if(this.value=='Search feeds')this.value=''"
-                onblur="if(this.value=='')this.value='Search feeds'" onkeypress="KeyPressSearch_rssfeed(event)"
-                value="Search feeds" />
-            <a href="#" title="Clear search" class="searchbox_clear" onclick="$('#tb_search_rssfeed').val('Search feeds');GetRSSHeaders(true);return false;"></a><a href="#" class="searchbox_submit" onclick="GetRSSHeaders(true);return false;"></a>
-        </div>
+<div id="rssfeed_overflow">
+    <div class="pad-all rss-menu-bar" style="border-bottom: 1px solid #DDD; background: #F5F5F5;">
+        <div class="img-appmenu app-menu-btn" onclick="RSSFeedApp.MenuClick();" title="View Menu"></div>
+        <a href="#refresh" class="img-refresh margin-left float-right" onclick="RSSFeedApp.GetRSSFeeds(true);return false;" title="Refresh Feeds"></a>
+        <div class="clear"></div>
     </div>
-    <div class="pad-top pad-bottom-big" style="height: 30px;">
-        <a href="#refresh" class="img-refresh margin-right-big float-right" onclick="GetRSSHeaders(true);return false;"
-            title="Refresh Feeds" style="margin-top: 10px;"></a>
-        <div class="float-right" style="padding-top: 5px;">
-            <span class="font-bold pad-right">Show</span>
-            <select id="RSSFeedsToPull" class="margin-right">
-                <option value="5">5</option>
-                <option value="10" selected="selected">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-                <option value="25">25</option>
-                <option value="30">30</option>
-            </select>
-        </div>
-        <div class="float-left">
-            <input id="btn_AddRemoveFeeds" runat="server" type="button" class="input-buttons margin-left margin-right float-left margin-bottom" value="Add / Remove RSS Feeds"
-                onclick="BuildADDRSSList()" />
-            <div class="float-left pad-left">
-                Feeds are automatically updated every 5 minutes.<br />
-                <div style="font-size: 10px;">
-                    <i>If feeds do not load, change the Feeds to Show to something smaller.</i>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="clear">
-    </div>
+    <div class="clear"></div>
     <div class="loading-message"></div>
     <div id="rssfeed_Holder">
+    </div>
+</div>
+<div id="rssfeed-sidebar-menu" class="customtable-sidebar-menu">
+    <div class="pad-all customtable-sidebar-innercontent">
+        <div class="img-close-dark app-menu-btn" onclick="RSSFeedApp.MenuClick();" title="Close Menu"></div>
+        <a href="#" class="float-right img-refresh" onclick="RSSFeedApp.GetRSSFeeds(true);return false;" title="Refresh Feeds"></a>
+        <div class="clear-space"></div>
+        <div class="pad-top-big pad-bottom">
+            <div class="searchwrapper" style="width: 100%;">
+                <input id="tb_search_rssfeed" type="text" class="searchbox" onfocus="if(this.value=='Search current feeds')this.value=''"
+                    onblur="if(this.value=='')this.value='Search current feeds'" onkeypress="RSSFeedApp.KeyPressSearch(event)"
+                    value="Search current feeds" />
+                <a href="#" title="Clear search" class="searchbox_clear" onclick="$('#tb_search_rssfeed').val('Search current feeds');RSSFeedApp.MenuClick();RSSFeedApp.GetRSSFeeds(true);return false;"></a><a href="#" class="searchbox_submit" onclick="RSSFeedApp.MenuClick();RSSFeedApp.GetRSSFeeds(true);return false;"></a>
+            </div>
+        </div>
+        <div class="clear-space"></div>
+        <div class="clear-space"></div>
+        <div id="Saved-RSSFeeds">
+            <h3 class="pad-top pad-bottom">Loading Categories...</h3>
+        </div>
+        <div class="clear-space"></div>
+        <div class="clear-space"></div>
+        <input id="btn_AddRemoveFeeds" runat="server" type="button" class="input-buttons-create" value="Edit Feeds" onclick="RSSFeedApp.BuildADDRSSList()" />
+        <div class="clear-space"></div>
+        <div class="clear-space"></div>
+        <span class="pad-right font-bold">Feeds To Pull</span>
+        <select id="dd_feedstopull" onchange="RSSFeedApp.MenuClick();RSSFeedApp.GetRSSFeeds(true);">
+            <option value="25">25</option>
+            <option value="50" selected="selected">50</option>
+            <option value="75">75</option>
+            <option value="100">100</option>
+            <option value="125">125</option>
+        </select>
+        <div class="clear-space"></div>
+        <div class="clear-space"></div>
+        <span class="pad-right font-bold">View Mode</span>
+        <select id="dd_rssviewmode" onchange="RSSFeedApp.UpdateViewMode();RSSFeedApp.MenuClick();">
+            <option value="cards">Card Previews</option>
+            <option value="full">Full Articles</option>
+        </select>
+        <div class="clear-space"></div>
+        <div class="clear-space"></div>
+        <input type="checkbox" id="cb_rssfeed_topbarfixedscroll" onchange="RSSFeedApp.SetTopMenuBarToFixedScroll(this);" /><label for="cb_rssfeed_topbarfixedscroll">&nbsp;Always show menu bar on scroll</label>
+        <div class="clear-space"></div>
+        <div class="clear-space"></div>
+        <div class="pad-top-big pad-bottom" id="rss-feed-update-interval-text" style="font-size: 11px;">
+        </div>
+        <asp:Panel ID="pnl_AdminRSSFeedSettings" runat="server" Visible="false" Enabled="false" CssClass="pad-top-big margin-top-big border-top">
+            <h3 class="font-bold">More Settings</h3>
+            <div class="clear-space"></div>
+            <a href="#" onclick="RSSFeedApp.Admin_GrabLatestFeeds();return false;">Grab the latest feeds</a>
+            <div class="clear-space-five"></div>
+            <a href="#" onclick="RSSFeedApp.Admin_ClearFeedList();return false;">Clear Loaded Feed List</a>
+            <div class="clear-space-five"></div>
+            <a href="#" onclick="RSSFeedApp.Admin_LoadStoredFeedList();return false;">Load From Stored File</a>
+            <div class="clear-space-five"></div>
+            <a href="#" onclick="RSSFeedApp.Admin_GetLoadStoredFeedListCount();return false;">Get Total Loaded Feed Count</a>
+            <div class="clear-space"></div>
+        </asp:Panel>
     </div>
 </div>
 <div id="RSS-Feed-Selector-element" class="Modal-element outside-main-app-div">
@@ -66,11 +92,12 @@
                 <div class="ModalScrollContent">
                     <div class="ModalPadContent">
                         <asp:Panel ID="pnl_addcustomerrss" runat="server" DefaultButton="btn_addcustomrss">
-                            <span class="pad-right font-bold">Add Feed</span><input id="tb_addcustomrss" type="text"
+                            <input id="tb_addcustomrss" type="text"
                                 class="textEntry" onfocus="if(this.value=='Link to RSS feed')this.value=''" onblur="if(this.value=='')this.value='Link to RSS feed'"
-                                value="Link to RSS feed" style="width: 400px;" />
-                            <asp:Button ID="btn_addcustomrss" runat="server" CssClass="input-buttons margin-left margin-right"
-                                OnClientClick="AddCustomRSSUrl();return false;" Text="Add" />
+                                value="Link to RSS feed" style="width: 90%;" />
+                            <div class="clear-space"></div>
+                            <asp:Button ID="btn_addcustomrss" runat="server" CssClass="input-buttons"
+                                OnClientClick="RSSFeedApp.AddCustomRSSUrl();return false;" Text="Add Custom Feed" />
                         </asp:Panel>
                         <div id="rssadderror" class="clear" style="height: 25px;">
                         </div>

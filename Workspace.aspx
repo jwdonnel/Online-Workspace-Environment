@@ -1,7 +1,6 @@
-﻿<%@ page language="C#" title="Home Workspace" masterpagefile="~/Site.master" autoeventwireup="true" inherits="Workspace, App_Web_ywsetmhi" %>
+﻿<%@ page language="C#" title="Home Workspace" masterpagefile="~/Site.master" autoeventwireup="true" inherits="Workspace, App_Web_ibeipvsb" %>
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
-    <title>Home Workspace</title>
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
     <asp:Image ID="container_logo" runat="server" ImageUrl="~/Standard_Images/logo.png" ClientIDMode="Static" />

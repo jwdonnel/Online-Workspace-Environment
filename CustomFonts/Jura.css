@@ -1,0 +1,165 @@
+﻿body, text, input, textarea, keygen, select, button {
+    font-family: 'Jura', Tahoma, Geneva, sans-serif;
+}
+
+/* ----------------- FONT FACES ----------------- */
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Jura Light'), local('Jura-Light'), url(https://fonts.gstatic.com/s/jura/v7/Hi2bRPMPVPqIXxaDG9xx3vY6323mHUZFJMgTvxaG2iE.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Jura Light'), local('Jura-Light'), url(https://fonts.gstatic.com/s/jura/v7/N9TjdQjcCXqDaIvr9ITAbPY6323mHUZFJMgTvxaG2iE.woff2) format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Jura Light'), local('Jura-Light'), url(https://fonts.gstatic.com/s/jura/v7/6UAKfJmjT_O59CsLz-MDHPY6323mHUZFJMgTvxaG2iE.woff2) format('woff2');
+  unicode-range: U+0370-03FF;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Jura Light'), local('Jura-Light'), url(https://fonts.gstatic.com/s/jura/v7/Gj_gifJX0sLtY2PIxeYGL_Y6323mHUZFJMgTvxaG2iE.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Jura Light'), local('Jura-Light'), url(https://fonts.gstatic.com/s/jura/v7/28HbrUmh3t8JKl-BC6QYmg.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Jura Regular'), local('Jura-Regular'), url(https://fonts.gstatic.com/s/jura/v7/TTP6pkLK4ssO46rAsyf3PA.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Jura Regular'), local('Jura-Regular'), url(https://fonts.gstatic.com/s/jura/v7/BKlgo-m363VJPXRiRr3a5A.woff2) format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Jura Regular'), local('Jura-Regular'), url(https://fonts.gstatic.com/s/jura/v7/LncB6wFxJ5rEqHJu945EOg.woff2) format('woff2');
+  unicode-range: U+0370-03FF;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Jura Regular'), local('Jura-Regular'), url(https://fonts.gstatic.com/s/jura/v7/bmI0GxZww8t20K342Lco0g.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Jura Regular'), local('Jura-Regular'), url(https://fonts.gstatic.com/s/jura/v7/2Jw1GPtuhy2Mk02G7ZXodQ.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Jura Medium'), local('Jura-Medium'), url(https://fonts.gstatic.com/s/jura/v7/_QhpE-ABniIHfdENL_BMT_Y6323mHUZFJMgTvxaG2iE.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Jura Medium'), local('Jura-Medium'), url(https://fonts.gstatic.com/s/jura/v7/WUF1Ndyvb9lNxX8HRB4kFfY6323mHUZFJMgTvxaG2iE.woff2) format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Jura Medium'), local('Jura-Medium'), url(https://fonts.gstatic.com/s/jura/v7/HMprMQhcLRXBZAfxMQfdYPY6323mHUZFJMgTvxaG2iE.woff2) format('woff2');
+  unicode-range: U+0370-03FF;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Jura Medium'), local('Jura-Medium'), url(https://fonts.gstatic.com/s/jura/v7/69bt31_QeELLf125whDfIPY6323mHUZFJMgTvxaG2iE.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Jura Medium'), local('Jura-Medium'), url(https://fonts.gstatic.com/s/jura/v7/-VwEkp6Nsd3JaBmxD3TjAg.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Jura DemiBold'), local('Jura-DemiBold'), url(https://fonts.gstatic.com/s/jura/v7/vfBuASzTTdVaBWIM_dsD8_Y6323mHUZFJMgTvxaG2iE.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Jura DemiBold'), local('Jura-DemiBold'), url(https://fonts.gstatic.com/s/jura/v7/tyCdH2pWDT6mgoGCoxVzq_Y6323mHUZFJMgTvxaG2iE.woff2) format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Jura DemiBold'), local('Jura-DemiBold'), url(https://fonts.gstatic.com/s/jura/v7/TyHrksY4OBeQTNXLRJbhePY6323mHUZFJMgTvxaG2iE.woff2) format('woff2');
+  unicode-range: U+0370-03FF;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Jura DemiBold'), local('Jura-DemiBold'), url(https://fonts.gstatic.com/s/jura/v7/WEQvNIBNdfcvENiLjKqGsfY6323mHUZFJMgTvxaG2iE.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Jura';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Jura DemiBold'), local('Jura-DemiBold'), url(https://fonts.gstatic.com/s/jura/v7/sGgK78qWBznL37N2OdMZiA.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}

@@ -278,7 +278,7 @@
                     &nbsp;&nbsp;&nbsp;_appInitializer = new AppInitializer(app_id, Page.User.Identity.Name, Page);
                     &nbsp;&nbsp;&nbsp;_appInitializer.LoadScripts_JS(true, "StartMessageBoard();LoadMessageBoardPosts()");
 
-                    &nbsp;&nbsp;&nbsp;string script = "$.getScript('//tinymce.cachefly.net/4.1/tinymce.min.js').done(function( script, textStatus ) { LoadTinyMCEControls_Simple();$('#Editor_messageboard_ifr').tooltip({ disabled: true }) });";
+                    &nbsp;&nbsp;&nbsp;string script = "openWSE.GetScriptFunction('//tinymce.cachefly.net/4.1/tinymce.min.js', function() { LoadTinyMCEControls_Simple(); $('#Editor_messageboard_ifr').tooltip({ disabled: true }); });";
                     &nbsp;&nbsp;&nbsp;ScriptManager.RegisterStartupScript(this, GetType(), Guid.NewGuid().ToString(), script, true);
                     }
                 </div>

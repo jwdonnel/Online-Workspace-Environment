@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    //loading_bookmarkviewer();
+    BookmarkViewerResizeApp();
     LoadBookmarks(1);
 
     $("#tb_search_bookmarks").autocomplete({
@@ -31,6 +31,7 @@ $(document).ready(function () {
 var prm = Sys.WebForms.PageRequestManager.getInstance();
 prm.add_endRequest(function (sender, args) {
     try {
+        BookmarkViewerResizeApp();
         var searchVal = $("#tb_search_bookmarks").val();
         if ((searchVal.toLowerCase() != "search for bookmark") && (searchVal != "")) {
             SearchBookmarks();
@@ -113,6 +114,12 @@ $(document.body).on("keydown", "#editBookmarkName, #editBookmarkHtml", function 
 });
 
 function LoadBookmarks(i) {
+    BookmarkViewerResizeApp();
+
+    if (i == 1) {
+        $("#showbookmarks_bookmarkviewer").html("<h3 class='pad-all'>Loading bookmarks...</h3>");
+    }
+
     $.ajax({
         url: openWSE.siteRoot() + "Apps/Bookmark_Viewer/BookmarkViewer.ashx?action=load&sortby=" + $("#sortby_bookmarkviewer").val(),
         type: "POST",
@@ -124,17 +131,24 @@ function LoadBookmarks(i) {
             if (response != "") {
                 $("#showbookmarks_bookmarkviewer").html(response);
             }
-            if (i == 1) {
-                openWSE.RemoveUpdateModal();
+            else {
+                $("#showbookmarks_bookmarkviewer").html("<h3 class='pad-all no-bookmarks'>No bookmarks found</h3>");
             }
 
             GetBookmarkCount();
+            
+            setTimeout(function () {
+                $("#showbookmarks_bookmarkviewer").find(".bookmark-table-styles").find("img").error(function () {
+                    $(this).css("visibility", "hidden");
+                });
+
+                openWSE.RemoveUpdateModal();
+            }, 100);
         }
     });
 }
 
 function OnSortChange_Bookmark() {
-    loading_bookmarkviewer();
     LoadBookmarks(1);
 }
 
@@ -150,12 +164,16 @@ function GetBookmarkCount() {
             if (response != "") {
                 $("#bookmarkCount").html(response);
             }
+
+            setTimeout(function () {
+                openWSE.RemoveUpdateModal();
+            }, 100);
         }
     });
 }
 
 function ImportBookmarks() {
-    loading_bookmarkviewer();
+    $("#showbookmarks_bookmarkviewer").html("<h3 class='pad-all'>Loading bookmarks...</h3>");
     var fd = new FormData;
     fd.append("Filedata", document.getElementById("importBookmarks_upload").files[0]);
     xmlHttpReq = createXMLHttpRequest();
@@ -175,7 +193,6 @@ function AddBookmark() {
     var name = escape(document.getElementById("tb_addbookmarkname_bookmarkviewer").value);
     var url = escape(document.getElementById("tb_addbookmarkhtml_bookmarkviewer").value);
     if ($.trim(url) != "") {
-        loading_bookmarkviewer();
         $.ajax({
             url: openWSE.siteRoot() + "Apps/Bookmark_Viewer/BookmarkViewer.ashx?action=add&sortby=" + $("#sortby_bookmarkviewer").val() + "&name=" + name + "&url=" + url,
             type: "POST",
@@ -211,7 +228,9 @@ function AddBookmark() {
                     $("#lbl_errormessage_bookmarkviewer").html("");
                 }, 3000);
 
-                openWSE.RemoveUpdateModal();
+                setTimeout(function () {
+                    openWSE.RemoveUpdateModal();
+                }, 100);
             }
         });
     }
@@ -232,8 +251,6 @@ function AddBookmark() {
 function remove_in_iFrame(id) {
     openWSE.ConfirmWindow("Are you sure you want to remove this bookmark?",
         function () {
-            loading_bookmarkviewer();
-
             $.ajax({
                 url: openWSE.siteRoot() + "Apps/Bookmark_Viewer/BookmarkViewer.ashx?action=remove&sortby=" + $("#sortby_bookmarkviewer").val() + "&id=" + id,
                 type: "POST",
@@ -245,22 +262,23 @@ function remove_in_iFrame(id) {
                     if (response != "") {
                         $("#" + response).remove();
                     }
-                    openWSE.RemoveUpdateModal();
 
                     var count = parseInt($("#bookmarkCount").html());
                     count -= 1;
                     if (count == 0) {
-                        $("#showbookmarks_bookmarkviewer").html("<h3 class='no-bookmarks pad-right-big pad-left-big pad-top-big'>No bookmarks available</h3>");
+                        $("#showbookmarks_bookmarkviewer").html("<h3 class='pad-all no-bookmarks'>No bookmarks found</h3>");
                     }
-                    $("#bookmarkCount").html(count)
+                    $("#bookmarkCount").html(count);
+
+                    setTimeout(function () {
+                        openWSE.RemoveUpdateModal();
+                    }, 100);
                 }
             });
         }, null);
 }
 
 function edit_in_iFrame(id) {
-    loading_bookmarkviewer();
-
     $.ajax({
         url: openWSE.siteRoot() + "Apps/Bookmark_Viewer/BookmarkViewer.ashx?action=edit&sortby=" + $("#sortby_bookmarkviewer").val() + "&id=" + id,
         type: "POST",
@@ -274,7 +292,10 @@ function edit_in_iFrame(id) {
                 openWSE.LoadModalWindow(true, 'bookmark-share-edit-element', 'Edit Bookmark');
                 $("#editBookmarkHtml").focus();
             }
-            openWSE.RemoveUpdateModal();
+
+            setTimeout(function () {
+                openWSE.RemoveUpdateModal();
+            }, 100);
         }
     });
 }
@@ -291,7 +312,10 @@ function edit_click() {
             if (response != "") {
                 $("#showbookmarks_bookmarkviewer").html(response);
             }
-            openWSE.RemoveUpdateModal();
+            
+            setTimeout(function () {
+                openWSE.RemoveUpdateModal();
+            }, 100);
         }
     });
 
@@ -300,8 +324,6 @@ function edit_click() {
 }
 
 function share_in_iFrame(id) {
-    loading_bookmarkviewer();
-
     $.ajax({
         url: openWSE.siteRoot() + "Apps/Bookmark_Viewer/BookmarkViewer.ashx?action=share&sortby=" + $("#sortby_bookmarkviewer").val() + "&id=" + id,
         type: "POST",
@@ -314,7 +336,10 @@ function share_in_iFrame(id) {
                 $("#pnl_share_bookmarkviewer").html(response);
                 openWSE.LoadModalWindow(true, 'bookmark-share-edit-element', 'Share Bookmark');
             }
-            openWSE.RemoveUpdateModal();
+
+            setTimeout(function () {
+                openWSE.RemoveUpdateModal();
+            }, 100);
         }
     });
 }
@@ -329,7 +354,6 @@ function share_click(id) {
     });
 
     if (users != "") {
-        loading_bookmarkviewer();
         $.ajax({
             url: openWSE.siteRoot() + "Apps/Bookmark_Viewer/BookmarkViewer.ashx?action=finishShare&sortby=" + $("#sortby_bookmarkviewer").val() + "&id=" + id + "&listusers=" + users,
             type: "POST",
@@ -337,7 +361,9 @@ function share_click(id) {
                 xhr.overrideMimeType("text/plain; charset=x-user-defined");
             },
             complete: function (data) {
-                openWSE.RemoveUpdateModal();
+                setTimeout(function () {
+                    openWSE.RemoveUpdateModal();
+                }, 100);
             }
         });
     }
@@ -363,28 +389,22 @@ $(document.body).on("change", "#importBookmarks_upload", function () {
 });
 
 $(document.body).on("click", ".bookmarkviewer-update-img", function() {
-    loading_bookmarkviewer();
+    openWSE.LoadingMessage1("Updating...");
 });
 
-$(document.body).on("click", "#app-bookmarkviewer .exit-button-app", function () {
+$(document.body).on("click", ".app-main-holder[data-appid='app-bookmarkviewer'] .exit-button-app, .app-min-bar[data-appid='app-bookmarkviewer'] .exit-button-app-min", function () {
     $("#youtube-player-element").remove();
 });
 
-function loading_bookmarkviewer() {
-    $.LoadingMessage("#bookmarkviewer-load");
-}
-
 function ClearSearchBookmarks() {
     $("#tb_search_bookmarks").val("Search for bookmark");
-    loading_bookmarkviewer();
     LoadBookmarks(1);
 }
 
 function SearchBookmarks() {
     var searchVal = $("#tb_search_bookmarks").val();
     if ((searchVal != "Search for bookmark") && (searchVal != "")) {
-        loading_bookmarkviewer();
-
+        $("#showbookmarks_bookmarkviewer").html("<h3 class='pad-all'>Searching...</h3>");
         $.ajax({
             url: openWSE.siteRoot() + "Apps/Bookmark_Viewer/BookmarkViewer.ashx?action=search&sortby=" + $("#sortby_bookmarkviewer").val() + "&val=" + escape(searchVal),
             type: "POST",
@@ -396,7 +416,13 @@ function SearchBookmarks() {
                 if (response != "") {
                     $("#showbookmarks_bookmarkviewer").html(response);
                 }
-                openWSE.RemoveUpdateModal();
+                else {
+                    $("#showbookmarks_bookmarkviewer").html("<h3 class='pad-all no-bookmarks'>No bookmarks found</h3>");
+                }
+
+                setTimeout(function () {
+                    openWSE.RemoveUpdateModal();
+                }, 100);
             }
         });
     }
@@ -421,3 +447,16 @@ function embedded_video_bookmark(html, name) {
     name = "<span title='" + $("#" + name).find(".bookmark-html-link").html() + "'><img alt='favicon' src='http://www.youtube.com/favicon.ico' class='float-left pad-right' />" + inframeName + "</span>";
     openWSE.LoadModalWindow(true, "youtube-player-element", name);
 }
+
+function BookmarkViewerResizeApp() {
+    $(".app-main-holder[data-appid='app-bookmarkviewer']").find("#bookmarkviewer_scroller").removeClass("bookmarkviewer-800-maxwidth");
+    $(".app-main-holder[data-appid='app-bookmarkviewer']").find("#showbookmarks_bookmarkviewer").removeClass("bookmarkviewer-800-maxwidth");
+    if ($(".app-main-holder[data-appid='app-bookmarkviewer']").outerWidth() < 800) {
+        $(".app-main-holder[data-appid='app-bookmarkviewer']").find("#bookmarkviewer_scroller").addClass("bookmarkviewer-800-maxwidth");
+        $(".app-main-holder[data-appid='app-bookmarkviewer']").find("#showbookmarks_bookmarkviewer").addClass("bookmarkviewer-800-maxwidth");
+    }
+}
+
+$(window).resize(function () {
+    BookmarkViewerResizeApp();
+});

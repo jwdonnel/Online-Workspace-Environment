@@ -97,3 +97,57 @@ function RefreshList() {
 $(window).load(function () {
     document.title = "Notification Manager";
 });
+
+/* On Page load Functions */
+$(document).ready(function () {
+    BuildLinks();
+
+    var url = location.href;
+    load(url == "" ? "1" : url);
+});
+$(function () {
+    $(window).hashchange(function () {
+        var url = location.href;
+        load(url == "" ? "1" : url);
+    });
+});
+function load(num) {
+    $(".pnl-section").hide();
+    $(".sitemenu-selection").find("li").removeClass("active");
+
+    var index = 0;
+    currentTab = num;
+
+    var arg1 = num.split("tab=");
+    if (arg1.length > 1) {
+        var arg2 = arg1[arg1.length - 1].split("#");
+        if (arg2.length == 1) {
+            index = GetPnlSectionIndex(arg2[0]);
+        }
+    }
+
+    $(".pnl-section").eq(index).show();
+    $(".sitemenu-selection").find("li").eq(index).addClass("active");
+}
+
+var currentTab = "";
+function BuildLinks() {
+    $(".pnl-section").each(function (index) {
+        var id = $(this).attr("id").replace("MainContent_pnl_", "");
+        $(".sitemenu-selection").append("<li><a href='#?tab=" + id + "'>" + $(this).attr("data-title") + "</a></li>");
+    });
+
+    $(".sitemenu-selection").find("li").on("click", function () {
+        load($(this).find("a").attr("href"));
+    });
+}
+function GetPnlSectionIndex(ele) {
+    var pnlIndex = 0;
+    $(".pnl-section").each(function (index) {
+        if ($(this).attr("id") == "MainContent_pnl_" + ele) {
+            pnlIndex = index;
+        }
+    });
+
+    return pnlIndex;
+}

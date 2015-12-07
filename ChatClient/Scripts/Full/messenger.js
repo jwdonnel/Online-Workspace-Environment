@@ -1,8 +1,8 @@
 ﻿/* --------------------------------------SO MESSENGER----------------------------------------------
 * Copyright: John Donnelly
-* Version: 2.2
-* Created: 11/25/2014
-* Last Updated: 6/24/2014
+* Version: 2.3
+* Created: 11/25/2013
+* Last Updated: 10/29/2015
 *
 * Requirements: Internet Explorer 7.0 and above, Firefox 3.0 and above, Chrome (all), Opera
 * ------------------------------------------------------------------------------------------------
@@ -40,6 +40,8 @@ $(document).ready(function () {
             return -1;
         };
     }
+
+    LoadFontStyles();
 
     currUser = getParameterByName("user");
     $("#chatmessages").html(loadingtag);
@@ -299,6 +301,46 @@ function postChatMessage() {
         }
     }
 }
+
+function LoadFontStyles() {
+    $.ajax({
+        type: "POST",
+        url: pageUrl + "/LoadFontStyle",
+        data: '{ }',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        cache: false,
+        success: function (data) {
+            if (data.d.length == 3) {
+                LoadCustomFontFamily(data.d[0]);
+                LoadCustomFontSize(data.d[1]);
+                LoadCustomFontColor(data.d[2]);
+            }
+        }
+    });
+}
+function LoadCustomFontFamily(url) {
+    if (url != null && url != "") {
+        $("link[href='" + url + "']").remove();
+        var head = document.getElementsByTagName('head')[0];
+        link = document.createElement('link');
+        link.type = 'text/css';
+        link.rel = 'stylesheet';
+        link.href = url;
+        head.appendChild(link);
+    }
+}
+function LoadCustomFontSize(fontSize) {
+    if (fontSize != null && fontSize != "") {
+        $("body").css("font-size", fontSize);
+    }
+}
+function LoadCustomFontColor(fontColor) {
+    if (fontColor != null && fontColor != "") {
+        $("body").css("color", fontColor);
+    }
+}
+
 
 var _isUpdateCall = false;
 function updateChatMessages() {

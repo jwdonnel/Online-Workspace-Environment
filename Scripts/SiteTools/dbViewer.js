@@ -35,7 +35,32 @@ Sys.Application.add_load(function () {
             });
         }
     });
+
+    if (schemaCollapsed) {
+        $(".collapse-expand-schemebtn").html("Expand");
+        $("#schematable-holder").hide();
+        schemaCollapsed = true;
+    }
+    else {
+        $(".collapse-expand-schemebtn").html("Collapse");
+        $("#schematable-holder").show();
+        schemaCollapsed = false;
+    }
 });
+
+var schemaCollapsed = false;
+function CollapseExpandSchema() {
+    if (!schemaCollapsed) {
+        $(".collapse-expand-schemebtn").html("Expand");
+        $("#schematable-holder").slideUp(openWSE_Config.animationSpeed);
+        schemaCollapsed = true;
+    }
+    else {
+        $(".collapse-expand-schemebtn").html("Collapse");
+        $("#schematable-holder").slideDown(openWSE_Config.animationSpeed);
+        schemaCollapsed = false;
+    }
+}
 
 $(document.body).on("click", ".dbviewer-update-img, .dbviewer-update a", function () {
     openWSE.LoadingMessage1("Updating. Please Wait...");

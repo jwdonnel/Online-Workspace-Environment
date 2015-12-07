@@ -1,4 +1,4 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="SiteTools_CreateAccount, App_Web_1sq1bxip" %>
+﻿<%@ page language="C#" autoeventwireup="true" inherits="SiteTools_CreateAccount, App_Web_fcqplbhq" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -17,7 +17,7 @@
         }
     </style>
 </head>
-<body style="min-height: 255px!important;">
+<body style="min-height: 255px!important; background: transparent!important;">
     <form id="form1" runat="server">
         <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="True" AsyncPostBackTimeout="360000" />
         <div class="pad-all">
@@ -70,7 +70,7 @@
                             <asp:TextBox ID="tb_lastnamereg" runat="server" CssClass="signintextbox" placeholder="Last Name"></asp:TextBox>
                             <div class="clear-space">
                             </div>
-                                <div style="margin: 0 auto; width: 222px;">
+                                <div style="margin: 0 auto; width: 240px; padding-left: 24px;">
                             <span class="pad-right float-left" style="font-size: 16px; padding-top: 8px;">User Color</span>
                             <span class="img-colors float-left margin-right-sml"></span>
                             <asp:TextBox runat="server" ID="Color1" CssClass="signintextbox float-left color margin-right"

@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../App_Themes/Standard/site_desktop.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="../../App_Themes/Standard/jqueryUI.css" />
+    <style type="text/css">
+        .help-table
+        {
+            width: 100%;
+            border-spacing: 10px;
+            border-collapse: separate;
+        }
+
+        .left-column
+        {
+            width: 25%;
+            padding: 10px;
+        }
+
+        .right-column
+        {
+            padding: 10px;
+        }
+
+        .help-images
+        {
+            max-width: 95%;
+            border: 1px solid #CCC;
+        }
+
+        .ul-steps
+        {
+            padding-left: 15px;
+        }
+
+            .ul-steps li
+            {
+                padding: 5px 0;
+            }
+    </style>
+</head>
+<body>
+    <div class="border-bottom margin-bottom" style="background: #F2F2F2;">
+        <h1 class="pad-all-big font-bold">Create a Background Service Steps</h1>
+        <div class="pad-left pad-bottom pad-right margin-left-big" style="font-size: 14px;">
+            <b><u>Requirements before you begin</u></b><div class="clear-space-two"></div>
+            <ul class="ul-steps">
+                <li>Microsoft Visual Studio 2012 or higher.
+                </li>
+                <li>.NET Framework 4.5 or higher.</li>
+                <li>Knowledge of C# and creating Threads</li>
+            </ul>
+        </div>
+        <div class="clear-space"></div>
+    </div>
+    <div class="clear-space"></div>
+    <table class="help-table">
+        <tbody>
+            <tr>
+                <td class="left-column">
+                    <a href="Images/1.png" target="_blank">
+                        <img alt="" src="Images/1.png" class="help-images" /></a>
+                </td>
+                <td class="right-column">
+                    <ul class="ul-steps">
+                        <li>To start creating your own Background Service for the site, you will need to open Microsoft Visual Studio 2010 or higher and start a new project.</li>
+                        <li>Set the Template type to Class Library under C#. You can find the Templates in the left pane of the New Project window.</li>
+                        <li>Make sure you have .NET Framework 4.5 selected at the top of the New Project window and press Ok.</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="clear"></div>
+    <table class="help-table">
+        <tbody>
+            <tr>
+                <td class="left-column">
+                    <a href="Images/2.png" target="_blank">
+                        <img alt="" src="Images/2.png" class="help-images" /></a>
+                </td>
+                <td class="right-column">
+                    <ul class="ul-steps">
+                        <li>Once you have created the new project file, you should see the first class created for the Class Library. By default this class name and filename will be Class1.</li>
+                        <li>In the Solution Explorer, right click on the References folder and select Add Reference.</li>
+                        <li>You should now see the Reference Manager window. Click on Browse and look for the OpenWSE_Library.dll file. <i><b class="pad-right-sml">Note:</b>If you are having trouble finding this file, you will need to download the zipped version of this site from <a href="http://openwse.com/About.aspx#IWantThis" target="_blank">OpenWSE.com</a>.</i></li>
+                        <li>Once you locate the OpenWSE_Library.dll, click Add to finish adding this reference to the project.</li>
+                    </ul>
+                </td>
+                <td class="left-column" style="text-align: right;">
+                    <a href="Images/3.png" target="_blank">
+                        <img alt="" src="Images/3.png" class="help-images" /></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="clear"></div>
+    <table class="help-table">
+        <tbody>
+            <tr>
+                <td class="left-column">
+                    <a href="Images/4.png" target="_blank">
+                        <img alt="" src="Images/4.png" class="help-images" /></a>
+                </td>
+                <td class="right-column">
+                    <ul class="ul-steps">
+                        <li>You will need to add the namespace OpenWSE_Library.Core.BackgroundServices.</li>
+                        <li>If this is the main class you will be running the service from, you will need to inherit the IBackgroundServiceState Interface class.</li>
+                        <li>IBackgroundServiceState lets the site know that this is where the main code should be called from to start and stop the service.</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="clear"></div>
+    <table class="help-table">
+        <tbody>
+            <tr>
+                <td class="right-column">
+                    <ul class="ul-steps">
+                        <li>Next, you will need to create some variables and implement some methods in order for service to run properly.</li>
+                        <li>The first variable to create is a private static object named LockObject. <i>(See image to the right)</i></li>
+                        <li>The second variable to create is a protected static BackgroundStates object named CurrentState. This variable is required in order to set the current state of the service. <i>(See image to the right)</i></li>
+                        <li>Create the constructor class with empty parameters. You can create a non empty constructor but the one that gets called will be the empty one. <i>(See image to the right)</i></li>
+                        <li>Finally, create the StartService and StopService methods from the IBackgroundServiceState Interface and make sure they are public and return void. <i>(See image to the right)</i></li>
+                    </ul>
+                </td>
+                <td class="left-column" style="text-align: right;">
+                    <a href="Images/5.png" target="_blank">
+                        <img alt="" src="Images/5.png" class="help-images" /></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="clear"></div>
+    <table class="help-table">
+        <tbody>
+            <tr>
+                <td class="left-column" style="width: 35%;">
+                    <a href="Images/6.png" target="_blank">
+                        <img alt="" src="Images/6.png" class="help-images" /></a>
+                </td>
+                <td class="right-column">
+                    <ul class="ul-steps">
+                        <li>After creating the required variables and methods, you can now start implementing those methods.</li>
+                        <li><b class="pad-right-sml">Note:</b>It is recommended that you start a new Thread in the StartService method that calls the main code you wish to run.</li>
+                        <li>To create a new Thread, you will need to reference the namespace System.Threading at the top of the class.</li>
+                        <li>You can then add the following code to the StartService method:<br />
+                            <div class="border-top border-bottom border-right border-left pad-all margin-top margin-bottom inline-block" style="background: #EFEFEF; color: #000; font-size: 14px; font-family: monospace;">
+                                <span style="color: #7A91C9">ThreadStart</span> threadStart = <span style="color: #0000FF;">new</span> <span style="color: #7A91C9">ThreadStart</span>(RunServiceThread);<br />
+                                <span style="color: #7A91C9">Thread</span> ServiceThread = <span style="color: #0000FF;">new</span> <span style="color: #7A91C9">Thread</span>(threadStart);<br />
+                                ServiceThread.Start();
+                            </div>
+                        </li>
+                        <li>The private method "RunServiceThread" will be the main block of code to run your code from.</li>
+                        <li>Make sure that when using Threads, to lock the block of code that is running. You can use lock (LockObject) for this. <i>(See image to the right)</i></li>
+                        <li>If you plan on running the service for longer than just one run, place all your code in a while loop with the condition CurrentState == BackgroundStates.Running.</li>
+                        <li>You will also need to make sure to add CurrentState = BackgroundStates.Stopped at the end of your method. This will need to be inside the lock code as you do not want to stop the service if it is called again.</li>
+                        <li>For optimal performance, you will also need to include a Thread.Sleep in your while loop. This will make sure the CPU usage doesn't sky rocket when this service starts running.</li>
+                        <li>If you want to log messages from your custom service, you can call BackgroundServiceCalls.AttemptLogMessage("ENTER YOUR MESSAGE HERE");. This will attempt to log the information if you have the Log checked for the service.</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="clear"></div>
+    <table class="help-table">
+        <tbody>
+            <tr>
+                <td class="left-column">
+                    <a href="Images/7.png" target="_blank">
+                        <img alt="" src="Images/7.png" class="help-images" /></a>
+                </td>
+                <td class="right-column">
+                    <ul class="ul-steps">
+                        <li>Once you feel your Background Service is complete, right click on the root project in the Solution Explorer and click Build.</li>
+                        <li>This will create the .dll files that you will need to upload.</li>
+                        <li>You do not need to include the OpenWSE_Library.dll file when uploading this to the site as the most current version of that .dll will be used.</li>
+                        <li>If more than one .dll is required for uploading, you can zip up those files and upload that way.</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

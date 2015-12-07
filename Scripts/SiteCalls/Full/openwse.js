@@ -1,8 +1,8 @@
 ﻿// -----------------------------------------------------------------------------------
 //
-//	openWSE v4.1
+//	openWSE v4.8
 //	by John Donnelly
-//	Last Modification: 5/25/2015
+//	Last Modification: 11/20/2015
 //
 //	Licensed under the Creative Commons Attribution 2.5 License - http://creativecommons.org/licenses/by/2.5/
 //  	- Free for use in both personal and commercial projects
@@ -31,6 +31,7 @@ var openWSE_Config = {
     workspaceMode: "",
     overlayPanelId: "pnl_OverlaysAll",
     reportAlert: true,
+    reportOnError: false,
     siteRootFolder: "",
     displayLoadingOnRedirect: true,
     saveCookiesAsSessions: false,
@@ -41,7 +42,12 @@ var openWSE_Config = {
     appSnapHelper: false,
     appStyle: "Style_1",
     onlyAllowOneAccordionOpen: false,
-    sidebarAccordionOn: true
+    sidebarAccordionOn: true,
+    showToolTips: true,
+    siteTipsOnPageLoad: false,
+    ShowLoginModalOnDemoMode: false,
+    showShadowOnScroll: true,
+    disableF5KeyOnModals: true
 };
 
 var openWSE = function () {
@@ -85,6 +91,7 @@ var openWSE = function () {
     var pagedIconClicked = false;
     var outsideAppModal = "-outside-modal-window";
     var resizingAppInProgress = false;
+    var allOverlaysDisabled = false;
 
     function init() {
         console.log(openWSE_Config);
@@ -92,9 +99,17 @@ var openWSE = function () {
         // Need to get correct path
         saveHandler = openWSE.siteRoot() + "WebServices/SaveControls.asmx";
 
+        var siteTipCookie = cookie.get("siteTipsOnPageLoad");
+        if ((siteTipCookie != "") && (siteTipCookie != null) && (siteTipCookie != undefined)) {
+            openWSE_Config.siteTipsOnPageLoad = ConvertBitToBoolean(siteTipCookie);
+        }
+
         LoadViewPort();
         GetCurrentPage();
         LoadSidebarShowHideCookie();
+        SiteTipsOnPageLoad();
+
+        $(document).tooltip({ disabled: !openWSE_Config.showToolTips });
 
         if (openWSE_Config.sidebarAccordionOn) {
             $("#accordian-sidebar").AccordianTab({
@@ -117,6 +132,144 @@ var openWSE = function () {
                 $("#lnk_BackToWorkspace").remove();
             }
         }
+
+        if (openWSE_Config.ShowLoginModalOnDemoMode) {
+            LoadLoginModal();
+        }
+
+        if (openWSE_Config.showShadowOnScroll) {
+            if ($("#maincontent_overflow").length > 0) {
+                $("#maincontent_overflow").scroll(function () {
+                    if ($("#maincontent_overflow").scrollTop() > 0 && $(".maincontent_overflow-shadow").length == 0) {
+                        var topPos1 = $("#always-visible").outerHeight();
+                        if ($("#always-visible").css("display") == "none") {
+                            topPos1 = 0;
+                        }
+
+                        if ($("#app_title_bg").length > 0 && $("#app_title_bg").css("display") != "none") {
+                            topPos1 += $("#app_title_bg").outerHeight();
+                        }
+
+                        $("#maincontent_overflow").prepend("<div class='maincontent_overflow-shadow' style='top: " + topPos1 + "px;'></div>");
+                    }
+                    else if ($("#maincontent_overflow").scrollTop() == 0 && $(".maincontent_overflow-shadow").length > 0) {
+                        $(".maincontent_overflow-shadow").remove();
+                    }
+                });
+            }
+
+            if ($("#accordian-sidebar").length > 0 && $("#sidebar_menulinks").css("display") != "none") {
+                $("#accordian-sidebar").scroll(function () {
+                    if ($("#accordian-sidebar").scrollTop() > 0 && $(".accordian-sidebar-shadow").length == 0) {
+                        var topPos1 = $("#always-visible").outerHeight();
+                        if ($("#always-visible").css("display") == "none") {
+                            topPos1 = 0;
+                        }
+
+                        if ($("#app_title_bg").length > 0 && $("#app_title_bg").css("display") != "none") {
+                            topPos1 += $("#app_title_bg").outerHeight();
+                        }
+
+                        $("#accordian-sidebar").prepend("<div class='accordian-sidebar-shadow' style='top: " + topPos1 + "px; width: " + $("#sidebar_menulinks").outerWidth() + "px;'></div>");
+                    }
+                    else if ($("#accordian-sidebar").scrollTop() == 0 && $(".accordian-sidebar-shadow").length > 0) {
+                        $(".accordian-sidebar-shadow").remove();
+                    }
+                });
+            }
+        }
+    }
+    function UpdateAppSelector() {
+        $(".clear-applist").remove();
+
+        if ($(".app-icon.Icon_Only").length > 0) {
+            $("#updatePnl_AppList").append("<div class='clear-applist'></div>");
+
+            if ($(".app-category-div").length > 0) {
+                $(".app-icon.Icon_Only").each(function () {
+                    if ($(this).parent().hasClass("app-category-div")) {
+                        $(this).parent().addClass("inline-block");
+                    }
+                });
+            }
+        }
+        else if ($(".app-icon.Icon_And_Text_Only").length > 0) {
+            $("#updatePnl_AppList").append("<div class='clear-applist'></div>");
+
+            if ($(".app-category-div").length > 0) {
+                $(".app-icon.Icon_And_Text_Only").each(function () {
+                    if ($(this).parent().hasClass("app-category-div")) {
+                        $(this).parent().addClass("inline-block");
+                    }
+                });
+            }
+        }
+        else if ($(".app-icon.Icon_And_Color_Only").length > 0) {
+            $("#updatePnl_AppList").append("<div class='clear-applist'></div>");
+
+            if ($(".app-category-div").length > 0) {
+                $(".app-icon.Icon_And_Color_Only").each(function () {
+                    if ($(this).parent().hasClass("app-category-div")) {
+                        $(this).parent().addClass("inline-block");
+                    }
+                });
+            }
+        }
+        else if ($(".app-icon.Icon_Plus_Color_And_Text").length > 0) {
+            $("#updatePnl_AppList").append("<div class='clear-applist'></div>");
+
+            if ($(".app-category-div").length > 0) {
+                $(".app-icon.Icon_Plus_Color_And_Text").each(function () {
+                    if ($(this).parent().hasClass("app-category-div")) {
+                        $(this).parent().addClass("inline-block");
+                    }
+                });
+            }
+        }
+    }
+
+    function LoadLoginModal() {
+        if ($("#pnl_Login_NonAuth").length > 0) {
+            var ele = "<div id='LoginModalPopup-element' class='Modal-element' style='display: none;'>";
+            ele += "<div class='Modal-overlay'>";
+            ele += "<div class='Modal-element-align'>";
+            ele += "<div class='Modal-element-modal'>";
+
+            // Header
+            ele += "<div class='ModalHeader'><div><div class='app-head-button-holder-admin'>";
+            ele += "<a href='#' onclick=\"openWSE.CloseLoginModalWindow();return false;\" class='ModalExitButton'></a>";
+            ele += "</div><span class='Modal-title'></span></div></div>";
+
+            // Body
+
+            ele += "<div class='ModalScrollContent'><div class='ModalPadContent'></div></div>";
+            ele += "</div></div></div></div>";
+
+            $("body").find("form[id='ct101']").append(ele);
+
+            $("#pnl_Login_NonAuth, .bgchange-icon").hide();
+
+            $("#LoginModalPopup-element").find(".ModalPadContent").append($("#login-modal-div"));
+            LoadModalWindow(true, "LoginModalPopup-element", $.trim($("#span_signinText").html()));
+
+            $("#LoginModalPopup-element").find(".Modal-overlay").on("click", function (e) {
+                if (e.target.className == "Modal-overlay") {
+                    openWSE.CloseLoginModalWindow();
+                }
+            });
+
+            $(window).resize();
+        }
+    }
+    function CloseLoginModalWindow() {
+        LoadModalWindow(false, "LoginModalPopup-element", "");
+
+        if ($("#pnl_Login_NonAuth").length > 0) {
+            $("#pnl_Login_NonAuth").find(".b").append($("#login-modal-div"));
+        }
+
+        $("#LoginModalPopup-element").remove();
+        $("#pnl_Login_NonAuth, .bgchange-icon").show();
     }
 
     function OnError(error, url) {
@@ -168,6 +321,166 @@ var openWSE = function () {
             openWSE.SetDropDownMaxHeight();
         }
     }
+    function AdjustModalWindowView() {
+        $(".Modal-element").each(function () {
+            $(this).removeClass("modal-fixed-position");
+            $(this).find(".Modal-overlay").css("top", "");
+            $(this).find(".Modal-overlay").css("bottom", "");
+            $(this).find(".Modal-overlay").css("left", "");
+            $(this).find(".Modal-overlay").css("right", "");
+            $(this).find(".Modal-overlay").css("width", "");
+            $(this).find(".Modal-element-modal").css("height", "");
+
+            if ($(this).css("display") == "block") {
+                var windowHt = $(window).height();
+                var windowWt = $(window).width();
+
+                var containment = $(this).attr("data-containment");
+                if (containment) {
+                    windowHt = $(containment).outerHeight();
+                    windowWt = $(containment).outerWidth();
+                }
+
+                var $modal = $(this).find(".Modal-element-modal");
+                if ($modal.length > 0 && $modal.outerHeight() > windowHt || $modal.outerWidth() > windowWt) {
+                    $(this).addClass("modal-fixed-position");
+                    $(this).find(".Modal-overlay").css("width", "auto");
+                    $(this).find(".Modal-overlay").css("right", "0px");
+                    $(this).find(".ModalScrollContent").css("max-height", "");
+
+                    var topPos = 0;
+                    if ($("#always-visible").length > 0 && $("#always-visible").css("display") != "none") {
+                        topPos += $("#always-visible").outerHeight();
+                    }
+                    if ($("#app_title_bg").length > 0 && $("#app_title_bg").css("display") != "none") {
+                        topPos += $("#app_title_bg").outerHeight();
+                    }
+
+                    if (topPos > 0) {
+                        $(this).find(".Modal-overlay").css("top", topPos);
+                    }
+
+                    if ($("#container-footer").length > 0 && $("#container-footer").css("display") != "none") {
+                        $(this).find(".Modal-overlay").css("bottom", $("#container-footer").outerHeight());
+                    }
+
+                    if ($(this).attr("id") != "overlayEdit-element" && $("#sidebar_menulinks").length > 0 && $("#sidebar_menulinks").css("display") != "none") {
+                        $(this).find(".Modal-overlay").css("left", $("#sidebar_menulinks").outerWidth());
+                    }
+                }
+            }
+        });
+    }
+
+
+    var tipIndex = 0;
+    var tipArray = new Array();
+    function SiteTipsOnPageLoad() {
+        if (openWSE_Config.siteTipsOnPageLoad) {
+            $.ajax({
+                type: "GET",
+                dataType: "xml",
+                url: openWSE.siteRoot() + "SiteTips.xml",
+                cache: false,
+                complete: function (xml) {
+                    if (tipArray.length == 0) {
+                        $(xml.responseText).find("Hint").each(function () {
+                            var tipText = $.trim($(this).html());
+                            if (tipText != "") {
+                                tipArray.push(tipText);
+                            }
+                        });
+                    }
+
+                    if (tipArray.length > 0) {
+                        tipIndex = Math.round(Math.random() * (tipArray.length - 1));
+
+                        var ele = "<div id='SiteTip-element' class='Modal-element' style='display: none;'>";
+                        ele += "<div class='Modal-overlay'>";
+                        ele += "<div class='Modal-element-align'>";
+                        ele += "<div class='Modal-element-modal' data-setwidth='550'>";
+
+                        // Header
+                        ele += "<div class='ModalHeader'><div><div class='app-head-button-holder-admin'>";
+                        ele += "<a href='#' onclick=\"openWSE.CloseSiteTip();return false;\" class='ModalExitButton'></a>";
+                        ele += "</div><span class='Modal-title'></span></div></div>";
+
+                        // Body
+                        var nextTipButton = "<input class='input-buttons nextprev-button' type='button' value='Next Tip' onclick=\"openWSE.NextSiteTip();\" style='width: 95px;' />";
+                        var prevTipButton = "<input class='input-buttons nextprev-button' type='button' value='Previous Tip' onclick=\"openWSE.PreviousSiteTip();\" style='width: 95px;' />";
+                        if (tipArray.length == 1) {
+                            nextTipButton = "";
+                            prevTipButton = "";
+                        }
+
+                        var closeButton = "<input class='input-buttons confirm-close-button' type='button' value='Close' onclick=\"openWSE.CloseSiteTip();\" style='width: 75px;' />";
+                        var dontShowAgain = "<div class='dont-show-again'><input id='dont-show-again-cb' type='checkbox' checked='checked' /><label for='dont-show-again-cb'>Show Tips on Page Load</label></div>";
+
+                        if (openWSE_Config.siteTheme == "") {
+                            openWSE_Config.siteTheme = "Standard";
+                        }
+
+                        var img = "<img alt='confirm' src='" + openWSE.siteRoot() + "App_Themes/" + openWSE_Config.siteTheme + "/Icons/sitetip.png' />";
+                        var tipMessage = tipArray[tipIndex];
+
+                        ele += "<div class='ModalPadContent'>" + img + "<span class='tip-title'>Did you know?</span><div class='clear'></div><div class='message-text'>" + tipMessage + "</div>";
+                        ele += "<div class='button-holder'>" + dontShowAgain + "<div class='clear-space'></div><div class='clear-space'></div>" + prevTipButton + nextTipButton + closeButton + "</div></div>";
+                        ele += "</div></div></div></div>";
+
+                        $("body").append(ele);
+                        LoadModalWindow(true, "SiteTip-element", "Site Tips");
+                        AdjustSiteTipModal();
+                    }
+                }
+            });
+        }
+    }
+    function NextSiteTip() {
+        tipIndex++;
+        if (tipIndex >= tipArray.length) {
+            tipIndex = 0;
+        }
+
+        $("#SiteTip-element").find(".message-text").html(tipArray[tipIndex]);
+        AdjustSiteTipModal();
+    }
+    function PreviousSiteTip() {
+        tipIndex--;
+        if (tipIndex < 0) {
+            tipIndex = tipArray.length - 1;
+        }
+        $("#SiteTip-element").find(".message-text").html(tipArray[tipIndex]);
+        AdjustSiteTipModal();
+    }
+    function CloseSiteTip() {
+        if (!$("#dont-show-again-cb").prop("checked")) {
+            if (!openWSE_Config.demoMode) {
+                $.ajax({
+                    url: openWSE.siteRoot() + "WebServices/AcctSettings.asmx/TurnOffSiteTipsOnPageLoad",
+                    data: "",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8"
+                });
+            }
+
+            cookie.set("siteTipsOnPageLoad", "false", "30");
+        }
+
+        tipIndex = 0;
+        tipArray = new Array();
+
+        $('#SiteTip-element').remove();
+    }
+    function AdjustSiteTipModal() {
+        var top = $("#SiteTip-element").find(".Modal-element-modal").css("top");
+        if (top == "auto") {
+            $("#SiteTip-element").find(".Modal-element-align").css({
+                marginTop: -($("#SiteTip-element").find(".Modal-element-modal").height() / 2),
+                marginLeft: -($("#SiteTip-element").find(".Modal-element-modal").width() / 2)
+            });
+        }
+    }
 
 
     /* Set the Paged version of the Workspace */
@@ -188,12 +501,14 @@ var openWSE = function () {
         }
     }
     function GetPagedAddOverlayAndModel() {
-        $("#" + openWSE_Config.overlayPanelId).append($(".addOverlay-bg"));
-        $("#" + openWSE_Config.overlayPanelId).append($("#overlayEdit-element"));
-        $(".addOverlay-bg").css({
-            bottom: $("#container-footer").outerHeight(),
-            left: $("#sidebar_menulinks").outerWidth()
-        });
+        if ($(".maincontent_overflow-main-bg-simple").length > 0 && $(".addOverlay-bg").length > 0) {
+            $("#" + openWSE_Config.overlayPanelId).append($(".addOverlay-bg"));
+            $("#" + openWSE_Config.overlayPanelId).append($("#overlayEdit-element"));
+            $(".addOverlay-bg").css({
+                bottom: $("#container-footer").outerHeight(),
+                left: $("#sidebar_menulinks").outerWidth()
+            });
+        }
     }
     function CreateNewPagedSearchBox() {
         $("#workspace-selector").append($("#searchwrapper-app-search"));
@@ -246,14 +561,23 @@ var openWSE = function () {
     function OpenMobileWorkspace() {
         var loc = openWSE.siteRoot() + 'AppRemote.aspx';
         if (location.href.indexOf('SiteTools/') > 0) {
-            var locPath = location.pathname;
+            var tempSearchParms = "";
+            loc = location.href;
+            if (loc.indexOf("#?") != -1) {
+                tempSearchParms = loc.split("#?")[1];
+                loc = loc.replace("#?" + tempSearchParms, "");
+            }
+
             if (location.search == '') {
-                locPath += '?mobileMode=true';
+                loc += '?mobileMode=true';
             }
             else {
-                locPath += '?' + location.search + '&mobileMode=true';
+                loc += '&mobileMode=true';
             }
-            loc += '#?id=adminPages&category=' + escape(locPath);
+
+            if (tempSearchParms != "") {
+                loc += "#?" + tempSearchParms;
+            }
         }
         window.open(loc, '_blank', 'toolbar=no, scrollbars=yes, resizable=yes, width=340, height=550');
         return false;
@@ -284,20 +608,62 @@ var openWSE = function () {
         }
     }
 
-    /* Set Trial Text */
-    function SetTrialText(exp) {
-        var text = "<div class='trial-version-text'><span>Trial Version</span><span class='float-right'>Expires in " + exp + "</span></div>";
-        $("#maincontent_overflow").prepend(text);
+    function CheckIfOverlaysExistsOnNonComplex() {
+        if ($(".no-overlays-found").length > 0) {
+            $(".no-overlays-found").remove();
+        }
+
+        var message = "You have no overlays being shown. Click the add button at the bottom to add overlays.";
+        if (openWSE_Config.demoMode) {
+            message = "You have no overlays being shown.";
+        }
+
+        if (allOverlaysDisabled) {
+            message = "Select an app to run in the left panel";
+        }
+
+        if (getParameterByName("AppPage") == "" || getParameterByName("AppPage") == null) {
+            if ($(".workspace-overlay-selector").length == 0) {
+                $("#" + openWSE_Config.overlayPanelId).append("<h3 class='pad-all-big no-overlays-found'>" + message + "</h3>");
+            }
+        }
+    }
+    function DisableOverlaysOnPagedWorkspace() {
+        allOverlaysDisabled = true;
+        $(".addOverlay-bg").remove();
     }
 
 
     /* Auto Update System */
+    var activeElementBeforeRequest;
+    var activeElementTextBeforeRequest;
+    var currScrollPos_maincontent_overflow = 0;
     Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(function (sender, args) {
         if (($("#pnl_aboutHolder").length > 0) && ($.trim($("#pnl_aboutHolder").html()) != "") && ($("#aboutApp-element").css("display") == "block")) {
             aboutHolder = $.trim($("#pnl_aboutHolder").html());
         }
 
         SaveInnerModalContent(args);
+
+        if ($("#maincontent_overflow").length > 0) {
+            currScrollPos_maincontent_overflow = $("#maincontent_overflow").scrollTop();
+        }
+
+        activeElementBeforeRequest = null;
+        activeElementTextBeforeRequest = null;
+
+        try {
+            if (document.activeElement && document.activeElement.localName.toLowerCase() != "body") {
+                activeElementBeforeRequest = $(document.activeElement).attr("id");
+                if (activeElementBeforeRequest) {
+                    activeElementBeforeRequest = "#" + activeElementBeforeRequest;
+                    if (document.activeElement.localName.toLowerCase() == "input" && document.activeElement.type.toLowerCase() == "text") {
+                        activeElementTextBeforeRequest = document.activeElement.value;
+                    }
+                }
+            }
+        }
+        catch (evt) { }
     });
     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
         $(".ui-tooltip-content").parents('div').remove();
@@ -320,6 +686,30 @@ var openWSE = function () {
         ShowNewNotificationPopup();
 
         // AdjustTableSettingsBox();
+
+        CheckIfOverlaysExistsOnNonComplex();
+
+        if ($("#maincontent_overflow").length > 0 && currScrollPos_maincontent_overflow >= 0) {
+            setTimeout(function () {
+                $("#maincontent_overflow").scrollTop(currScrollPos_maincontent_overflow);
+                currScrollPos_maincontent_overflow = 0;
+            }, 1);
+        }
+
+        setTimeout(function () {
+            try {
+                if (activeElementBeforeRequest && activeElementBeforeRequest != null) {
+                    $(activeElementBeforeRequest).focus();
+                    if (activeElementTextBeforeRequest && activeElementTextBeforeRequest != null) {
+                        $(activeElementBeforeRequest).val(activeElementTextBeforeRequest);
+                    }
+                }
+            }
+            catch (evt) { }
+
+            activeElementBeforeRequest = null;
+            activeElementTextBeforeRequest = null;
+        }, 1);
     });
     function autoupdate(_hf_r, _handler, _updateAppId) {
         if ((hf_r == "") && (_hf_r != "")) {
@@ -378,7 +768,8 @@ var openWSE = function () {
                             autoupdate(hf_r, handler, updateAppId);
                         }
                     },
-                    error: function () {
+                    error: function (e) {
+                        console.log("Error on auto update system!");
                         autoupdaterunning = 0;
                         autoupdate(hf_r, handler, updateAppId);
                     }
@@ -527,9 +918,9 @@ var openWSE = function () {
     });
     $(document.body).on("click", "#Category-Back", function () {
         var category = $("#Category-Back-Name-id").html();
-        $("#Category-Back").fadeOut(openWSE_Config.animationSpeed);
         if ($("." + category).length > 0) {
-            if (openWSE_Config.animationSpeed == 0) {
+            if (openWSE_Config.animationSpeed == 0 || $(".app-icon.Icon_Only").length > 0 || $(".app-icon.Icon_And_Text_Only").length > 0 || $(".app-icon.Icon_And_Color_Only").length > 0 || $(".app-icon.Icon_Plus_Color_And_Text").length > 0) {
+                $("#Category-Back").hide();
                 $("." + category).hide();
                 $(".app-icon-category-list").show();
                 $("#Category-Back-Name").html("");
@@ -539,6 +930,7 @@ var openWSE = function () {
             }
             else {
                 $("." + category).hide("slide", { direction: "right" }, openWSE_Config.animationSpeed, function () {
+                    $("#Category-Back").hide();
                     $(".app-icon-category-list").show();
                     $("#Category-Back-Name").html("");
                     $("#Category-Back-Name-id").html("");
@@ -548,6 +940,7 @@ var openWSE = function () {
             }
         }
         else {
+            $("#Category-Back").hide();
             $(".app-icon-category-list").show();
             $("#Category-Back-Name").html("");
             $("#Category-Back-Name-id").html("");
@@ -651,13 +1044,13 @@ var openWSE = function () {
                 if ($_id.find(".app-body").find("div").html() == null) {
                     if (canclose == 1) {
                         $_id.find(".app-body").html("");
-                        // $_id.find(".app-body").html(loadingMessage);
+                        // AppendLoadingMessage($_id.find(".app-body"));
                     }
                 }
                 else {
                     if (canclose == 1) {
                         $_id.find(".app-body").find("div").html("");
-                        // $_id.find(".app-body").find("div").html(loadingMessage);
+                        // AppendLoadingMessage($_id.find(".app-body").find("div"));
                     }
                 }
 
@@ -678,12 +1071,18 @@ var openWSE = function () {
                 if ($_id.find(".options-button-app").length > 0) {
                     $_id.find(".options-button-app").removeClass("active");
                     $_id.find(".app-popup-inner-app").hide();
+                    if (openWSE_Config.appStyle == "Style_3") {
+                        $_id.find(".app-head-button-holder").hide();
+                        optionsOpen_Style3 = false;
+                    }
                 }
 
                 var modalClasses = $_id.attr("data-appid") + outsideAppModal;
                 $("." + modalClasses).each(function () {
                     $(this).remove();
                 });
+
+                RemoveCSSFilesOnAppClose($_id.attr("data-appid"));
 
                 $.ajax({
                     url: saveHandler + "/App_Close",
@@ -702,10 +1101,7 @@ var openWSE = function () {
         return false;
     });
     $(document.body).on("click", ".app-min-bar", function () {
-        var name = $(this).find("span").text();
-        var workspace = Getworkspace();
         var _appId = $(this).attr("data-appid");
-
         var $thisApp = $(".app-main-holder[data-appid='" + _appId + "']");
         if ($thisApp.hasClass("app-min-bar-preview")) {
             $thisApp.css("opacity", "0.0");
@@ -713,129 +1109,9 @@ var openWSE = function () {
             $thisApp.removeClass("app-min-bar-preview");
         }
 
-        var appWidth = $thisApp.width();
-        var appHeight = $thisApp.height();
-
-        $.ajax({
-            url: saveHandler + "/App_Open",
-            type: "POST",
-            data: '{ "appId": "' + _appId + '","name": "' + name + '","workspace": "' + workspace + '","width": "' + appWidth + '","height": "' + appHeight + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
-            contentType: "application/json; charset=utf-8",
-            success: function (data) {
-                var content = data.d;
-                if (content != "") {
-                    MoveToCurrworkspace(workspace, _appId);
-                    AddworkspaceAppNum(workspace, _appId);
-
-                    if (($thisApp.css("display") != "block") || ($thisApp.css("visibility") != "visible")) {
-                        var body = "";
-                        if ($thisApp.find(".app-body").find("div").html() == null) {
-                            body = $thisApp.find(".app-body").html().trim();
-                        }
-                        else {
-                            body = $thisApp.find(".app-body").find("div").html().trim();
-                        }
-
-                        var maxApp = "0";
-                        if ($thisApp.hasClass("app-maximized")) {
-                            maxApp = "1";
-                        }
-
-                        if (body == "") {
-                            if (_appId.indexOf("app-ChatClient-") != -1) {
-                                var chatUser = $thisApp.attr("chat-username");
-                                content = "ChatClient/ChatWindow.html?user=" + chatUser + "&displayVersion=workspace";
-                            }
-
-                            if ((($thisApp.css("left") == null) && ($thisApp.css("top") == null)) || (($thisApp.css("left") == "auto") && ($thisApp.css("top") == "auto"))) {
-                                CreateSOApp(_appId, name, content, "50px", "50px", appWidth, appHeight, "1", maxApp);
-                            }
-                            else {
-                                if (parseInt($thisApp.css("top")) < 0) {
-                                    $thisApp.css("top", "50px");
-                                }
-                                if (parseInt($thisApp.css("left")) < 0) {
-                                    $thisApp.css("left", "50px");
-                                }
-                                CreateSOApp(_appId, name, content, $thisApp.css("left"), $thisApp.css("top"), appWidth, appHeight, "1", maxApp);
-                            }
-                        }
-
-                        if ($(".app-min-bar[data-appid='" + _appId + "']").length != 0) {
-                            if ((!$thisApp.hasClass("auto-full-page")) && (!$thisApp.hasClass("auto-full-page-min")) && (!$thisApp.hasClass("app-maximized")) && (!$thisApp.hasClass("app-maximized-min"))) {
-                                $thisApp.find(".maximize-button-app").removeClass("active");
-                                $thisApp.css("width", appWidth);
-                                $thisApp.css("height", appHeight);
-                                $thisApp.css("top", topBarHt);
-                            }
-                            else {
-                                $thisApp.find(".maximize-button-app").addClass("active");
-                                $thisApp.css("top", "0px");
-
-                                if ($thisApp.hasClass("app-maximized-min")) {
-                                    $thisApp.removeClass("app-maximized-min");
-                                    $thisApp.addClass("app-maximized");
-                                }
-
-                                if ($thisApp.hasClass("auto-full-page-min")) {
-                                    $thisApp.removeClass("auto-full-page-min");
-                                    $thisApp.addClass("auto-full-page");
-                                }
-                            }
-
-                            var xData = $(".app-min-bar[data-appid='" + _appId + "']").attr("data-x");
-                            var yData = $(".app-min-bar[data-appid='" + _appId + "']").attr("data-y");
-
-                            if (previewHover && previewAppID == _appId) {
-                                $thisApp.css({
-                                    visibility: "visible",
-                                    display: "block",
-                                    opacity: 1.0,
-                                    left: xData,
-                                    top: yData
-                                });
-                            }
-                            else {
-                                $thisApp.css({
-                                    visibility: "visible",
-                                    display: "block"
-                                }).animate({
-                                    opacity: 1.0,
-                                    left: xData,
-                                    top: yData
-                                }, openWSE_Config.animationSpeed);
-                            }
-
-                            $.ajax({
-                                url: saveHandler + "/App_Move",
-                                type: "POST",
-                                data: '{ "appId": "' + _appId + '","name": "' + name + '","x": "' + xData + '","y": "' + yData + '","width": "' + appWidth + '","height": "' + appHeight + '","workspace": "' + workspace + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
-                                contentType: "application/json; charset=utf-8"
-                            });
-                        }
-                        else {
-                            $thisApp.css({
-                                top: topBarHt,
-                                visibility: "visible",
-                                display: "block"
-                            }).fadeIn(openWSE_Config.animationSpeed);
-                        }
-
-                        SetActiveApp($thisApp);
-
-                        if ($(".app-min-bar[data-appid='" + _appId + "']").length > 0) {
-                            $(".app-min-bar[data-appid='" + _appId + "']").remove();
-                        }
-                    }
-
-                    previewHover = false;
-                    previewAppID = "";
-
-                    SetContainerTopPos(true);
-                    ResizeAppBody($thisApp);
-                }
-            }
-        });
+        var workspace = Getworkspace();
+        LoadApp($thisApp, workspace);
+        $(window).resize();
         return false;
     });
     $(document.body).on("click", ".app-main-holder", function (e) {
@@ -858,6 +1134,9 @@ var openWSE = function () {
         if ($_parent.find(".app-popup-inner-app").css("display") == "block") {
             $_id.removeClass("active");
             $_parent.find(".app-popup-inner-app").slideUp(openWSE_Config.animationSpeed);
+            if (openWSE_Config.appStyle == "Style_3") {
+                optionsOpen_Style3 = false;
+            }
         }
         else {
             $_id.addClass("active");
@@ -869,6 +1148,10 @@ var openWSE = function () {
 
             $_parent.find(".app-popup-inner-app").slideDown(openWSE_Config.animationSpeed);
             SetActiveApp($_parent.parent());
+
+            if (openWSE_Config.appStyle == "Style_3") {
+                optionsOpen_Style3 = true;
+            }
         }
 
         return false;
@@ -882,6 +1165,11 @@ var openWSE = function () {
                     var $_parent = $_id.parent();
                     $_id.removeClass("active");
                     $_parent.find(".app-popup-inner-app").hide();
+
+                    if (openWSE_Config.appStyle == "Style_3") {
+                        $_parent.find(".app-head-button-holder").hide();
+                        optionsOpen_Style3 = false;
+                    }
                 }
             }
             else {
@@ -974,6 +1262,8 @@ var openWSE = function () {
     function LoadingMessage1(message) {
         RemoveUpdateModal();
 
+        BindF5KeyPress();
+
         if (message.indexOf("...") != -1) {
             message = message.replace("...", "");
         }
@@ -984,15 +1274,41 @@ var openWSE = function () {
         x += "<div class='update-element-modal'><h3 class='inline-block'>" + message + "</h3></div></div></div></div>";
         $("body").append(x);
 
-        StartMessageTickInterval($("#update-element").find(".progress")[0]);
-        $("#update-element").show();
+        if ($("#update-element").find(".progress").length > 0) {
+            StartMessageTickInterval($("#update-element").find(".progress")[0]);
+        }
 
         var $modalWindow = $("#update-element").find(".update-element-modal");
+        try {
+            var backgroundClr = "#151515";
+            var element = document.getElementById("always-visible");
+            if (element) {
+                var style = window.getComputedStyle(element);
+                backgroundClr = style.getPropertyValue("background");
+                if (backgroundClr == null || backgroundClr == "") {
+                    backgroundClr = style.getPropertyValue("background-color");
+                }
+            }
+
+            if (backgroundClr == null || backgroundClr == "") {
+                backgroundClr = "#151515";
+            }
+
+            $modalWindow.css("background", backgroundClr);
+        }
+        catch (evt) {
+            $modalWindow.css("background", "#151515");
+        }
+
+        if ($("#always-visible").css("display") != "none") {
+            $modalWindow.css("top", $("#always-visible").outerHeight());
+        }
+
+        $("#update-element").show();
+
         var currUpdateWidth = -($modalWindow.outerWidth() / 2);
-        var currUpdateHeight = -($modalWindow.outerHeight() / 2);
         $modalWindow.css({
-            marginLeft: currUpdateWidth,
-            marginTop: currUpdateHeight
+            marginLeft: currUpdateWidth
         });
     }
     function StartMessageTickInterval(elem) {
@@ -1021,10 +1337,12 @@ var openWSE = function () {
     }
     function RemoveUpdateModal() {
         intervalCount = 0;
-        if (messageLoadInterval != null) {
+        if (messageLoadInterval && messageLoadInterval != null) {
             clearInterval(messageLoadInterval);
         }
         $("#update-element").remove();
+
+        UnbindF5KeyPress();
     }
 
 
@@ -1064,6 +1382,8 @@ var openWSE = function () {
         LoadModalWindow(true, "AlertWindow-element", "Message");
         setTimeout(function () {
             $("#AlertWindow-element").find(".confirm-ok-button").focus();
+            RemoveUpdateModal();
+            BindF5KeyPress();
         }, 250);
     }
     function CloseAlertWindow() {
@@ -1071,6 +1391,8 @@ var openWSE = function () {
             $("#AlertWindow-element").hide();
             $("#AlertWindow-element").remove();
         }
+
+        UnbindF5KeyPress();
     }
     function ReportAlert(error, url) {
         if (url == "" || url == null) {
@@ -1127,12 +1449,77 @@ var openWSE = function () {
         LoadModalWindow(true, "ConfirmWindow-element", "Confirmation");
         setTimeout(function () {
             $("#ConfirmWindow-element").find(".confirm-ok-button").focus();
+            RemoveUpdateModal();
+            BindF5KeyPress();
+        }, 250);
+    }
+    function ConfirmWindowAltBtns(message, okCallback, cancelCallback) {
+        if (message == "" || message == null) {
+            message = "Are you sure you want to continue?";
+        }
+
+        var ele = "<div id='ConfirmWindow-element' class='Modal-element' style='display: none;'>";
+        ele += "<div class='Modal-overlay'>";
+        ele += "<div class='Modal-element-align'>";
+        ele += "<div class='Modal-element-modal' data-setwidth='370'>";
+
+        // Header
+        ele += "<div class='ModalHeader'><div><div class='app-head-button-holder-admin'>";
+        ele += "<a href='#' onclick=\"openWSE.CloseConfirmWindow();return false;\" class='ModalExitButton confirm-cancel-button-header'></a>";
+        ele += "</div><span class='Modal-title'></span></div></div>";
+
+        // Body
+        var okButton = "<input class='input-buttons confirm-ok-button' type='button' value='Yes' style='width: 60px;' />";
+        var cancelButton = "<input class='input-buttons confirm-cancel-button' type='button' value='No' />";
+
+        if (openWSE_Config.siteTheme == "") {
+            openWSE_Config.siteTheme = "Standard";
+        }
+
+        var img = "<img alt='confirm' src='" + openWSE.siteRoot() + "App_Themes/" + openWSE_Config.siteTheme + "/Icons/confirm.png' />";
+        ele += "<div class='ModalPadContent'><div class='message-text'>" + img + message + "</div><div class='button-holder'>" + okButton + cancelButton + "</div></div></div>";
+        ele += "</div></div></div></div>";
+
+        $("body").append(ele);
+
+        $("#ConfirmWindow-element").find(".confirm-ok-button").one("click", function () {
+            openWSE.CloseConfirmWindow();
+            if (okCallback != null) {
+                okCallback();
+            }
+        });
+        $("#ConfirmWindow-element").find(".confirm-cancel-button, .confirm-cancel-button-header").one("click", function () {
+            openWSE.CloseConfirmWindow();
+            if (cancelCallback != null) {
+                cancelCallback();
+            }
+        });
+
+        LoadModalWindow(true, "ConfirmWindow-element", "Confirmation");
+        setTimeout(function () {
+            $("#ConfirmWindow-element").find(".confirm-ok-button").focus();
+            RemoveUpdateModal();
         }, 250);
     }
     function CloseConfirmWindow() {
         if ($("#ConfirmWindow-element").length > 0) {
             $("#ConfirmWindow-element").hide();
             $("#ConfirmWindow-element").remove();
+        }
+
+        UnbindF5KeyPress();
+    }
+
+
+    /* Disable/Enable F5 Key Event */
+    function BindF5KeyPress() {
+        if (openWSE_Config.disableF5KeyOnModals) {
+            $(document).on("keydown", openWSE.disableF5);
+        }
+    }
+    function UnbindF5KeyPress() {
+        if (openWSE_Config.disableF5KeyOnModals) {
+            $(document).off("keydown", openWSE.disableF5);
         }
     }
 
@@ -1150,14 +1537,19 @@ var openWSE = function () {
     }
     function CheckIfWorkspaceLinkAvailable() {
         var hasWorkspaceLink = false;
-        $(".site-tools-tablist").each(function (index) {
-            $(".site-tools-tablist").eq(index).find(".app-icon-links").each(function () {
-                var $this = $(this).find(".app-icon-font");
-                if ($this.html().toLowerCase() == "workspace") {
-                    hasWorkspaceLink = true;
-                }
+        if ($("#pnl_Login_NonAuth").length > 0) {
+            hasWorkspaceLink = true;
+        }
+        else {
+            $(".site-tools-tablist").each(function (index) {
+                $(".site-tools-tablist").eq(index).find(".app-icon-links").each(function () {
+                    var $this = $(this).find(".app-icon-font");
+                    if ($this.html().toLowerCase() == "workspace") {
+                        hasWorkspaceLink = true;
+                    }
+                });
             });
-        });
+        }
 
         return hasWorkspaceLink;
     }
@@ -1508,6 +1900,9 @@ var openWSE = function () {
                 $thisElement.find(".ModalExitButton").html("<span></span>");
                 $modalElement.append($thisElement.find(".ModalHeader"));
             }
+            else if (openWSE_Config.appStyle == "Style_3") {
+                $thisElement.addClass("modal-style3");
+            }
             else {
                 $thisElement.addClass("modal-style1");
             }
@@ -1522,14 +1917,9 @@ var openWSE = function () {
                 }
             }
 
-            if ($modalElement.outerWidth() > $(container).width()) {
-                $modalElement.find(".ModalScrollContent").css("max-height", $(container).height());
-                $modalElement.css({
-                    width: $(container).width(),
-                    minWidth: 50
-                });
-            }
-            else if ($modalElement.attr("data-setwidth") != null && $modalElement.attr("data-setwidth") != "") {
+	        var tempWidth = parseInt($modalElement.attr("data-setwidth"));
+
+            if ($modalElement.attr("data-setwidth") != null && $modalElement.attr("data-setwidth") != "") {
                 if ($modalElement.attr("data-setmaxheight") != null && $modalElement.attr("data-setmaxheight") != "") {
                     $modalElement.find(".ModalScrollContent").css("max-height", parseInt($modalElement.attr("data-setmaxheight")));
                 }
@@ -1550,6 +1940,8 @@ var openWSE = function () {
                     $modalElement.find(".ModalScrollContent").css("max-height", $(container).height() - 100);
                 }
             }
+
+            $thisElement.attr("data-containment", container);
 
             $modalElement.draggable({
                 containment: container,
@@ -1623,6 +2015,19 @@ var openWSE = function () {
                                     if ($this.attr("id") != "") {
                                         innerMCArray[0] = $this.attr("id");
                                         innerMCArray[1] = innerModalContentString;
+
+                                        var inputs = new Array();
+                                        $this.find(".ModalScrollContent").find("input[type='text']").each(function () {
+                                            inputs.push($(this).val());
+                                        });
+                                        innerMCArray[2] = inputs;
+
+                                        var textAreas = new Array();
+                                        $this.find(".ModalScrollContent").find("textarea").each(function () {
+                                            textAreas.push($(this).val());
+                                        });
+                                        innerMCArray[3] = textAreas;
+                                        
                                         innerModalContent.push(innerMCArray);
                                     }
                                 }
@@ -1650,6 +2055,19 @@ var openWSE = function () {
                         if (innerModalContent[i][0] == $this.attr("id")) {
                             var tempContent = unescape(innerModalContent[i][1]);
                             $this.find(".ModalScrollContent").html(tempContent);
+
+                            $this.find(".ModalScrollContent").find("input[type='text']").each(function (index) {
+                                if (innerModalContent[i][2][index]) {
+                                    $(this).val(innerModalContent[i][2][index]);
+                                }
+                            });
+
+                            $this.find(".ModalScrollContent").find("textarea").each(function (index) {
+                                if (innerModalContent[i][3][index]) {
+                                    $(this).val(innerModalContent[i][3][index]);
+                                }
+                            });
+
                             break;
                         }
                     }
@@ -1676,6 +2094,7 @@ var openWSE = function () {
             });
 
             $thisElement.css("visibility", "visible");
+            AdjustModalWindowView();
         }
     }
 
@@ -2111,9 +2530,9 @@ var openWSE = function () {
                 newmember_text += "<span class='intro-title'>Workspace App List</span>";
                 newmember_text += "<div class='clear-space'></div>";
                 newmember_text += "<div class='workspace-intro'>";
-                newmember_text += "<img alt='workspace' src='" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/workspace.png' />";
+                newmember_text += "<img alt='workspace' src='" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/workspace.jpg' />";
                 newmember_text += "<div class='help-intro-overlay'>";
-                newmember_text += "<div class='help-intro-circle' style='top: 7%; left: 0px; height: 62%; width: 9%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/app-selector.png\");'></div>";
+                newmember_text += "<div class='help-intro-circle' style='top: 7%; left: 0px; height: 68%; width: 10%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/app-selector.png\");'></div>";
                 newmember_text += "<div class='help-intro-text' style='top: 10%; left: 15%;'><ul>";
                 newmember_text += "<li>All your available apps will open in the workspace portion of the page (where your custom background appears).</li>";
                 newmember_text += "<li>You can load as many apps as you want and move them anywhere you like. The site will record the position and save it to the database where it can retrieve it on page loads.</li>";
@@ -2128,10 +2547,10 @@ var openWSE = function () {
                 newmember_text += "<span class='intro-title'>Workspace Controls</span>";
                 newmember_text += "<div class='clear-space'></div>";
                 newmember_text += "<div class='workspace-intro'>";
-                newmember_text += "<img alt='workspace' src='" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/workspace.png' />";
+                newmember_text += "<img alt='workspace' src='" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/workspace.jpg' />";
                 newmember_text += "<div class='help-intro-overlay'>";
-                newmember_text += "<div class='help-intro-circle' style='top: 0%; left: 0px; height: 18%; width: 5%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/workspace-selector.png\");'></div>";
-                newmember_text += "<div class='help-intro-circle' style='top: 0%; right: 0px; height: 47%; width: 27.5%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/top-right-btns.png\");'></div>";
+                newmember_text += "<div class='help-intro-circle' style='top: 0%; left: 0px; height: 24%; width: 6%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/workspace-selector.png\");'></div>";
+                newmember_text += "<div class='help-intro-circle' style='top: 0%; right: 0px; height: 51%; width: 27.5%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/top-right-btns.png\");'></div>";
                 newmember_text += "<div class='help-intro-text' style='top: 5%; left: 14%; width: 25%;'>You can select the workspace you want to work on. Apps can be placed in each workspace anyway you want.</div>";
                 newmember_text += "<div class='help-intro-text' style='top: 5%; right: 30%; width: 15%;'>The top buttons to the left will show you different features such as:<br /><ul class='pad-left-big'><li>Group Login</li><li>Login/Logout</li><li>Overlay View</li><li>Notifications</li><li>Search</li></ul></div>";
                 newmember_text += "</div>";
@@ -2142,9 +2561,9 @@ var openWSE = function () {
                 newmember_text += "<span class='intro-title'>Workspace Opened App</span>";
                 newmember_text += "<div class='clear-space'></div>";
                 newmember_text += "<div class='workspace-intro'>";
-                newmember_text += "<img alt='workspace' src='" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/workspace.png' />";
+                newmember_text += "<img alt='workspace' src='" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/workspace.jpg' />";
                 newmember_text += "<div class='help-intro-overlay'>";
-                newmember_text += "<div class='help-intro-circle' style='top: 7%; left: 0px; height: 62%; width: 9%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/app-selector-with-openapp.png\");'></div>";
+                newmember_text += "<div class='help-intro-circle' style='top: 7%; left: 0px; height: 68%; width: 10%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/app-selector-with-openapp.png\");'></div>";
                 newmember_text += "<div class='help-intro-circle' style='top: 7%; left: 15%; height: 63%; width: 51%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/app.png\");'></div>";
                 newmember_text += "<div class='help-intro-text' style='bottom: 5%; left: 15%;'><ul>";
                 newmember_text += "<li>All apps are configurable to your liking. Each app will also come with option buttons, which can be found at the top right of the app header (If App Style is Style 2)</li>";
@@ -2158,7 +2577,7 @@ var openWSE = function () {
                 newmember_text += "<span class='intro-title'>App Options</span>";
                 newmember_text += "<div class='clear-space'></div>";
                 newmember_text += "<div class='workspace-intro'>";
-                newmember_text += "<img alt='workspace' src='" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/workspace.png' />";
+                newmember_text += "<img alt='workspace' src='" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/workspace.jpg' />";
                 newmember_text += "<div class='help-intro-overlay'>";
                 newmember_text += "<div class='help-intro-no-circle' style='top: 7%; left: 0px; height: 62%; width: 9%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/app-selector-with-openapp.png\");'><div class='help-intro-overlay'></div></div>";
                 newmember_text += "<div class='help-intro-no-circle' style='top: 7%; left: 15%; height: 63%; width: 51%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/app.png\");'><div class='help-intro-overlay'></div></div>";
@@ -2175,10 +2594,10 @@ var openWSE = function () {
                 newmember_text += "<span class='intro-title'>Minimized App</span>";
                 newmember_text += "<div class='clear-space'></div>";
                 newmember_text += "<div class='workspace-intro'>";
-                newmember_text += "<img alt='workspace' src='" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/workspace.png' />";
+                newmember_text += "<img alt='workspace' src='" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/workspace.jpg' />";
                 newmember_text += "<div class='help-intro-overlay'>";
                 newmember_text += "<div class='help-intro-no-circle' style='top: 7%; left: 0px; height: 62%; width: 9%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/app-selector-with-openapp.png\");'><div class='help-intro-overlay'></div></div>";
-                newmember_text += "<div class='help-intro-circle' style='top: 0; left: 7%; height: 1%; width: 3%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/app-minimized.png\");'></div>";
+                newmember_text += "<div class='help-intro-circle' style='top: 0; left: 7%; height: 1.5%; width: 6%; background-image: url(\"" + GetSiteRoot() + "Standard_Images/NewUserIntro/Workspace/app-minimized.png\");'></div>";
                 newmember_text += "<div class='help-intro-text' style='top: 10%; left: 15%;'><ul>";
                 newmember_text += "<li>When apps are minimized, they will be moved completely off the screen.</li>";
                 newmember_text += "<li>If you hover over the minimized app, a preview will be shown with the exact place the app was before being minimized. (Only if option is on in settings)</li>";
@@ -2292,7 +2711,7 @@ var openWSE = function () {
     $(document).keydown(function (e) {
         // ALT + O keydown combo
         e = e || window.event;
-        if (e.altKey && e.which == 79) {
+        if (e.altKey && e.which == 79 && $("#overlay_tab").length > 0 && $("#overlay_tab").css("display") != "none") {
             if (openWSE_Config.overlayPanelId == "pnl_OverlaysAll") {
                 if ($("#pnl_OverlaysAll").css("display") != "block") {
                     $("#pnl_OverlaysAll").fadeIn(openWSE_Config.animationSpeed);
@@ -2359,6 +2778,8 @@ var openWSE = function () {
                 RemoveUpdateModal();
             }
         });
+
+        CheckIfOverlaysExistsOnNonComplex();
     }
     function TryAddLoadOverlay(ids) {
         var splitIds = ids.split(',');
@@ -2384,6 +2805,7 @@ var openWSE = function () {
         }
 
         UpdateOverlayTable();
+        CheckIfOverlaysExistsOnNonComplex();
     }
     function CallOverlayList() {
         LoadingMessage1("Loading...");
@@ -2763,16 +3185,23 @@ var openWSE = function () {
     function LoadCreateAccountHolder() {
         if ($("#Login-holder").css("display") != "none") {
             $("#Login-holder").hide();
-            $("#iframe-createaccount-holder").html("<iframe id='iframe-demo' src='" + GetSiteRoot() + "SiteTools/iframes/CreateAccount.aspx' frameborder='0' width='315px' style='visibility: hidden;'></iframe>");
+
+            var fullUrl = GetSiteRoot() + "SiteTools/iframes/CreateAccount.aspx";
+            if (GetSiteRoot() == "/Scripts/SiteCalls/Full/" || GetSiteRoot() == "/Scripts/SiteCalls/Min/") {
+                fullUrl = "/SiteTools/iframes/CreateAccount.aspx";
+            }
+
+            $("#iframe-createaccount-holder").html("<iframe id='iframe-demo' src='" + fullUrl + "' frameborder='0' width='315px' style='visibility: hidden;'></iframe>");
             $("#iframe-createaccount-holder").append("<div style='text-align: center;'><h3 id='loadingControls'>Loading Controls. Please Wait...</h3></div>");
             $("#CreateAccount-holder").fadeIn(openWSE_Config.animationSpeed);
             $("#iframe-demo").load(function () {
                 $("#loadingControls").remove();
                 $("#register_password_cancel").show();
                 $("#iframe-demo").css({
-                    height: "475px",
+                    height: "500px",
                     visibility: "visible"
                 });
+                AdjustLoginModalPopup();
             });
         }
         else {
@@ -2780,6 +3209,8 @@ var openWSE = function () {
             $("#iframe-createaccount-holder").html("");
             $("#Login-holder").fadeIn(openWSE_Config.animationSpeed);
         }
+
+        AdjustLoginModalPopup();
     }
     function LoadRecoveryPassword() {
         $("#tb_username_recovery").val("");
@@ -2788,6 +3219,18 @@ var openWSE = function () {
         $("#Login-holder").hide();
         $("#register_password_cancel").show();
         $("#ForgotPassword-holder").fadeIn(openWSE_Config.animationSpeed);
+        AdjustLoginModalPopup();
+    }
+    function AdjustLoginModalPopup() {
+        if ($("#LoginModalPopup-element").length > 0 && $("#LoginModalPopup-element").css("display") == "block") {
+            var top = $("#LoginModalPopup-element").find(".Modal-element-modal").css("top");
+            if (top == "auto") {
+                $("#LoginModalPopup-element").find(".Modal-element-align").css({
+                    marginTop: -($("#LoginModalPopup-element").find(".Modal-element-modal").height() / 2),
+                    marginLeft: -($("#LoginModalPopup-element").find(".Modal-element-modal").width() / 2)
+                });
+            }
+        }
     }
 
 
@@ -2848,7 +3291,7 @@ var openWSE = function () {
                 fullUrl = "?";
             }
 
-            fullUrl += "iframecontent=" + url; // + "&contentName=" + $.trim($(_this).text());
+            fullUrl += "iframecontent=" + escape(url); // + "&contentName=" + $.trim($(_this).text());
 
             window.location += fullUrl;
         }
@@ -2861,6 +3304,7 @@ var openWSE = function () {
             }, openWSE_Config.animationSpeed);
         }
         else {
+            url = unescape(url);
             var iframeHeight = $(window).height() - ($("#always-visible").height() + $("#container-footer").height());
             if (!isExternal(url)) {
                 url = openWSE.siteRoot() + url;
@@ -2992,7 +3436,7 @@ var openWSE = function () {
                         // Add Upload iframe
                         if (data.d[0] != "") {
                             modal += "<div class='clear' style='height: 20px;'></div>";
-                            modal += "<iframe src='" + data.d[0] + "' frameborder='0' style='width: 100%; height: 70px; overflow: hidden;'></iframe>";
+                            modal += "<iframe src='" + data.d[0] + "' frameborder='0' style='width: 100%; height: 80px; overflow: hidden;'></iframe>";
                             modal_list += "<small class='float-right'>Click on the background that you would like to apply to your workspace.</small>";
                             modal_list += "<div class='float-left'><span class='font-bold pad-right'>Folder</span><select id='dd_userimagefolder' onchange='openWSE.ChangeImageFolder();'><option value='user'>User Uploads</options><option value='public'>Public</option></select></div>";
                             modal_list += "<div class='clear-space'></div>";
@@ -3214,36 +3658,59 @@ var openWSE = function () {
     }
     $(document.body).on("click", "#BackgroundSelector-element .image-selector", function (e) {
         if (e.target.className.indexOf("delete-uploadedimg") == -1) {
-            var $this = $(this);
-            var img = "";
-            if ($(this).find(".color-bg-div").length > 0) {
-                img = $(this).find(".color-bg-div").attr("data-color");
+            var showConfirm = false;
+            if ($(this).hasClass("image-selector-active") && $(".image-selector-active").length > 2) {
+                showConfirm = true;
             }
-            else {
-                img = $(this).find("img").attr("data-imgsrc");
+            else if (!$(this).hasClass("image-selector-active") && $(".image-selector-active").length > 0) {
+                showConfirm = true;
             }
 
-            if (!openWSE_Config.demoMode) {
-                LoadingMessage1("Saving Background");
-                $.ajax({
-                    url: openWSE.siteRoot() + "WebServices/AcctSettings.asmx/SaveNewBackground",
-                    type: "POST",
-                    data: '{ "_workspace": "' + Getworkspace().replace("workspace_", "") + '","_img": "' + img + '","folder": "' + selectedImgFolder + '" }',
-                    contentType: "application/json; charset=utf-8",
-                    success: function (data) {
-                        if (data.d.length == 3) {
-                            SetNewBackground(data.d[0], data.d[1]);
-                            if (data.d[2].length == 6) {
-                                $("#BackgroundSelector-element").find(".img-list-selector").html(data.d[2][1]);
-                            }
+            var _this = this;
+
+            if (showConfirm) {
+                ConfirmWindowAltBtns("Do you want to remove the previous selected background(s)? Click No to add the new background to the existing list.", function () {
+                    LoadingMessage1("Updating...");
+                    $.ajax({
+                        url: openWSE.siteRoot() + "WebServices/AcctSettings.asmx/SaveNewBackground",
+                        type: "POST",
+                        data: '{ "_workspace": "' + Getworkspace() + '","_img": "' + "" + '","folder": "' + selectedImgFolder + '" }',
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            $.ajax({
+                                url: openWSE.siteRoot() + "WebServices/AcctSettings.asmx/SaveNewBackground",
+                                type: "POST",
+                                data: '{ "_workspace": "' + Getworkspace() + '","_img": "' + "" + '","folder": "' + selectedImgFolder + '" }',
+                                contentType: "application/json; charset=utf-8",
+                                success: function (data) {
+                                    var div = "";
+                                    if ($("#app_title_bg").length == 0) {
+                                        div = "#maincontent_overflow";
+                                    }
+                                    else if ($(".workspace-backgrounds-fixed").length > 0 && IsComplexWorkspaceMode()) {
+                                        div = "#MainContent_bg_" + Getworkspace();
+                                    }
+                                    else {
+                                        div = "#app_title_bg";
+                                    }
+
+                                    var timerIndex = FindBackgroundLoopTimerIndex(div);
+                                    if (timerIndex != -1) {
+                                        clearInterval(backgroundLoopTimer[timerIndex].obj);
+                                    }
+
+                                    openWSE.RemoveUpdateModal();
+                                    BackgroundClickAction(_this);
+                                }
+                            });
                         }
-                        openWSE.RemoveUpdateModal();
-                        RefreshAcctSettingsBackgrounds()
-                    }
+                    });
+                }, function () {
+                    BackgroundClickAction(_this);
                 });
             }
             else {
-                SetNewBackground(img, "30000");
+                BackgroundClickAction(_this);
             }
         }
     });
@@ -3307,7 +3774,7 @@ var openWSE = function () {
 
             div = "#maincontent_overflow";
         }
-        else if ($(".workspace-backgrounds-fixed").length > 0) {
+        else if ($(".workspace-backgrounds-fixed").length > 0 && IsComplexWorkspaceMode()) {
             if (img.length > 6) {
                 $("#MainContent_bg_" + Getworkspace()).css("background", openWSE_Config.defaultBackgroundColor + " url('" + img + "') " + openWSE_Config.defaultBackgroundRepeat + " " + openWSE_Config.defaultBackgroundPosition);
                 $("#MainContent_bg_" + Getworkspace()).css("background-size", openWSE_Config.defaultBackgroundSize);
@@ -3402,7 +3869,7 @@ var openWSE = function () {
             $("#maincontent_overflow").css("background-repeat", openWSE_Config.defaultBackgroundRepeat);
             $("#maincontent_overflow").css("background-size", openWSE_Config.defaultBackgroundSize);
         }
-        else if ($(".workspace-backgrounds-fixed").length > 0) {
+        else if ($(".workspace-backgrounds-fixed").length > 0 && IsComplexWorkspaceMode()) {
             for (var i = 0; i < $(".workspace-holder").length; i++) {
                 $("#MainContent_bg_" + (i + 1)).css("background-color", openWSE_Config.defaultBackgroundColor);
                 $("#MainContent_bg_" + (i + 1)).css("background-position", openWSE_Config.defaultBackgroundPosition);
@@ -3415,6 +3882,39 @@ var openWSE = function () {
             $("#app_title_bg").css("background-position", openWSE_Config.defaultBackgroundPosition);
             $("#app_title_bg").css("background-repeat", openWSE_Config.defaultBackgroundRepeat);
             $("#app_title_bg").css("background-size", openWSE_Config.defaultBackgroundSize);
+        }
+    }
+    function BackgroundClickAction(_this) {
+        var $this = $(_this);
+        var img = "";
+        if ($this.find(".color-bg-div").length > 0) {
+            img = $this.find(".color-bg-div").attr("data-color");
+        }
+        else {
+            img = $this.find("img").attr("data-imgsrc");
+        }
+
+        if (!openWSE_Config.demoMode) {
+            LoadingMessage1("Saving Background");
+            $.ajax({
+                url: openWSE.siteRoot() + "WebServices/AcctSettings.asmx/SaveNewBackground",
+                type: "POST",
+                data: '{ "_workspace": "' + Getworkspace().replace("workspace_", "") + '","_img": "' + img + '","folder": "' + selectedImgFolder + '" }',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.d.length == 3) {
+                        SetNewBackground(data.d[0], data.d[1]);
+                        if (data.d[2].length == 6) {
+                            $("#BackgroundSelector-element").find(".img-list-selector").html(data.d[2][1]);
+                        }
+                    }
+                    openWSE.RemoveUpdateModal();
+                    RefreshAcctSettingsBackgrounds()
+                }
+            });
+        }
+        else {
+            SetNewBackground(img, "30000");
         }
     }
 
@@ -3651,8 +4151,8 @@ var openWSE = function () {
             $_id.css("z-index", "3000");
 
             if ($_id.find(".iFrame-apps").length > 0) {
-                var _content = $get(id + " .iFrame-apps");
-                if (_content.src != null) {
+                var _content = $_id.find(".iFrame-apps");
+                if (_content && _content != null && _content.src != null) {
                     _content.src = _content.src;
                 }
             }
@@ -3673,7 +4173,6 @@ var openWSE = function () {
         }
 
         $('#updatePnl_AppList').sortable({
-            axis: 'y',
             cancel: '.app-icon-category-list, #Category-Back, .app-popup',
             containment: '#updatePnl_AppList',
             opacity: 0.6,
@@ -3699,9 +4198,16 @@ var openWSE = function () {
                     });
                 }
 
-                $(document).tooltip({ disabled: false });
+                if (openWSE_Config.showToolTips) {
+                    $(document).tooltip({ disabled: false });
+                }
             }
         });
+
+        if ($(".app-icon.Icon_Only").length == 0 && $(".app-icon.Icon_And_Text_Only").length == 0 && $(".app-icon.Icon_And_Color_Only").length == 0 && $(".app-icon.Icon_Plus_Color_And_Text").length == 0) {
+            $("#updatePnl_AppList").sortable("option", "axis", "y");
+        }
+
         $('#updatePnl_AppList').disableSelection();
     }
     function CreateSOApp(id, title, content, x, y, width, height, min, max) {
@@ -3772,9 +4278,10 @@ var openWSE = function () {
                     }
                     else {
                         $_id.find(".app-body").load(content, function () {
+                            LoadCSSFilesInApp($_id.attr("data-appid"));
                             if ($_id.find(".app-body").find("iframe").length > 0) {
                                 if ($_id.find(".app-body").find(".loading-background-holder").length <= 0) {
-                                    $_id.find(".app-body").append(loadingMessage);
+                                    AppendLoadingMessage($_id.find(".app-body"));
                                 }
 
                                 ResizeAppBody($_id);
@@ -3788,6 +4295,9 @@ var openWSE = function () {
                         });
                     }
                 }
+            }
+            else {
+                LoadCSSFilesInApp($_id.attr("data-appid"));
             }
 
             SetAppIconActive($_id);
@@ -3868,6 +4378,18 @@ var openWSE = function () {
                 $(".app-min-bar[data-appid='" + id + "']").attr("title", title);
             }
 
+            var $appIcon = $(".app-icon[data-appid='" + id + "']");
+            if ($appIcon.length > 0 && ($appIcon.hasClass("Color_And_Description") || $appIcon.hasClass("Icon_And_Color_Only") || $appIcon.hasClass("Icon_Plus_Color_And_Text"))) {
+                var bgColor = $(".app-icon[data-appid='" + id + "']").css("background");
+                $(".app-min-bar[data-appid='" + id + "']").css("background", bgColor);
+
+                var $appTitle = $(".app-min-bar[data-appid='" + id + "']").find(".app-title");
+                if ($appTitle.length > 0) {
+                    var fontColor = $appIcon.find(".app-icon-font").css("color");
+                    $appTitle.css("color", fontColor);
+                }
+            }
+
             $_id.css({
                 visibility: "hidden",
                 display: "block"
@@ -3923,22 +4445,32 @@ var openWSE = function () {
         var appHeight = $_id.height();
 
         if (($_id.css("display") != "block") || ($_id.css("visibility") != "visible")) {
-            if (_appId.indexOf("app-ChatClient-") != -1) {
-                var chatUser = $_id.attr("chat-username");
-                content = "ChatClient/ChatWindow.html?user=" + chatUser + "&displayVersion=workspace";
-            }
-
-            if ((($_id.css("left") == null) && ($_id.css("top") == null)) || (($_id.css("left") == "auto") && ($_id.css("top") == "auto"))) {
-                CreateSOApp(_appId, name, content, "50px", "50px", appWidth, appHeight, "1", "0");
+            var body = "";
+            if ($_id.find(".app-body").find("div").html() == null) {
+                body = $.trim($_id.find(".app-body").html());
             }
             else {
-                if (parseInt($_id.css("top")) < 0) {
-                    $_id.css("top", "50px");
+                body = $.trim($_id.find(".app-body").find("div").html());
+            }
+
+            if (body == "") {
+                if (_appId.indexOf("app-ChatClient-") != -1) {
+                    var chatUser = $_id.attr("chat-username");
+                    content = "ChatClient/ChatWindow.html?user=" + chatUser + "&displayVersion=workspace";
                 }
-                if (parseInt($_id.css("left")) < 0) {
-                    $_id.css("left", "50px");
+
+                if ((($_id.css("left") == null) && ($_id.css("top") == null)) || (($_id.css("left") == "auto") && ($_id.css("top") == "auto"))) {
+                    CreateSOApp(_appId, name, content, "50px", "50px", appWidth, appHeight, "1", "0");
                 }
-                CreateSOApp(_appId, name, content, $_id.css("left"), $_id.css("top"), appWidth, appHeight, "1", "0");
+                else {
+                    if (parseInt($_id.css("top")) < 0) {
+                        $_id.css("top", "50px");
+                    }
+                    if (parseInt($_id.css("left")) < 0) {
+                        $_id.css("left", "50px");
+                    }
+                    CreateSOApp(_appId, name, content, $_id.css("left"), $_id.css("top"), appWidth, appHeight, "1", "0");
+                }
             }
 
             $_id.css("display", "block");
@@ -3946,8 +4478,8 @@ var openWSE = function () {
             $_id.css("z-index", "3000");
 
             if ($(".app-min-bar[data-appid='" + _appId + "']").length != 0) {
-                if ($_id.find(".loading-background-holder").length <= 0) {
-                    $_id.find(".app-body").append(loadingMessage);
+                if ($_id.find(".loading-background-holder").length <= 0 && body == "") {
+                    AppendLoadingMessage($_id.find(".app-body"));
                 }
                 if ((!$_id.hasClass("auto-full-page")) && (!$_id.hasClass("auto-full-page-min")) && (!$_id.hasClass("app-maximized")) && (!$_id.hasClass("app-maximized-min"))) {
                     $_id.find(".maximize-button-app").removeClass("active");
@@ -3964,15 +4496,27 @@ var openWSE = function () {
                 var xData = $(".app-min-bar[data-appid='" + _appId + "']").attr("data-x");
                 var yData = $(".app-min-bar[data-appid='" + _appId + "']").attr("data-y");
 
-                $_id.css({
-                    visibility: "visible",
-                    display: "block"
-                }).animate({
-                    opacity: 1.0,
-                    filter: "alpha(opacity=100)",
-                    left: xData,
-                    top: yData
-                }, openWSE_Config.animationSpeed);
+
+                if (previewHover && previewAppID == _appId) {
+                    $_id.css({
+                        visibility: "visible",
+                        display: "block",
+                        opacity: 1.0,
+                        left: xData,
+                        top: yData
+                    });
+                }
+                else {
+                    $_id.css({
+                        visibility: "visible",
+                        display: "block"
+                    }).animate({
+                        opacity: 1.0,
+                        filter: "alpha(opacity=100)",
+                        left: xData,
+                        top: yData
+                    }, openWSE_Config.animationSpeed);
+                }
 
                 $.ajax({
                     url: saveHandler + "/App_Move",
@@ -3980,6 +4524,7 @@ var openWSE = function () {
                     data: '{ "appId": "' + _appId + '","name": "' + name + '","x": "' + xData + '","y": "' + yData + '","width": "' + appWidth + '","height": "' + appHeight + '","workspace": "' + workspace + '","workspaceMode": "' + openWSE_Config.workspaceMode + '" }',
                     contentType: "application/json; charset=utf-8"
                 });
+
                 ResizeAllAppBody($_id);
             }
             else {
@@ -3991,6 +4536,9 @@ var openWSE = function () {
             }
 
             $(".app-min-bar[data-appid='" + _appId + "']").remove();
+
+            previewHover = false;
+            previewAppID = "";
 
             if (needpostback == 1) {
                 var hf_loadApp1 = document.getElementById("hf_loadApp1");
@@ -4063,7 +4611,9 @@ var openWSE = function () {
 
         var $workspace = $(a).closest(".app-body").parent().parent();
         if ($workspace.length > 0) {
-            if ($app.length == 1) {
+            LoadCSSFilesInApp(id);
+
+            if ($app.length > 0) {
                 $app.find('.outside-main-app-div').each(function () {
                     $(this).addClass(id + outsideAppModal);
                     $workspace.append($(this));
@@ -4113,6 +4663,57 @@ var openWSE = function () {
     }
 
 
+    function LoadCSSFilesInApp(id) {
+        var $app = $(".app-main-holder[data-appid='" + id + "']");
+
+        if ($app.length > 0) {
+            $app.find("link").each(function () {
+                var href = $.trim($(this).attr("href"));
+                if (href.indexOf("~/") == 0) {
+                    href = openWSE.siteRoot() + href.replace("~/", "");
+                    $(this).attr("href", href);
+                }
+                else if (href.indexOf("App/") == 0) {
+                    href = openWSE.siteRoot() + href;
+                    $(this).attr("href", href);
+                }
+
+                $(this).attr("data-id", id);
+                $(document.head).append($(this));
+            });
+            $app.find("style").each(function () {
+                $(this).attr("data-id", id);
+                $(document.head).append($(this));
+            });
+            $app.find("script").each(function () {
+                var src = $.trim($(this).attr("src"));
+                if (src.indexOf("~/") == 0) {
+                    src = openWSE.siteRoot() + src.replace("~/", "");
+                    $(this).attr("src", src);
+                }
+                else if (src.indexOf("App/") == 0) {
+                    src = openWSE.siteRoot() + src;
+                    $(this).attr("src", src);
+                }
+
+                $(this).attr("data-id", id);
+                $(document.head).append($(this));
+            });
+        }
+    }
+    function RemoveCSSFilesOnAppClose(id) {
+        if ($("link[data-id='" + id + "']").length > 0) {
+            $("link[data-id='" + id + "']").remove();
+        }
+        if ($("style[data-id='" + id + "']").length > 0) {
+            $("style[data-id='" + id + "']").remove();
+        }
+        if ($("script[data-id='" + id + "']").length > 0) {
+            $("script[data-id='" + id + "']").remove();
+        }
+    }
+
+
     function IsValidAspxFile(filename) {
         filename = filename.toLowerCase();
         if (filename.length > 5 && filename.substring(filename.length - 5) == ".aspx") {
@@ -4155,19 +4756,44 @@ var openWSE = function () {
                 headerHt = $appHead.outerHeight();
             }
 
-            var bodyHt = appHt - (headerHt + 2);
+            var borders = 0;
+            if ($this.css("border") != "") {
+                var borderWt = $this.css("border").split("px")[0];
+                borderWt = parseInt(borderWt);
+                if (borderWt && borderWt.toString() != "NaN") {
+                    borders = (borderWt * 2);
+                }
+            }
+            else {
+                if ($this.css("border-top") != "") {
+                    var borderWt = $this.css("border-top").split("px")[0];
+                    borderWt = parseInt(borderWt);
+                    if (borderWt && borderWt.toString() != "NaN") {
+                        borders = borderWt;
+                    }
+                }
+                if ($this.css("border-bottom") != "") {
+                    var borderWt = $this.css("border-bottom").split("px")[0];
+                    borderWt = parseInt(borderWt);
+                    if (borderWt && borderWt.toString() != "NaN") {
+                        borders += borderWt;
+                    }
+                }
+            }
+
+            var bodyHt = appHt - (headerHt + borders);
             $this.find(".app-body").css({
                 height: bodyHt,
                 width: $this.width()
             });
 
             if ($this.find(".iFrame-apps").length > 0) {
-                var adjustmentHt = 2;
+                var adjustmentHt = 0;
                 if ($this.find(".app-title-bg-color").length > 0) {
-                    adjustmentHt = $this.find(".app-title-bg-color").outerHeight() + (adjustmentHt + 1);
+                    adjustmentHt = $this.find(".app-title-bg-color").outerHeight();
                 }
 
-                $this.find(".iFrame-apps").css("height", bodyHt - (adjustmentHt + 1));
+                $this.find(".iFrame-apps").css("height", bodyHt - adjustmentHt);
             }
         }
     }
@@ -4223,7 +4849,7 @@ var openWSE = function () {
             var loadscreen = $app.find("iframe").length;
             if (loadscreen > 0) {
                 if ($app.find(".loading-background-holder").length <= 0) {
-                    $app.find(".app-body").append(loadingMessage);
+                    AppendLoadingMessage($app.find(".app-body"));
                 }
 
                 WatchForLoad(app);
@@ -4617,7 +5243,8 @@ var openWSE = function () {
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     maxBtn_InProgress = false;
-                    ResizeAppBody(_this);
+                    // ResizeAppBody(_this);
+                    $(window).resize();
                 },
                 error: function (data) {
                     maxBtn_InProgress = false;
@@ -4636,7 +5263,8 @@ var openWSE = function () {
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     maxBtn_InProgress = false;
-                    ResizeAppBody(_this);
+                    // ResizeAppBody(_this);
+                    $(window).resize();
                 },
                 error: function (data) {
                     maxBtn_InProgress = false;
@@ -4673,11 +5301,9 @@ var openWSE = function () {
                 var ndClasses = "workspace-reminder font-no-bold " + ndID;
                 var style = "display:block;";
 
-                if ($appIcon.find(".app-icon-font").length > 0) {
-                    var $appIconName = $appIcon.find(".app-icon-font");
-                    if ($appIconName.css("display") == "none") {
-                        style = "display:none;";
-                    }
+                if ($appIcon.find(".app-icon-font").length > 0 && ($appIcon.hasClass("Icon_And_Color_Only") || $appIcon.hasClass("Color_And_Description") || $appIcon.hasClass("Icon_Plus_Color_And_Text"))) {
+                    var ftColor = $appIcon.find(".app-icon-font").css("color");
+                    style += "color:" + ftColor + "!important;";
                 }
 
                 if ($("." + ndID).length > 0) {
@@ -4737,8 +5363,8 @@ var openWSE = function () {
     }
     function CategoryClick(id, category) {
         $(".app-icon-category-list").hide();
-        $("#Category-Back").fadeIn(openWSE_Config.animationSpeed);
-        if (openWSE_Config.animationSpeed == 0) {
+        $("#Category-Back").show();
+        if (openWSE_Config.animationSpeed == 0 || $(".app-icon.Icon_Only").length > 0 || $(".app-icon.Icon_And_Text_Only").length > 0 || $(".app-icon.Icon_And_Color_Only").length > 0 || $(".app-icon.Icon_Plus_Color_And_Text").length > 0) {
             $("." + id).show();
         }
         else {
@@ -4753,12 +5379,34 @@ var openWSE = function () {
     var previousWidth = 0;
     var previousHeight = 0;
     var resizeAxis = null;
+    var dragStart_Style3 = false;
+    var optionsOpen_Style3 = false;
 
     function ApplyAppDragResize() {
         if (openWSE.IsComplexWorkspaceMode()) {
+            var cancelCtrls = '.app-body, .exit-button-app, .minimize-button-app, .maximize-button-app, .options-button-app, .app-maximized, .auto-full-page, .app-popup-inner-app';
+            if (openWSE_Config.appStyle != "Style_3") {
+                cancelCtrls += ', .app-head-button-holder';
+            }
+            else if (openWSE_Config.appStyle == "Style_3") {
+                $(".app-main-style3 .app-head-hover-button").unbind("mouseenter");
+                $(".app-main-style3 .app-head-button-holder").unbind("mouseleave");
+                $(".app-main-style3 .app-head-hover-button").bind("mouseenter", function () {
+                    $(this).parent().find(".app-head-button-holder").show();
+                });
+                $(".app-main-style3 .app-head-button-holder").bind("mouseleave", function () {
+                    if (!dragStart_Style3 && !optionsOpen_Style3) {
+                        $(this).parent().find(".app-head-button-holder").hide();
+                    }
+                });
+                $(document.body).on("click", ".move-button-app", function () {
+                    return false;
+                });
+            }
+
             $(".app-main-holder").draggable({
                 scroll: true,
-                cancel: '.app-body, .exit-button-app, .minimize-button-app, .maximize-button-app, .options-button-app, .app-head-button-holder, .app-maximized, .auto-full-page',
+                cancel: cancelCtrls,
                 start: function (event, ui) {
                     var $this = $(this);
                     SetActiveApp($this);
@@ -4766,6 +5414,11 @@ var openWSE = function () {
 
                     $this.css("opacity", "0.6");
                     $this.css("filter", "alpha(opacity=60)");
+
+                    if (openWSE_Config.appStyle == "Style_3") {
+                        $this.find(".app-head-button-holder").show();
+                        dragStart_Style3 = true;
+                    }
 
                     // Apply an overlay over app
                     // This fixes the issues when dragging iframes
@@ -4832,6 +5485,10 @@ var openWSE = function () {
 
             $(".app-main-holder").on("dragstop", function (event, ui) {
                 var $this = $(this);
+
+                if (openWSE_Config.appStyle == "Style_3") {
+                    dragStart_Style3 = false;
+                }
 
                 $this.css("opacity", "1.0");
                 $this.css("filter", "alpha(opacity=100)");
@@ -4970,7 +5627,27 @@ var openWSE = function () {
         if ((resizeAxis == "se" || resizeAxis == "e") && (snapDataType == "left" || snapDataType == "right")) {
             var thisPos = leftPos + w;
             if (thisPos >= (snapPosLeft + snapOuterWidth) - 10 && thisPos <= (snapPosLeft + snapOuterWidth) + 10) {
-                previousWidth = previousWidth - (thisPos - (snapPosLeft - 2));
+
+                var borderLeftWt = 1;
+                if ($(_this).css("border") != "") {
+                    var borderWt = $(_this).css("border").split("px")[0];
+                    borderWt = parseInt(borderWt);
+                    if (borderWt && borderWt.toString() != "NaN") {
+                        borderLeftWt = borderWt - 2;
+                    }
+                }
+                else {
+                    if ($(_this).css("border-left") != "") {
+                        var borderWt = $(_this).css("border-left").split("px")[0];
+                        borderWt = parseInt(borderWt);
+                        if (borderWt && borderWt.toString() != "NaN") {
+                            borderLeftWt = borderWt - 2;
+                        }
+                    }
+                }
+
+
+                previousWidth = previousWidth - (thisPos - (snapPosLeft + borderLeftWt));
                 return true;
             }
         }
@@ -4985,7 +5662,26 @@ var openWSE = function () {
         if ((resizeAxis == "se" || resizeAxis == "s") && (snapDataType == "top" || snapDataType == "bottom")) {
             var thisPos = topPos + h;
             if (thisPos >= (snapPosTop + snapOuterHeight) - 10 && thisPos <= (snapPosTop + snapOuterHeight) + 10) {
-                previousHeight = previousHeight - (thisPos - (snapPosTop - 1));
+
+                var borderTopWt = 1;
+                if ($(_this).css("border") != "") {
+                    var borderWt = $(_this).css("border").split("px")[0];
+                    borderWt = parseInt(borderWt);
+                    if (borderWt && borderWt.toString() != "NaN") {
+                        borderTopWt = borderWt - 2;
+                    }
+                }
+                else {
+                    if ($(_this).css("border-top") != "") {
+                        var borderWt = $(_this).css("border-top").split("px")[0];
+                        borderWt = parseInt(borderWt);
+                        if (borderWt && borderWt.toString() != "NaN") {
+                            borderTopWt = borderWt - 2;
+                        }
+                    }
+                }
+
+                previousHeight = previousHeight - (thisPos - (snapPosTop + borderTopWt));
                 return true;
             }
         }
@@ -5013,6 +5709,10 @@ var openWSE = function () {
         var $_parent = $_idOptions.parent();
         $_idOptions.removeClass("active");
         $_parent.find(".app-popup-inner-app").hide();
+        if (openWSE_Config.appStyle == "Style_3") {
+            $_parent.find(".app-head-button-holder").hide();
+            optionsOpen_Style3 = false;
+        }
 
         var modalClasses = id + outsideAppModal;
         $("." + modalClasses).each(function () {
@@ -5024,7 +5724,7 @@ var openWSE = function () {
             if (_content.src != null) {
                 if ($_id.find(".app-body").find("div").html() == null) {
                     if ($_id.find(".app-body").find(".loading-background-holder").length <= 0) {
-                        $_id.find(".app-body").append(loadingMessage);
+                        AppendLoadingMessage($_id.find(".app-body"));
                     }
                     $_id.find(".iFrame-apps").one('load', (function () {
                         $_id.find(".app-body").find(".loading-background-holder").each(function () {
@@ -5034,7 +5734,7 @@ var openWSE = function () {
                 }
                 else {
                     if ($_id.find(".app-body").find("div").find(".loading-background-holder").length <= 0) {
-                        $_id.find(".app-body").find("div").append(loadingMessage);
+                        AppendLoadingMessage($_id.find(".app-body").find("div"));
                     }
 
                     $_id.find(".iFrame-apps").one('load', (function () {
@@ -5053,8 +5753,9 @@ var openWSE = function () {
             }
 
             if ($_id.find(".app-body").find(".loading-background-holder").length <= 0) {
-                $_id.find(".app-body").append(loadingMessage);
+                AppendLoadingMessage($_id.find(".app-body"));
             }
+
             $("#hf_ReloadApp").val(id);
             __doPostBack('hf_ReloadApp', '');
         }
@@ -5068,6 +5769,10 @@ var openWSE = function () {
         var $_parent = $_idOptions.parent();
         $_idOptions.removeClass("active");
         $_parent.find(".app-popup-inner-app").hide();
+        if (openWSE_Config.appStyle == "Style_3") {
+            $_parent.find(".app-head-button-holder").hide();
+            optionsOpen_Style3 = false;
+        }
 
         $("#MainContent_pnl_aboutHolder").html("");
 
@@ -5132,6 +5837,10 @@ var openWSE = function () {
             if ($_id.find(".options-button-app").length > 0) {
                 $_id.find(".options-button-app").removeClass("active");
                 $_id.find(".app-popup-inner-app").hide();
+                if (openWSE_Config.appStyle == "Style_3") {
+                    $_id.find(".app-head-button-holder").hide();
+                    optionsOpen_Style3 = false;
+                }
             }
 
             $.ajax({
@@ -5259,6 +5968,16 @@ var openWSE = function () {
             }
         });
     }
+    function AppendLoadingMessage(_this) {
+        $(_this).append(loadingMessage);
+        var $appMain = $(_this).closest(".app-main-holder");
+        if ($appMain.length > 0) {
+            var $appIcon = $(".app-icon[data-appid='" + $appMain.attr("data-appid") + "']");
+            if ($appIcon.length > 0 && $appIcon.find("img").length > 0 && $appIcon.find("img").css("display") != "none" && !$appIcon.find("img").hasClass("display-none")) {
+                $(_this).find(".loading-background-holder").css("background-image", "url('" + $appIcon.find("img").attr("src") + "')");
+            }
+        }
+    }
         
 
     function CreateDragSnapObjects(_this) {
@@ -5272,21 +5991,28 @@ var openWSE = function () {
 
                 if ($workspace.length > 0) {
                     $workspace.find(".app-main-holder").each(function () {
-                        var appId = $(this).attr("data-appid");
-                        if ($(this).css("display") == "block" && $(this).css("visibility") != "hidden" && $(_this).attr("data-appid") != appId) {
-                            if ($(".app-snap-helper[data-appid='" + appId + "']").length == 0) {
-                                var leftPos = parseInt($(this).css("left").replace("px", "")) + 1;
-                                var rightPos = leftPos + $(this).outerWidth() - 2;
-                                var topPos = parseInt($(this).css("top").replace("px", "")) + 1;
-                                var bottomPos = topPos + $(this).outerHeight() - 2;
+                        if (!$(this).hasClass("app-maximized") && !$(this).hasClass("auto-full-page")) {
+                            var appId = $(this).attr("data-appid");
+                            if ($(this).css("display") == "block" && $(this).css("visibility") != "hidden" && $(_this).attr("data-appid") != appId) {
+                                if ($(".app-snap-helper[data-appid='" + appId + "']").length == 0) {
+                                    var borderLeftWt = GetBorderWidthForHelper(this, "left", 0, 0);
+                                    var borderRightWt = GetBorderWidthForHelper(this, "right", 0, 0);
+                                    var borderTopWt = GetBorderWidthForHelper(this, "top", 0, 0);
+                                    var borderBottomWt = GetBorderWidthForHelper(this, "bottom", 0, 0);
 
-                                $workspace.append("<div class='app-snap-helper' data-appid='" + appId + "' data-type='left' style='left: " + leftPos + "px; top: 0; bottom: 0; width: 1px;'></div>");
-                                $workspace.append("<div class='app-snap-helper' data-appid='" + appId + "' data-type='right' style='left: " + rightPos + "px; top: 0; bottom: 0; width: 1px;'></div>");
-                                $workspace.append("<div class='app-snap-helper' data-appid='" + appId + "' data-type='top' style='top: " + topPos + "px; left: 0; right: 0; height: 1px;'></div>");
-                                $workspace.append("<div class='app-snap-helper' data-appid='" + appId + "' data-type='bottom' style='top: " + bottomPos + "px; left: 0; right: 0; height: 1px;'></div>");
+                                    var leftPos = parseInt($(this).css("left").replace("px", "")) + (borderLeftWt - 1);
+                                    var rightPos = leftPos + $(this).outerWidth() - (borderRightWt + borderLeftWt) + 1;
+                                    var topPos = parseInt($(this).css("top").replace("px", "")) + (borderTopWt - 1);
+                                    var bottomPos = topPos + $(this).outerHeight() - (borderBottomWt + borderTopWt) + 1;
 
-                                if (draggable) {
-                                    AddItemToSnapElements(appId, leftPos, rightPos, topPos, bottomPos, draggable);
+                                    $workspace.append("<div class='app-snap-helper' data-appid='" + appId + "' data-type='left' style='left: " + leftPos + "px; top: 0; bottom: 0; width: 1px;'></div>");
+                                    $workspace.append("<div class='app-snap-helper' data-appid='" + appId + "' data-type='right' style='left: " + rightPos + "px; top: 0; bottom: 0; width: 1px;'></div>");
+                                    $workspace.append("<div class='app-snap-helper' data-appid='" + appId + "' data-type='top' style='top: " + topPos + "px; left: 0; right: 0; height: 1px;'></div>");
+                                    $workspace.append("<div class='app-snap-helper' data-appid='" + appId + "' data-type='bottom' style='top: " + bottomPos + "px; left: 0; right: 0; height: 1px;'></div>");
+
+                                    if (draggable) {
+                                        AddItemToSnapElements(appId, leftPos, rightPos, topPos, bottomPos, draggable);
+                                    }
                                 }
                             }
                         }
@@ -5296,46 +6022,52 @@ var openWSE = function () {
         }
     }
     function AddItemToSnapElements(appId, leftPos, rightPos, topPos, bottomPos, draggable) {
-        var object1 = {
+        var $thisApp = $(".app-main-holder[data-appid='" + appId + "']");
+        var borderLeftWt = GetBorderWidthForHelper($thisApp, "left", -1, 1);
+        var borderRightWt = GetBorderWidthForHelper($thisApp, "right", -1, -1);
+        var borderTopWt = GetBorderWidthForHelper($thisApp, "top", -1, 1);
+        var borderBottomWt = GetBorderWidthForHelper($thisApp, "bottom", -1, -1);
+
+        var object1_left = {
             height: $(".app-snap-helper[data-appid='" + appId + "'][data-type='left']").height(),
             item: $(".app-snap-helper[data-appid='" + appId + "'][data-type='left']")[0],
-            left: (leftPos + $("#sidebar_menulinks").outerWidth())- 1,
+            left: (leftPos + $("#sidebar_menulinks").outerWidth()) + borderLeftWt,
             snapping: false,
             top: $("#always-visible").outerHeight(),
             width: 1
         }
 
-        var object2 = {
+        var object2_right = {
             height: $(".app-snap-helper[data-appid='" + appId + "'][data-type='right']").height(),
             item: $(".app-snap-helper[data-appid='" + appId + "'][data-type='right']")[0],
-            left: (rightPos + $("#sidebar_menulinks").outerWidth()),
+            left: (rightPos + $("#sidebar_menulinks").outerWidth()) + borderRightWt,
             snapping: false,
             top: $("#always-visible").outerHeight(),
             width: 1
         }
 
-        var object3 = {
+        var object3_top = {
             height: 1,
             item: $(".app-snap-helper[data-appid='" + appId + "'][data-type='top']")[0],
             left: $("#sidebar_menulinks").outerWidth(),
             snapping: false,
-            top: (topPos + $("#always-visible").outerHeight()) - 1,
+            top: (topPos + $("#always-visible").outerHeight()) + borderTopWt,
             width: $(".app-snap-helper[data-appid='" + appId + "'][data-type='top']").width()
         }
 
-        var object4 = {
+        var object4_bottom = {
             height: 1,
             item: $(".app-snap-helper[data-appid='" + appId + "'][data-type='bottom']")[0],
             left: $("#sidebar_menulinks").outerWidth(),
             snapping: false,
-            top: (bottomPos + $("#always-visible").outerHeight()),
+            top: (bottomPos + $("#always-visible").outerHeight()) + borderBottomWt,
             width: $(".app-snap-helper[data-appid='" + appId + "'][data-type='bottom']").width()
         }
 
-        draggable.snapElements.push(object1);
-        draggable.snapElements.push(object2);
-        draggable.snapElements.push(object3);
-        draggable.snapElements.push(object4);
+        draggable.snapElements.push(object1_left);
+        draggable.snapElements.push(object2_right);
+        draggable.snapElements.push(object3_top);
+        draggable.snapElements.push(object4_bottom);
     }
     function AddSnapHelperClass(_this) {
         if (_this) {
@@ -5352,6 +6084,30 @@ var openWSE = function () {
         }
 
         $(".app-snap-helper").remove();
+    }
+
+    function GetBorderWidthForHelper(ele, posDir, difVal, defaultVal) {
+        var $thisApp = $(ele);
+        if ($thisApp.length > 0) {
+            if ($thisApp.css("border") != "") {
+                var borderWt = $thisApp.css("border").split("px")[0];
+                borderWt = parseInt(borderWt);
+                if (borderWt && borderWt.toString() != "NaN") {
+                    return borderWt + difVal;
+                }
+            }
+            else {
+                if ($thisApp.css("border-" + posDir) != "") {
+                    var borderWt = $thisApp.css("border-" + posDir).split("px")[0];
+                    borderWt = parseInt(borderWt);
+                    if (borderWt && borderWt.toString() != "NaN") {
+                        return borderWt + difVal;
+                    }
+                }
+            }
+        }
+
+        return defaultVal;
     }
 
 
@@ -5759,8 +6515,9 @@ var openWSE = function () {
             meta = document.createElement('meta');
             meta.name = 'viewport';
             meta.id = 'mobileViewport';
-            meta.content = 'width=device-width, initial-scale=0.70, user-scalable=no';
+            meta.content = 'initial-scale=1.0, user-scalable=no';
             head.appendChild(meta);
+            $(document).tooltip({ disabled: true });
         }
         else {
             if ($("#mobileViewport").length > 0) {
@@ -5840,6 +6597,12 @@ var openWSE = function () {
         });
 
         $("#maincontent_overflow").width($(window).width());
+        $(".maincontent-padding").css("padding-left", "25px");
+        $(".maincontent-padding").css("padding-right", "25px");
+        $("#maincontent_overflow_cell").css("margin-left", "0px");
+
+        $(".sitemenu-selection").css("margin-left", "-25px");
+        $(".sitemenu-selection").css("margin-right", "-25px");
 
         $("#always-visible").find(".top-options").hide();
         $("#DateDisplay").hide();
@@ -5848,10 +6611,78 @@ var openWSE = function () {
         $(window).resize();
     }
     function MobileMode() {
-        $("#app_title_bg, #container-footer").hide();
+        $("#always-visible").show();
+        if (window.location.href.indexOf("?mobileMode=true&tab=IconSelector") == -1) {
+            $("#workspace-selector").append("<a href='" + GetSiteRoot() + "AppRemote.aspx#?id=adminPages&category=pageSelect' id='Go-Back-Btn'>Back</a>");
+        }
+        else {
+            $("#workspace-selector").append("<a href='" + GetSiteRoot() + "AppRemote.aspx#' id='Go-Back-Btn'>Back</a>");
+        }
+
+        $("#copyright-footer").removeClass("float-left");
+        $("#footer-signdate").removeClass("float-right");
+
+        $("#copyright-footer, #footer-signdate").css("padding-left", "0");
+        $("#copyright-footer, #footer-signdate").css("padding-right", "0");
+
+        $("#copyright-footer").addClass("inline-block");
+        $("#footer-signdate").addClass("inline-block");
+
+        $(".footer-padding").css("text-align", "center");
+
+        $(".bgchange-icon, .my-app-remote-link").remove();
+        $("#app_title_bg").hide();
         $(".sitemenu-selection").addClass("mobile-mode");
         $("#MainContent_pnlLinkBtns").css("height", "auto");
+        $(".top-options").show();
+        $("#overlay_tab, #notifications_tab, #group_tab, #app_search_tab, .account-link-style").hide();
+        $(".btn_changephoto").remove();
+        $("#img_Profile").css("max-height", "38px");
+        $("#profile_tab_Buttons").css("margin-top", "0px");
+        $(".maincontent-padding").css("padding-left", "25px");
+        $(".maincontent-padding").css("padding-right", "25px");
+        $("#maincontent_overflow_cell").css("margin-left", "0px");
+
+        var noHeader = false;
+        var noHeaderModeParm = getParameterByName("noHeader");
+        if (noHeaderModeParm && noHeaderModeParm == "true") {
+            noHeader = true;
+        }
+
+        if (noHeader) {
+            $("#Go-Back-Btn").hide();
+        }
+        else {
+            $("#Go-Back-Btn").attr("onclick", "openWSE.LoadingMessage1('Loading...');return true;");
+        }
+
+        if ($("#MainContent_pnlLinkBtns").length > 0) {
+            $("#MainContent_pnlLinkBtns").find("a").each(function () {
+                var href = $(this).attr("href");
+                if (href.indexOf("#?") == -1) {
+                    if (href.indexOf("?") == -1) {
+                        href += "?mobileMode=true";
+                    }
+                    else {
+                        href += "&mobileMode=true";
+                    }
+
+                    if (noHeader) {
+                        href += "&noHeader=true";
+                    }
+
+                    $(this).attr("href", href);
+                }
+            });
+        }
+
         ResizeContainer();
+
+        if ($(".loading-background-holder-mobile").length > 0) {
+            setTimeout(function () {
+                $(".loading-background-holder-mobile").remove();
+            }, 500);
+        }
     }
     function GetCurrentPage() {
         $(".app-icon-links").removeClass("active");
@@ -5940,7 +6771,6 @@ var openWSE = function () {
             allowCloseAll: true,
             oneOpen: true,
             startCollapsed: true,
-            animationSpeed: 150,
             createCookie: true,
             headerClass: "menu-title",
             bodyClass: "li-pnl-tab",
@@ -5964,43 +6794,45 @@ var openWSE = function () {
                 $("." + settings.bodyClass).show();
             }
         });
-        $accordianDiv.find("." + settings.headerClass).on("click", function () {
-            if ($("." + settings.headerClass).length > 1 && $("." + settings.bodyClass).length > 1) {
-                var $menu = $(this).find("." + settings.menuDropDownClass);
-                var $pnl = $(this).parent().find("." + settings.bodyClass);
-                if ($menu.length != 0 && $pnl.length != 0) {
-                    var toolTip = "";
-                    if ($menu.hasClass(settings.collapsedClass)) {
-                        toolTip = settings.collapseTooltip;
-                        $(this).attr("title", toolTip);
-                        $menu.removeClass(settings.collapsedClass).addClass(settings.expandedClass);
-                        $pnl.slideDown(settings.animationSpeed);
-                    }
-                    else if ((!settings.allowCloseAll && GetTotalOpen() > 1) || settings.allowCloseAll) {
-                        toolTip = settings.expandTooltip;
-                        $(this).attr("title", toolTip);
-                        $menu.removeClass(settings.expandedClass).addClass(settings.collapsedClass);
-                        $pnl.slideUp(settings.animationSpeed);
-                    }
+        $accordianDiv.find("." + settings.headerClass).on("click", function (e) {
+            if (e.target.className != "sidebar-edit-btn") {
+                if ($("." + settings.headerClass).length > 1 && $("." + settings.bodyClass).length > 1) {
+                    var $menu = $(this).find("." + settings.menuDropDownClass);
+                    var $pnl = $(this).parent().find("." + settings.bodyClass);
+                    if ($menu.length != 0 && $pnl.length != 0) {
+                        var toolTip = "";
+                        if ($menu.hasClass(settings.collapsedClass)) {
+                            toolTip = settings.collapseTooltip;
+                            $(this).attr("title", toolTip);
+                            $menu.removeClass(settings.collapsedClass).addClass(settings.expandedClass);
+                            $pnl.slideDown(openWSE_Config.animationSpeed);
+                        }
+                        else if ((!settings.allowCloseAll && GetTotalOpen() > 1) || settings.allowCloseAll) {
+                            toolTip = settings.expandTooltip;
+                            $(this).attr("title", toolTip);
+                            $menu.removeClass(settings.expandedClass).addClass(settings.collapsedClass);
+                            $pnl.slideUp(openWSE_Config.animationSpeed);
+                        }
 
-                    if (settings.oneOpen) {
-                        $accordianDiv.find("." + settings.bodyClass).each(function () {
-                            if ($(this).attr("id") != $pnl.attr("id")) {
-                                $(this).parent().find("." + settings.headerClass).attr("title", settings.expandTooltip);
-                                $(this).parent().find("." + settings.headerClass).find("." + settings.menuDropDownClass).removeClass(settings.expandedClass).addClass(settings.collapsedClass);
-                                $(this).slideUp(settings.animationSpeed);
-                            }
-                        });
-                    }
+                        if (settings.oneOpen) {
+                            $accordianDiv.find("." + settings.bodyClass).each(function () {
+                                if ($(this).attr("id") != $pnl.attr("id")) {
+                                    $(this).parent().find("." + settings.headerClass).attr("title", settings.expandTooltip);
+                                    $(this).parent().find("." + settings.headerClass).find("." + settings.menuDropDownClass).removeClass(settings.expandedClass).addClass(settings.collapsedClass);
+                                    $(this).slideUp(openWSE_Config.animationSpeed);
+                                }
+                            });
+                        }
 
-                    if ($(this).attr("aria-describedby") != null && $(this).attr("aria-describedby") != "") {
-                        var jqueryToolTipId = $(this).attr("aria-describedby");
-                        $("#" + jqueryToolTipId).find(".ui-tooltip-content").html(toolTip);
-                    }
+                        if ($(this).attr("aria-describedby") != null && $(this).attr("aria-describedby") != "") {
+                            var jqueryToolTipId = $(this).attr("aria-describedby");
+                            $("#" + jqueryToolTipId).find(".ui-tooltip-content").html(toolTip);
+                        }
 
-                    setTimeout(function () {
-                        SetSidebarTabCookie();
-                    }, settings.animationSpeed * 2);
+                        setTimeout(function () {
+                            SetSidebarTabCookie();
+                        }, openWSE_Config.animationSpeed * 2);
+                    }
                 }
             }
         });
@@ -6165,6 +6997,7 @@ var openWSE = function () {
             cookie.del(sidebarCookie);
         }
 
+        GetPagedAddOverlayAndModel();
         $(window).resize();
     }
     function ShowSidebar() {
@@ -6173,30 +7006,33 @@ var openWSE = function () {
         sideBarWt -= $("#sidebar_menulinks").outerWidth();
         sideBarWt = Math.abs(sideBarWt);
 
-        if ($("#workspace_holder").length > 0) {
-            $(".app-main-holder").each(function () {
-                var $this = $(this);
-                var hasMin = ($(".app-min-bar[data-appid='" + $this.attr("data-appid") + "']").length > 0);
-                if (!$this.hasClass("auto-full-page") && !$this.hasClass("app-maximized") && $this.css("display") == "block") {
-                    var leftPos = parseInt($this.css("left").replace("px", ""));
-                    if (hasMin) {
-                        leftPos = parseInt($(".app-min-bar[data-appid='" + $this.attr("data-appid") + "']").attr("data-x"));
-                    }
-
-                    if (leftPos.toString() != "NaN") {
-                        var newLeftPos = Math.abs(leftPos - sideBarWt);
-                        if (leftPos < sideBarWt) {
-                            newLeftPos = leftPos;
-                        }
-
-                        $this.css("left", newLeftPos + "px");
-
+        var cssPosition = window.getComputedStyle(document.getElementById("sidebar_menulinks"), null).getPropertyValue("position");
+        if (cssPosition == "relative") {
+            if ($("#workspace_holder").length > 0) {
+                $(".app-main-holder").each(function () {
+                    var $this = $(this);
+                    var hasMin = ($(".app-min-bar[data-appid='" + $this.attr("data-appid") + "']").length > 0);
+                    if (!$this.hasClass("auto-full-page") && !$this.hasClass("app-maximized") && $this.css("display") == "block") {
+                        var leftPos = parseInt($this.css("left").replace("px", ""));
                         if (hasMin) {
-                            $(".app-min-bar[data-appid='" + $this.attr("data-appid") + "']").attr("data-x", newLeftPos);
+                            leftPos = parseInt($(".app-min-bar[data-appid='" + $this.attr("data-appid") + "']").attr("data-x"));
+                        }
+
+                        if (leftPos.toString() != "NaN") {
+                            var newLeftPos = Math.abs(leftPos - sideBarWt);
+                            if (leftPos < sideBarWt) {
+                                newLeftPos = leftPos;
+                            }
+
+                            $this.css("left", newLeftPos + "px");
+
+                            if (hasMin) {
+                                $(".app-min-bar[data-appid='" + $this.attr("data-appid") + "']").attr("data-x", newLeftPos);
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
         }
     }
     function HideSidebar() {
@@ -6204,26 +7040,29 @@ var openWSE = function () {
         $("#sidebar_menulinks, #accordian-sidebar").addClass("sidebar-minimized");
         sideBarWt -= $("#sidebar_menulinks").outerWidth();
 
-        if ($("#workspace_holder").length > 0) {
-            $(".app-main-holder").each(function () {
-                var $this = $(this);
-                var hasMin = ($(".app-min-bar[data-appid='" + $this.attr("data-appid") + "']").length > 0);
-                if (!$this.hasClass("auto-full-page") && !$this.hasClass("app-maximized") && $this.css("display") == "block") {
-                    var leftPos = parseInt($this.css("left").replace("px", ""));
-                    if (hasMin) {
-                        leftPos = parseInt($(".app-min-bar[data-appid='" + $this.attr("data-appid") + "']").attr("data-x"));
-                    }
-
-                    if (leftPos.toString() != "NaN") {
-                        var newLeftPos = sideBarWt + leftPos;
-                        $this.css("left", newLeftPos + "px");
-
+        var cssPosition = window.getComputedStyle(document.getElementById("sidebar_menulinks"), null).getPropertyValue("position");
+        if (cssPosition == "relative") {
+            if ($("#workspace_holder").length > 0) {
+                $(".app-main-holder").each(function () {
+                    var $this = $(this);
+                    var hasMin = ($(".app-min-bar[data-appid='" + $this.attr("data-appid") + "']").length > 0);
+                    if (!$this.hasClass("auto-full-page") && !$this.hasClass("app-maximized") && $this.css("display") == "block") {
+                        var leftPos = parseInt($this.css("left").replace("px", ""));
                         if (hasMin) {
-                            $(".app-min-bar[data-appid='" + $this.attr("data-appid") + "']").attr("data-x", newLeftPos);
+                            leftPos = parseInt($(".app-min-bar[data-appid='" + $this.attr("data-appid") + "']").attr("data-x"));
+                        }
+
+                        if (leftPos.toString() != "NaN") {
+                            var newLeftPos = sideBarWt + leftPos;
+                            $this.css("left", newLeftPos + "px");
+
+                            if (hasMin) {
+                                $(".app-min-bar[data-appid='" + $this.attr("data-appid") + "']").attr("data-x", newLeftPos);
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
         }
     }
     function LoadSidebarShowHideCookie() {
@@ -6234,6 +7073,8 @@ var openWSE = function () {
                 $(".sidebar-showhide-ctrl").addClass("sidebar-show");
                 HideSidebar();
                 $(window).resize();
+
+                GetPagedAddOverlayAndModel();
             }
         }
     }
@@ -6248,7 +7089,7 @@ var openWSE = function () {
     }
 
     function ApplyMobileModeForMenuBar() {
-        if (location.href.indexOf("SiteTools/") > 0 && location.href.indexOf("AppRemote.aspx") == -1 && $(".sitemenu-selection").length > 0) {
+        if ((location.href.toLowerCase().indexOf("sitetools/") > 0 || location.href.toLowerCase().indexOf("about.aspx") > 0) && (location.href.toLowerCase().indexOf("appremote.aspx") == -1 || location.href.toLowerCase().indexOf("redirect=appremote.aspx") > 0) && $(".sitemenu-selection").length > 0) {
             $(".sitemenu-selection").removeClass("mobile-mode");
 
             var liWidth = 0;
@@ -6262,8 +7103,15 @@ var openWSE = function () {
 
             liWidth += longestLi;
 
-            if ($("#maincontent_overflow").outerWidth() < liWidth) {
-                $(".sitemenu-selection").addClass("mobile-mode");
+            if ($("#maincontent_overflow").length > 0) {
+                if ($("#maincontent_overflow").outerWidth() < liWidth) {
+                    $(".sitemenu-selection").addClass("mobile-mode");
+                }
+            }
+            else {
+                if ($("body").outerWidth() < liWidth) {
+                    $(".sitemenu-selection").addClass("mobile-mode");
+                }
             }
         }
     }
@@ -6272,6 +7120,11 @@ var openWSE = function () {
     var backgroundLoopTimer = new Array();
     function BackgroundLoop(backgrounds, timer, div) {
         if ($(div).length > 0) {
+            timer = parseInt(timer);
+            if (timer < 1000) {
+                timer = timer * 1000;
+            }
+
             var list = backgrounds.split('|');
             var modifiedList = new Array();
             for (var i = 0; i < list.length; i++) {
@@ -6380,6 +7233,57 @@ var openWSE = function () {
         cookie.del("top_menu");
     }
 
+    function HexToRgb(hex) {
+        // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+        var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+            return r + r + g + g + b + b;
+        });
+
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    }
+
+    /* A replacement function for $.getScript */
+    function GetScriptFunction(loc, callback) {
+        if (loc && $("head").find("script[src='" + loc + "']").length == 0) {
+            var scriptTag = document.createElement("script");
+            scriptTag.type = "text/javascript";
+            if (callback && typeof (callback) == "function") {
+                scriptTag.onload = function () {
+                    window.setTimeout(function () {
+                        callback();
+                    }, 1);
+                }
+            }
+            scriptTag.src = loc;
+            document.getElementsByTagName("head")[0].appendChild(scriptTag);
+        }
+        else if (callback && typeof (callback) == "function") {
+            try {
+                window.setTimeout(function () {
+                    try {
+                        callback();
+                    }
+                    catch (evt) { }
+                }, 500);
+            }
+            catch (evt) {
+                openWSE.AlertWindow(evt.message, loc);
+            }
+        }
+    }
+
+    function disableF5(e) {
+        if ((e.which || e.keyCode) == 116) {
+            e.preventDefault();
+        }
+    }
+
     return {
         siteRoot: GetSiteRoot,
         loadingImg: loadingImg,
@@ -6390,10 +7294,17 @@ var openWSE = function () {
         IsComplexWorkspaceMode: IsComplexWorkspaceMode,
         PagedWorkspace: PagedWorkspace,
         SetContainerTopPos: SetContainerTopPos,
-        SetTrialText: SetTrialText,
+        AdjustModalWindowView: AdjustModalWindowView,
         ConvertBitToBoolean: ConvertBitToBoolean,
         OpenMobileWorkspace: OpenMobileWorkspace,
         init: init,
+        UpdateAppSelector: UpdateAppSelector,
+        NextSiteTip: NextSiteTip,
+        PreviousSiteTip: PreviousSiteTip,
+        CloseSiteTip: CloseSiteTip,
+        CheckIfOverlaysExistsOnNonComplex: CheckIfOverlaysExistsOnNonComplex,
+        DisableOverlaysOnPagedWorkspace: DisableOverlaysOnPagedWorkspace,
+        CloseLoginModalWindow: CloseLoginModalWindow,
         OnError: OnError,
         AdjustContainerLogo: AdjustContainerLogo,
         autoupdate: autoupdate,
@@ -6535,7 +7446,10 @@ var openWSE = function () {
         AddBackgroundColorToLogo: AddBackgroundColorToLogo,
         RemoveBackgroundColorToLogo: RemoveBackgroundColorToLogo,
         ChangeUserProfileImage: ChangeUserProfileImage,
-        CloseTopDropDowns: CloseTopDropDowns
+        CloseTopDropDowns: CloseTopDropDowns,
+        HexToRgb: HexToRgb,
+        GetScriptFunction: GetScriptFunction,
+        disableF5: disableF5
     }
 }();
 
@@ -6551,6 +7465,7 @@ $(window).resize(function () {
     }
 
     openWSE.ApplyMobileModeForMenuBar();
+    openWSE.AdjustModalWindowView();
 });
 
 $(document).ready(function () {
@@ -6596,6 +7511,8 @@ $(document).ready(function () {
     }
 
     // openWSE.AdjustTableSettingsBox();
+
+    openWSE.CheckIfOverlaysExistsOnNonComplex();
 });
 
 $(function () {
@@ -6635,9 +7552,11 @@ window.onerror = function (errorMsg, url) {
     if (!openWSE_Config.reportAlert) {
         openWSE.OnError(errorMsg, url);
     }
-    else {
+    else if (openWSE_Config.reportOnError) {
         openWSE.AlertWindow(errorMsg, url);
     }
+
+    console.log(errorMsg);
 }
 
 $(window).load(function () {

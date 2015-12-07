@@ -98,7 +98,7 @@ public class PersonalCalendar  : System.Web.Services.WebService
                         if (DateTime.TryParse(dr["EndDate"], out endmonth))
                         {
 
-                            if (InBetweenDaysInclusive(DateTime.Now.Date, startmonth, endmonth))
+                            if (InBetweenDaysInclusive(ServerSettings.ServerDateTime.Date, startmonth, endmonth))
                             {
                                 str.Append("<div class='personalcalendar-overlay-entry'>");
                                 str.Append("<div class='personalcalendar-entry-bg' style='background-color:" + dr["ColorCode"] + "'></div>");

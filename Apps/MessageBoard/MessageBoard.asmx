@@ -47,7 +47,7 @@ public class MessageBoard : WebService
             _username = _userId.Name;
             _message = HttpUtility.UrlDecode(message);
             string[] _groups = group.Split(ServerSettings.StringDelimiter_Array, StringSplitOptions.RemoveEmptyEntries);
-            string _date = DateTime.Now.ToString();
+            DateTime _date = ServerSettings.ServerDateTime;
 
             // Check if message is a link to an article and grab the contents of the url
             if (_message.IndexOf("<p><a href=\"") != -1) {
@@ -100,7 +100,7 @@ public class MessageBoard : WebService
 
             string realGroupNames = "";
 
-            string messageId = _siteMessageboard.addPost(_username, HttpUtility.UrlEncode(_message), _date, group);
+            string messageId = _siteMessageboard.addPost(_username, HttpUtility.UrlEncode(_message), _date.ToString(), group);
 
             foreach (string _group in _groups) {
                 if (!string.IsNullOrEmpty(_group)) {
@@ -130,18 +130,7 @@ public class MessageBoard : WebService
 
             returnArray.Add(messageId);
             returnArray.Add(className);
-
-            str.Append("<div style='height: 25px; margin-top: -10px;padding-bottom: 10px;'>");
-            str.Append("<div class='float-right'>");
-            str.Append("<a href='#' class='img-quote pad-all-sml margin-left margin-right' onclick=\"PostMessageQuote('" + messageId + "');return false\" title='Quote Message'></a>");
-            str.Append("<a href='#' class='td-delete-btn margin-left margin-right' onclick=\"PostMessageDeleted('" + messageId + "');return false\" title='Delete Message'></a>");
-            str.Append("</div>");
-            str.Append("<div class='float-left'>");
-            str.Append(UserImageColorCreator.CreateImgColor(_member.AccountImage, _member.UserColor, _member.UserId, 35));
-            str.Append("<span class='userInfo margin-right font-bold'>" + HelperMethods.MergeFMLNames(_member) + "</span>");
-            str.Append("&bull; <span class='margin-right'>" + realGroupNames + "</span>&bull;<span class='userInfoDate pad-left-sml'><i>" + _date + "</i></span>");
-            str.Append("</div></div><div class='clear'></div>");
-            str.Append("<div class='messageText'>" + HttpUtility.UrlDecode(_message) + "</div>");
+            str.Append(BuildMessageBody(messageId, _member, realGroupNames, _message, _date.ToString(), true));
             returnArray.Add(str.ToString());
 
             return returnArray.ToArray();
@@ -478,7 +467,7 @@ public class MessageBoard : WebService
 
         var message = new MailMessage();
         var messagebody = new StringBuilder();
-        messagebody.Append("<b style='padding-right: 5px;'>" + _userId.Name + "</b>&bull;<small style='padding-left: 3px;'><i>" + DateTime.Now.ToString(CultureInfo.InvariantCulture) + "</i></small><div style='clear: both;'></div>");
+        messagebody.Append("<b style='padding-right: 5px;'>" + _userId.Name + "</b>&bull;<small style='padding-left: 3px;'><i>" + ServerSettings.ServerDateTime.ToString(CultureInfo.InvariantCulture) + "</i></small><div style='clear: both;'></div>");
         messagebody.Append("<b style='padding-right: 5px;'>Group:</b>" + @group + "<br /><br />" + m + "<br /><br />");
         foreach (MembershipUser u in from MembershipUser u in userlist
                                      where (u.UserName.ToLower() != _userId.Name.ToLower()) && (u.UserName.ToLower() != ServerSettings.AdminUserName.ToLower())
@@ -521,20 +510,7 @@ public class MessageBoard : WebService
 
         obj.Add(messageId);
         obj.Add(className);
-        str.Append("<div style='height: 25px; margin-top: -10px;padding-bottom: 10px;'>");
-        str.Append("<div class='float-right'>");
-        str.Append("<a href='#' class='img-quote pad-all-sml margin-left margin-right' onclick=\"PostMessageQuote('" + messageId + "');return false\" title='Quote Message'></a>");
-        if (row["UserName"].ToLower() == _userId.Name.ToLower())
-            str.Append("<a href='#' class='td-delete-btn margin-left margin-right' onclick=\"PostMessageDeleted('" + messageId + "');return false\" title='Delete Message'></a>");
-        
-        str.Append("</div>");
-        str.Append("<div class='float-left'>");
-        str.Append(UserImageColorCreator.CreateImgColor(tempmember.AccountImage, tempmember.UserColor, tempmember.UserId, 35));
-        str.Append("<span class='userInfo margin-right font-bold'>" + HelperMethods.MergeFMLNames(tempmember) + "</span>");
-        str.Append("&bull; <span class='margin-right'>" + realGroupNames + "</span>&bull;<span class='userInfoDate pad-left-sml'><i>" + row["Date"] + "</i></span>");
-        str.Append("</div></div><div class='clear'></div>");
-        str.Append("<div class='messageText'>" +  HttpUtility.UrlDecode(row["Post"]) + "</div>");
-
+        str.Append(BuildMessageBody(messageId, tempmember, realGroupNames, row["Post"], row["Date"], row["UserName"].ToLower() == _userId.Name.ToLower()));
         obj.Add(str.ToString());
         return obj.ToArray();
     }
@@ -556,10 +532,7 @@ public class MessageBoard : WebService
                 realGroupNames += g.GetGroupName_byID(group);
             }
         }
-
-        str.Append("<div style='height: 25px;'><div class='float-left'>" + UserImageColorCreator.CreateImgColor(tempmember.AccountImage, tempmember.UserColor, tempmember.UserId, 35));
-        str.Append("<b><span class='margin-right'>" + HelperMethods.MergeFMLNames(tempmember) + "</span></b>&bull; <span class='margin-right'>" + realGroupNames + "</span>&bull; <small class='pad-left-sml'><i>" + row["Date"] + "</i></small></div></div>");
-        str.Append("<div class='clear-space-two'></div><p>" + HttpUtility.UrlDecode(row["Post"]) + "</p>");
+        str.Append(BuildMessageBody(row["ID"], tempmember, realGroupNames, row["Post"], row["Date"], false));
         returnArray.Add(str.ToString());
 
         return returnArray.ToArray();
@@ -592,5 +565,28 @@ public class MessageBoard : WebService
             msg = str.ToString();
         }
         return msg;
+    }
+
+    private static string BuildMessageBody(string messageId, MemberDatabase tempmember, string realGroupNames, string messageText, string datePosted, bool canShowDelete) {
+        StringBuilder str = new StringBuilder();
+
+        str.Append("<div class='float-right'>");
+        str.Append("<a href='#' class='img-quote pad-all-sml margin-left margin-right' onclick=\"PostMessageQuote('" + messageId + "');return false\" title='Quote Message'></a>");
+        if (canShowDelete) {
+            str.Append("<a href='#' class='td-delete-btn margin-left margin-right' onclick=\"PostMessageDeleted('" + messageId + "');return false\" title='Delete Message'></a>");
+        }
+        str.Append("</div>");
+        
+        str.Append("<div class='float-left pad-bottom pad-right-sml'>" + UserImageColorCreator.CreateImgColor(tempmember.AccountImage, tempmember.UserColor, tempmember.UserId, 35) + "</div>");
+
+        DateTime _date = ServerSettings.ServerDateTime;
+        DateTime.TryParse(datePosted, out _date);
+
+        str.Append("<div class='float-left'><span class='userInfo'>" + HelperMethods.MergeFMLNames(tempmember) + "</span>");
+        str.Append("<div class='clear-space-two'></div><span class='userGroupsInfo'>" + realGroupNames + "</span></div>");
+        str.Append("<div class='clear-space'></div>");
+        str.Append("<div class='messageText'>" + HttpUtility.UrlDecode(messageText) + "</div><div class='userInfoDate'>" + HelperMethods.GetPrettyDate(_date) + "</div>");
+
+        return str.ToString();
     }
 }

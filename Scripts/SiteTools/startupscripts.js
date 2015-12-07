@@ -469,21 +469,21 @@ function load(num) {
                 $('#hdl2').removeClass('active');
                 $('#hdl1').addClass('active');
                 $('#startupcss').hide();
-                $('#startupjs').fadeIn(openWSE_Config.animationSpeed);
+                $('#startupjs').show();
                 document.title = "Startup Scripts: Javascripts";
             }
             else if (arg2[0] == "stylesheets") {
                 $('#hdl1').removeClass('active');
                 $('#hdl2').addClass('active');
                 $('#startupjs').hide();
-                $('#startupcss').fadeIn(openWSE_Config.animationSpeed);
+                $('#startupcss').show();
                 document.title = "Startup Scripts: Style Sheets";
             }
             else {
                 $('#hdl2').removeClass('active');
                 $('#hdl1').addClass('active');
                 $('#startupcss').hide();
-                $('#startupjs').fadeIn(openWSE_Config.animationSpeed);
+                $('#startupjs').show();
                 document.title = "Network Activity: Statistics";
             }
         }

@@ -1,4 +1,4 @@
-﻿<%@ page title="Site Settings" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_SiteSettings, App_Web_ogqsad33" %>
+﻿<%@ page title="Site Settings" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_SiteSettings, App_Web_txobhkq5" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -28,13 +28,62 @@
                                 <div class="title-line"></div>
                                 <div class="td-settings-ctrl">
                                     <asp:Panel ID="pnl_totalworkspacesAllowed" runat="server" DefaultButton="btn_updateTotalWorkspaces">
-                                        <asp:TextBox ID="tb_totalWorkspacesAllowed" runat="server" CssClass="textEntry" Width="45px"></asp:TextBox>
+                                        <asp:TextBox ID="tb_totalWorkspacesAllowed" runat="server" CssClass="textEntry" Width="55px" TextMode="Number"></asp:TextBox>
                                         <asp:Button ID="btn_updateTotalWorkspaces" runat="server" Text="Update" OnClick="btn_updateTotalWorkspaces_Click"
                                             CssClass="RandomActionBtns input-buttons margin-left" />
                                     </asp:Panel>
                                 </div>
                                 <div class="td-settings-desc">
                                     Determine how many workspaces a user is allowed to have.
+                                </div>
+                            </div>
+                            <div class="table-settings-box">
+                                <div class="td-settings-title">
+                                    Server Timezone
+                                </div>
+                                <div class="title-line"></div>
+                                <div class="td-settings-ctrl">
+                                    <asp:DropDownList ID="dd_timezoneset" runat="server" CssClass="margin-right">
+                                        <asp:ListItem Value="-12">(GMT-12:00) International Date Line West</asp:ListItem>
+                                        <asp:ListItem Value="-11">(GMT-11:00) Midway Island, Samoa</asp:ListItem>
+                                        <asp:ListItem Value="-10">(GMT-10:00) Hawaii</asp:ListItem>
+                                        <asp:ListItem Value="-9">(GMT-09:00) Alaska</asp:ListItem>
+                                        <asp:ListItem Value="-8">(GMT-08:00) Pacific Time (US & Canada)</asp:ListItem>
+                                        <asp:ListItem Value="-7">(GMT-07:00) Mountain Time (US & Canada)</asp:ListItem>
+                                        <asp:ListItem Value="-6">(GMT-06:00) Central Time (US & Canada)</asp:ListItem>
+                                        <asp:ListItem Value="-5">(GMT-05:00) Eastern Time (US & Canada), Indiana (East)</asp:ListItem>
+                                        <asp:ListItem Value="-4">(GMT-04:00) Atlantic Time (Canada)</asp:ListItem>
+                                        <asp:ListItem Value="-3.5">(GMT-03:30) Newfoundland</asp:ListItem>
+                                        <asp:ListItem Value="-3">(GMT-03:00) Montevideo</asp:ListItem>
+                                        <asp:ListItem Value="-2">(GMT-02:00) Mid-Atlantic</asp:ListItem>
+                                        <asp:ListItem Value="-1">(GMT-01:00) Cape Verde Is.</asp:ListItem>
+                                        <asp:ListItem Value="0">(GMT+00:00) Greenwich Mean Timen</asp:ListItem>
+                                        <asp:ListItem Value="1">(GMT+01:00) Amsterdam, Berlin, Rome, Stockholm, Vienna</asp:ListItem>
+                                        <asp:ListItem Value="2">(GMT+02:00) Athens, Bucharest, Istanbul</asp:ListItem>
+                                        <asp:ListItem Value="3">(GMT+03:00) Moscow, St. Petersburg, Volgograd</asp:ListItem>
+                                        <asp:ListItem Value="3.5">(GMT+03:30) Tehran</asp:ListItem>
+                                        <asp:ListItem Value="4">(GMT+04:00) Abu Dhabi, Muscat</asp:ListItem>
+                                        <asp:ListItem Value="4.5">(GMT+04:30) Kabul</asp:ListItem>
+                                        <asp:ListItem Value="5">(GMT+05:00) Yekaterinburg</asp:ListItem>
+                                        <asp:ListItem Value="5.5">(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi</asp:ListItem>
+                                        <asp:ListItem Value="5.75">(GMT+05:45) Kathmandu</asp:ListItem>
+                                        <asp:ListItem Value="6">(GMT+06:00) Almaty, Novosibirsk And Astana, Dhaka</asp:ListItem>
+                                        <asp:ListItem Value="6.5">(GMT+06:30) Yangon (Rangoon)</asp:ListItem>
+                                        <asp:ListItem Value="7">(GMT+07:00) Bangkok, Hanoi, Jakarta And Krasnoyarsk</asp:ListItem>
+                                        <asp:ListItem Value="8">(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi</asp:ListItem>
+                                        <asp:ListItem Value="9">(GMT+09:00) Osaka, Sapporo, Tokyo</asp:ListItem>
+                                        <asp:ListItem Value="9.5">(GMT+09:30) Adelaide</asp:ListItem>
+                                        <asp:ListItem Value="10">(GMT+10:00) Brisbane</asp:ListItem>
+                                        <asp:ListItem Value="11">(GMT+11:00) Magadan, Solomon Is., New Caledonia</asp:ListItem>
+                                        <asp:ListItem Value="12">(GMT+12:00) Auckland, Wellington</asp:ListItem>
+                                        <asp:ListItem Value="13">(GMT+13:00) Nuku'alofa</asp:ListItem>
+                                    </asp:DropDownList>
+                                    <asp:Button ID="btn_timezoneset" runat="server" CssClass="input-buttons RandomActionBtns" Text="Update" OnClick="btn_timezoneset_Click" />
+                                    <div class="clear-space"></div>
+                                    <span class="font-bold pad-right-sml">Current Server Time:</span><asp:Label ID="lbl_currentServerTime" runat="server" Text="" ClientIDMode="Static"></asp:Label>
+                                </div>
+                                <div class="td-settings-desc">
+                                    Set the current timezone for the server.
                                 </div>
                             </div>
                             <div class="table-settings-box">
@@ -89,7 +138,7 @@
                                     </div>
                                     <div class="title-line"></div>
                                     <div class="td-settings-ctrl">
-                                        <asp:TextBox ID="tb_updateFolder" runat="server" CssClass="textEntry" Width="361px"></asp:TextBox>
+                                        <asp:TextBox ID="tb_updateFolder" runat="server" CssClass="textEntry" Width="98%"></asp:TextBox>
                                         <div class="clear-space-five"></div>
                                         <asp:LinkButton ID="btn_usedefaultloc" runat="server" CssClass="RandomActionBtns margin-top-sml"
                                             OnClick="btn_usedefaultloc_Click" Font-Size="Small">Use default path</asp:LinkButton>
@@ -105,6 +154,7 @@
                         </asp:Panel>
 
                         <asp:Panel ID="pnl_NetworkActivitySettings" runat="server" CssClass="pnl-section" data-title="Network Log Settings">
+                            <div class="clear-space"></div>
                             <div class="table-settings-box">
                                 <div class="td-settings-title">
                                     Record Network Activity
@@ -120,6 +170,23 @@
                                 </div>
                                 <div class="td-settings-desc">
                                     Disable this feature if you dont want the website to track errors and Sql database changes.
+                                </div>
+                            </div>
+                            <div class="table-settings-box">
+                                <div class="td-settings-title">
+                                    Disable Javascript Error Alerts
+                                </div>
+                                <div class="title-line"></div>
+                                <div class="td-settings-ctrl">
+                                    <div class="field switch inline-block">
+                                        <asp:RadioButton ID="rb_DisableJavascriptErrorAlerts_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                            OnCheckedChanged="rb_DisableJavascriptErrorAlerts_on_CheckedChanged" AutoPostBack="True" />
+                                        <asp:RadioButton ID="rb_DisableJavascriptErrorAlerts_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                            OnCheckedChanged="rb_DisableJavascriptErrorAlerts_off_CheckedChanged" AutoPostBack="True" />
+                                    </div>
+                                </div>
+                                <div class="td-settings-desc">
+                                    Set this to no to allow the javascript to notify errors to the user .
                                 </div>
                             </div>
                             <asp:Panel ID="pnl_RecordLogFile" runat="server">
@@ -210,10 +277,6 @@
                                         <b class="pad-right-sml">Date Updated:</b><asp:Label ID="lbl_dateupdatedmailsettings"
                                             runat="server" Text="N/A"></asp:Label>
                                     </div>
-                                    <div class="float-left pad-right-big">
-                                        <asp:LinkButton ID="lbtn_TurnOnOff_Email" runat="server" CssClass="RandomActionBtns"
-                                            OnClick="lbtn_TurnOnOff_Email_Clicked"></asp:LinkButton>
-                                    </div>
                                     <div class="float-left pad-left-big">
                                         <h3>
                                             <span class="pad-right font-bold">Status:</span><asp:Label ID="lbl_emailStatus" runat="server"></asp:Label></h3>
@@ -221,117 +284,129 @@
                                 </div>
                                 <div class="table-settings-box">
                                     <div class="td-settings-title">
-                                        SMTP Server Address
-                                    </div>
-                                    <div class="title-line"></div>
-                                    <div class="td-settings-ctrl">
-                                        <asp:TextBox ID="tb_smtpserver" runat="server" CssClass="textEntry margin-right-big"
-                                            Width="200px"></asp:TextBox>
-                                    </div>
-                                </div>
-                                <div class="table-settings-box">
-                                    <div class="td-settings-title">
-                                        Port Number
-                                    </div>
-                                    <div class="title-line"></div>
-                                    <div class="td-settings-ctrl">
-                                        <asp:TextBox ID="tb_portnumber" runat="server" CssClass="textEntry margin-right-big"
-                                            Width="50px" MaxLength="4"></asp:TextBox>
-                                    </div>
-                                    <div class="td-settings-desc">
-                                        Enter in the smtp server address and port number<br />
-                                        that your outgoing mail will use. (Example: smtp.gmail.com:587)
-                                    </div>
-                                </div>
-                                <div class="table-settings-box">
-                                    <div class="td-settings-title">
-                                        SSL Enabled
+                                        Email Status
                                     </div>
                                     <div class="title-line"></div>
                                     <div class="td-settings-ctrl">
                                         <div class="field switch inline-block">
-                                            <asp:RadioButton ID="rb_ssl_enabled" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                                OnCheckedChanged="rb_ssl_enabled_Checked" AutoPostBack="true" />
-                                            <asp:RadioButton ID="rb_ssl_disabled" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                                OnCheckedChanged="rb_ssl_disabled_Checked" AutoPostBack="true" />
+                                            <asp:RadioButton ID="rb_emailStatus_on" runat="server" Text="On" CssClass="RandomActionBtns cb-enable"
+                                                OnCheckedChanged="rb_emailStatus_on_Checked" AutoPostBack="true" />
+                                            <asp:RadioButton ID="rb_emailStatus_off" runat="server" Text="Off" CssClass="RandomActionBtns cb-disable"
+                                                OnCheckedChanged="rb_emailStatus_off_Checked" AutoPostBack="true" />
                                         </div>
                                     </div>
                                     <div class="td-settings-desc">
-                                        Check to make sure that the port number being used to send email is not SSL enabled.
+                                        Turn on/off the ability to send emails from this site.
+                                    </div>
+                                </div>
+                                <asp:Panel ID="pnl_emailStatus_holder" runat="server">
+                                    <div class="table-settings-box">
+                                        <div class="td-settings-title">
+                                            SMTP Server Address
+                                        </div>
+                                        <div class="title-line"></div>
+                                        <div class="td-settings-ctrl">
+                                            <asp:TextBox ID="tb_smtpserver" runat="server" CssClass="textEntry margin-right-big"
+                                                Width="200px"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                    <div class="table-settings-box">
+                                        <div class="td-settings-title">
+                                            Port Number
+                                        </div>
+                                        <div class="title-line"></div>
+                                        <div class="td-settings-ctrl">
+                                            <asp:TextBox ID="tb_portnumber" runat="server" CssClass="textEntry margin-right-big"
+                                                Width="55px" MaxLength="4" TextMode="Number"></asp:TextBox>
+                                        </div>
+                                        <div class="td-settings-desc">
+                                            Enter in the smtp server address and port number<br />
+                                            that your outgoing mail will use. (Example: smtp.gmail.com:587)
+                                        </div>
+                                    </div>
+                                    <div class="table-settings-box">
+                                        <div class="td-settings-title">
+                                            SSL Enabled
+                                        </div>
+                                        <div class="title-line"></div>
+                                        <div class="td-settings-ctrl">
+                                            <div class="field switch inline-block">
+                                                <asp:RadioButton ID="rb_ssl_enabled" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                                    OnCheckedChanged="rb_ssl_enabled_Checked" AutoPostBack="true" />
+                                                <asp:RadioButton ID="rb_ssl_disabled" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                                    OnCheckedChanged="rb_ssl_disabled_Checked" AutoPostBack="true" />
+                                            </div>
+                                        </div>
+                                        <div class="td-settings-desc">
+                                            Check to make sure that the port number being used to send email is not SSL enabled.
                                                     If it is, click enabled for SSL.
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="table-settings-box">
-                                    <div class="td-settings-title">
-                                        Email Address
+                                    <div class="table-settings-box">
+                                        <div class="td-settings-title">
+                                            Email Address
+                                        </div>
+                                        <div class="title-line"></div>
+                                        <div class="td-settings-ctrl">
+                                            <asp:TextBox ID="tb_usernamesmtp" runat="server" CssClass="textEntry"
+                                                Width="200px"></asp:TextBox>
+                                        </div>
+                                        <div class="td-settings-desc">
+                                            Use the email address associated with the smtp server.
+                                        </div>
                                     </div>
-                                    <div class="title-line"></div>
-                                    <div class="td-settings-ctrl">
-                                        <asp:TextBox ID="tb_usernamesmtp" runat="server" CssClass="textEntry"
-                                            Width="200px"></asp:TextBox>
+                                    <div class="table-settings-box">
+                                        <div class="td-settings-title">
+                                            Email Password
+                                        </div>
+                                        <div class="title-line"></div>
+                                        <div class="td-settings-ctrl">
+                                            <asp:TextBox ID="tb_passwordsmtp" runat="server" CssClass="textEntry"
+                                                Width="200px"></asp:TextBox>
+                                        </div>
+                                        <div class="td-settings-desc">
+                                            Enter the password associated with the email address and smtp server.
+                                        </div>
                                     </div>
-                                    <div class="td-settings-desc">
-                                        Use the email address associated with the smtp server.
+                                    <div class="clear-space">
                                     </div>
-                                </div>
-                                <div class="table-settings-box">
-                                    <div class="td-settings-title">
-                                        Email Password
+                                    <asp:Button ID="btn_updatemailsettings" runat="server" Text="Update Mail Settings"
+                                        ClientIDMode="Static" CssClass="input-buttons RandomActionBtns float-left"
+                                        OnClick="btn_updatemailsettings_Click" />
+                                    <asp:LinkButton ID="lbtn_testconnection" runat="server" Text="Test Connection" CssClass="margin-top-sml margin-left-big TestConnection float-left" OnClick="lbtn_testconnection_Click" />
+                                    <asp:LinkButton ID="lbtn_SendTestEmail" runat="server" CssClass="margin-top-sml margin-left-big TestConnection float-left" OnClick="lbtn_SendTestEmail_Click" />
+                                    <div class="clear-space">
                                     </div>
-                                    <div class="title-line"></div>
-                                    <div class="td-settings-ctrl">
-                                        <asp:TextBox ID="tb_passwordsmtp" runat="server" CssClass="textEntry"
-                                            Width="200px"></asp:TextBox>
+                                    <a id="btn_customizeSMTP" runat="server" clientidmode="Static" href="#iframecontent"
+                                        class="margin-right float-left input-buttons" onclick="openWSE.LoadIFrameContent('SiteTools/iframes/EmailSettings.aspx', this);return false;"
+                                        style="display: block;"><span class="img-customize margin-right-sml float-left"></span>Customize Outgoing Email Messages</a>
+                                    <asp:Label ID="lbl_testconnection" runat="server" Visible="false" CssClass="float-left pad-left-big margin-left-big"
+                                        Font-Size="Small" Style="padding-top: 7px;" Text=""></asp:Label>
+                                    <small>
+                                        <asp:Label ID="lbl_mailsettings_error" runat="server" ForeColor="Red" Visible="false"
+                                            Style="margin-left: 180px;" Text="All fields must be filled out."></asp:Label></small>
+                                    <div class="clear-space">
                                     </div>
-                                    <div class="td-settings-desc">
-                                        Enter the password associated with the email address and smtp server.
-                                    </div>
-                                </div>
-                                <div class="clear-space">
-                                </div>
-                                <asp:Button ID="btn_updatemailsettings" runat="server" Text="Update Mail Settings"
-                                    ClientIDMode="Static" CssClass="input-buttons RandomActionBtns float-left"
-                                    OnClick="btn_updatemailsettings_Click" />
-                                <asp:LinkButton ID="lbtn_testconnection" runat="server" Text="Test Connection" CssClass="margin-top-sml margin-left-big TestConnection float-left" OnClick="lbtn_testconnection_Click" />
-                                <asp:LinkButton ID="lbtn_SendTestEmail" runat="server" CssClass="margin-top-sml margin-left-big TestConnection float-left" OnClick="lbtn_SendTestEmail_Click" />
-                                <div class="clear-space">
-                                </div>
-                                <a id="btn_customizeSMTP" runat="server" clientidmode="Static" href="#iframecontent"
-                                    class="margin-right float-left input-buttons" onclick="openWSE.LoadIFrameContent('SiteTools/iframes/EmailSettings.aspx', this);return false;"
-                                    style="display: block;"><span class="img-customize margin-right-sml float-left"></span>Customize Outgoing Email Messages</a>
-                                <asp:Label ID="lbl_testconnection" runat="server" Visible="false" CssClass="float-left pad-left-big margin-left-big"
-                                    Font-Size="Small" Style="padding-top: 7px;" Text=""></asp:Label>
-                                <small>
-                                    <asp:Label ID="lbl_mailsettings_error" runat="server" ForeColor="Red" Visible="false"
-                                        Style="margin-left: 180px;" Text="All fields must be filled out."></asp:Label></small>
-                                <div class="clear-space">
-                                </div>
+                                </asp:Panel>
                             </asp:Panel>
                         </asp:Panel>
 
                         <asp:Panel ID="pnl_admincontrolsonly" CssClass="pnl-section" runat="server" data-title="Administrative Settings" Visible="false" Enabled="false">
                             <div class="clear-space"></div>
-                            <div class="clear-space"></div>
                             These settings are only for the Administrator user. No users can see or modify these settings.
-                            <asp:Panel ID="pnl_autoupdate" runat="server">
-                                <div class="table-settings-box">
-                                    <div class="td-settings-title">
-                                        Auto Update System
-                                    </div>
-                                    <div class="title-line"></div>
-                                    <div class="td-settings-ctrl">
-                                        <div class="field switch inline-block">
-                                            <asp:RadioButton ID="rb_autoupdate_on" runat="server" Text="On" CssClass="RandomActionBtns cb-enable"
-                                                OnCheckedChanged="rb_autoupdate_on_CheckedChanged" AutoPostBack="True" />
-                                            <asp:RadioButton ID="rb_autoupdate_off" runat="server" Text="Off" CssClass="RandomActionBtns cb-disable"
-                                                OnCheckedChanged="rb_autoupdate_off_CheckedChanged" AutoPostBack="True" />
-                                        </div>
-                                    </div>
-                                    <div class="td-settings-desc">
-                                        Turning off the Auto Update System may cause some features to stop working, but might increase performance. (Will disable many of the features available on the Mobile Dashboard)
-                                    </div>
+                            <div class="table-settings-box">
+                                <div class="td-settings-title">
+                                    Update Server Settings Cache
                                 </div>
-                            </asp:Panel>
+                                <div class="title-line"></div>
+                                <div class="td-settings-ctrl">
+                                    <asp:Button ID="btn_updateserversettingscache" runat="server" Text="Update Cache" OnClick="btn_updateserversettingscache_Click"
+                                        CssClass="RandomActionBtns input-buttons" />
+                                </div>
+                                <div class="td-settings-desc">
+                                    Updates the Server Settings Cache. Only needed if change is made manually on the database.
+                                </div>
+                            </div>
                             <div id="ClearUserNoti_Controls" class="table-settings-box">
                                 <div class="td-settings-title">
                                     Clear User Notifications
@@ -740,12 +815,41 @@
                                                 an account.
                                     </div>
                                 </div>
+                                <asp:Panel ID="pnl_showloginmodalondemomode" runat="server">
+                                    <div class="table-settings-box">
+                                        <div class="td-settings-title">
+                                            Show Login Modal on Page Load (No Login/Demo Mode)
+                                        </div>
+                                        <div class="title-line"></div>
+                                        <div class="td-settings-ctrl">
+                                            <div class="field switch inline-block">
+                                                <asp:RadioButton ID="rb_ShowLoginModalOnDemoMode_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                                    OnCheckedChanged="rb_ShowLoginModalOnDemoMode_on_CheckedChanged" AutoPostBack="True" />
+                                                <asp:RadioButton ID="rb_ShowLoginModalOnDemoMode_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                                    OnCheckedChanged="rb_ShowLoginModalOnDemoMode_off_CheckedChanged" AutoPostBack="True" />
+                                            </div>
+                                        </div>
+                                        <div class="td-settings-desc">
+                                            Set to Yes to force the login modal window on page load. This will only apply when user is attempting to access the Workspace on No Login/Demo mode. Will not apply for the App Remote (Mobile).
+                                        </div>
+                                    </div>
+                                </asp:Panel>
                             </asp:Panel>
                             <asp:Panel ID="pnl_NoLoginMainPage" runat="server" Enabled="false" Visible="false">
-                                <div class="clear-space">
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">
+                                        No Login/Demo Customizations
+                                    </div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <a href="#iframecontent" class="input-buttons-create float-left" onclick="openWSE.LoadIFrameContent('SiteTools/UserMaintenance/AcctSettings.aspx?u=demouser&toolview=true', this);return false;"
+                                            style="display: block;">Customize Demo User</a>
+                                        <div class="clear"></div>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        Customize the demo user settings.
+                                    </div>
                                 </div>
-                                <a href="#iframecontent" class="margin-right float-left input-buttons" onclick="openWSE.LoadIFrameContent('SiteTools/UserMaintenance/AcctSettings.aspx?u=demouser&toolview=true', this);return false;"
-                                    style="display: block;"><span class="img-customize margin-right-sml float-left"></span>No Login/Demo Customizations</a>
                             </asp:Panel>
                             <div class="clear" style="height: 50px;">
                             </div>
@@ -841,8 +945,41 @@
                                         </div>
                                     </div>
                                     <div class="td-settings-desc">
-                                        Prevent anyone from creating
-                                                a custom table.
+                                        Prevent anyone from creating a custom table.
+                                    </div>
+                                </div>
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">
+                                        Lock App Creator
+                                    </div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <div class="field switch inline-block">
+                                            <asp:RadioButton ID="rb_LockAppCreator_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                                OnCheckedChanged="rb_LockAppCreator_on_CheckedChanged" AutoPostBack="True" />
+                                            <asp:RadioButton ID="rb_LockAppCreator_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                                OnCheckedChanged="rb_LockAppCreator_off_CheckedChanged" AutoPostBack="True" />
+                                        </div>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        Prevent anyone from creating and uploading an app.
+                                    </div>
+                                </div>
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">
+                                        Lock Background Services
+                                    </div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <div class="field switch inline-block">
+                                            <asp:RadioButton ID="rb_LockBackgroundServices_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                                OnCheckedChanged="rb_LockBackgroundServices_on_CheckedChanged" AutoPostBack="True" />
+                                            <asp:RadioButton ID="rb_LockBackgroundServices_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                                OnCheckedChanged="rb_LockBackgroundServices_off_CheckedChanged" AutoPostBack="True" />
+                                        </div>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        Prevent anyone from uploading, starting, or stopping a background service.
                                     </div>
                                 </div>
                                 <div class="table-settings-box">
@@ -1056,6 +1193,7 @@
                         </asp:Panel>
 
                         <asp:Panel ID="pnl_UserRegister" runat="server" CssClass="pnl-section" data-title="User Registration Settings">
+                            <div class="clear-space"></div>
                             <div id="userReg">
                                 <div id="rb_usersignup_holder" runat="server">
                                     <div class="table-settings-box">
@@ -1203,16 +1341,28 @@
                                             Select an initial role for the user registering an account. (To create new roles, go to User Accounts and select Manage Roles at the top)
                                         </div>
                                     </div>
-                                    <div class="clear-space">
+                                    <div class="table-settings-box">
+                                        <div class="td-settings-title">
+                                            New User Settings Setup
+                                        </div>
+                                        <div class="title-line"></div>
+                                        <div class="td-settings-ctrl">
+                                            <a id="btn_customizeua" href="#iframecontent" class="margin-right float-left input-buttons-create"
+                                                onclick="openWSE.LoadIFrameContent('SiteTools/UserMaintenance/AcctSettings.aspx?toolview=true&u=NewUserDefaults&NoRegistration=true', this);return false;"
+                                                style="display: block;">Setup New User</a>
+                                            <div class="clear"></div>
+                                        </div>
+                                        <div class="td-settings-desc">
+                                            Set up a new user based on the User Sign Up Role.
+                                        </div>
                                     </div>
-                                    <a id="btn_customizeua" href="#iframecontent" class="margin-right float-left input-buttons"
-                                        onclick="openWSE.LoadIFrameContent('SiteTools/UserMaintenance/AcctSettings.aspx?toolview=true&u=NewUserDefaults&NoRegistration=true', this);return false;"
-                                        style="display: block;"><span class="img-customize margin-right-sml float-left"></span>New User Customization Settings</a>
+                                    <div class="clear"></div>
                                 </div>
                             </div>
                         </asp:Panel>
 
                         <asp:Panel ID="pnl_Customizations" runat="server" CssClass="pnl-section" data-title="Site Customizations">
+                            <div class="clear-space"></div>
                             <asp:Panel ID="pnl_meteTagCustomizations" runat="server">
                                 <div class="table-settings-box">
                                     <div class="td-settings-title">
@@ -1221,7 +1371,7 @@
                                     <div class="title-line"></div>
                                     <div class="td-settings-ctrl">
                                         <asp:TextBox ID="tb_descriptionMetaTag" runat="server" CssClass="textEntry float-left"
-                                            Width="95%" AutoPostBack="False" TextMode="MultiLine" Font-Names='"Arial"' MaxLength="4000"
+                                            Width="95%" AutoPostBack="False" TextMode="MultiLine" MaxLength="4000"
                                             BorderColor="#D9D9D9" BorderStyle="Solid" BorderWidth="1px" Height="75px" Style="padding: 4px;"
                                             ForeColor="#353535"></asp:TextBox>
                                         <div class="clear-space"></div>
@@ -1231,7 +1381,7 @@
                                             OnClick="lbtn_clearDescriptionMeta_Click">Clear</asp:LinkButton>
                                     </div>
                                     <div class="td-settings-desc">
-                                        This will update the description meta tag on the Site.master.
+                                        This will update the description meta tag on any page that doesn't have a description with it.
                                     </div>
                                 </div>
                                 <div class="table-settings-box">
@@ -1250,7 +1400,60 @@
                                         <a href="#" id="aViewAsString" onclick="ViewAsString();return false;">View as String</a>
                                     </div>
                                     <div class="td-settings-desc">
-                                        This will update the keywords meta tag on the Site.master.
+                                        This will update the keywords meta tag on any page that doesn't have keywords with it.
+                                    </div>
+                                </div>
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">
+                                        Default Site Font Family
+                                    </div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <asp:Panel ID="pnl_defaultbodyfontfamily" runat="server" DefaultButton="btn_defaultbodyfontfamily">
+                                            <asp:DropDownList ID="dd_defaultbodyfontfamily" runat="server" CssClass="margin-right">
+                                            </asp:DropDownList>
+                                            <asp:Button ID="btn_defaultbodyfontfamily" runat="server" Text="Update" OnClick="btn_defaultbodyfontfamily_Click"
+                                                CssClass="RandomActionBtns input-buttons margin-left" />
+                                        </asp:Panel>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        Set the default site font family. Some fonts may not work with certain browsers. Visit <a href="https://www.google.com/fonts" target="_blank">https://www.google.com/fonts</a> to get custom fonts. (Must refresh the page to see changes)
+                                    </div>
+                                </div>
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">
+                                        Default Site Font Size
+                                    </div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <asp:Panel ID="pnl_defaultfontsize" runat="server" DefaultButton="btn_defaultfontsize">
+                                            <asp:TextBox ID="tb_defaultfontsize" runat="server" CssClass="textEntry" Width="55px" TextMode="Number"></asp:TextBox><span class="pad-left-sml">px</span>
+                                            <asp:Button ID="btn_defaultfontsize" runat="server" Text="Update" OnClick="btn_defaultfontsize_Click"
+                                                CssClass="RandomActionBtns input-buttons margin-left" />
+                                            <asp:LinkButton ID="lbtn_defaultfontsize_clear" runat="server" Text="Reset to default" OnClick="lbtn_defaultfontsize_clear_Click"
+                                                CssClass="RandomActionBtns" />
+                                        </asp:Panel>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        Set the default site font size. Empty values will inherit the font-size from the site theme. (Must refresh the page to see changes)
+                                    </div>
+                                </div>
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">
+                                        Default Site Font Color
+                                    </div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <asp:Panel ID="pnl_defaultfontcolor" runat="server" DefaultButton="btn_defaultfontcolor">
+                                            <asp:TextBox ID="tb_defaultfontcolor" runat="server" CssClass="textEntry color" MaxLength="6" Width="75px"></asp:TextBox>
+                                            <asp:Button ID="btn_defaultfontcolor" runat="server" Text="Update" OnClick="btn_defaultfontcolor_Click"
+                                                CssClass="RandomActionBtns input-buttons margin-left" />
+                                            <asp:LinkButton ID="lbtn_defaultfontcolor_clear" runat="server" Text="Reset to default" OnClick="lbtn_defaultfontcolor_clear_Click"
+                                                CssClass="RandomActionBtns" />
+                                        </asp:Panel>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        Set the default site font color. (Must refresh the page to see changes)
                                     </div>
                                 </div>
                                 <div class="table-settings-box">
@@ -1323,36 +1526,6 @@
                                         <asp:Panel ID="pnl_MainSiteLogoDesc" runat="server" Enabled="false" Visible="false">
                                             Upload a new logo to display on the workspace. This logo will be centered
                                                     on the page. Uploading new logo will overwrite previous logo. (.png, .jpg, .jpeg, .gif ONLY)
-                                        </asp:Panel>
-                                    </div>
-                                </div>
-                                <div class="table-settings-box">
-                                    <div class="td-settings-title">
-                                        Alternative Site Logo (Used on Login Pages)
-                                    </div>
-                                    <div class="title-line"></div>
-                                    <div class="td-settings-ctrl">
-                                        <div class="pad-all-sml inline-block margin-right-big">
-                                            <asp:Image ID="img_altworkspaceLogo" runat="server" Width="175px" />
-                                        </div>
-                                        <div class="clear-space">
-                                        </div>
-                                        <asp:Panel ID="pnl_AltSiteLogoUpload" runat="server" Enabled="false" Visible="false">
-                                            <asp:FileUpload ID="FileUpload1" runat="server" />
-                                            <div class="clear-space">
-                                            </div>
-                                            <asp:Button ID="btn_alternativeuploadlogo" runat="server" CssClass="input-buttons" Text="Update"
-                                                OnClick="btn_alternativeuploadlogo_Click" disabled="disabled" />
-                                            <div class="clear">
-                                            </div>
-                                            <div id="fu_error_message_alt" style="color: Red">
-                                            </div>
-                                        </asp:Panel>
-                                    </div>
-                                    <div class="td-settings-desc">
-                                        <asp:Panel ID="pnl_AltSiteLogoDesc" runat="server" Enabled="false" Visible="false">
-                                            Upload an alternative logo to display on the login screens. This logo will be centered
-                                                    on the page. Uploading a new alternative logo will overwrite previous alternative logo. (.png, .jpg, .jpeg, .gif ONLY)
                                         </asp:Panel>
                                     </div>
                                 </div>
@@ -1487,6 +1660,8 @@
                     </ContentTemplate>
                     <Triggers>
                         <asp:AsyncPostBackTrigger ControlID="lbtn_testconnection" />
+                        <asp:AsyncPostBackTrigger ControlID="lbtn_defaultfontsize_clear" />
+                        <asp:AsyncPostBackTrigger ControlID="lbtn_defaultfontcolor_clear" />
                         <asp:AsyncPostBackTrigger ControlID="rb_allowusersignup_on" />
                         <asp:AsyncPostBackTrigger ControlID="rb_allowusersignup_off" />
                     </Triggers>

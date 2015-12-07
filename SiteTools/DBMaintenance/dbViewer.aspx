@@ -1,4 +1,4 @@
-﻿<%@ page title="Database Viewer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_dbViewer, App_Web_uowmthqy" %>
+﻿<%@ page title="Database Viewer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_dbViewer, App_Web_h3zobxng" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -10,6 +10,35 @@
         .GridNormalRow td, .GridAlternate td
         {
             padding: 7px 5px;
+        }
+
+        .GridNormalRow
+        {
+            border-left: 1px solid #DFDFDF;
+        }
+
+        @media screen and (max-width: 650px)
+        {
+            .myHeaderStyle
+            {
+                border-color: #FFF !important;
+            }
+
+            .myHeaderStyle, .myItemStyle, .GridNormalRow
+            {
+                border-left: 1px solid #FFF;
+            }
+
+            .GridNormalRow td, .myItemStyle td, .myHeaderStyle td, .myHeaderStyle th
+            {
+                border-top: 1px solid rgba(0, 0, 0, 0);
+            }
+        }
+
+        .collapse-expand-schemebtn
+        {
+            margin-left: 20px;
+            float: right;
         }
     </style>
 </asp:Content>
@@ -28,11 +57,11 @@
                 <a href="#" id="a_turn_onoff_refresh" class="dbviewer-update-img">Turn off</a>
                 <div class="clear-space">
                 </div>
-                <span class="settings-name-column float-left" style="padding-top: 3px!important;">Table Name</span>
-                <asp:DropDownList ID="dd_table" runat="server" CssClass="float-left margin-right"
+                <span class="settings-name-column float-left margin-top" style="padding-top: 3px!important;">Table Name</span>
+                <asp:DropDownList ID="dd_table" runat="server" CssClass="float-left margin-right margin-top"
                     ClientIDMode="Static" AutoPostBack="true" OnSelectedIndexChanged="dd_table_Changed">
                 </asp:DropDownList>
-                <div class="float-left">
+                <div class="float-left margin-top">
                     <asp:UpdatePanel ID="UpdatePanel3" runat="server" UpdateMode="Conditional">
                         <ContentTemplate>
                             <asp:LinkButton ID="lbtn_savetable" runat="server" CssClass="margin-left float-left dbviewer-update-img input-buttons"
@@ -88,8 +117,8 @@
                     <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
                         onfocus="if(this.value=='Search Database Table')this.value=''" onblur="if(this.value=='')this.value='Search Database Table'"
                         Text="Search Database Table"></asp:TextBox>
-                    <a href="#" onclick="$('#MainContent_tb_search').val('Search Database Table');return false;"
-                        class="searchbox_clear"></a>
+                    <asp:LinkButton ID="imgbtn_clearsearch" runat="server" ToolTip="Clear search" OnClientClick="$('#MainContent_tb_search').val('Search Database Table');" CssClass="searchbox_clear RandomActionBtns"
+                        OnClick="imgbtn_clearsearch_Click" />
                     <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
                         OnClick="imgbtn_search_Click" />
                 </asp:Panel>
@@ -107,7 +136,7 @@
                 <asp:HiddenField ID="hf_updatetable" runat="server" OnValueChanged="hf_updatetable_Changed"
                     ClientIDMode="Static" />
                 <asp:GridView ID="GV_dbviewer" runat="server" CellPadding="0" CellSpacing="0" AutoGenerateColumns="True"
-                    Width="100%" ShowHeaderWhenEmpty="True" AllowPaging="True" AllowSorting="True"
+                    Width="100%" ShowHeaderWhenEmpty="True" AllowPaging="True" AllowSorting="True" BorderStyle="None"
                     PageSize="20" OnPageIndexChanging="GV_dbviewer_PageIndexChanging" OnRowCreated="GV_dbviewer_RowCreated"
                     OnSorting="GV_dbviewer_Sorting">
                     <PagerSettings Position="Bottom" />
@@ -126,6 +155,7 @@
                 <asp:AsyncPostBackTrigger ControlID="dd_display" />
                 <asp:AsyncPostBackTrigger ControlID="dd_table" />
                 <asp:AsyncPostBackTrigger ControlID="btn_refresh" />
+                <asp:AsyncPostBackTrigger ControlID="imgbtn_clearsearch" />
                 <asp:AsyncPostBackTrigger ControlID="imgbtn_search" />
             </Triggers>
         </asp:UpdatePanel>

@@ -1,13 +1,12 @@
-﻿<%@ page title="" language="C#" autoeventwireup="true" inherits="SiteTools_About, App_Web_ravcmota" %>
+﻿<%@ page title="About" language="C#" autoeventwireup="true" inherits="SiteTools_About, App_Web_jtoan5js" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
-    <title>About</title>
     <meta name="author" content="John Donnelly" />
     <meta name="revisit-after" content="10 days" />
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-    <meta name="viewport" content="initial-scale=0.95, user-scalable=no" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <link id="Link1" runat="server" rel="shortcut icon" href="Standard_Images/favicon.ico"
@@ -47,17 +46,17 @@
             font-size: 14px;
         }
 
-        #siteInfo, #changeLog, #helppages
+        #siteInfo, #termsofuse, #changeLog, #helppages
         {
             padding: 20px 35px;
             line-height: normal;
             position: relative;
         }
 
-        #siteInfo, #changeLog, #helppage-select-holder, #forkmeInfo, .pnlLinkBtns_Holder
+        #siteInfo, #termsofuse, #changeLog, #helppage-select-holder, #forkmeInfo, .pnlLinkBtns_Holder
         {
             margin: 0 auto;
-            width: 1000px;
+            max-width: 1000px;
         }
 
         #lbl_currentVer
@@ -65,18 +64,31 @@
             font-weight: bold;
         }
 
-        .screenshot-img
+        .termsofuse-section
         {
-            max-width: 600px;
-            -moz-box-shadow: 0 2px 4px rgba(0,0,0,.12);
-            -o-box-shadow: 0 2px 4px rgba(0,0,0,.12);
-            -webkit-box-shadow: 0 2px 4px rgba(0,0,0,.12);
-            box-shadow: 0 2px 4px rgba(0,0,0,.12);
+            padding-bottom: 30px;
+            clear: both;
         }
 
-        .workspace-img
+        .termsofus-section-title
         {
-            max-width: 500px;
+            font-weight: bold;
+            font-size: 14px;
+            clear: both;
+            padding-bottom: 10px;
+        }
+
+        .termsofus-section-text
+        {
+            clear: both;
+            line-height: 18px !important;
+            font-size: 13px !important;
+        }
+
+        .screenshot-img, .workspace-img
+        {
+            max-height: 450px;
+            max-width: 100%;
             -moz-box-shadow: 0 2px 4px rgba(0,0,0,.12);
             -o-box-shadow: 0 2px 4px rgba(0,0,0,.12);
             -webkit-box-shadow: 0 2px 4px rgba(0,0,0,.12);
@@ -95,14 +107,14 @@
         .about-section
         {
             padding-bottom: 60px;
-            line-height: 20px;
+            line-height: 22px;
             font-size: 14px;
         }
 
         .lnk_Download
         {
-            border: 1px solid #5D7196;
-            background: #687DA8;
+            border: 1px solid #3079ED;
+            background: #4D90FE;
             float: left;
             -webkit-border-radius: 5px;
             -moz-border-radius: 5px;
@@ -123,7 +135,14 @@
 
             .lnk_Download:hover
             {
-                background: #5D7196;
+                background: #357AE8;
+                boder: 1px solid #2F5BB7;
+            }
+
+            .lnk_Download:active
+            {
+                background: #2B65BC;
+                border: 1px solid #234589;
             }
 
         #forkme_banner
@@ -170,6 +189,61 @@
                 background: transparent!important;
                 border-bottom: 0px!important;
             }
+
+        .help-intro-text li
+        {
+            color: #CCC;
+        }
+
+        .mobile-pnlLinkBtns
+        {
+            background: none!important;
+            border-bottom: none!important;
+        }
+
+        .mobile-siteInfo .about-section
+        {
+            padding-bottom: 30px !important;
+            line-height: 18px !important;
+            font-size: 13px !important;
+        }
+
+        .mobile-termsofuse .about-section
+        {
+            padding-bottom: 30px !important;
+            line-height: 18px !important;
+            font-size: 13px !important;
+        }
+
+        .mobile-changeLog
+        {
+            padding: 0!important;
+            font-size: 12px !important;
+        }
+
+            .mobile-changeLog table
+            {
+                border-spacing: 0px;
+                border-collapse: collapse;
+            }
+
+            .mobile-changeLog .pad-all
+            {
+                padding: 5px !important;
+            }
+
+        .aspNetDisabled
+        {
+            cursor: default !important;
+            background: #CCC !important;
+            border: #AAA !important;
+        }
+
+            .aspNetDisabled .download-text
+            {
+                color: #F1F1F1 !important;
+                text-shadow: 1px 2px 2px #BBB !important;
+            }
     </style>
 </head>
 <body>
@@ -197,9 +271,10 @@
         <asp:Panel ID="pnlLinkBtns" runat="server">
             <div class="pnlLinkBtns_Holder">
                 <ul class="sitemenu-selection">
-                    <li id="hdl1" class="active"><a href="#" onclick="$('#changeLog, #helppages').hide();$('#siteInfo').show();$('.sitemenu-selection').find('li').removeClass('active');$('.sitemenu-selection').find('li').eq(0).addClass('active');return false;">Site Information</a></li>
-                    <li id="hdl2"><a href="#" onclick="$('#siteInfo, #helppages').hide();$('#changeLog').show();$('.sitemenu-selection').find('li').removeClass('active');$('.sitemenu-selection').find('li').eq(1).addClass('active');return false;">Change Log</a></li>
-                    <li id="hdl3"><a href="#" onclick="$('#siteInfo, #changeLog').hide();$('#helppages').show();$('.sitemenu-selection').find('li').removeClass('active');$('.sitemenu-selection').find('li').eq(2).addClass('active');return false;">Help Pages</a></li>
+                    <li id="hdl1" onclick="$('#termsofuse, #changeLog, #helppages').hide();$('#siteInfo').show();$('.sitemenu-selection').find('li').removeClass('active');$('.sitemenu-selection').find('li').eq(0).addClass('active');" class="active"><a href="#" onclick="return false;">About Site</a></li>
+                    <li id="hdl2" onclick="$('#siteInfo, #changeLog, #helppages').hide();$('#termsofuse').show();$('.sitemenu-selection').find('li').removeClass('active');$('.sitemenu-selection').find('li').eq(1).addClass('active');"><a href="#" onclick="return false;">Terms of Use</a></li>
+                    <li id="hdl3" onclick="$('#siteInfo, #termsofuse, #helppages').hide();$('#changeLog').show();$('.sitemenu-selection').find('li').removeClass('active');$('.sitemenu-selection').find('li').eq(2).addClass('active');"><a href="#" onclick="return false;">Change Log</a></li>
+                    <li id="hdl4" onclick="$('#siteInfo, #termsofuse, #changeLog').hide();$('#helppages').show();$('.sitemenu-selection').find('li').removeClass('active');$('.sitemenu-selection').find('li').eq(3).addClass('active');"><a href="#" onclick="return false;">Help Pages</a></li>
                 </ul>
             </div>
         </asp:Panel>
@@ -208,8 +283,8 @@
         <div class="clear-space">
         </div>
         <div id="forkmeInfo" class="pad-top-big">
-            <a id="forkme_banner" href="https://github.com/jwdonnel/OpenWSE" target="_blank">View on GitHub</a>
-            <div id="lbl_currentVer" runat="server" class="float-right pad-right-big">
+            <a id="forkme_banner" href="https://github.com/jwdonnel/OpenWSE" class="margin-left" target="_blank">View on GitHub</a>
+            <div id="lbl_currentVer" runat="server" class="float-right pad-top-big pad-right">
             </div>
         </div>
         <div class="clear-space">
@@ -217,20 +292,12 @@
         <div id="siteInfo">
             <div id="AboutopenWSE">
                 <div class="about-section">
-                    <table cellpadding="10" cellspacing="10" border="0" width="100%">
-                        <tbody>
-                            <tr>
-                                <td valign="top">
-                                    <img alt="workspace" src="Standard_Images/About Logos/Workspace.png" class="margin-right-big workspace-img" />
-                                </td>
-                                <td valign="top">
-                                    <h2>Introduction</h2>
-                                    <div class="clear-space-five"></div>
-                                    OpenWSE is a Windows desktop like workspace. The goal of this site is to provide a Windows like experience but from your web browser on any computer. Much like your desktop, you can have multiple modal windows (called apps) opened on your workspace. And just like your desktop, if you have apps opened that you dont want to close, but dont want to show, you can simply minimize them in the taskbar at the top. Apps can be based off of UserControls (.ascx), existing webpages, or just custom html pages. Apps can incorporate their own css stylesheets along with javascript files and other code. This allows for any developer to integrate with the OpenWSE code. Each user can register an account (if enabled by the Administrator) that allows you to save your apps position, size, and whats loaded so you can go from any browser or computer and keep the same settings.
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <img alt="workspace" src="Standard_Images/About Logos/Workspace.jpg" style="max-width: 100%;" />
+                    <div class="clear-space"></div>
+                    <div class="clear-space"></div>
+                    <h2>Introduction</h2>
+                    <div class="clear-space-five"></div>
+                    OpenWSE is a Windows desktop like workspace. The goal of this site is to provide a Windows like experience but from your web browser on any computer. Much like your desktop, you can have multiple modal windows (called apps) opened on your workspace. And just like your desktop, if you have apps opened that you dont want to close, but dont want to show, you can simply minimize them in the taskbar at the top. Apps can be based off of UserControls (.ascx), existing webpages, or just custom html pages. Apps can incorporate their own css stylesheets along with javascript files and other code. This allows for any developer to integrate with the OpenWSE code. Each user can register an account (if enabled by the Administrator) that allows you to save your apps position, size, and whats loaded so you can go from any browser or computer and keep the same settings.
                 </div>
                 <div class="about-section">
                     <h2>Features</h2>
@@ -271,7 +338,9 @@
                         <li>You can also choose to bypass the login screen and go straight to the workspace as a guest user.</li>
                     </ul>
                     <div class="clear-space"></div>
-                    <img alt="Login Page" src="Standard_Images/About Logos/loginpage.png" class="screenshot-img" />
+                    <div style="text-align: center">
+                        <img alt="Login Page" src="Standard_Images/About Logos/loginpage.jpg" class="screenshot-img" />
+                    </div>
                 </div>
                 <div class="about-section">
                     <h2>The Workspace</h2>
@@ -289,8 +358,11 @@
                             or by pressing Alt + O</li>
                     </ul>
                     <div class="clear-space"></div>
-                    <img alt="Workspace" src="Standard_Images/About Logos/openwse_v4.4.png" class="screenshot-img margin-right-big float-left" style="width: 480px;" />
-                    <img alt="Workspace" src="Standard_Images/About Logos/openwse_v4.4_overlays.png" class="screenshot-img float-left" style="width: 480px;" />
+                    <div style="text-align: center">
+                        <img alt="Workspace" src="Standard_Images/About Logos/openwse_v4.5.jpg" class="screenshot-img" />
+                        <div class="clear" style="height: 20px;"></div>
+                        <img alt="Workspace" src="Standard_Images/About Logos/openwse_v4.5_overlays.jpg" class="screenshot-img" />
+                    </div>
                     <div class="clear-space"></div>
                 </div>
                 <div class="about-section">
@@ -338,21 +410,18 @@
                         <li>Track issues, user logins, site request, speeds, and enable the IP Listener which can make your site available to only certain IP addresses.</li>
                     </ul>
                     <div class="clear-space"></div>
-                    <table style="width: 100%;">
-                        <tr>
-                            <td align="center" valign="top">
-                                <img alt="Site Settings" src="Standard_Images/About Logos/sitesettings.png" class="boxshadow" style="width: 400px;" />
-                                <div class="clear-space"></div>
-                                <h3>Site Settings</h3>
-                            </td>
-                            <td align="center" valign="top">
-                                <img alt="Custom Tables" src="Standard_Images/About Logos/customtables.png" class="boxshadow" style="width: 400px;" />
-                                <div class="clear-space"></div>
-                                <h3>Custom Tables</h3>
-                            </td>
-                        </tr>
-                    </table>
+                    <div align="center" class="pad-bottom-big">
+                        <img alt="Network Log" src="Standard_Images/About Logos/networklog.jpg" class="screenshot-img" />
+                        <div class="clear-space"></div>
+                        <h3>Network Log</h3>
+                    </div>
+                    <div align="center" class="pad-bottom-big">
+                        <img alt="Custom Tables" src="Standard_Images/About Logos/customtables.jpg" class="screenshot-img" />
+                        <div class="clear-space"></div>
+                        <h3>Custom Tables</h3>
+                    </div>
                 </div>
+                <div class="clear"></div>
                 <div class="about-section">
                     <h2>App Remote</h2>
                     <div class="clear-space-five"></div>
@@ -362,7 +431,9 @@
                         <li>You do not have to be on the same network as your workspace. The App Remote works from anywhere as long as there is an internet connection.</li>
                     </ul>
                     <div class="clear-space"></div>
-                    <img alt="App Remote" src="Standard_Images/About Logos/appremote.png" class="boxshadow" class="screenshot-img" />
+                    <div style="text-align: center">
+                        <img alt="App Remote" src="Standard_Images/About Logos/appremote.jpg" class="screenshot-img" />
+                    </div>
                 </div>
                 <div class="about-section">
                     <h2>Chat Client</h2>
@@ -373,7 +444,9 @@
                         <li>Set your current state to either Available, Away, Busy, or Offline.</li>
                     </ul>
                     <div class="clear-space"></div>
-                    <img alt="Chat Client" src="Standard_Images/About Logos/chatclient.png" class="boxshadow" class="screenshot-img" />
+                    <div style="text-align: center">
+                        <img alt="Chat Client" src="Standard_Images/About Logos/chatclient.jpg" class="screenshot-img" />
+                    </div>
                 </div>
                 <div id="IWantThis" class="about-section"></div>
                 <div class="about-section">
@@ -445,13 +518,39 @@
             <div align="center" class="clear-margin">
                 <div class="clear-space">
                 </div>
-                <a href="http://jquery.com" target="_blank" class='pad-left pad-right'>
-                    <img alt="jquery" src="Standard_Images/About Logos/jquery.png" style="max-height: 75px" /></a>
-                <a href="http://www.asp.net" target="_blank" class='pad-left pad-right'>
-                    <img alt="asp.net" src="Standard_Images/About Logos/aspnet.png" style="max-height: 75px" /></a>
+                <a href="http://jquery.com" target="_blank" class='pad-left pad-right pad-bottom'>
+                    <img alt="jquery" src="Standard_Images/About Logos/jquery.png" style="max-height: 75px; max-width: 100%;" /></a>
+                <a href="http://www.asp.net" target="_blank" class='pad-left pad-right pad-bottom'>
+                    <img alt="asp.net" src="Standard_Images/About Logos/aspnet.png" style="max-height: 75px; max-width: 100%;" /></a>
                 <div class="clear-space"></div>
             </div>
             <div class="clear-space"></div>
+        </div>
+        <div id="termsofuse" style="display: none;">
+            <h3 class="font-bold">Terms of Use</h3>
+            <div class="clear-space"></div>
+            <span class="font-bold pad-right-sml">Date:</span>August 16, 2015
+                <div class="clear-space"></div>
+            <div class="clear-space"></div>
+            <div class="clear-space"></div>
+            <div class="termsofuse-section">
+                <div class="termsofus-section-title">1. Terms</div>
+                <div class="termsofus-section-text">
+                    By accessing this web site, you are agreeing to be bound by these web site Terms and Conditions of Use, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws. If you do not agree with any of these terms, you are prohibited from using or accessing this site. The materials contained in this web site are protected by applicable copyright and trade mark law.
+                </div>
+            </div>
+            <div class="termsofuse-section">
+                <div class="termsofus-section-title">2. Disclaimer</div>
+                <div class="termsofus-section-text">
+                    The materials on this site's web site are provided "as is". this site makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties, including without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights. Further, this site does not warrant or make any representations concerning the accuracy, likely results, or reliability of the use of the materials on its Internet web site or otherwise relating to such materials or on any sites linked to this site.
+                </div>
+            </div>
+            <div class="termsofuse-section">
+                <div class="termsofus-section-title">3. Limitations</div>
+                <div class="termsofus-section-text">
+                    Users signing in to this site must enter a valid username and password. Failure to do so can result in your IP being blocked by this site. If your IP is blocked due to this, or you feel that you are being blocked for other reasons, you can email John Donnelly at <a href="mailto:jwdonnel@gmail.com">jwdonnel@gmail.com</a>.
+                </div>
+            </div>
         </div>
         <div id="changeLog" style="display: none;">
             <asp:Literal ID="ltl_changeLog" runat="server"></asp:Literal>
@@ -490,7 +589,7 @@
         <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
         <script type="text/javascript" src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
         <script type="text/javascript" src="Scripts/jquery/combined-scripts.min.js"></script>
-        <script type="text/javascript" src="Scripts/SiteCalls/Min/openwse.min.js"></script>
+        <script type="text/javascript" src="Scripts/SiteCalls/Full/openwse.js"></script>
         <script type="text/javascript">
             var availableHelpPages = "-";
             $(document).ready(function () {
@@ -526,6 +625,8 @@
 
                     helpPageChange();
                 }
+
+                $(window).resize();
             });
 
             function containsHelpPage(page) {
@@ -581,6 +682,22 @@
                     });
                 }
             }
+
+            $(window).resize(function () {
+                openWSE.ApplyMobileModeForMenuBar();
+
+                $("#pnlLinkBtns").removeClass("mobile-pnlLinkBtns");
+                $("#siteInfo").removeClass("mobile-siteInfo");
+                $("#termsofuse").removeClass("mobile-termsofuse");
+                $("#changeLog").removeClass("mobile-changeLog");
+
+                if ($(".mobile-mode").length > 0) {
+                    $("#pnlLinkBtns").addClass("mobile-pnlLinkBtns");
+                    $("#siteInfo").addClass("mobile-siteInfo");
+                    $("#termsofuse").addClass("mobile-termsofuse");
+                    $("#changeLog").addClass("mobile-changeLog");
+                }
+            });
         </script>
     </form>
 </body>

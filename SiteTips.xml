@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SiteTips>
+    <Hint>You can adjust the background of your workspace by selecting the image button at the bottom left or by selecting the Background tab in the Account Settings.</Hint>
+    <Hint>
+        You can control your workspace from the mobile version of this site.
+    </Hint>
+    <Hint>Notifications, Overlays, and App settings can be changed in your Account Settings.</Hint>
+    <Hint>When on the mobile version of this site, you can swipe right to bring the menu up.</Hint>
+    <Hint>You can set a default group to log into when signing in by selecting the User Info tab of your Account Settings.</Hint>
+    <Hint>You can override certain settings to each of your apps installed. Apps must have the Allow User Overrides property set to true on the app in order for users to override the settings.</Hint>
+    <Hint>You can select the total number of workspaces to show on your home workspace page.</Hint>
+    <Hint>You can override the Mobile background style by using the Default Background Color or the selected background image.</Hint>
+    <Hint>You can categorize your apps allowing for easier browsing. (Note: Sorting may not work properly when categorizing is enabled)</Hint>
+    <Hint>There are 2 different workspace modes and App Styles that a user can choose from in the Customize tab of the Account Settings.</Hint>
+    <Hint>The groups created are used to determine how to pull data from each app. Each user created MUST be associated with a group. When sending a user an invite, that user must have their group notification enabled. Otherwise, you will not see the user in the invite list.</Hint>
+    <Hint>Apps can be in as many categories as you want. If you select "View User Apps and Overrides", only apps you have installed will be shown and changes made will only apply to your account.</Hint>
+    <Hint>App packages are used for the app installer within the user accounts setup. They are also used to setup Group logins and Demo users.</Hint>
+    <Hint>When logging into a group, all default settings for that group will be applied to your account. These settings will be removed once you log out of the group. Your Apps, Overlays, and Notifications will be overridden with the group's settings.</Hint>
+    <Hint>You can customize your workspace (Both desktop and mobile) in over a hundred ways. View your Account Settings to customize your account.</Hint>
+</SiteTips>

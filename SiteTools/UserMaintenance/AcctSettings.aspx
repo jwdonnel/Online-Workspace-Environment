@@ -1,11 +1,12 @@
-﻿<%@ page title="Account Settings" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AcctSettings, App_Web_rrukwxwl" clientidmode="Static" %>
+﻿<%@ page title="Account Settings" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AcctSettings, App_Web_fk34kkkf" clientidmode="Static" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
         .ajax__slider_h_rail
         {
-            width: 325px !important;
-            margin-right: 10px;
+            width: 250px !important;
+            margin-right: 15px;
+            margin-bottom: 10px;
         }
 
         #pnl_images
@@ -35,7 +36,7 @@
         .adminpageedit
         {
             margin-right: 10px;
-            width: 140px;
+            min-width: 150px;
         }
 
         #pnl_overlayList .item-column
@@ -47,12 +48,25 @@
         {
             padding: 1px 0;
         }
+
+        #img_appstyleexample
+        {
+            max-height: 75px;
+            margin: 5px;
+            border: 1px solid #DDD;
+            max-width: 100%;
+        }
+
+        #pnl_iframeUserImageUpload iframe
+        {
+            height: 110px !important;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
     <div class="maincontent-padding pad-top-big margin-top">
         <div id="pnl_topbackgroundTitleBar" runat="server" visible="false">
-            <div id="app_title_bg_acct" runat="server" class="app-Settings-title-bg-color-main" style="margin-top: -20px; margin-left: -35px; padding-right: 75px;">
+            <div id="app_title_bg_acct" runat="server" class="app-Settings-title-bg-color-main" style="margin-top: -20px; margin-left: -35px; padding-right: 60px;">
                 <div class="pad-all">
                     <div class="app-Settings-title-user-info">
                         <div class="float-left">
@@ -64,27 +78,31 @@
                     </div>
                 </div>
             </div>
-            <div class="clear-space"></div>
             <asp:Panel ID="non_grouplogin" runat="server">
+                <div class="clear-space"></div>
                 Settings will depend on the user Role, apps, and
             groups. Certain features may be visible but not used.<br />
                 For new users defaults, all overlays and notifications will be enabled by default
             (Depending on which apps are installed and user role).
+                <div class="clear-space"></div>
+                <div class="clear-space"></div>
             </asp:Panel>
             <asp:Panel ID="grouplogin" runat="server" Visible="false" Enabled="false">
+                <div class="clear-space"></div>
                 Users logging into this group will inherit all the account settings below. These settings will are only applied for users who are logged into the group session.
+                <div class="clear-space"></div>
+                <div class="clear-space"></div>
             </asp:Panel>
-            <div class="clear-space"></div>
         </div>
         <asp:Literal ID="UserGroupLoginMessage" runat="server"></asp:Literal>
-        <div class="clear-space">
+        <div class="clear">
         </div>
         <ul class="sitemenu-selection">
         </ul>
         <div class="clear-space">
         </div>
 
-        <asp:Panel ID="pnl_UserInformation" CssClass="pnl-section" runat="server" data-title="Information">
+        <asp:Panel ID="pnl_UserInformation" CssClass="pnl-section" runat="server" data-title="User Info">
             <asp:Panel ID="pnl_passwordchange" runat="server">
                 <div class="table-settings-box">
                     <div class="td-settings-title">
@@ -396,30 +414,51 @@
             <asp:UpdatePanel ID="updatepnl_WorkspaceOverlays" runat="server" UpdateMode="Conditional">
                 <ContentTemplate>
                     <div class="table-settings-box">
+                        <div class="td-settings-title">
+                            Disable Overlays
+                        </div>
+                        <div class="title-line"></div>
                         <div class="td-settings-ctrl">
-                            <div class="float-left">
-                                <asp:LinkButton ID="btn_DisableAll_overlay" runat="server" Text="Disable All" ClientIDMode="Static"
-                                    CssClass="RandomActionBtns" OnClick="btn_DisableAll_overlay_Clicked"></asp:LinkButton>
+                            <div class="field switch inline-block">
+                                <asp:RadioButton ID="rb_hidealloverlays_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                    OnCheckedChanged="rb_hidealloverlays_on_CheckedChanged" AutoPostBack="True" />
+                                <asp:RadioButton ID="rb_hidealloverlays_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                    OnCheckedChanged="rb_hidealloverlays_off_CheckedChanged" AutoPostBack="True" />
                             </div>
-                            <div class="float-right">
-                                <span class="font-bold pad-right">Overlays Enabled</span><asp:Label ID="lbl_overlaysEnabled"
-                                    runat="server" Text="0"></asp:Label>
-                            </div>
-                            <div class="clear-space">
-                            </div>
-                            <asp:Panel ID="pnl_overlays" runat="server">
-                            </asp:Panel>
                         </div>
                         <div class="td-settings-desc">
-                            Workspace overlays show limited information. They are a non editable type of app. Position determines which side of the screen the overlay will move to. Set the Workspace dropdown to the display the overlay on. When disabling the overlay, it will clear out your current settings for that overlay and reset them back to the defaults.
+                            Select No if you want to be able to view overlays. (Page may have to refresh to show changes)
                         </div>
                     </div>
+                    <asp:Panel ID="pnl_useroverlaylist" runat="server">
+                        <div class="table-settings-box">
+                            <div class="td-settings-ctrl">
+                                <div class="float-left">
+                                    <asp:LinkButton ID="btn_DisableAll_overlay" runat="server" Text="Disable All" ClientIDMode="Static"
+                                        CssClass="RandomActionBtns" OnClick="btn_DisableAll_overlay_Clicked"></asp:LinkButton>
+                                </div>
+                                <div class="float-right">
+                                    <span class="font-bold pad-right">Overlays Enabled</span><asp:Label ID="lbl_overlaysEnabled"
+                                        runat="server" Text="0"></asp:Label>
+                                </div>
+                                <div class="clear-space">
+                                </div>
+                                <asp:Panel ID="pnl_overlays" runat="server">
+                                </asp:Panel>
+                            </div>
+                            <div class="td-settings-desc">
+                                Workspace overlays show limited information. They are a non editable type of app. Position determines which side of the screen the overlay will move to. Set the Workspace dropdown to the display the overlay on. When disabling the overlay, it will clear out your current settings for that overlay and reset them back to the defaults.
+                            </div>
+                        </div>
+                    </asp:Panel>
                     <asp:HiddenField ID="hf_updateEnabled_overlay" runat="server" ClientIDMode="Static"
                         OnValueChanged="hf_updateEnabled_overlay_Changed" />
                     <asp:HiddenField ID="hf_updateDisabled_overlay" runat="server" ClientIDMode="Static"
                         OnValueChanged="hf_updateDisabled_overlay_Changed" />
                 </ContentTemplate>
                 <Triggers>
+                    <asp:AsyncPostBackTrigger ControlID="rb_hidealloverlays_on" />
+                    <asp:AsyncPostBackTrigger ControlID="rb_hidealloverlays_off" />
                     <asp:AsyncPostBackTrigger ControlID="btn_DisableAll_overlay" />
                     <asp:AsyncPostBackTrigger ControlID="hf_updateEnabled_overlay" />
                     <asp:AsyncPostBackTrigger ControlID="hf_updateDisabled_overlay" />
@@ -497,14 +536,14 @@
                                                     <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
                                                         Min Width
                                                     </div>
-                                                    <asp:TextBox ID="tb_minwidth_edit" runat="server" CssClass="TextBoxEdit" Width="50px"></asp:TextBox><span
+                                                    <asp:TextBox ID="tb_minwidth_edit" runat="server" CssClass="TextBoxEdit" Width="55px"></asp:TextBox><span
                                                         class="pad-left">px</span>
                                                     <div class="clear-space">
                                                     </div>
                                                     <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
                                                         Min Height
                                                     </div>
-                                                    <asp:TextBox ID="tb_minheight_edit" runat="server" CssClass="TextBoxEdit" Width="50px"></asp:TextBox><span
+                                                    <asp:TextBox ID="tb_minheight_edit" runat="server" CssClass="TextBoxEdit" Width="55px"></asp:TextBox><span
                                                         class="pad-left">px</span>
                                                     <div class="clear-space">
                                                     </div>
@@ -515,6 +554,14 @@
                                                         <asp:ListItem Text="Visible" Value="app-main"></asp:ListItem>
                                                         <asp:ListItem Text="Hidden" Value="app-main-nobg"></asp:ListItem>
                                                     </asp:DropDownList>
+                                                    <div id="backgroundcolorholder_edit">
+                                                        <div class="clear-space">
+                                                        </div>
+                                                        <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
+                                                            Background Color
+                                                        </div>
+                                                        <asp:TextBox ID="tb_backgroundColor_edit" runat="server" CssClass="TextBoxEdit color" MaxLength="6" Width="75px"></asp:TextBox>
+                                                    </div>
                                                     <div class="clear-space">
                                                     </div>
                                                     <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
@@ -535,6 +582,12 @@
                                                     </asp:DropDownList>
                                                 </div>
                                                 <div class="float-left" style="padding-left: 75px;">
+                                                    <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
+                                                        Icon Color
+                                                    </div>
+                                                    <asp:TextBox ID="tb_iconColor_edit" runat="server" CssClass="TextBoxEdit color" MaxLength="6" Width="75px"></asp:TextBox>
+                                                    <div class="clear-space">
+                                                    </div>
                                                     <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
                                                         Max on Load
                                                     </div>
@@ -585,11 +638,12 @@
                                 </div>
                             </div>
                             <div class="ModalButtonHolder">
-                                <input type="button" class="input-buttons" onclick="UpdateOverrides();" value="Save" style="width: 75px;" />
-                                <input id="btn_undoOverrides" type="button" class="input-buttons" onclick="DeleteOverrides('');"
-                                    value="Reset" style="width: 75px;" />
-                                <input type="button" class="input-buttons" onclick="openWSE.LoadModalWindow(false, 'App-element', '');"
-                                    value="Close" style="width: 75px; margin-right: 5px!important;" />
+                                <input type="button" class="input-buttons float-left" onclick="UpdateOverrides();" value="Save" style="width: 75px;" />
+                                <input id="btn_undoOverrides" type="button" class="input-buttons float-right" onclick="DeleteOverrides('');"
+                                    value="Reset" style="width: 75px; margin-left: 16px!important; margin-right: 0px!important;" />
+                                <input type="button" class="input-buttons float-right" onclick="openWSE.LoadModalWindow(false, 'App-element', '');"
+                                    value="Close" style="width: 75px; margin-left: 16px!important; margin-right: 0px!important;" />
+                                <div class="clear"></div>
                             </div>
                         </div>
                     </div>
@@ -760,6 +814,94 @@
                     <asp:AsyncPostBackTrigger ControlID="btn_screenRotateNumberUpdate" />
                     <asp:AsyncPostBackTrigger ControlID="rb_updateOnRotate_on" />
                     <asp:AsyncPostBackTrigger ControlID="rb_updateOnRotate_off" />
+                </Triggers>
+            </asp:UpdatePanel>
+        </asp:Panel>
+
+        <asp:Panel ID="pnl_AppRemoteContainer" CssClass="pnl-section" runat="server" data-title="Mobile">
+            <asp:UpdatePanel ID="updatepnl_AppRemoteContainer" runat="server" UpdateMode="Conditional">
+                <ContentTemplate>
+                    <asp:Panel ID="pnl_MobileAutoSync" runat="server">
+                        <div class="table-settings-box">
+                            <div class="td-settings-title">
+                                Try to Auto Connect to Workspace when using Mobile
+                            </div>
+                            <div class="title-line"></div>
+                            <div class="td-settings-ctrl">
+                                <div class="field switch inline-block">
+                                    <asp:RadioButton ID="rb_MobileAutoSync_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                        OnCheckedChanged="rb_MobileAutoSync_on_CheckedChanged" AutoPostBack="True" />
+                                    <asp:RadioButton ID="rb_MobileAutoSync_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                        OnCheckedChanged="rb_MobileAutoSync_off_CheckedChanged" AutoPostBack="True" />
+                                </div>
+                            </div>
+                            <div class="td-settings-desc">
+                                Set this to Yes to automatically sync your workspace with your Mobile.
+                            </div>
+                        </div>
+                    </asp:Panel>
+                    <div class="table-settings-box">
+                        <div class="td-settings-title">
+                            Mobile Background Style
+                        </div>
+                        <div class="title-line"></div>
+                        <div class="td-settings-ctrl">
+                            <asp:RadioButton ID="rb_NoBGOnAppRemote_on" runat="server" Text="&nbsp;Use Default Workspace Background Color" CssClass="RandomActionBtns"
+                                OnCheckedChanged="rb_NoBGOnAppRemote_on_CheckedChanged" AutoPostBack="True" />
+                            <div class="clear-space-five"></div>
+                            <asp:RadioButton ID="rb_NoBGOnAppRemote_off" runat="server" Text="&nbsp;Use Workspace Background Image" CssClass="RandomActionBtns"
+                                OnCheckedChanged="rb_NoBGOnAppRemote_off_CheckedChanged" AutoPostBack="True" />
+                        </div>
+                        <div class="td-settings-desc">
+                            You can override the Mobile background style by using the Default Background Color or the selected background image.
+                        </div>
+                    </div>
+                    <asp:Panel ID="pnl_appremoteForeColor" runat="server" Enabled="false" Visible="false">
+                        <div class="table-settings-box">
+                            <div class="td-settings-title">
+                                Default Background Color
+                            </div>
+                            <div class="title-line"></div>
+                            <div class="td-settings-ctrl">
+                                <asp:Panel ID="Panel1" runat="server" DefaultButton="btn_defaultbackgroundcolor_mobile">
+                                    <div class="float-left">
+                                        <asp:TextBox runat="server" ID="tb_defaultbackgroundcolor_mobile" CssClass="textEntry float-left margin-right color"
+                                            MaxLength="6" AutoCompleteType="None" Width="75px" />
+                                    </div>
+                                    <asp:Button ID="btn_defaultbackgroundcolor_mobile" runat="server" CssClass="input-buttons margin-left RandomActionBtns" Text="Update" OnClick="btn_defaultbackgroundcolor_mobile_Clicked" Style="margin-top: 2px;" />
+                                </asp:Panel>
+                            </div>
+                            <div class="td-settings-desc">
+                                Set the default background color. (This also applies for the Workspace background)
+                            </div>
+                        </div>
+                        <div class="table-settings-box">
+                            <div class="td-settings-title">
+                                Mobile Foreground Color
+                            </div>
+                            <div class="title-line"></div>
+                            <div class="td-settings-ctrl">
+                                <asp:Panel ID="Panel2" runat="server" DefaultButton="btn_appremoteforecolor">
+                                    <div class="float-left">
+                                        <asp:TextBox runat="server" ID="tb_appremoteforecolor" CssClass="textEntry float-left margin-right color"
+                                            MaxLength="6" AutoCompleteType="None" Width="75px" />
+                                    </div>
+                                    <asp:Button ID="btn_appremoteforecolor" runat="server" CssClass="input-buttons margin-left RandomActionBtns" Text="Update" OnClick="btn_appremoteforecolor_Clicked" Style="margin-top: 2px;" />
+                                </asp:Panel>
+                            </div>
+                            <div class="td-settings-desc">
+                                Set the default foreground color for your Mobile.
+                            </div>
+                        </div>
+                    </asp:Panel>
+                </ContentTemplate>
+                <Triggers>
+                    <asp:AsyncPostBackTrigger ControlID="rb_MobileAutoSync_on" />
+                    <asp:AsyncPostBackTrigger ControlID="rb_MobileAutoSync_off" />
+                    <asp:AsyncPostBackTrigger ControlID="rb_NoBGOnAppRemote_on" />
+                    <asp:AsyncPostBackTrigger ControlID="rb_NoBGOnAppRemote_off" />
+                    <asp:AsyncPostBackTrigger ControlID="btn_defaultbackgroundcolor_mobile" />
+                    <asp:AsyncPostBackTrigger ControlID="btn_appremoteforecolor" />
                 </Triggers>
             </asp:UpdatePanel>
         </asp:Panel>
@@ -996,7 +1138,7 @@
             </asp:Panel>
         </asp:Panel>
 
-        <asp:Panel ID="pnl_TopSideMenuBar" CssClass="pnl-section" runat="server" data-title="Top/Left Menu">
+        <asp:Panel ID="pnl_TopSideMenuBar" CssClass="pnl-section" runat="server" data-title="Top/Left Bar">
             <asp:UpdatePanel ID="updatepnl_TopSideMenuBar" runat="server" UpdateMode="Conditional">
                 <ContentTemplate>
                     <div class="table-settings-box">
@@ -1014,6 +1156,20 @@
                         </div>
                         <div class="td-settings-desc">
                             Select No if you dont want to see the date/time in the top tool bar.
+                        </div>
+                    </div>
+                    <div class="table-settings-box">
+                        <div class="td-settings-title">
+                            User Profile Link Style
+                        </div>
+                        <div class="title-line"></div>
+                        <div class="td-settings-ctrl">
+                            <asp:DropDownList ID="dd_ProfileLinkStyle" runat="server" CssClass="margin-right">
+                            </asp:DropDownList>
+                            <asp:Button ID="btn_ProfileLinkStyle" runat="server" CssClass="input-buttons RandomActionBtns" OnClick="btn_ProfileLinkStyle_Click" Text="Update" />
+                        </div>
+                        <div class="td-settings-desc">
+                            You can change the style of your profile link which is displayed at the top right of the screen.
                         </div>
                     </div>
                     <div class="table-settings-box">
@@ -1051,24 +1207,24 @@
                         </div>
                     </div>
                     <asp:Panel ID="pnl_AccordianOpen" runat="server">
-                    <div class="table-settings-box">
-                        <div class="td-settings-title">
-                            Only Allow One Sidebar Accordion to be Open
-                        </div>
-                        <div class="title-line"></div>
-                        <div class="td-settings-ctrl">
-                            <div class="field switch inline-block">
-                                <asp:RadioButton ID="rb_SidebarAccordionMutliOpenAllowed_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                    OnCheckedChanged="rb_SidebarAccordionMutliOpenAllowed_on_CheckedChanged" AutoPostBack="True" />
-                                <asp:RadioButton ID="rb_SidebarAccordionMutliOpenAllowed_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                    OnCheckedChanged="rb_SidebarAccordionMutliOpenAllowed_off_CheckedChanged" AutoPostBack="True" />
+                        <div class="table-settings-box">
+                            <div class="td-settings-title">
+                                Only Allow One Sidebar Accordion to be Open
+                            </div>
+                            <div class="title-line"></div>
+                            <div class="td-settings-ctrl">
+                                <div class="field switch inline-block">
+                                    <asp:RadioButton ID="rb_SidebarAccordionMutliOpenAllowed_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                        OnCheckedChanged="rb_SidebarAccordionMutliOpenAllowed_on_CheckedChanged" AutoPostBack="True" />
+                                    <asp:RadioButton ID="rb_SidebarAccordionMutliOpenAllowed_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                        OnCheckedChanged="rb_SidebarAccordionMutliOpenAllowed_off_CheckedChanged" AutoPostBack="True" />
+                                </div>
+                            </div>
+                            <div class="td-settings-desc">
+                                Select no to allow any dropdown accordion to be open without minimizing another. (You must refresh the page when updated)
                             </div>
                         </div>
-                        <div class="td-settings-desc">
-                            Select no to allow any dropdown accordion to be open without minimizing another. (You must refresh the page when updated)
-                        </div>
-                    </div>
-                        </asp:Panel>
+                    </asp:Panel>
                     <asp:Panel ID="pnl_loadLinksOnNewPage" runat="server">
                         <div class="table-settings-box">
                             <div class="td-settings-title">
@@ -1166,6 +1322,7 @@
                 <Triggers>
                     <asp:AsyncPostBackTrigger ControlID="rb_showPreview_on" />
                     <asp:AsyncPostBackTrigger ControlID="rb_showPreview_off" />
+                    <asp:AsyncPostBackTrigger ControlID="btn_ProfileLinkStyle" />
                     <asp:AsyncPostBackTrigger ControlID="rb_showWorkspacePreview_on" />
                     <asp:AsyncPostBackTrigger ControlID="rb_showWorkspacePreview_off" />
                     <asp:AsyncPostBackTrigger ControlID="rb_showdatetime_on" />
@@ -1213,6 +1370,20 @@
                     </asp:Panel>
                     <div class="table-settings-box">
                         <div class="td-settings-title">
+                            App Selector Style
+                        </div>
+                        <div class="title-line"></div>
+                        <div class="td-settings-ctrl">
+                            <asp:DropDownList ID="dd_AppSelectorStyle" runat="server" CssClass="margin-right">
+                            </asp:DropDownList>
+                            <asp:Button ID="btn_AppSelectorStyle" runat="server" CssClass="input-buttons RandomActionBtns" OnClick="btn_AppSelectorStyle_Click" Text="Update" />
+                        </div>
+                        <div class="td-settings-desc">
+                            You can select different types of App Selectors to customize your account.
+                        </div>
+                    </div>
+                    <div class="table-settings-box">
+                        <div class="td-settings-title">
                             Categorize App List
                         </div>
                         <div class="title-line"></div>
@@ -1225,7 +1396,7 @@
                             </div>
                         </div>
                         <div class="td-settings-desc">
-                            Enabling this will group the icons by category allowing for easier browsing. (Note: Sorting may not work properly when grouping is enabled)
+                            Enabling this will group the icons by category allowing for easier browsing. (Note: Sorting may not work properly when this is enabled)
                         </div>
                     </div>
                     <asp:Panel ID="pnl_categoryCount" runat="server" Enabled="false" Visible="false">
@@ -1290,6 +1461,7 @@
                 <Triggers>
                     <asp:AsyncPostBackTrigger ControlID="rb_LockAppIcons_on" />
                     <asp:AsyncPostBackTrigger ControlID="rb_LockAppIcons_off" />
+                    <asp:AsyncPostBackTrigger ControlID="btn_AppSelectorStyle" />
                     <asp:AsyncPostBackTrigger ControlID="rb_showappcategoryCount_on" />
                     <asp:AsyncPostBackTrigger ControlID="rb_showappcategoryCount_off" />
                     <asp:AsyncPostBackTrigger ControlID="rb_groupicons_on" />
@@ -1302,7 +1474,7 @@
             </asp:UpdatePanel>
         </asp:Panel>
 
-        <asp:Panel ID="pnl_SiteCustomizations" CssClass="pnl-section" runat="server" data-title="Customizations">
+        <asp:Panel ID="pnl_SiteCustomizations" CssClass="pnl-section" runat="server" data-title="Customize">
             <asp:UpdatePanel ID="updatepnl_SiteCustomizations" runat="server" UpdateMode="Conditional">
                 <ContentTemplate>
                     <asp:Panel ID="pnl_demoPackage" runat="server" Enabled="false" Visible="false">
@@ -1348,7 +1520,7 @@
                             <div class="td-settings-ctrl">
                                 <asp:DropDownList ID="ddl_WorkspaceMode" runat="server" CssClass="margin-right">
                                     <asp:ListItem Value="Simple" Text="Page Based"></asp:ListItem>
-                                    <asp:ListItem Value="Complex" Text="App Based"></asp:ListItem>
+                                    <asp:ListItem Value="Complex" Text="Window Based"></asp:ListItem>
                                 </asp:DropDownList>
                                 <asp:Button ID="btn_WorkspaceMode" runat="server" CssClass="input-buttons RandomActionBtns" OnClick="btn_WorkspaceMode_Click" Text="Update" />
                             </div>
@@ -1357,25 +1529,63 @@
                             </div>
                         </div>
                     </asp:Panel>
-                    <asp:Panel ID="pnl_MobileAutoSync" runat="server">
+                    <div id="fontcustomizations">
                         <div class="table-settings-box">
                             <div class="td-settings-title">
-                                Try to Auto Connect to Workspace when using AppRemote
+                                Default Site Font Family
                             </div>
                             <div class="title-line"></div>
                             <div class="td-settings-ctrl">
-                                <div class="field switch inline-block">
-                                    <asp:RadioButton ID="rb_MobileAutoSync_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                        OnCheckedChanged="rb_MobileAutoSync_on_CheckedChanged" AutoPostBack="True" />
-                                    <asp:RadioButton ID="rb_MobileAutoSync_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                        OnCheckedChanged="rb_MobileAutoSync_off_CheckedChanged" AutoPostBack="True" />
-                                </div>
+                                <asp:Panel ID="pnl_defaultbodyfontfamily" runat="server" DefaultButton="btn_defaultbodyfontfamily">
+                                    <asp:DropDownList ID="dd_defaultbodyfontfamily" runat="server" CssClass="margin-right">
+                                    </asp:DropDownList>
+                                    <asp:Button ID="btn_defaultbodyfontfamily" runat="server" Text="Update" OnClick="btn_defaultbodyfontfamily_Click"
+                                        CssClass="RandomActionBtns input-buttons margin-left" />
+                                    <asp:LinkButton ID="lbtn_defaultbodyfontfamily_reset" runat="server" Text="Reset to server default" OnClick="lbtn_defaultbodyfontfamily_reset_Click"
+                                        CssClass="RandomActionBtns" />
+                                </asp:Panel>
                             </div>
                             <div class="td-settings-desc">
-                                Set this to Yes to automatically sync your workspace with your AppRemote when using the AppRemote(Mobile).
+                                Override the default site font family. Some fonts may not work with certain browsers. (Must refresh the page to see changes)
                             </div>
                         </div>
-                    </asp:Panel>
+                        <div class="table-settings-box">
+                            <div class="td-settings-title">
+                                Default Site Font Size
+                            </div>
+                            <div class="title-line"></div>
+                            <div class="td-settings-ctrl">
+                                <asp:Panel ID="pnl_defaultfontsize" runat="server" DefaultButton="btn_defaultfontsize">
+                                    <asp:TextBox ID="tb_defaultfontsize" runat="server" CssClass="textEntry" Width="55px" TextMode="Number"></asp:TextBox><span class="pad-left-sml">px</span>
+                                    <asp:Button ID="btn_defaultfontsize" runat="server" Text="Update" OnClick="btn_defaultfontsize_Click"
+                                        CssClass="RandomActionBtns input-buttons margin-left" />
+                                    <asp:LinkButton ID="lbtn_defaultfontsize_clear" runat="server" Text="Reset to server default" OnClick="lbtn_defaultfontsize_clear_Click"
+                                        CssClass="RandomActionBtns" />
+                                </asp:Panel>
+                            </div>
+                            <div class="td-settings-desc">
+                                Override the default site font size. Empty values will inherit the font-size from the site theme. (Must refresh the page to see changes)
+                            </div>
+                        </div>
+                        <div class="table-settings-box">
+                            <div class="td-settings-title">
+                                Default Site Font Color
+                            </div>
+                            <div class="title-line"></div>
+                            <div class="td-settings-ctrl">
+                                <asp:Panel ID="pnl_defaultfontcolor" runat="server" DefaultButton="btn_defaultfontcolor">
+                                    <asp:TextBox ID="tb_defaultfontcolor" runat="server" CssClass="textEntry color" MaxLength="6" Width="75px"></asp:TextBox>
+                                    <asp:Button ID="btn_defaultfontcolor" runat="server" Text="Update" OnClick="btn_defaultfontcolor_Click"
+                                        CssClass="RandomActionBtns input-buttons margin-left" />
+                                    <asp:LinkButton ID="lbtn_defaultfontcolor_clear" runat="server" Text="Reset to server default" OnClick="lbtn_defaultfontcolor_clear_Click"
+                                        CssClass="RandomActionBtns" />
+                                </asp:Panel>
+                            </div>
+                            <div class="td-settings-desc">
+                                Override the default site font color. (Must refresh the page to see changes)
+                            </div>
+                        </div>
+                    </div>
                     <div class="table-settings-box">
                         <div class="td-settings-title">
                             Animation Speed
@@ -1386,11 +1596,14 @@
                                 <div id="Slider2" class="ajax__slider_h_rail">
                                 </div>
                             </div>
-                            <input id="btnUpdateAnimiation" type="button" class="input-buttons margin-left" value="Update" onclick="UpdateAnimationSpeed();" style="display: none;" />
-                            <input type="button" class="input-buttons margin-left" value="Reset" onclick="ResetAnimationSpeed();" />
+                            <input id="btnUpdateAnimiation" type="button" class="input-buttons margin-bottom" value="Update" onclick="UpdateAnimationSpeed();" style="display: none;" />
+                            <input type="button" class="input-buttons margin-bottom" value="Reset" onclick="ResetAnimationSpeed();" />
                             <asp:HiddenField ID="hf_AnimationSpeed" runat="server" ClientIDMode="Static" OnValueChanged="hf_AnimationSpeed_Changed" />
                             <div id="currentAnimationSpeed">
                             </div>
+                        </div>
+                        <div class="td-settings-desc">
+                            Changing the animation speed will not effect all elements with a transition.
                         </div>
                     </div>
                     <asp:Panel ID="pnl_theme" runat="server">
@@ -1412,7 +1625,7 @@
                     </asp:Panel>
                     <div class="table-settings-box">
                         <div class="td-settings-title">
-                            Site Tips
+                            Hover Tool Tips
                         </div>
                         <div class="title-line"></div>
                         <div class="td-settings-ctrl">
@@ -1424,7 +1637,24 @@
                             </div>
                         </div>
                         <div class="td-settings-desc">
-                            Select Off if you dont want to see any site tool tips.
+                            Select Off if you dont want to see any site tool tips when hovering over certain objects and links.
+                        </div>
+                    </div>
+                    <div class="table-settings-box">
+                        <div class="td-settings-title">
+                            Site Tips on Page Load
+                        </div>
+                        <div class="title-line"></div>
+                        <div class="td-settings-ctrl">
+                            <div class="field switch inline-block">
+                                <asp:RadioButton ID="rb_sitetipsonload_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                    OnCheckedChanged="rb_sitetipsonload_on_CheckedChanged" AutoPostBack="True" />
+                                <asp:RadioButton ID="rb_sitetipsonload_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                    OnCheckedChanged="rb_sitetipsonload_off_CheckedChanged" AutoPostBack="True" />
+                            </div>
+                        </div>
+                        <div class="td-settings-desc">
+                            You can view tips and tricks on page load.
                         </div>
                     </div>
                     <asp:Panel ID="pnl_accountPrivacy" runat="server">
@@ -1582,12 +1812,16 @@
                         </div>
                         <div id="lbl_appmodalstyle_desc" runat="server" class="td-settings-desc">
                             Change the look of your app window and modal popups.
+                            <asp:Label ID="lbl_appstyleexample_space" runat="server" ClientIDMode="Static" CssClass="clear-space" Style="display: block;"></asp:Label>
+                            <asp:Image ID="img_appstyleexample" runat="server" ClientIDMode="Static" ImageUrl="~/App_Themes/Standard/App/AppStyle_Examples/Style_1.png" />
                         </div>
                     </div>
                 </ContentTemplate>
                 <Triggers>
                     <asp:AsyncPostBackTrigger ControlID="rb_tooltips_off" />
                     <asp:AsyncPostBackTrigger ControlID="rb_tooltips_on" />
+                    <asp:AsyncPostBackTrigger ControlID="rb_sitetipsonload_on" />
+                    <asp:AsyncPostBackTrigger ControlID="rb_sitetipsonload_off" />
                     <asp:AsyncPostBackTrigger ControlID="hf_AnimationSpeed" />
                     <asp:AsyncPostBackTrigger ControlID="btn_UpdateTheme" />
                     <asp:AsyncPostBackTrigger ControlID="btn_appStyle" />
@@ -1603,11 +1837,17 @@
                     <asp:AsyncPostBackTrigger ControlID="hf_addPlugin" />
                     <asp:AsyncPostBackTrigger ControlID="hf_removePlugin" />
                     <asp:AsyncPostBackTrigger ControlID="hf_removeAllPlugins" />
+                    <asp:AsyncPostBackTrigger ControlID="btn_defaultbodyfontfamily" />
+                    <asp:AsyncPostBackTrigger ControlID="lbtn_defaultbodyfontfamily_reset" />
+                    <asp:AsyncPostBackTrigger ControlID="btn_defaultfontsize" />
+                    <asp:AsyncPostBackTrigger ControlID="lbtn_defaultfontsize_clear" />
+                    <asp:AsyncPostBackTrigger ControlID="btn_defaultfontcolor" />
+                    <asp:AsyncPostBackTrigger ControlID="lbtn_defaultfontcolor_clear" />
                 </Triggers>
             </asp:UpdatePanel>
         </asp:Panel>
 
-        <asp:Panel ID="pnl_ChatClient" CssClass="pnl-section" runat="server" data-title="Chat Client">
+        <asp:Panel ID="pnl_ChatClient" CssClass="pnl-section" runat="server" data-title="Chat">
             <asp:UpdatePanel ID="updatepnl_ChatClient" runat="server" UpdateMode="Conditional">
                 <ContentTemplate>
                     <div class="table-settings-box">
@@ -1652,8 +1892,7 @@
                             </div>
                             <div class="title-line"></div>
                             <div class="td-settings-ctrl">
-                                <asp:TextBox ID="tb_updateintervals" runat="server" CssClass="textEntry" Width="35px"
-                                    MaxLength="3"></asp:TextBox><span class="pad-left">minute(s)</span>
+                                <asp:TextBox ID="tb_updateintervals" runat="server" CssClass="textEntry" Width="55px" TextMode="Number"></asp:TextBox><span class="pad-left">minute(s)</span>
                                 <asp:Button ID="btn_updateintervals" runat="server" CssClass="margin-left RandomActionBtns input-buttons"
                                     Text="Update" OnClick="btn_updateintervals_Click" />
                             </div>

@@ -1,4 +1,4 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_AlarmClock_AlarmClock, App_Web_so0zdf0z" clientidmode="Static" %>
+﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_AlarmClock_AlarmClock, App_Web_e5rfrdao" clientidmode="Static" %>
 <asp:HiddenField ID="hf_currUser_AlarmClock" runat="server" />
 <div class="pad-all">
     <div id="alarm-time">

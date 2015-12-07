@@ -1,4 +1,4 @@
-﻿<%@ page title="User Accounts" async="true" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_UserAccounts, App_Web_rrukwxwl" %>
+﻿<%@ page title="User Accounts" async="true" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_UserAccounts, App_Web_fk34kkkf" %>
 
 <asp:Content ID="HeaderContent" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -17,20 +17,36 @@
     <div class="maincontent-padding pad-top-big margin-top">
         <div id="useraccounts">
             <asp:Panel ID="pnl_admin_tools" runat="server">
-                <a href="#" class="float-left input-buttons-create" onclick="ClearNewUserFields();openWSE.LoadModalWindow(true, 'NewUser-element', 'Create New User');return false;">Create User</a>
-                <div id="customizeBtns" class="float-right">
-                    <a id="btn_customizeua" href="#iframecontent" class="display-inline margin-left-big" onclick="openWSE.LoadIFrameContent('SiteTools/UserMaintenance/AcctSettings.aspx?toolview=true&u=NewUserDefaults', this);return false;">
+                <a href="#" class="float-left input-buttons-create margin-right-big" onclick="ClearNewUserFields();openWSE.LoadModalWindow(true, 'NewUser-element', 'Create New User');return false;">Create User</a>
+                <div class="float-left" style="margin-top: 3px;">
+                    <div class="searchwrapper">
+                        <asp:Panel ID="Panel1_usersearch" runat="server" DefaultButton="imgbtn_search">
+                            <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
+                                onfocus="if(this.value=='Search Users')this.value=''" onblur="if(this.value=='')this.value='Search Users'"
+                                Text="Search Users"></asp:TextBox>
+                            <a href="#" onclick="return false;" class="searchbox_clear" title="Clear search"></a>
+                            <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
+                                OnClick="imgbtn_search_Click" />
+                        </asp:Panel>
+                    </div>
+                </div>
+                <div class="clear-space"></div>
+                <asp:Label ID="lbl_totalUsers" runat="server"></asp:Label>
+                <div class="clear-space"></div>
+                <div class="clear-space"></div>
+                <div id="customizeBtns" class="float-left">
+                    <a id="btn_customizeua" href="#iframecontent" class="display-inline margin-right-big margin-bottom" onclick="openWSE.LoadIFrameContent('SiteTools/UserMaintenance/AcctSettings.aspx?toolview=true&u=NewUserDefaults', this);return false;">
                         <span class="img-customize margin-right-sml float-left"></span>Customize New Users</a>
-                    <a id="btn_appsusers" href="#iframecontent" class="margin-left-big"
+                    <a id="btn_appsusers" href="#iframecontent" class="margin-right-big margin-bottom"
                         onclick="openWSE.LoadIFrameContent('SiteTools/iframes/UsersAndApps.aspx', this);return false;">
                         <span class="img-app-dark margin-right-sml float-left"></span>User Apps and Plugins</a>
                 </div>
-                <div class="float-right">
+                <div class="float-left">
                     <asp:UpdatePanel ID="UpdatePanel3" runat="server">
                         <ContentTemplate>
-                            <asp:LinkButton ID="btn_manageRoles" runat="server" CssClass="RandomActionBtns margin-left-big"
+                            <asp:LinkButton ID="btn_manageRoles" runat="server" CssClass="RandomActionBtns margin-right-big margin-bottom"
                                 OnClick="btn_manageRoles_Click"><span class="td-edit-btn float-left margin-right-sml" style="padding: 0!important;"></span>Manage Custom Roles</asp:LinkButton>
-                            <asp:LinkButton ID="btn_rebuild_uc" runat="server" CssClass="RandomActionBtns margin-left-big"
+                            <asp:LinkButton ID="btn_rebuild_uc" runat="server" CssClass="RandomActionBtns margin-right-big margin-bottom"
                                 OnClick="btn_rebuild_uc_Clicked"><span class="img-refresh float-left margin-right-sml"></span>Rebuild Users</asp:LinkButton>
                         </ContentTemplate>
                     </asp:UpdatePanel>
@@ -122,56 +138,12 @@
                     </div>
                 </div>
             </asp:Panel>
-            <div class="clear-space"></div>
-            <div id="ddlPagesize_holder" class="float-right margin-top">
-                <span class="font-bold pad-right">Page Size</span>
-                <asp:DropDownList ID="ddl_pageSize" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddl_pageSize_Changed">
-                    <asp:ListItem Text="3" Value="3"></asp:ListItem>
-                    <asp:ListItem Text="5" Value="5"></asp:ListItem>
-                    <asp:ListItem Text="10" Value="10" Selected="True"></asp:ListItem>
-                    <asp:ListItem Text="15" Value="15"></asp:ListItem>
-                    <asp:ListItem Text="20" Value="20"></asp:ListItem>
-                    <asp:ListItem Text="All" Value="0"></asp:ListItem>
-                </asp:DropDownList>
-            </div>
-            <div class="float-left margin-top">
-                <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-                    <ContentTemplate>
-                        <span class="font-bold pad-right">Sort By</span>
-                        <asp:DropDownList ID="ddl_sortby" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddl_sort_Changed">
-                            <asp:ListItem Text="Username (Ascending)" Value="1"></asp:ListItem>
-                            <asp:ListItem Text="Username (Descending)" Value="2"></asp:ListItem>
-                            <asp:ListItem Text="Email (Ascending)" Value="3"></asp:ListItem>
-                            <asp:ListItem Text="Email (Descending)" Value="4"></asp:ListItem>
-                            <asp:ListItem Text="Date Joined (Ascending)" Value="5"></asp:ListItem>
-                            <asp:ListItem Text="Date Joined (Descending)" Value="6"></asp:ListItem>
-                        </asp:DropDownList>
-                    </ContentTemplate>
-                </asp:UpdatePanel>
-            </div>
-            <div class="clear-space"></div>
-            <div class="clear-margin">
-                <asp:Label ID="lbl_totalUsers" runat="server"></asp:Label>
-            </div>
+            <div class="clear-space-five"></div>
             <div id="UserList">
                 <asp:UpdatePanel ID="updatepnl_Users" runat="server">
                     <ContentTemplate>
-                        <div class="float-left">
-                            <div class="searchwrapper">
-                                <asp:Panel ID="Panel1_usersearch" runat="server" DefaultButton="imgbtn_search">
-                                    <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
-                                        onfocus="if(this.value=='Search Users')this.value=''" onblur="if(this.value=='')this.value='Search Users'"
-                                        Text="Search Users"></asp:TextBox>
-                                    <a href="#" onclick="return false;" class="searchbox_clear" title="Clear search"></a>
-                                    <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
-                                        OnClick="imgbtn_search_Click" />
-                                </asp:Panel>
-                            </div>
-                        </div>
+                        <asp:HiddenField ID="hf_sortusers" runat="server" ClientIDMode="Static" OnValueChanged="hf_sortusers_Changed" />
                         <asp:HiddenField ID="hf_clearsearch" runat="server" ClientIDMode="Static" OnValueChanged="hf_clearsearch_Changed" />
-                        <div class="float-right margin-left-big pad-top">
-                            <small>Leave search textbox blank to search all users</small>
-                        </div>
                         <div class="clear-space">
                         </div>
                         <asp:Panel ID="pnl_Users" runat="server">
@@ -191,7 +163,7 @@
                             ClientIDMode="Static" />
                     </ContentTemplate>
                     <Triggers>
-                        <asp:AsyncPostBackTrigger ControlID="ddl_pageSize" />
+                        <asp:AsyncPostBackTrigger ControlID="imgbtn_search" />
                     </Triggers>
                 </asp:UpdatePanel>
             </div>
@@ -290,16 +262,18 @@
                                                                         <asp:CompareValidator ID="PasswordCompare" runat="server" ControlToCompare="Password"
                                                                             ControlToValidate="ConfirmPassword" CssClass="failureNotification" Display="Dynamic"
                                                                             ErrorMessage="" ValidationGroup="RegisterUserValidationGroup">*</asp:CompareValidator>
+                                                                        <div class="clear" style="height: 20px;"></div>
+                                                                        <a href="#" style="font-size: 12px;" onclick="CreateMultipleUsers();return false;">Click Here to Create Multiple Users</a>
                                                                     </td>
                                                                     <td valign="top">
                                                                         <div class="clear-space"></div>
-                                                                        <span style="color: #555;">User Color</span>
-                                                                        <div class="clear-space-two"></div>
-                                                                        <span class="img-colors float-left margin-right-sml" style="margin-top: -2px"></span>
+                                                                        <span class="pad-right float-left pad-top-sml" style="color: #555;">User Color</span>
+                                                                        <span class="img-colors float-left margin-right-sml" style="margin-top: -4px"></span>
                                                                         <asp:TextBox runat="server" ID="Color1" MaxLength="6" CssClass="textEntryReg float-left color"
                                                                             AutoCompleteType="None" Width="75px" />
+                                                                        <div class="clear-space"></div>
                                                                         <asp:Button ID="CreateUserButton" runat="server" CommandName="MoveNext" ValidationGroup="RegisterUserValidationGroup"
-                                                                            CssClass="input-buttons margin-left float-right continue-create-user" Text="Create"></asp:Button>
+                                                                            CssClass="input-buttons-create continue-create-user" Text="Create User"></asp:Button>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -311,20 +285,19 @@
                                                             <asp:ValidationSummary ID="RegisterUserValidationSummary" runat="server" CssClass="failureNotification"
                                                                 ValidationGroup="RegisterUserValidationGroup" />
                                                         </div>
-                                                        <div class="clear-space"></div>
+                                                        <div class="clear"></div>
                                                     </ContentTemplate>
                                                     <CustomNavigationTemplate>
                                                     </CustomNavigationTemplate>
                                                 </asp:CreateUserWizardStep>
                                                 <asp:CompleteWizardStep>
                                                     <ContentTemplate>
-                                                        <div class="clear-space-five">
+                                                        <div class="clear-space">
                                                         </div>
                                                         Account has been created. Click continue to refresh page.
-                                                        <div class="clear-space"></div>
                                                         <asp:Button ID="ContinueCreateUserButton" runat="server" OnClick="RegisterUser_Continue"
                                                             CssClass="input-buttons RandomActionBtns margin-bottom float-right" Text="Continue"
-                                                            Style="margin-top: -4px;"></asp:Button>
+                                                            Style="margin-top: -20px;"></asp:Button>
                                                         <div class="clear">
                                                         </div>
                                                     </ContentTemplate>
@@ -333,11 +306,10 @@
                                         </asp:CreateUserWizard>
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
-                                <a href="#" style="font-size: 12px;" onclick="CreateMultipleUsers();return false;">Click Here to Create Multiple Users</a>
                             </div>
                         </div>
                         <div class="ModalButtonHolder">
-                            <input type="button" class="input-buttons" value="Cancel" onclick="openWSE.LoadModalWindow(false, 'NewUser-element', ''); ClearNewUserFields();" />
+                            <input type="button" class="input-buttons no-margin" value="Cancel" onclick="openWSE.LoadModalWindow(false, 'NewUser-element', ''); ClearNewUserFields();" />
                         </div>
                     </div>
                 </div>
@@ -369,7 +341,7 @@
                                                 <div class="clear-space"></div>
                                             </td>
                                             <td valign="top">
-                                                <span style="color: #555;">Select a User Role</span><br />
+                                                <span class="pad-right" style="color: #555;">Select Role</span>
                                                 <asp:DropDownList ID="dd_role_multiUser" runat="server" Width="120px">
                                                 </asp:DropDownList>
                                             </td>
@@ -390,14 +362,14 @@
                                 <span style="color: #555;">User List</span>
                                 <span id="userlistrequired" title="At least one user is required." class="failureNotification pad-left-sml" style="display: none;">*</span>
                                 <div id="multiusercreate"></div>
-                                <input type="button" class="input-buttons float-right" value="Create Users" onclick="FinishCreateMultiUsers()" style="margin-top: -27px;" />
+                                <input type="button" class="input-buttons-create float-right" value="Create Users" onclick="FinishCreateMultiUsers()" style="margin-top: -27px;" />
                                 <div class="clear-space"></div>
                                 <a href="#" style="font-size: 12px;" onclick="CancelMultipleUsers();return false;">Cancel Multiple User Creation</a>
                                 <div class="clear-space-five"></div>
                             </div>
                         </div>
                         <div class="ModalButtonHolder">
-                            <input type="button" class="input-buttons" value="Cancel" onclick="openWSE.LoadModalWindow(false, 'Multiple-User-Create-element', ''); ClearMultiUserFields();" />
+                            <input type="button" class="input-buttons no-margin" value="Cancel" onclick="openWSE.LoadModalWindow(false, 'Multiple-User-Create-element', ''); ClearMultiUserFields();" />
                         </div>
                     </div>
                 </div>

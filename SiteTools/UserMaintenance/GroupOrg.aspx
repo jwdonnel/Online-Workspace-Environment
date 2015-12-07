@@ -1,4 +1,4 @@
-﻿<%@ page title="Group Organizer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_GroupOrg, App_Web_rrukwxwl" %>
+﻿<%@ page title="Group Organizer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_GroupOrg, App_Web_fk34kkkf" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
 </asp:Content>
@@ -41,37 +41,37 @@
         </asp:UpdatePanel>
         <asp:UpdatePanel ID="updatepnl_header" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
-                <div class="table-settings-box">
-                    <div class="td-settings-ctrl">
-                        <asp:Panel ID="pnl_addgroupbtn" runat="server">
-                            <a class="margin-right-big input-buttons-create" onclick="ResetControls();return false;">Create Group</a>
-                            <div class="float-right">
-                                <b class="pad-right">Group Count</b><asp:Label ID="lbl_companycount" runat="server" Text="0"></asp:Label>
-                            </div>
-                            <div class="clear-space">
-                            </div>
-                        </asp:Panel>
-                        <div class="clear-space-five"></div>
-                    </div>
-                    <div class="td-settings-desc">
-                        The groups created are used to determine how to pull data from each app. Each user created MUST be associated with a group. When sending a user an invite, that user must have their group notification enabled. Otherwise, you will not see the user in the invite list.<br />
-                    </div>
-                </div>
                 <div class="clear-space">
                 </div>
-                <div class="searchwrapper">
-                    <asp:HiddenField ID="hf_clearsearch" runat="server" ClientIDMode="Static" OnValueChanged="hf_clearsearch_Changed" />
-                    <asp:Panel ID="Panel1_groupsearch" runat="server" DefaultButton="imgbtn_search">
-                        <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
-                            onfocus="if(this.value=='Search Groups')this.value=''" onblur="if(this.value=='')this.value='Search Groups'"
-                            Text="Search Groups"></asp:TextBox>
-                        <a href="#" onclick="return false;" class="searchbox_clear" title="Clear search"></a>
-                        <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
-                            OnClick="imgbtn_search_Click" />
-                    </asp:Panel>
+                <asp:Panel ID="pnl_addgroupbtn" runat="server">
+                    <a class="margin-right-big input-buttons-create float-left" onclick="ResetControls();return false;">Create Group</a>
+                    <div class="searchwrapper float-left" style="margin-top: 3px;">
+                        <asp:HiddenField ID="hf_clearsearch" runat="server" ClientIDMode="Static" OnValueChanged="hf_clearsearch_Changed" />
+                        <asp:Panel ID="Panel1_groupsearch" runat="server" DefaultButton="imgbtn_search">
+                            <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
+                                onfocus="if(this.value=='Search Groups')this.value=''" onblur="if(this.value=='')this.value='Search Groups'"
+                                Text="Search Groups"></asp:TextBox>
+                            <a href="#" onclick="return false;" class="searchbox_clear" title="Clear search"></a>
+                            <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
+                                OnClick="imgbtn_search_Click" />
+                        </asp:Panel>
+                    </div>
+                    <div class="clear-space">
+                    </div>
+                    <b class="pad-right">Group Count</b><asp:Label ID="lbl_companycount" runat="server" Text="0"></asp:Label>
+                    <div class="clear-space">
+                    </div>
+                </asp:Panel>
+                <div class="clear-space">
                 </div>
                 <asp:Panel ID="pnl_companyholder" runat="server">
                 </asp:Panel>
+                <div class="table-settings-box no-border">
+                    <div class="td-settings-desc">
+                        The groups created are used to determine how to pull data from each app. Each user created MUST be associated with a group. When sending a user an invite, that user must have their group notification enabled. Otherwise, you will not see the user in the invite list.<br />
+                        <b class="pad-right-sml">Note</b>You can edit the default settings of a group (after you create a group), by clicking the pencel edit button and selecting the Change Default User Settings link in the popup window.
+                    </div>
+                </div>
             </ContentTemplate>
         </asp:UpdatePanel>
         <div id="NewEdit-Group-element" class="Modal-element">
@@ -89,57 +89,41 @@
                         </div>
                         <div class="ModalScrollContent" style="height: 300px;">
                             <div class="ModalPadContent">
-                                <div style="width: 220px;" class="inline-block float-left">
-                                    <div class="clear-margin">
-                                        <asp:UpdatePanel ID="updatepnl_editmode_1" runat="server" UpdateMode="Conditional">
-                                            <ContentTemplate>
-                                                <span>Group Name</span>
-                                                <br />
-                                                <asp:TextBox ID="tb_companyname" runat="server" CssClass="textEntryReg" Width="225px"
-                                                    MaxLength="500"></asp:TextBox>
-                                                <asp:Label ID="lbl_error" runat="server" Text="" Font-Size="X-Small" ForeColor="Red"></asp:Label>
-                                                <asp:Label ID="lbl_tempcompanyname" runat="server" Text="" Visible="false" Enabled="false"></asp:Label>
-                                                <div class="clear-space">
-                                                </div>
-                                                <div style="padding-top: 15px;">
-                                                    <p class="font-color-light-black">
-                                                        If you have a URL that you would like to use for your logo, enter it in the textbox
-                                                below.
-                                                    </p>
-                                                    <div class="clear-space">
-                                                    </div>
-                                                    <span>Image Url</span><br />
-                                                    <asp:TextBox ID="tb_imageurl" runat="server" CssClass="textEntry" onfocus="if(this.value=='Link to image')this.value=''"
-                                                        onblur="if(this.value=='')this.value='Link to image'" Text="Link to image" Width="225px"></asp:TextBox>
-                                                </div>
-                                                <div class="clear-space">
-                                                </div>
-                                                <span>Upload a Logo</span>
-                                                <br />
-                                            </ContentTemplate>
-                                        </asp:UpdatePanel>
-                                        <asp:FileUpload ID="fu_image_create" runat="server" />
+                                <asp:UpdatePanel ID="updatepnl_editmode_1" runat="server" UpdateMode="Conditional">
+                                    <ContentTemplate>
+                                        <asp:TextBox ID="tb_companyname" runat="server" CssClass="textEntryReg" Width="225px" MaxLength="500" placeholder="Group Name"></asp:TextBox>
+                                        <asp:Label ID="lbl_error" runat="server" Text="" Font-Size="X-Small" ForeColor="Red"></asp:Label>
+                                        <asp:Label ID="lbl_tempcompanyname" runat="server" Text="" Visible="false" Enabled="false"></asp:Label>
+                                        <div class="clear-space">
+                                        </div>
+                                        <asp:TextBox ID="tb_description" runat="server" CssClass="textEntryReg" Width="500px" MaxLength="500" placeholder="Description"></asp:TextBox>
+                                        <div class="clear-space">
+                                        </div>
+                                        <asp:CheckBox ID="cb_isprivate" runat="server" Text="&nbsp;Is Private" />
+                                        <div class="clear-space">
+                                        </div>
+                                        <small class="font-color-light-black">If you have a URL that you would like to use for your logo, enter it in the textbox below.
+                                        </small>
                                         <div class="clear-space-five">
                                         </div>
-                                        <small><i><b>.png</b> <b>.jpeg</b> and <b>.gif</b> are allowed</i></small>
-                                    </div>
+                                        <asp:TextBox ID="tb_imageurl" runat="server" CssClass="textEntry" onfocus="if(this.value=='Link to image')this.value=''"
+                                            onblur="if(this.value=='')this.value='Link to image'" placeholder="Link to image" Width="515px"></asp:TextBox>
+                                        <div class="clear-space">
+                                        </div>
+                                        <span class="font-bold">Upload a Logo</span>
+                                        <div class="clear-space-two">
+                                        </div>
+                                    </ContentTemplate>
+                                </asp:UpdatePanel>
+                                <asp:FileUpload ID="fu_image_create" runat="server" />
+                                <div class="clear-space">
                                 </div>
                                 <asp:UpdatePanel ID="updatepnl_editmode_2" runat="server" UpdateMode="Conditional">
                                     <ContentTemplate>
-                                        <div class="inline-block float-right pad-left-big">
-                                            <div class="clear-margin">
-                                                <span>Description</span>
-                                                <br />
-                                                <asp:TextBox ID="tb_description" runat="server" CssClass="textEntryReg" Width="235px" Height="70px" Font-Names="Arial" TextMode="MultiLine" MaxLength="500"></asp:TextBox>
-                                                <div class="clear-space">
-                                                </div>
-                                                <asp:CheckBox ID="cb_isprivate" runat="server" Text="&nbsp;Is Private" Style="color: #555;" />
-                                                <div class="clear-space">
-                                                </div>
-                                                <a href="#" id="group-userdefaults-button" title="Change the user default settings for users that log into this group." class="margin-bottom">Change Default User Settings</a>
-                                            </div>
-                                            <asp:Image ID="img_logo" runat="server" Style="display: none; max-height: 90px; max-width: 175px;" />
+                                        <a href="#" id="group-userdefaults-button" title="Change the user default settings for users that log into this group." class="margin-top margin-bottom"><span class="img-customize float-left pad-right-sml"></span>Change Default User Settings</a>
+                                        <div class="clear-space">
                                         </div>
+                                        <asp:Image ID="img_logo" runat="server" Style="display: none; max-width: 100%;" />
                                         <div class="clear-space">
                                         </div>
                                     </ContentTemplate>
@@ -147,9 +131,10 @@
                             </div>
                         </div>
                         <div class="ModalButtonHolder">
-                            <asp:Button ID="btn_finish_add" runat="server" Text="Save" CssClass="input-buttons"
-                                OnClick="btn_finish_add_Click" CausesValidation="false" Width="60px" />
-                            <input type="button" class="input-buttons no-margin" onclick="openWSE.LoadModalWindow(false, 'NewEdit-Group-element', '');" value="Cancel" />
+                            <asp:Button ID="btn_finish_add" runat="server" Text="Save" CssClass="input-buttons float-left no-margin"
+                                OnClick="btn_finish_add_Click" CausesValidation="false" />
+                            <input type="button" class="input-buttons no-margin float-right" onclick="openWSE.LoadModalWindow(false, 'NewEdit-Group-element', '');" value="Close" />
+                            <div class="clear"></div>
                         </div>
                     </div>
                 </div>
@@ -181,7 +166,8 @@
                             </div>
                         </div>
                         <div class="ModalButtonHolder">
-                            <input type="button" class="input-buttons" value="Close" onclick="openWSE.LoadModalWindow(false, 'GroupEdit-element', ''); RefreshList();" />
+                            <input type="button" class="input-buttons no-margin" value="Close" onclick="openWSE.LoadModalWindow(false, 'GroupEdit-element', ''); RefreshList();" />
+                            <div class="clear"></div>
                         </div>
                     </div>
                 </div>
@@ -207,7 +193,8 @@
                             </div>
                         </div>
                         <div class="ModalButtonHolder">
-                            <input type="button" class="input-buttons" value="Close" onclick="openWSE.LoadModalWindow(false, 'GroupInviteUser-element', '');" />
+                            <input type="button" class="input-buttons no-margin" value="Close" onclick="openWSE.LoadModalWindow(false, 'GroupInviteUser-element', '');" />
+                            <div class="clear"></div>
                         </div>
                     </div>
                 </div>
@@ -249,7 +236,8 @@
                             </div>
                         </div>
                         <div class="ModalButtonHolder">
-                            <input type="button" class="input-buttons" value="Close" onclick="$('#MainContent_ipMessage').html(''); $('#tb_ipAdd').val(''); openWSE.LoadModalWindow(false, 'GroupNetwork-element', '');" />
+                            <input type="button" class="input-buttons no-margin" value="Close" onclick="$('#MainContent_ipMessage').html(''); $('#tb_ipAdd').val(''); openWSE.LoadModalWindow(false, 'GroupNetwork-element', '');" />
+                            <div class="clear"></div>
                         </div>
                     </div>
                 </div>

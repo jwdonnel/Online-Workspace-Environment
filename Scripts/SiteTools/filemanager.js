@@ -181,3 +181,8 @@ function hidedelete(xdelete, xedit) {
         }
     }
 }
+
+function DownloadFile(file) {
+    $("#hf_downloadFile").val(file);
+    __doPostBack("hf_downloadFile", "");
+}

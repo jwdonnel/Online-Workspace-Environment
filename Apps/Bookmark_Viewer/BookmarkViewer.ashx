@@ -314,9 +314,9 @@ public class BookmarkViewer : IHttpHandler {
         str.Append("<div class='clear'></div><span class='pad-left-sml' style='font-size:10px;color:#888'><b class='pad-right-sml'>Date Added:</b>" + date + "</span></div></td>");
 
         // Add bm-hidden to the class list to make use of the hover visibility
-        string remove = "<a href='#Remove' class='td-delete-btn margin-right float-right' onclick='remove_in_iFrame(\"" + id + "\");return false;' title='Delete'></a>";
-        string share = "<a href='#Share' class='td-add-btn margin-right float-right' onclick='share_in_iFrame(\"" + id + "\");return false;' title='Share'></a>";
-        string edit = "<a href='#Edit' class='td-edit-btn margin-right float-right' onclick='edit_in_iFrame(\"" + id + "\");return false;' title='Edit'></a>";
+        string remove = "<a href='#Remove' class='td-delete-btn margin-right-sml margin-left-sml' onclick='remove_in_iFrame(\"" + id + "\");return false;' title='Delete'></a>";
+        string share = "<a href='#Share' class='td-add-btn margin-right-sml margin-left-sml' onclick='share_in_iFrame(\"" + id + "\");return false;' title='Share'></a>";
+        string edit = "<a href='#Edit' class='td-edit-btn margin-right-sml margin-left-sml' onclick='edit_in_iFrame(\"" + id + "\");return false;' title='Edit'></a>";
 
         if (OpenWSE_Tools.Apps.AppInitializer.IsGroupAdminSession(HttpContext.Current.User.Identity.Name) && GroupSessions.DoesUserHaveGroupLoginSessionKey(HttpContext.Current.User.Identity.Name)) {
             share = string.Empty;
@@ -327,7 +327,7 @@ public class BookmarkViewer : IHttpHandler {
             edit = string.Empty;
         }
         
-        str.Append("<td class='bookmark-edit-btn-holder'>" + remove + share + edit + "</td></tr></tbody></table>");
+        str.Append("<td class='bookmark-edit-btn-holder'>" + edit + remove + share + "</td></tr></tbody></table>");
 
         return str.ToString();
     }
@@ -453,20 +453,21 @@ public class BookmarkViewer : IHttpHandler {
         foreach (Dictionary<string, string> dr in _bookmarks.bookmarks_dt) {
             if (id == dr["ID"].ToString()) {
                 string bookmarkName = dr["BookmarkName"];
-                str.Append("<h4 class='float-left pad-top-sml font-bold'>Edit '" + bookmarkName + "'</h4>");
+                str.Append("<h4 class='float-left pad-top-sml'>Edit <span class='font-bold'>" + bookmarkName + "</span></h4>");
                 str.Append("<div class='clear-space'></div>");
                 str.Append("<input type='hidden' id='editBookmarkid' value='" + id + "' />");
                 str.Append("<table cellspacing='5' cellpadding='5' style='width: 100%;'>");
                 str.Append("<tr><td style='width: 50px;'><span class='pad-right font-bold'>Url</span></td>");
-                str.Append("<td><input type='text' id='editBookmarkHtml' class='textEntry margin-right-sml' value='" + dr["BookmarkHTML"].ToString() + "' style='width:100%' /></td></tr>");
+                str.Append("<td><input type='text' id='editBookmarkHtml' class='textEntry margin-right-sml' value=\"" + dr["BookmarkHTML"].ToString() + "\" style='width:100%' /></td></tr>");
                 str.Append("<tr><td style='width: 50px;'><span class='pad-right font-bold'>Name</span></td>");
-                str.Append("<td><input type='text' id='editBookmarkName' class='textEntry margin-right-sml' value='" + dr["BookmarkName"].ToString() + "' style='width:100%' /></td></tr>");
+                str.Append("<td><input type='text' id='editBookmarkName' class='textEntry margin-right-sml' value=\"" + dr["BookmarkName"].ToString() + "\" style='width:100%' /></td></tr>");
                 str.Append("</table>");
                 break;
             }
         }
         str.Append("<div class='clear-space'></div>");
-        str.Append("<input type='button' class='input-buttons' value='Save' onclick='edit_click()' />");
+        str.Append("<input type='button' class='input-buttons float-right no-margin' value='Cancel' onclick=\"openWSE.LoadModalWindow(false, 'bookmark-share-edit-element', '');$('#pnl_share_bookmarkviewer').html('');\" />");
+        str.Append("<input type='button' class='input-buttons float-right' value='Save' onclick='edit_click()' /><div class='clear'></div>");
 
         return str.ToString();
     }

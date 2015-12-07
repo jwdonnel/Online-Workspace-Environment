@@ -1,16 +1,15 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_Twitter_TwitterStation, App_Web_a4yfjpuk" clientidmode="Static" %>
-<div class="pad-all app-title-bg-color" style="min-height: 55px;">
+﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_Twitter_TwitterStation, App_Web_sygbdj0f" clientidmode="Static" %>
+<div class="pad-all app-title-bg-color-alt">
     <div class="float-left">
-        <asp:Image ID="img_Title" runat="server" CssClass="float-left pad-right" Height="38px" />
-        <asp:Label ID="lbl_Title" runat="server" Text="" Font-Size="30px"></asp:Label>
+        <asp:Image ID="img_Title" runat="server" CssClass="app-img-titlebar" style="margin-top: 4px;" />
+        <asp:Label ID="lbl_Title" runat="server" Text="" CssClass="app-text-titlebar"></asp:Label>
     </div>
-    <div>
-        <input id="btn_addNewTwitterFeed" runat="server" type="button" value="Add Feed" class="input-buttons float-right no-margin" onclick="twitterStation.AddFeed();" />
-        <div class="clear-space-two">
-        </div>
-        <span id="update-int-text"></span>
-        <a href="#update" class="img-refresh float-right" title="Refresh" onclick="twitterStation.GetFeeds(true);return false;"></a>
+    <div class="float-right margin-top">
+        <a href="#update" title="Refresh" class="img-refresh-alt margin-left-big" onclick="twitterStation.GetFeeds(true);return false;"></a>
+        <a href="#edit" id="btn_editTwitterFeeds" runat="server" title="Edit Feeds" class="img-edit margin-left-big" onclick="openWSE.LoadModalWindow(true, 'TwitterEditFeeds_element', 'Edit Feeds');return false;"></a>
+        <a href="#add" id="btn_addNewTwitterFeed" runat="server" title="Add New Feed" class="img-add margin-left-big" onclick="twitterStation.AddFeed();return false;"></a>
     </div>
+    <div class="clear"></div>
 </div>
 <div id="twitterstation-posts">
 </div>
@@ -71,6 +70,31 @@
                         </div>
                         <asp:Label ID="lbl_errorTwitter" runat="server" ForeColor="Red"></asp:Label>
                         <div class="clear-space">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="TwitterEditFeeds_element" runat="server" class="Modal-element outside-main-app-div">
+    <div class="Modal-overlay">
+        <div class="Modal-element-align">
+            <div class="Modal-element-modal" data-setwidth="700">
+                <div class="ModalHeader">
+                    <div>
+                        <div class="app-head-button-holder-admin">
+                            <a href="#" onclick="openWSE.LoadModalWindow(false, 'TwitterEditFeeds_element', '');return false;"
+                                class="ModalExitButton"></a>
+                        </div>
+                        <span class="Modal-title"></span>
+                    </div>
+                </div>
+                <div class="ModalScrollContent">
+                    <div class="ModalPadContent">
+                        <div id="twitter_edit_feeds_holder">
+                        </div>
+                        <div class="clear">
                         </div>
                     </div>
                 </div>

@@ -22,7 +22,7 @@ $(document).ready(function () {
 $(window).resize(function () {
     try {
         var h = $(window).height();
-        $("#editor").css("height", h - 380);
+        $("#editor").css("height", h - 410);
     }
     catch (evt) { }
 });
@@ -37,6 +37,24 @@ function ConfirmLoaderFileCancel(_this) {
 
     return false;
 }
+
+$(document.body).on("change", "#MainContent_dd_enablebg_create", function () {
+    if ($(this).val() == "app-main") {
+        $("#backgroundcolorholder_create").show();
+    }
+    else {
+        $("#backgroundcolorholder_create").hide();
+    }
+});
+
+$(document.body).on("change", "#MainContent_dd_enablebg_edit", function () {
+    if ($(this).val() == "app-main") {
+        $("#backgroundcolorholder_edit").show();
+    }
+    else {
+        $("#backgroundcolorholder_edit").hide();
+    }
+});
 
 $(document.body).on("change", "#MainContent_dd_allowpopout_create", function () {
     if ($(this).val() == "1") {
@@ -105,34 +123,50 @@ $(document.body).on("change", "#MainContent_ddl_pageSize", function () {
 $(document.body).on("change", "#MainContent_dd_maxonload_create", function () {
     var $resize = $("#MainContent_dd_allowresize_create");
     var $maximize = $("#MainContent_dd_allowmax_create");
+    var $minWidth = $("#MainContent_tb_minwidth_create");
+    var $minHeight = $("#MainContent_tb_minheight_create");
     if (openWSE.ConvertBitToBoolean($(this).val())) {
         $resize.val("0");
         $maximize.val("0");
         $resize.attr("disabled", "disabled");
         $maximize.attr("disabled", "disabled");
+        $minWidth.attr("disabled", "disabled");
+        $minHeight.attr("disabled", "disabled");
+
+        if ($.trim($minWidth.val()) == "") {
+            $minWidth.val("500");
+        }
+
+        if ($.trim($minHeight.val()) == "") {
+            $minHeight.val("500");
+        }
     }
     else {
         $resize.val("1");
         $maximize.val("1");
         $resize.removeAttr("disabled");
         $maximize.removeAttr("disabled");
+        $minWidth.removeAttr("disabled");
+        $minHeight.removeAttr("disabled");
     }
 });
 
 $(document.body).on("change", "#MainContent_dd_maxonload_edit", function () {
     var $resize = $("#MainContent_dd_allowresize_edit");
     var $maximize = $("#MainContent_dd_allowmax_edit");
+    var $minWidth = $("#MainContent_tb_minwidth_edit");
+    var $minHeight = $("#MainContent_tb_minheight_edit");
     if (openWSE.ConvertBitToBoolean($(this).val())) {
-        $resize.val("0");
-        $maximize.val("0");
         $resize.attr("disabled", "disabled");
         $maximize.attr("disabled", "disabled");
+        $minWidth.attr("disabled", "disabled");
+        $minHeight.attr("disabled", "disabled");
     }
     else {
-        $resize.val("1");
-        $maximize.val("1");
         $resize.removeAttr("disabled");
         $maximize.removeAttr("disabled");
+        $minWidth.removeAttr("disabled");
+        $minHeight.removeAttr("disabled");
     }
 });
 
@@ -315,6 +349,13 @@ prm.add_endRequest(function () {
     if (params != "") {
         $("#MainContent_pnl_app_params_holder").html(params);
         params = "";
+    }
+
+    if ($("#MainContent_dd_enablebg_edit").val() == "app-main") {
+        $("#backgroundcolorholder_edit").show();
+    }
+    else {
+        $("#backgroundcolorholder_edit").hide();
     }
 });
 
@@ -587,7 +628,7 @@ function GetAppsInCategory() {
         else {
             var found = 0;
             $(".app-item-installer").each(function () {
-                var categoryId = $(this).attr("data-category").split(';');
+                var categoryId = $(this).attr("data-category").split(',');
                 if (categoryId.indexOf(selected) == -1) {
                     $(this).hide();
                 }

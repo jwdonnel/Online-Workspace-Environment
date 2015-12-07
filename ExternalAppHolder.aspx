@@ -1,4 +1,4 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="WebControls_ExternalAppHolder, App_Web_ravcmota" %>
+﻿<%@ page language="C#" autoeventwireup="true" inherits="WebControls_ExternalAppHolder, App_Web_jtoan5js" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -29,6 +29,28 @@
             float: left;
         }
 
+        .external-title-with-image
+        {
+            float: left;
+            padding-top: 5px;
+            padding-left: 5px;
+        }
+
+            .external-title-with-image img
+            {
+                float: left;
+                height: 22px;
+                margin-right: 8px;
+            }
+
+            .external-title-with-image .app-title-ext
+            {
+                float: left;
+                padding-top: 3px;
+                font-size: 15px;
+                color: #FFF;
+            }
+
         .iFrame-apps
         {
             -moz-border-radius: 0px !important;
@@ -47,7 +69,7 @@
                     <ContentTemplate>
                         <div id="workspace-selector">
                         </div>
-                        <asp:Label ID="lbl_appName" runat="server" CssClass="external-title"></asp:Label>
+                        <asp:Label ID="lbl_appName" runat="server"></asp:Label>
                         <table class="top-options" cellpadding="0" cellspacing="0">
                             <tbody>
                                 <tr>
@@ -74,9 +96,10 @@
                 </asp:UpdatePanel>
             </div>
         </div>
-        <div class="loading-background-holder" style="z-index: 10000;"></div>
+        <div id="div_loadingbackground_holder" runat="server" class="loading-background-holder" style="z-index: 10000;"></div>
         <asp:PlaceHolder ID="PlaceHolder1" runat="server" EnableViewState="false" ViewStateMode="Disabled"></asp:PlaceHolder>
         <asp:HiddenField ID="hf_appId" runat="server" Value="" />
+        <div class="clear"></div>
         <script type="text/javascript">
             $(document).ready(function () {
                 openWSE_Config.workspaceMode = "simple";
@@ -106,7 +129,10 @@
             function OpenApp_External() {
                 if (!performingAction) {
                     $(".top-options").hide();
+
+                    $(".loading-background-holder").css("background-image", "");
                     $(".loading-background-holder").show();
+
                     performingAction = true;
                     var windowMode = "normal";
 

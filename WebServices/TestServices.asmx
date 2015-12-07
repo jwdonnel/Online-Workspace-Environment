@@ -4,6 +4,10 @@ using System;
 using System.Web;
 using System.Web.Services;
 using System.Web.Services.Protocols;
+using System.Data.Odbc;
+using System.Collections.Generic;
+using System.Web.Script.Serialization;
+
 
 [WebService(Namespace = "http://tempuri.org/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
@@ -12,8 +16,13 @@ using System.Web.Services.Protocols;
 public class TestServices  : System.Web.Services.WebService {
 
     [WebMethod]
-    public string HelloWorld() {
-        return "Hello World";
+    public string GetUniversalTime() {
+        return ServerSettings.ServerDateTime.ToUniversalTime().ToString();
+    }
+
+    [WebMethod]
+    public string GetLocalTime() {
+        return ServerSettings.ServerDateTime.ToLocalTime().ToString();
     }
     
 }

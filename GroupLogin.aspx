@@ -1,9 +1,8 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="GroupLogin, App_Web_ravcmota" %>
+﻿<%@ page title="Group Login" language="C#" autoeventwireup="true" inherits="GroupLogin, App_Web_jtoan5js" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
-    <title>Group Login Page</title>
     <meta name="author" content="John Donnelly" />
     <meta name="revisit-after" content="10 days" />
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
@@ -21,6 +20,16 @@
             margin-right: 5px;
             margin-left: 5px;
         }
+
+        #lbl_UserName
+        {
+            cursor: default!important;
+        }
+
+            #lbl_UserName:hover, #lbl_UserName:active
+            {
+                background-color: inherit!important;
+            }
     </style>
 </head>
 <body>
@@ -48,10 +57,11 @@
         </div>
         <div id="container-footer" class="footer">
             <div class="footer-padding">
-                <div id="copyright-footer" class="float-left">&copy; 2015 John Donnelly</div>
+                <div id="copyright-footer" class="float-left">&copy; 2015 OpenWSE</div>
                 <div id="footer-signdate" class="float-right">
                     <a href="AppRemote.aspx" title="Open Mobile Workspace">Mobile</a> | 
-                    <a href="#" onclick="OpeniframePage('About.aspx?iframeName=About&iframeFullScreen=false');return false;">About</a>
+                    <a href="#" onclick="OpeniframePage('About.aspx?iframeName=About&iframeFullScreen=false');return false;">About</a> | 
+                    <a href="#iframecontent" onclick="openWSE.LoadIFrameContent('About.aspx?a=termsofuse', this);return false;">Terms</a>
                 </div>
             </div>
         </div>
@@ -94,11 +104,6 @@
             function UpdateContainerHeight() {
                 var ht = $(window).height() - ($("#always-visible").outerHeight() + $("#container-footer").outerHeight());
                 $("#container").css("height", ht);
-            }
-
-            function SetTrialText(exp) {
-                var text = "<div class='trial-version-text'><span>Trial Version</span><span class='float-right'>Expires in " + exp + "</span></div>";
-                $("#container").prepend(text);
             }
 
             function OpeniframePage(url) {

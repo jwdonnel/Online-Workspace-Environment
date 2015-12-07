@@ -191,19 +191,24 @@ function RemoveUser(_this, username) {
     var tempUsername = username;
     var tempGroup = currGroup;
 
-    var $this = $(_this).closest(".app-icon-admin-group");
-    if ($this.length > 0) {
-        $this.remove();
-        var $div = $this.find(".img-collapse-sml");
-        $div.removeClass("img-collapse-sml");
-        $div.addClass("img-expand-sml");
-        var $a = $this.find("a");
-        var click = $a.attr("onclick");
-        click = click.replace("RemoveUser", "AddUser");
-        $a.attr("onclick", click);
-        $("#package-removed").prepend($this);
+    try {
+        var $this = $(_this).closest(".app-icon-admin-group");
+        if ($this.length > 0) {
+            $this.remove();
+            var $div = $this.find(".img-collapse-sml");
+            $div.removeClass("img-collapse-sml");
+            $div.addClass("img-expand-sml");
+            var $a = $this.find("a");
+            var click = $a.attr("onclick");
+            click = click.replace("RemoveUser", "AddUser");
+            $a.attr("onclick", click);
+            $("#package-removed").prepend($this);
+        }
+        else {
+            tempUsername = _this;
+        }
     }
-    else {
+    catch (evt) {
         tempUsername = _this;
     }
 
@@ -222,19 +227,24 @@ function AddUser(_this, username) {
     var tempUsername = username;
     var tempGroup = currGroup;
     $("#noUsersdiv").remove();
-    var $this = $(_this).closest(".app-icon-admin-group");
-    if ($this.length > 0) {
-        $this.remove();
-        var $div = $this.find(".img-expand-sml");
-        $div.removeClass("img-expand-sml");
-        $div.addClass("img-collapse-sml");
-        var $a = $this.find("a");
-        var click = $a.attr("onclick");
-        click = click.replace("AddUser", "RemoveUser");
-        $a.attr("onclick", click);
-        $("#package-added").prepend($this);
+    try {
+        var $this = $(_this).closest(".app-icon-admin-group");
+        if ($this.length > 0) {
+            $this.remove();
+            var $div = $this.find(".img-expand-sml");
+            $div.removeClass("img-expand-sml");
+            $div.addClass("img-collapse-sml");
+            var $a = $this.find("a");
+            var click = $a.attr("onclick");
+            click = click.replace("AddUser", "RemoveUser");
+            $a.attr("onclick", click);
+            $("#package-added").prepend($this);
+        }
+        else {
+            tempUsername = _this;
+        }
     }
-    else {
+    catch (evt) {
         tempUsername = _this;
     }
 

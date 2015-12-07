@@ -1,9 +1,8 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="Default, App_Web_ravcmota" %>
+﻿<%@ page title="Login Portal" language="C#" autoeventwireup="true" inherits="Default, App_Web_jtoan5js" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Login Portal</title>
     <meta name="author" content="John Donnelly" />
     <meta name="revisit-after" content="10 days" />
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
@@ -348,13 +347,15 @@
                     <asp:HiddenField ID="hf_GroupSessionLogoff" runat="server" OnValueChanged="hf_GroupSessionLogoff_ValueChanged" />
                 </ContentTemplate>
             </asp:UpdatePanel>
+            <div class="modal-blur"></div>
         </div>
         <div id="container-footer" class="footer">
             <div class="footer-padding">
-                <div id="copyright-footer" class="float-left">&copy; 2015 John Donnelly</div>
+                <div id="copyright-footer" class="float-left">&copy; 2015 OpenWSE</div>
                 <div id="footer-signdate" class="float-right">
                     <a href="AppRemote.aspx" title="Open Mobile Workspace">Mobile</a> | 
-                    <a href="#" onclick="OpeniframePage('About.aspx?iframeName=About&iframeFullScreen=false');return false;">About</a>
+                    <a href="#" onclick="OpeniframePage('About.aspx?iframeName=About&iframeFullScreen=false');return false;">About</a> | 
+                    <a href="#iframecontent" onclick="openWSE.LoadIFrameContent('About.aspx?a=termsofuse', this);return false;">Terms</a>
                 </div>
             </div>
         </div>
@@ -368,6 +369,7 @@
         var animationSpeed = 150;
         var currentEle = "";
         var allowDrag = true;
+        var showModalBlur = true;
 
         $(function () {
             $(window).hashchange(function () {
@@ -394,12 +396,22 @@
                     marginTop: -($thisElement.find(".Modal-element-modal").height() / 2),
                     marginLeft: -($thisElement.find(".Modal-element-modal").width() / 2)
                 });
+
+                SetModalBlur();
             }
         });
 
         $(document).ready(function () {
+            if (!showModalBlur) {
+                $(".modal-blur").addClass("hide-modal-blur");
+            }
+
             UpdateContainerHeight();
             HashChange();
+
+            setTimeout(function () {
+                SetModalBlur();
+            }, 250);
         });
 
         $(document.body).on("click", "#pnl_CancelGroupLogin", function () {
@@ -414,10 +426,6 @@
 
         function colorChanged(sender) {
             sender.get_element().style.color = "#" + sender.get_selectedColor();
-        }
-        function SetTrialText(exp) {
-            var text = "<div class='trial-version-text'><span>Trial Version</span><span class='float-right'>Expires in " + exp + "</span></div>";
-            $("#container").prepend(text);
         }
 
         /* Modal Loader */
@@ -497,6 +505,14 @@
                             $this.css("opacity", "0.6");
                             $this.css("filter", "alpha(opacity=60)");
 
+                            if ($(".modal-blur").length > 0 && !$(".modal-blur").hasClass("hide-modal-blur")) {
+                                $(".modal-blur").css({
+                                    top: $this.offset().top,
+                                    left: $this.offset().left,
+                                    marginTop: "-34px"
+                                });
+                            }
+
                             // Apply an overlay over app
                             // This fixes the issues when dragging iframes
                             if ($this.find("iframe").length > 0) {
@@ -538,6 +554,30 @@
                 });
 
                 $thisElement.css("visibility", "visible");
+            }
+
+            SetModalBlur();
+        }
+
+        function SetModalBlur() {
+            if ($(".modal-blur").length > 0 && !$(".modal-blur").hasClass("hide-modal-blur")) {
+                $(".Modal-element").each(function () {
+                    if ($(this).css("display") == "block") {
+                        var $this = $(this).find(".Modal-element-modal");
+                        var modalWt = $this.outerWidth();
+                        var modalHt = $this.outerHeight();
+                        $(".modal-blur").css({
+                            width: modalWt,
+                            height: modalHt
+                        });
+
+                        $(".modal-blur").css({
+                            top: $this.offset().top,
+                            left: $this.offset().left,
+                            marginTop: "-34px"
+                        });
+                    }
+                });
             }
         }
 

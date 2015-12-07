@@ -1,4 +1,4 @@
-﻿<%@ page title="Overlay Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_Overlays, App_Web_qakpaghm" %>
+﻿<%@ page title="Overlay Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_Overlays, App_Web_5emrkdig" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -15,8 +15,71 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding margin-top">
+    <div class="maincontent-padding pad-top-big margin-top">
         <asp:Literal ID="ltl_locked" runat="server"></asp:Literal>
+        <div class="clear-space-five"></div>
+        <ul class="sitemenu-selection">
+        </ul>
+        <div class="clear-space"></div>
+        <asp:Panel ID="pnl_OverlayList" runat="server" CssClass="pnl-section margin-top" data-title="Overlay List">
+            <asp:UpdatePanel ID="updatepnl_overlays" runat="server" UpdateMode="Conditional">
+                <ContentTemplate>
+                    <div class="table-settings-box no-border" style="margin-bottom: 0px!important;">
+                        <div class="td-settings-ctrl" style="padding-top: 0px!important;">
+                            <a id="aAddNewOverlay" runat="server" class="margin-right-big input-buttons-create float-left" onclick="openWSE.LoadModalWindow(true, 'AddOverlay-element', 'Add New Overlay');$('#MainContent_txt_uploadNotifiName').focus();return false;">Upload Overlay</a>
+                            <div class="searchwrapper float-left" style="width: 350px; margin-top: 3px;">
+                                <asp:UpdatePanel ID="updatepnl_search" runat="server" UpdateMode="Conditional">
+                                    <ContentTemplate>
+                                        <asp:Panel ID="pnl_Search" runat="server" DefaultButton="imgbtn_search">
+                                            <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
+                                                onfocus="if(this.value=='Search Overlays')this.value=''" onblur="if(this.value=='')this.value='Search Overlays'"
+                                                Text="Search Overlays" data-defaultvalue="Search Overlays"></asp:TextBox>
+                                            <asp:LinkButton ID="imgbtn_clearsearch" runat="server" ToolTip="Clear search" CssClass="searchbox_clear RandomActionBtns"
+                                                OnClick="imgbtn_clearsearch_Click" />
+                                            <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
+                                                OnClick="imgbtn_search_Click" />
+                                        </asp:Panel>
+                                    </ContentTemplate>
+                                    <Triggers>
+                                        <asp:AsyncPostBackTrigger ControlID="imgbtn_clearsearch" />
+                                        <asp:AsyncPostBackTrigger ControlID="imgbtn_search" />
+                                    </Triggers>
+                                </asp:UpdatePanel>
+                            </div>
+                            <div class="clear-space"></div>
+                            <span class="font-bold pad-right">Total Overlays</span><asp:Label ID="lbl_overlaysEnabled"
+                                runat="server" Text="0"></asp:Label>
+                            <div class="clear-space">
+                            </div>
+                            <asp:Panel ID="pnl_overlays" runat="server" CssClass="pad-top-big">
+                            </asp:Panel>
+                            <div class="clear-space">
+                            </div>
+                        </div>
+                        <div class="td-settings-desc">
+                            Overlays can be uploaded and configured here. Only ASP.Net user control files (.ascx) and .zip that contains the .dll and the .ascx are allowed at the moment. Users will be able to enable these overlays their Account Settings.
+                        </div>
+                    </div>
+                </ContentTemplate>
+            </asp:UpdatePanel>
+        </asp:Panel>
+        <asp:Panel ID="pnl_AssociatedApps" runat="server" CssClass="pnl-section pad-top-big" data-title="Associated Apps">
+            <div class="table-settings-box no-border" style="padding-top: 0px!important; margin-top: 0px!important;">
+                <div class="td-settings-ctrl">
+                    <asp:UpdatePanel ID="updatepnl_Associations" runat="server" UpdateMode="Conditional">
+                        <ContentTemplate>
+                            <asp:Panel ID="pnl_AppAssociation" runat="server">
+                            </asp:Panel>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="td-settings-desc">
+                    Overlays must be associated with an installed app in order to view them in the user overlay settings.
+                </div>
+            </div>
+        </asp:Panel>
         <div id="AddOverlay-element" class="Modal-element">
             <div class="Modal-overlay">
                 <div class="Modal-element-align">
@@ -35,19 +98,11 @@
                                     You can add a custom overlay for a app. Overlays must be a UserControl (.ascx) file with precompiled code.
                                 <div class="clear" style="height: 20px;">
                                 </div>
-                                    <div class="font-bold pad-bottom-sml">
-                                        Overlay Name
-                                    </div>
                                     <asp:TextBox ID="txt_uploadOverlayName" runat="server" CssClass="textEntry" Width="325px"
-                                        MaxLength="250"></asp:TextBox>
+                                        MaxLength="250" placeholder="Name"></asp:TextBox>
                                     <div class="clear-space">
                                     </div>
-                                    <div class="font-bold pad-bottom-sml pad-top">
-                                        Description
-                                    </div>
-                                    <asp:TextBox ID="txt_uploadOverlayDesc" runat="server" CssClass="pad-all-sml" Width="400px"
-                                        Height="50px" MaxLength="500" TextMode="MultiLine" Font-Names="Arial" BorderColor="#DDDDDD"
-                                        BorderWidth="1px"></asp:TextBox>
+                                    <asp:TextBox ID="txt_uploadOverlayDesc" runat="server" CssClass="pad-all-sml" Width="400px" MaxLength="500" placeholder="Description"></asp:TextBox>
                                     <div class="clear-space">
                                     </div>
                                     <div class="font-bold pad-bottom-sml pad-top">
@@ -103,49 +158,13 @@
                             </div>
                         </div>
                         <div class="ModalButtonHolder">
-                            <asp:Button ID="btn_uploadOverlay" runat="server" Text="Upload" CssClass="input-buttons Upload-Button-Action"
+                            <input type="button" class="input-buttons no-margin float-right no-margin" value="Cancel" onclick="openWSE.LoadModalWindow(false, 'AddOverlay-element', '');" />
+                            <asp:Button ID="btn_uploadOverlay" runat="server" Text="Upload" CssClass="input-buttons float-left no-margin Upload-Button-Action"
                                 disabled="disabled" OnClick="btn_uploadOverlay_Clicked" />
-                            <input type="button" class="input-buttons no-margin" value="Cancel" onclick="openWSE.LoadModalWindow(false, 'AddOverlay-element', '');" />
+                            <div class="clear"></div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <asp:UpdatePanel ID="updatepnl_overlays" runat="server" UpdateMode="Conditional">
-            <ContentTemplate>
-                <div class="table-settings-box" style="margin-bottom: 0px!important;">
-                    <div class="td-settings-ctrl">
-                        <a id="aAddNewOverlay" runat="server" class="margin-right-big input-buttons-create" onclick="openWSE.LoadModalWindow(true, 'AddOverlay-element', 'Add New Overlay');$('#MainContent_txt_uploadNotifiName').focus();return false;">Upload Overlay</a>
-                        <div class="float-right">
-                            <span class="font-bold pad-right">Total Overlays</span><asp:Label ID="lbl_overlaysEnabled"
-                                runat="server" Text="0"></asp:Label>
-                        </div>
-                        <div class="clear-space">
-                        </div>
-                        <asp:Panel ID="pnl_overlays" runat="server" CssClass="pad-top-big">
-                        </asp:Panel>
-                        <div class="clear-space">
-                        </div>
-                    </div>
-                    <div class="td-settings-desc">
-                        Overlays can be uploaded and configured here. Only ASP.Net user control files (.ascx) and .zip that contains the .dll and the .ascx are allowed at the moment. Users will be able to enable these overlays their Account Settings.
-                    </div>
-                </div>
-            </ContentTemplate>
-        </asp:UpdatePanel>
-        <div class="table-settings-box no-border" style="padding-top: 0px!important; margin-top: 0px!important;">
-            <div class="td-settings-ctrl">
-                <asp:UpdatePanel ID="updatepnl_Associations" runat="server" UpdateMode="Conditional">
-                    <ContentTemplate>
-                        <asp:Panel ID="pnl_AppAssociation" runat="server">
-                        </asp:Panel>
-                    </ContentTemplate>
-                </asp:UpdatePanel>
-                <div class="clear">
-                </div>
-            </div>
-            <div class="td-settings-desc">
-                Overlays must be associated with an installed app in order to view them in the user overlay settings.
             </div>
         </div>
         <div id="App-element" class="Modal-element">
@@ -180,7 +199,7 @@
                             </div>
                         </div>
                         <div class="ModalButtonHolder">
-                            <input type="button" class="input-buttons" value="Close" onclick="openWSE.LoadModalWindow(false, 'App-element', ''); RefreshList();" />
+                            <input type="button" class="input-buttons no-margin" value="Close" onclick="openWSE.LoadModalWindow(false, 'App-element', ''); RefreshList();" />
                         </div>
                     </div>
                 </div>

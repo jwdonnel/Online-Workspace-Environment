@@ -1,9 +1,8 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_Bookmark_Viewer_BookmarkViewer, App_Web_5551fl03" clientidmode="Static" %>
-<div id="bookmarkviewer_scroller" class="pad-all app-title-bg-color"
-    style="min-height: 70px">
+﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_Bookmark_Viewer_BookmarkViewer, App_Web_s3b2d2no" clientidmode="Static" %>
+<div id="bookmarkviewer_scroller" class="pad-all app-title-bg-color">
     <div class="float-left">
-        <asp:Image ID="img_Title" runat="server" CssClass="float-left pad-right" Height="38px" />
-        <asp:Label ID="lbl_Title" runat="server" Text="" Font-Size="30px"></asp:Label>
+        <asp:Image ID="img_Title" runat="server" CssClass="app-img-titlebar" />
+        <asp:Label ID="lbl_Title" runat="server" Text="" CssClass="app-text-titlebar"></asp:Label>
     </div>
     <div class="pad-top" align="right">
         <div class="searchwrapper" style="width: 400px;">
@@ -30,8 +29,9 @@
     <asp:Panel ID="pnl_BookmarkPnlBtns" runat="server">
         <input type="button" value="Import" class="input-buttons" onclick="ImportBookmark();"
             style="width: 65px;" />
-        <input type="button" value="Add" class="input-buttons" onclick="openWSE.LoadModalWindow(true, 'bookmark-add-element', 'Add New Bookmark'); $('#tb_addbookmarkname_bookmarkviewer').val(''); $('#tb_addbookmarkhtml_bookmarkviewer').val(''); $('#lbl_errormessage_bookmarkviewer').html(''); $('#tb_addbookmarkhtml_bookmarkviewer').focus();" style="width: 65px;" />
+        <input type="button" value="Add" class="input-buttons no-margin" onclick="openWSE.LoadModalWindow(true, 'bookmark-add-element', 'Add New Bookmark'); $('#tb_addbookmarkname_bookmarkviewer').val(''); $('#tb_addbookmarkhtml_bookmarkviewer').val(''); $('#lbl_errormessage_bookmarkviewer').html(''); $('#tb_addbookmarkhtml_bookmarkviewer').focus();" style="width: 65px;" />
     </asp:Panel>
+    <div class="clear"></div>
 </div>
 <div id="showbookmarks_bookmarkviewer">
 </div>
@@ -134,9 +134,8 @@
                             </div>
                             <div align="right">
                                 <input type="button" id="btn_addbookmark_bookmarkviewer" value="Done" class="input-buttons bookmarkviewer-update-img"
-                                    onclick="AddBookmark();" style="width: 60px;" />
-                                <input type="button" value="Cancel" class="input-buttons" onclick="openWSE.LoadModalWindow(false, 'bookmark-add-element', ''); $('#tb_addbookmarkname_bookmarkviewer').val(''); $('#tb_addbookmarkhtml_bookmarkviewer').val('');"
-                                    style="width: 60px;" />
+                                    onclick="AddBookmark();" />
+                                <input type="button" value="Cancel" class="input-buttons no-margin" onclick="openWSE.LoadModalWindow(false, 'bookmark-add-element', ''); $('#tb_addbookmarkname_bookmarkviewer').val(''); $('#tb_addbookmarkhtml_bookmarkviewer').val('');" />
                             </div>
                             <span id="lbl_errormessage_bookmarkviewer" class="float-right" style="color: Red"></span>
                         </div>

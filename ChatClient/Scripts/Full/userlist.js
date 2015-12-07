@@ -2,7 +2,7 @@
 //
 //	Chat Client v3.2
 //	by John Donnelly
-//	Last Modification: 1/5/2015
+//	Last Modification: 7/27/2015
 //
 //	Licensed under the Creative Commons Attribution 2.5 License - http://creativecommons.org/licenses/by/2.5/
 //  	- Free for use in both personal and commercial projects
@@ -153,6 +153,11 @@ var chatClient = function () {
                 modal += BuildChatButtonHolder(id, user);
                 modal += BuildChatHeader(fullName, currStatus);
             }
+            else if (appStyle == "app-main-style3") {
+                modal += BuildChatBody();
+                modal += BuildChatButtonHolder(id, user);
+                modal += BuildChatHeader(fullName, currStatus);
+            }
 
             modal += "</div>";
             $("#MainContent_" + workspace).append(modal);
@@ -172,13 +177,22 @@ var chatClient = function () {
     }
 
     function BuildChatButtonHolder(id, user) {
-        var modal = "<div class='app-head-button-holder'>";
+        var modal = "";
+
+        if (openWSE_Config && openWSE_Config.appStyle == "Style_3") {
+            modal += "<div class='app-head-hover-button'></div>";
+        }
+
+        modal += "<div class='app-head-button-holder'>";
+        if (openWSE_Config && openWSE_Config.appStyle == "Style_3") {
+            modal += "<a href='#" + id + "' class='move-button-app' title='Move app'><span></span></a>";
+        }
         modal += "<a href='#" + id + "' class='options-button-app' title='View app options'><span></span></a>";
         modal += "<div class='app-popup-inner-app'>";
         modal += "<table><tbody><tr><td valign='top'><h3>App Options</h3><div class='clear-space-five'></div><ul>";
-        modal += "<li onclick='openWSE.ReloadApp(this)' title='Refresh'><a href='#" + id + "' class='reload-button-app'></a>Refresh</li>";
-        modal += "<li onclick=\"openWSE.PopOutFrame(this,'ExternalAppHolder.aspx?chatuser=" + user + "')" + "\" title='Pop Out'><a href='#" + id + "' class='popout-button-app'></a>Pop out</li>";
-        modal += "<li onclick='openWSE.AboutApp(this)' title='About App'><div class='about-app'></div>About</li></ul></td></tr>";
+        modal += "<li onclick='openWSE.ReloadApp(this)' title='Refresh'><a href='#" + id + "' class='reload-button-app'></a><span>Refresh</span></li>";
+        modal += "<li onclick=\"openWSE.PopOutFrame(this,'ExternalAppHolder.aspx?chatuser=" + user + "')" + "\" title='Pop Out'><a href='#" + id + "' class='popout-button-app'></a><span>Pop out</span></li>";
+        modal += "<li onclick='openWSE.AboutApp(this)' title='About App'><div class='about-app'></div><span>About</span></li></ul></td></tr>";
 
         if ($("#ddl_WorkspaceSelector").length > 0) {
             modal += "<tr><td><div class='clear-space'></div><span class='workspace-selector-app-option'>Workspace</span>";

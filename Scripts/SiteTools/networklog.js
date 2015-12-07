@@ -6,7 +6,7 @@ var _lineWidth = 2;
 var _curveType = 'none'; /*'function'*/
 
 $(document).ready(function () {
-    $.getScript("//www.google.com/jsapi").done(function (script, textStatus) {
+    openWSE.GetScriptFunction("//www.google.com/jsapi", function () {
         google.load("visualization", "1", { callback: function () { }, packages: ["corechart"] });
     });
 
@@ -122,23 +122,21 @@ function AddIPToListener() {
         contentType: "application/json; charset=utf-8",
         success: function (data) {
             if (openWSE.ConvertBitToBoolean(data.d)) {
-                $("#listener_postmessage").html("");
                 $("#hf_UpdateIPListener").val(new Date().toString());
                 __doPostBack("hf_UpdateIPListener", "");
             }
             else if (!openWSE.ConvertBitToBoolean(data.d)) {
-                $("#listener_postmessage").html("<small style='color: red'>IP Address is invalid</small>");
+                openWSE.AlertWindow("IP Address is invalid");
                 openWSE.RemoveUpdateModal();
             }
             else if (data.d == "duplicate") {
-                $("#listener_postmessage").html("<small style='color: red'>Duplicate ip address</small>");
+                openWSE.AlertWindow("Duplicate ip address");
                 openWSE.RemoveUpdateModal();
             }
             else {
-                $("#listener_postmessage").html("<small style='color: red'>Error trying to add ip</small>");
+                openWSE.AlertWindow("Error trying to add IP");
                 openWSE.RemoveUpdateModal();
             }
-            window.setTimeout(function () { $("#listener_postmessage").html(""); }, 4000);
         },
         error: function () {
             openWSE.AlertWindow("There was an error adding ip. Please try again.");
@@ -185,15 +183,13 @@ function DeleteIP(ip) {
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     if (openWSE.ConvertBitToBoolean(data.d)) {
-                        $("#listener_postmessage").html("<small style='color: green'>IP Address has been deleted</small>");
                         $("#hf_UpdateIPListener").val(new Date().toString());
                         __doPostBack("hf_UpdateIPListener", "");
                     }
                     else {
-                        $("#listener_postmessage").html("<small style='color: red'>Error Deleting IP</small>");
+                        openWSE.AlertWindow("Error Deleting IP");
                         openWSE.RemoveUpdateModal();
                     }
-                    window.setTimeout(function () { $("#listener_postmessage").html(""); }, 4000);
                 },
                 error: function () {
                     openWSE.AlertWindow("There was an error deleting ip. Please try again.");
@@ -216,16 +212,14 @@ function UpdateActive(ip, active, _this) {
                 __doPostBack("hf_UpdateIPListener", "");
             }
             else if (data.d == "sameip") {
-                $("#listener_postmessage").html("<small style='color: red'>Cannot disable your own IP address when more than one are active</small>");
+                openWSE.AlertWindow("Cannot disable your own IP address when more than one are active.");
                 openWSE.RemoveUpdateModal();
                 ResetStatus(__this);
-                window.setTimeout(function () { $("#listener_postmessage").html(""); }, 4000);
             }
             else if (data.d == "differentip") {
-                $("#listener_postmessage").html("<small style='color: red'>Cannot Enable another IP address until your current IP address is.</small>");
+                openWSE.AlertWindow("Cannot Enable another IP address until your current IP address is.");
                 openWSE.RemoveUpdateModal();
                 ResetStatus(__this);
-                window.setTimeout(function () { $("#listener_postmessage").html(""); }, 4000);
             }
             else {
                 openWSE.RemoveUpdateModal();
@@ -268,39 +262,39 @@ function BuildGraphs() {
     var height = 300;
     if (!runningGraph) {
         runningGraph = true;
-        $.ajax({
-            url: openWSE.siteRoot() + "WebServices/NetworkLog.asmx/GetGraphs",
-            data: "{ '_dataInt': '" + $("#dd_track").val() + "' }",
-            type: "POST",
-            cache: false,
-            contentType: "application/json",
-            dataType: "json",
-            success: function (data) {
-                if (data != null) {
-                    if (data.d[0] != null) {
-                        BuildRequests(data.d[0], width, height);
-                    }
-                    if (data.d[1] != null) {
-                        document.getElementById("statholder").innerHTML = data.d[1];
-                    }
-                    if (data.d[2] != null) {
-                        if (data.d[2] != "") {
-                            document.getElementById("pnl_NetworkInfoHolder").innerHTML = data.d[2];
+        setTimeout(function () {
+            $.ajax({
+                url: openWSE.siteRoot() + "WebServices/NetworkLog.asmx/GetGraphs",
+                data: "{ '_dataInt': '" + $("#dd_track").val() + "' }",
+                type: "POST",
+                cache: false,
+                contentType: "application/json",
+                dataType: "json",
+                success: function (data) {
+                    if (data != null) {
+                        if (data.d[0] != null) {
+                            BuildRequests(data.d[0], width, height);
                         }
-                        else {
-                            document.getElementById("pnl_NetworkInfoHolder").innerHTML = "Not information available";
+                        if (data.d[1] != null) {
+                            document.getElementById("statholder").innerHTML = data.d[1];
+                        }
+                        if (data.d[2] != null) {
+                            if (data.d[2] != "") {
+                                document.getElementById("pnl_NetworkInfoHolder").innerHTML = data.d[2];
+                            }
+                            else {
+                                document.getElementById("pnl_NetworkInfoHolder").innerHTML = "Not information available";
+                            }
                         }
                     }
-                }
 
-                runningGraph = false;
-                setTimeout(function () {
+                    runningGraph = false;
                     if (!paused) {
                         BuildGraphs();
                     }
-                }, (updateinterval));
-            }
-        });
+                }
+            });
+        }, (updateinterval));
     }
 }
 
@@ -455,13 +449,13 @@ function load(num) {
 
     switch (index) {
         case 0:
-            BuildGraphs();
-            paused = false;
+        case 1:
+            $("#search_box").show();
             break;
 
-        case 1:
         case 2:
-            $("#search_box").show();
+            BuildGraphs();
+            paused = false;
             break;
     }
 }
@@ -479,6 +473,38 @@ function GetPnlSectionIndex(ele) {
 
 var ipSearch = "";
 function SearchLoginIp(ip) {
+    if (ip) {
+        if (ipSearch != "") {
+            window.open("http://www.ip-tracker.org/locator/ip-lookup.php?ip=" + ip);
+        }
+        else {
+            var ele = "<div id='searchip-element' class='Modal-element' style='display: none;'>";
+            ele += "<div class='Modal-overlay'>";
+            ele += "<div class='Modal-element-align'>";
+            ele += "<div class='Modal-element-modal' data-setwidth='370'>";
+
+            // Header
+            ele += "<div class='ModalHeader'><div><div class='app-head-button-holder-admin'>";
+            ele += "<a href='#' onclick=\"$('#searchip-element').remove();return false;\" class='ModalExitButton'></a>";
+            ele += "</div><span class='Modal-title'></span></div></div>";
+
+            var links = "<a href='#' onclick=\"SearchLoginIpClick('" + ip + "');return false;\">Search all events from IP</a><div class='clear-space-five'></div>";
+            links += "<a href='http://www.ip-tracker.org/locator/ip-lookup.php?ip=" + ip + "' target='_blank' onclick=\"$('#searchip-element').remove();\">Open IP Tracker Page</a><div class='clear-space'></div>";
+
+            // Body
+            var cancelButton = "<input class='input-buttons float-right no-margin' type='button' value='Cancel' onclick=\"$('#searchip-element').remove();\" />";
+            ele += "<div class='ModalPadContent'><div class='message-text'>" + links + "</div><div class='button-holder'>" + cancelButton + "<div class='clear'></div></div></div>";
+            ele += "</div></div></div></div>";
+
+            $("body").append(ele);
+            openWSE.LoadModalWindow(true, "searchip-element", "Search Options");
+        }
+    }
+}
+
+function SearchLoginIpClick(ip) {
+    $("#searchip-element").remove();
+
     ipSearch = ip;
     ShowAllLoginSearchRows();
     $("#loginactivitysearch").hide();
@@ -518,3 +544,12 @@ function ClearIpSearch() {
     ShowAllLoginSearchRows();
     $("#clearloginsearch, #loginactivitysearch").hide();
 }
+
+$(document.body).on("keypress", "#MainContent_tb_daystokeepLoginActivity, #MainContent_tb_autoblock_count", function (e) {
+    var code = (e.which) ? e.which : e.keyCode;
+    var val = String.fromCharCode(code);
+
+    if (val != "0" && val != "1" && val != "2" && val != "3" && val != "4" && val != "5" && val != "6" && val != "7" && val != "8" && val != "9") {
+        return false;
+    }
+});

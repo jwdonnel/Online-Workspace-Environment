@@ -1,6 +1,78 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Items>
-    <version>ver. 4.4.2</version>
+    <version>Ver. 4.5.9</version>
+    <log name="12/4/2015">
+        New custom fonts added.<br />
+        Fixes to uploading and creating new apps.<br />
+        Fix for showing Uncategorized items multiple times in app list.
+    </log>
+    <log name="11/11/2015">
+        Various fixes to core and layout.
+    </log>
+    <log name="10/29/2015">
+        Removed the Summary Table Creator/Editor.<br />
+        Search boxes added to Custom Projects, Jquery Plugins, Notification Manager, Overlay Manager, Web Services, and Background Services pages.
+    </log>
+    <log name="10/13/2015">
+        Added ability to disable javascript error alerts.<br />
+        New customizations available to change the Font-Family, Font-Size, and Font-Color. Add new custom font css files to the CustomFonts folder.<br />
+        Fixes to the Group Organizer page - The group network was not allowing users to see their own created groups if the group network was on and user was not on the correct network.<br />
+        Disable all overlays fixed in user settings - If any overlays were still enabled, they will load on your workspace but would give no way to view them.
+    </log>
+    <log name="9/21/2015">
+        Add new setting for users to hide all overlays.<br />
+        Notification button at top right will now be hidden if all user notifications are off and users notification count is zero.<br />
+        Fixed issue with private apps showing up in other users available to install app list under the UsersAndApps page.
+    </log>
+    <log name="9/16/2015">
+        New user profile link style located under Top/Left Bar in Account Settings.<br />
+        Updated icon list.
+    </log>
+    <log name="8/26/2015">
+        Added Server Timezone setting in the Site/Server Settings.<br />
+        Custom Table and Table Import now features a summary option and revamped creater options.<br />
+        Fixed issue with modals not saving inputs and textareas when page executes the auto refresh.<br />
+        Startup Scripts now appear in the header when loaded. This will also fix some issues with loading functions after the script is loaded along with only loading the script once.<br />
+        Removed paging from User Accounts page.<br />
+        CSS modifications to allow for more screen sizes.
+    </log>
+    <log name="7/31/2015">
+        Added App Selector settings button to App menu on the sidebar.<br />
+        New App Selector Styles available.
+    </log>
+    <log name="7/26/2015">
+        Group Login fixes to App Remote.<br />
+        Removed alternative site logo from Server Settings.<br />
+        New App Selector Style called Icon Only.
+    </log>
+    <log name="7/15/2015">
+        <h3 class="font-bold">
+            New to Version 4.5
+        </h3>
+        <br />
+        <small>
+            <b>Note: </b>Upgrading from a previous version will be difficult with the new database and web.config changes. Some tables will have to be manually updated to display the ApplicationId column.</small>
+        <br />
+        <br />
+        New security features to the database. - Database tables have a new column for ApplicationId which is taken from the Web.Config file on your server. You can also see your application id by going to your LicenseManager.aspx page.<br />
+        Auto Update System has been enhanced to allow mulitple sessions to run at one time.<br />
+        Fixes to all App javascript files that reference the app Id and not the class (was not updated with fixes prior to Version 4.4).<br />
+        New Default Database Values added to Database Manager page. You can restore your default table values based on the DatabaseDefaultValues.xml file.<br />
+        Bug fixes to the user roles and user accounts page that were causing errors.<br />
+        Minor fix for swipe animate of menu in App Remote on a mobile device.<br />
+        New background override for AppRemote (Mobile) that allows users to use the default background color and select a foreground color for their mobile layout.<br />
+        Bug fixes for auto connect on the AppRemote.<br />
+        RSS News Feed app updated to bring in the news articles from all sources of a category.<br />
+        AppRemote layout slighyly updated.<br />
+        New Site Tips on page load. This feature can be turned off by the user in the user settings page.<br />
+        New developer license available that is similar to the full version.
+    </log>
+    <log name="6/13/2015">
+        Fixes to minimized apps and iframes.<br />
+        Added Shuffle, Repeat, and Continuous play in filedrive audio files.<br />
+        Twitter Feed app layout updated.<br />
+        All App css has been modified to make it more customizable in the future.
+    </log>
     <log name="5/27/2015">
         Fixed issue with Events To Keep in Network Log - Log Files were not being deleted and could produce possible failures due to the number of files created.<br />
         Bug fixes to the Site Requests and clearing the queue.<br />

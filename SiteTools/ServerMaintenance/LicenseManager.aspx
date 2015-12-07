@@ -1,4 +1,4 @@
-﻿<%@ page title="License Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_LicenseManager, App_Web_ogqsad33" %>
+﻿<%@ page title="License Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_LicenseManager, App_Web_txobhkq5" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -49,8 +49,9 @@
                     </div>
                 </asp:Panel>
                 <asp:Panel ID="pnl_trialVersion" runat="server" Enabled="false" Visible="false">
-                    <div class="pad-all">
-                        <h4>Enter the information below to start your <span id="trialLength" runat="server"></span>full version<span id="trialtext" runat="server"></span>. Please note, the <b>Website Url</b> is the url to which this trial copy will be hosted from. (Example: http://mydomain.com)</h4>
+                    <div class="table-settings-box">
+                        <h4 id="h4_trial_text" runat="server">Enter the information below to start your <span id="trialLength" runat="server"></span>full version<span id="trialtext" runat="server"></span>. Please note, the <b>Website Url</b> is the url to which this trial copy will be hosted from. (Example: http://mydomain.com)</h4>
+                        <h4 id="h4_developer_text" runat="server" visible="false">Enter the information below to start your full Developer version. Please note, the <b>Website Url</b> is the url to which this developer copy will be hosted from. (Example: http://mydomain.com)</h4>
                         <div class="clear-space">
                         </div>
                         <asp:Panel ID="pnl_trialVersion_Info" runat="server" DefaultButton="btn_SubmitTrial" CssClass="float-left pad-right-big margin-right-big">
@@ -60,10 +61,10 @@
                                         <h4 class="font-bold pad-right">Website Name</h4>
                                     </td>
                                     <td>
-                                            <asp:TextBox ID="txt_WebsiteName" runat="server" CssClass="textEntry"></asp:TextBox>
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="*"
-                                                ControlToValidate="txt_WebsiteName" ForeColor="Red">
-                                            </asp:RequiredFieldValidator>
+                                        <asp:TextBox ID="txt_WebsiteName" runat="server" CssClass="textEntry"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="*"
+                                            ControlToValidate="txt_WebsiteName" ForeColor="Red">
+                                        </asp:RequiredFieldValidator>
                                     </td>
                                 </tr>
                                 <tr>
@@ -71,11 +72,11 @@
                                         <h4 class="font-bold pad-right">Website Url</h4>
                                     </td>
                                     <td>
-                                            <asp:TextBox ID="txt_WebsiteUrl" runat="server" CssClass="textEntry"></asp:TextBox>
-                                            <asp:LinkButton ID="lbtn_useDefaultUrl" runat="server" Font-Size="Small" Text="Use Default" CssClass="margin-left margin-right" CausesValidation="false" OnClick="lbtn_useDefaultUrl_Click"></asp:LinkButton>
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="*"
-                                                ControlToValidate="txt_WebsiteUrl" ForeColor="Red">
-                                            </asp:RequiredFieldValidator>
+                                        <asp:TextBox ID="txt_WebsiteUrl" runat="server" CssClass="textEntry"></asp:TextBox>
+                                        <asp:LinkButton ID="lbtn_useDefaultUrl" runat="server" Font-Size="Small" Text="Use Default" CssClass="margin-left margin-right RandomActionBtns" CausesValidation="false" OnClick="lbtn_useDefaultUrl_Click"></asp:LinkButton>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="*"
+                                            ControlToValidate="txt_WebsiteUrl" ForeColor="Red">
+                                        </asp:RequiredFieldValidator>
                                     </td>
                                 </tr>
                                 <tr>
@@ -83,10 +84,10 @@
                                         <h4 class="font-bold pad-right">Email Address</h4>
                                     </td>
                                     <td>
-                                            <asp:TextBox ID="txt_emailAddress" runat="server" CssClass="textEntry"></asp:TextBox>
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="*"
-                                                ControlToValidate="txt_emailAddress" ForeColor="Red">
-                                            </asp:RequiredFieldValidator>
+                                        <asp:TextBox ID="txt_emailAddress" runat="server" CssClass="textEntry"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="*"
+                                            ControlToValidate="txt_emailAddress" ForeColor="Red">
+                                        </asp:RequiredFieldValidator>
                                     </td>
                                 </tr>
                                 <tr>
@@ -106,25 +107,25 @@
                         </asp:Panel>
                         <div class="clear-space"></div>
                         <h4>A license will be automatically generated and uploaded to your computer. You must have an internet connection for activation.<br />
-                            During the trial version, all postbacks will check the expiration date of the trial. Once the trial is up, you will be able to purchase the full version.<br />
-                            A trial license can only be generated once per website url/domain. Once that trial has expired, you will either have to change your website url/domain or purchase the full version.
+                            If you are using the trial version, all postbacks will check the expiration date of the trial. Once the trial/developer version is up, you will be able to purchase the full version.<br />
+                            A trial license can only be generated once per website url/domain, while the developer license has no url/domain limit. If you are using the trial version that has expired, you will either have to change your website url/domain or purchase the full version.
                             <br />
                             <br />
                         </h4>
                         <h4>If you require help, please email John Donnelly at <a href="mailto:jwdonnel@gmail.com" target="_blank">jwdonnel@gmail.com</a>.
                         </h4>
-                    </div>
-                    <div class="pad-all">
-                        <div class="clear-space"></div>
-                        <h4>If you like what you see, you can purchase the full version by clicking <a href="LicenseManager.aspx?purchase=true">here</a>.<br />
-                            The full version will feature a lifetime license for one domain.
+                        <div class="pad-top">
+                            <div class="clear-space"></div>
+                            <h4>If you like what you see, you can purchase the full version by clicking <a href="LicenseManager.aspx?purchase=true">here</a>.<br />
+                                The full version will feature a lifetime license for one domain.
                             <br />
-                            Payments will be made using <a href="https://www.paypal.com/" target="_blank">PayPal
+                                Payments will be made using <a href="https://www.paypal.com/" target="_blank">PayPal
                             <img alt="paypal" src="../../Standard_Images/About Logos/Paypal.png" style="height: 18px;" /></a></h4>
+                        </div>
                     </div>
                 </asp:Panel>
                 <asp:Panel ID="pnl_purchaseVersion" runat="server" Enabled="false" Visible="false">
-                    <div class="pad-all">
+                    <div class="table-settings-box">
                         <asp:LinkButton ID="lbtn_goFoward_purchased" runat="server" Text="Back to License Info" CausesValidation="false" OnClick="lbtn_goFoward_purchased_Click" Enabled="false" Visible="false"></asp:LinkButton>
                         <div class="clear-space"></div>
                         <h4>The OpenWSE is a large platform with many features and capabilities.<br />
@@ -148,7 +149,7 @@
                             </h4>
                             <div class="clear-space">
                             </div>
-                            <span class="font-bold pad-right">Validation Code:</span><asp:TextBox ID="txt_ValidationCodePurchased" runat="server" CssClass="textEntry margin-right"></asp:TextBox><asp:Button ID="btn_ValidationCodePurchased" runat="server" Text="Activate" CssClass="input-buttons" OnClick="btn_ValidationCodePurchased_Click" />
+                            <span class="font-bold pad-right">Validation Code:</span><asp:TextBox ID="txt_ValidationCodePurchased" runat="server" CssClass="textEntry margin-right"></asp:TextBox><asp:Button ID="btn_ValidationCodePurchased" runat="server" Text="Activate" CssClass="input-buttons RandomActionBtns" OnClick="btn_ValidationCodePurchased_Click" />
                             <div class="clear-space"></div>
                             <asp:Label ID="lbl_valError" runat="server" ForeColor="Red" Text=""></asp:Label>
                         </asp:Panel>
@@ -163,20 +164,20 @@
                         </h4>
                         <h4>If you require help, please email John Donnelly at <a href="mailto:jwdonnel@gmail.com" target="_blank">jwdonnel@gmail.com</a>.
                         </h4>
-                    </div>
-                    <div class="pad-all">
-                        <div class="clear-space"></div>
-                        <h4>The full version will feature a lifetime license for one domain.
+                        <div class="pad-top">
+                            <div class="clear-space"></div>
+                            <h4>The full version will feature a lifetime license for one domain.
                             <br />
-                            Payments will be made using <a href="https://www.paypal.com/" target="_blank">PayPal
+                                Payments will be made using <a href="https://www.paypal.com/" target="_blank">PayPal
                             <img alt="paypal" src="../../Standard_Images/About Logos/Paypal.png" style="height: 18px;" /></a></h4>
+                        </div>
                     </div>
                 </asp:Panel>
                 <asp:Panel ID="pnl_purchaseFinishVersion" runat="server" Enabled="false" Visible="false">
-                    <div class="pad-all">
+                    <div class="table-settings-box">
                         <asp:LinkButton ID="lbtn_goBack_purchased" runat="server" Text="Go Back" CausesValidation="false" OnClick="lbtn_goBack_purchased_Click"></asp:LinkButton>
                         <div class="clear-space"></div>
-                        <h4>Enter the information below to start your full version. Please note, the <b>Website Url</b> is the url to which this trial copy will be hosted from. (Example: http://mydomain.com)</h4>
+                        <h4>Enter the information below to start your full version. Please note, the <b>Website Url</b> is the url to which this trial/developer copy will be hosted from. (Example: http://mydomain.com)</h4>
                         <div class="clear-space">
                         </div>
                         <asp:Panel ID="pnl_fullVersionInfo" runat="server" DefaultButton="btn_SubmitFull" CssClass="float-left pad-right-big margin-right-big">
@@ -238,8 +239,8 @@
                         </asp:Panel>
                         <div class="clear-space"></div>
                         <h4>A license will be automatically generated and uploaded to your computer. You must have an internet connection for activation.<br />
-                            During the trial version, all postbacks will check the expiration date of the trial. Once the trial is up, you will be able to purchase the full version.<br />
-                            A trial license can only be generated once per website url/domain. Once that trial has expired, you will either have to change your website url/domain or purchase the full version.
+                            If you are using the trial version, all postbacks will check the expiration date of the trial. Once the trial/developer version is up, you will be able to purchase the full version.<br />
+                            A trial license can only be generated once per website url/domain, while the developer license has no url/domain limit. If you are using the trial version that has expired, you will either have to change your website url/domain or purchase the full version.
                             <br />
                             <br />
                         </h4>
@@ -249,7 +250,7 @@
                 </asp:Panel>
             </ContentTemplate>
         </asp:UpdatePanel>
-        <div class="table-settings-box">
+        <div class="table-settings-box no-border">
             <div class="td-settings-title">
                 Upload License File
             </div>

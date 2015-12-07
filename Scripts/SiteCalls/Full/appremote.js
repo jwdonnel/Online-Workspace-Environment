@@ -1,8 +1,8 @@
 ﻿// -----------------------------------------------------------------------------------
 //
-//	appRemote v4.1
+//	appRemote v4.5
 //	by John Donnelly
-//	Last Modification: 5/24/2015
+//	Last Modification: 11/12/2015
 //
 //	Licensed under the Creative Commons Attribution 2.5 License - http://creativecommons.org/licenses/by/2.5/
 //  	- Free for use in both personal and commercial projects
@@ -13,6 +13,7 @@
 //      migrate.jquery.min.js - http://code.jquery.com/jquery-migrate-1.2.1.min.js
 //
 // -----------------------------------------------------------------------------------
+
 var appRemote_Config = {
     animationSpeed: 150,
     closeTimeout: 2000,
@@ -27,7 +28,13 @@ var appRemote_Config = {
     siteRootFolder: "",
     forceGroupLogin: false,
     autoSync: false,
-    scale: "0.95"
+    scale: "0.95",
+    foreColor: "#252525",
+    useDarkColor: true,
+    needToSetColorMode: false,
+    showToolTips: true,
+    siteTipsOnPageLoad: false,
+    saveCookiesAsSessions: false
 };
 
 var appRemote = function () {
@@ -65,6 +72,7 @@ var appRemote = function () {
         return false;
     }
 
+    var iconsOpenOnSlide = false;
     $(document.body).on("click", "#appremote-menu-overlay", function () {
         CloseMenu();
     });
@@ -82,20 +90,36 @@ var appRemote = function () {
     function OpenSidebarMenu_Swipe() {
         var $menu = $("#appremote-sidebar-menu");
         if ($menu.length > 0) {
-            $("#workspace-selector-overlay, #workspace-selector-modal").hide();
+            var hasBackgrounImage = true;
+            if ($("#main_body").css("background-image") == "" || $("#main_body").css("background-image") == "none") {
+                hasBackgrounImage = false;
+            }
 
+            if ($("#pnl_icons").css("display") == "block" && $("#Category-Back").length > 0 && CheckIfOnMobileDevice() && hasBackgrounImage) {
+                iconsOpenOnSlide = true;
+            }
+            else if ($("#pnl_icons").css("display") == "block" && ($(".app-icon.Icon_Only").length > 0 || $(".app-icon.Icon_And_Text_Only").length > 0 || $(".app-icon.Icon_And_Color_Only").length > 0 || $(".app-icon.Icon_Plus_Color_And_Text").length > 0) && CheckIfOnMobileDevice()) {
+                iconsOpenOnSlide = true;
+            }
+
+            $("#workspace-selector-overlay, #workspace-selector-modal").hide();
             AdjustTopBottomPosSidebar();
 
             if (!$menu.hasClass("showmenu")) {
                 $menu.addClass("showmenu");
                 GetOpenedAppsForMenu();
-                $menu.show();
                 $("#appremote-menu-overlay").show();
-                $menu.animate({
-                    width: $(window).width() - 25
-                }, 150, function () {
+
+                $menu.css("width", $(window).width() - 25);
+                if (iconsOpenOnSlide) {
+                    $menu.show();
                     $menu.find(".appremote-sidebar-innercontent").show();
-                });
+                }
+                else {
+                    $menu.show("slide", { direction: "left" }, 150, function () {
+                        $menu.find(".appremote-sidebar-innercontent").show();
+                    });
+                }
             }
         }
     }
@@ -103,19 +127,26 @@ var appRemote = function () {
         var $menu = $("#appremote-sidebar-menu");
         if ($menu.length > 0) {
             $("#workspace-selector-overlay, #workspace-selector-modal").hide();
-
             AdjustTopBottomPosSidebar();
 
             if ($menu.hasClass("showmenu")) {
                 $menu.removeClass("showmenu");
-                $("#appremote-menu-overlay").hide();
                 $menu.find(".appremote-sidebar-innercontent").hide();
-                $menu.animate({
-                    width: 0
-                }, 150, function () {
+
+                if (iconsOpenOnSlide) {
                     $menu.hide();
-                });
+                    $menu.css("width", 0);
+                    $("#appremote-menu-overlay").hide();
+                }
+                else {
+                    $menu.hide("slide", { direction: "left" }, 150, function () {
+                        $menu.css("width", 0);
+                        $("#appremote-menu-overlay").hide();
+                    });
+                }
             }
+
+            iconsOpenOnSlide = false;
         }
     }
     function AdjustTopBottomPosSidebar() {
@@ -195,8 +226,14 @@ var appRemote = function () {
                 if ($app.length > 0 && !ArrayContainsItem(id, appArray)) {
                     $app = $app.eq(0);
                     var appHtml = $.trim($app.html());
+
+                    var backagroundStyle = "";
+                    if ($app.hasClass("Color_And_Description") || $app.hasClass("Icon_And_Color_Only") || $app.hasClass("Icon_Plus_Color_And_Text")) {
+                        backagroundStyle = "style='background: " + $app.css("background") + "'";
+                    }
+
                     var onClick = $app.attr("onclick");
-                    $("#opened_apps_holder").append("<div data-appid='" + id + "' class='opened-app-icon' onclick=\"" + onClick + "\">" + appHtml + "</div>");
+                    $("#opened_apps_holder").append("<div data-appid='" + id + "' class='opened-app-icon' onclick=\"" + onClick + "\" " + backagroundStyle + ">" + appHtml + "</div>");
                     appArray.push(id);
                 }
             });
@@ -205,8 +242,14 @@ var appRemote = function () {
                 var id = $(this).attr("data-appid");
                 if ($(this).hasClass("active") && !ArrayContainsItem(id, appArray)) {
                     var appHtml = $.trim($(this).html());
+
+                    var backagroundStyle = "";
+                    if ($(this).hasClass("Color_And_Description") || $(this).hasClass("Icon_And_Color_Only") || $(this).hasClass("Icon_Plus_Color_And_Text")) {
+                        backagroundStyle = "style='background: " + $(this).css("background") + "'";
+                    }
+
                     var onClick = $(this).attr("onclick");
-                    $("#opened_apps_holder").append("<div data-appid='" + id + "' class='opened-app-icon' onclick=\"" + onClick + "\">" + appHtml + "</div>");
+                    $("#opened_apps_holder").append("<div data-appid='" + id + "' class='opened-app-icon' onclick=\"" + onClick + "\" " + backagroundStyle + ">" + appHtml + "</div>");
                     appArray.push(id);
                 }
             });
@@ -271,6 +314,14 @@ var appRemote = function () {
             appRemote_Config.remoteName = "";
             UpdateURL();
         }
+    }
+
+    function CheckIfOnMobileDevice() {
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            return true;
+        }
+
+        return false;
     }
 
     $(document.body).on("click", "#menu-s", function () {
@@ -378,18 +429,28 @@ var appRemote = function () {
         appRemote_Config.remoteName = "";
         UpdateURL();
     });
-    $(document.body).on("click", "#wl-s", function () {
-        appRemote_Config.categoryId = "";
-        appRemote_Config.categoryName = "";
-        appRemote_Config.remoteId = "";
-        appRemote_Config.remoteName = "";
-        UpdateURL();
+    $(document.body).on("click", "#wl-s", function (e) {
+        if (e.target.className != "sidebar-edit-btn") {
+            appRemote_Config.categoryId = "";
+            appRemote_Config.categoryName = "";
+            appRemote_Config.remoteId = "";
+            appRemote_Config.remoteName = "";
+            UpdateURL();
+        }
+        else {
+            CloseMenu();
+        }
     });
     $(document.body).on("click", "#login-s", function () {
         CloseMenu();
         if ($("#pnl_login").css("display") != "block") {
             if (window.location.href.indexOf("?") == -1) {
-                window.location += "?loginPnl=true";
+                if (window.location.href.indexOf("#") == -1) {
+                    window.location += "#?loginPnl=true";
+                }
+                else {
+                    window.location += "?loginPnl=true";
+                }
             }
             else {
                 window.location = GetLocationWithPartialSearch() + "loginPnl=true";
@@ -406,8 +467,17 @@ var appRemote = function () {
     $(document.body).on("click", "#lbl_UserName", function () {
         CloseMenu();
         if ($("#pnl_AccountInfo").css("display") != "block") {
+            if (window.location.href.indexOf("?group=") != -1) {
+                return false;
+            }
+
             if (window.location.href.indexOf("?") == -1) {
-                window.location += "?acctInfo=true";
+                if (window.location.href.indexOf("#") == -1) {
+                    window.location += "#?acctInfo=true";
+                }
+                else {
+                    window.location += "?acctInfo=true";
+                }
             }
             else {
                 window.location = GetLocationWithPartialSearch() + "acctInfo=true";
@@ -422,6 +492,9 @@ var appRemote = function () {
         }
 
         if (loc.indexOf("?") == -1) {
+            if (loc.indexOf("#") == -1) {
+                loc += "#";
+            }
             loc += "?";
         }
         else {
@@ -439,6 +512,7 @@ var appRemote = function () {
             }
         }
     });
+
     $(document.body).on("keydown", "#moveresize-top, #moveresize-left, #moveresize-width, #moveresize-height", function (event) {
         try {
             if (event.which == 13) {
@@ -455,6 +529,24 @@ var appRemote = function () {
             delete evt;
         }
     });
+
+    $(document.body).on("change", "#ddl_appDropdownSelector, #rb_norm, #rb_max, #rb_min", function (event) {
+        OpenApp();
+    });
+
+    var initialPropVal = "";
+    $(document.body).on("focus", "#moveresize-top, #moveresize-left, #moveresize-width, #moveresize-height", function (event) {
+        this.select();
+        initialPropVal = $.trim($(this).val());
+    });
+    $(document.body).on("blur", "#moveresize-top, #moveresize-left, #moveresize-width, #moveresize-height", function (event) {
+        if (initialPropVal != $.trim($(this).val())) {
+            OpenApp();
+        }
+
+        initialPropVal = "";
+    });
+
     $(document.body).on("change", "#dropdownSelector", function () {
         OnWorkspaceClick($(this).val());
     });
@@ -470,6 +562,10 @@ var appRemote = function () {
         $("." + appRemote_Config.categoryId).show();
         $("#Category-Back-Name").html(appRemote_Config.categoryName);
         $("#Category-Back-Name-id").html(appRemote_Config.categoryId);
+
+        if (appRemote_Config.autoSync && !canConnect) {
+            skipAutoConnect = true;
+        }
 
         if (updateUrl) {
             UpdateURL();
@@ -512,6 +608,9 @@ var appRemote = function () {
         }
     }
 
+    var refreshSyncTimer;
+    var refreshSyncTimer_Interval = (1000 * 10);
+
     $(document.body).on("click", "#notifications", function () {
         CloseMenu();
         if ($("#notifications-viewtable").css("display") != "block") {
@@ -529,7 +628,9 @@ var appRemote = function () {
             CanConnectToWorkspace();
         }
         else {
+            skipAutoConnect = true;
             canConnect = false;
+            clearTimeout(refreshSyncTimer);
             Load();
             GetOpenedAppsForMenu();
         }
@@ -557,12 +658,8 @@ var appRemote = function () {
             color = "0,0,0";
         }
 
-        if ($("#groupLoginLogo").length > 0) {
-            $("#groupLoginLogo").addClass("logo-backgroundcolor");
-            $(".logo-backgroundcolor").css("background-color", "rgba(" + color + ",0.4)");
-        }
-        else if ($("#mainLoginLogo").length > 0) {
-            $("#mainLoginLogo").addClass("logo-backgroundcolor");
+        if ($("#img_icon_logo").length > 0) {
+            $("#img_icon_logo").addClass("logo-backgroundcolor");
             $(".logo-backgroundcolor").css("background-color", "rgba(" + color + ",0.4)");
         }
     }
@@ -641,11 +738,53 @@ var appRemote = function () {
     /* Initialization */
     function init() {
         InitializeAdminPageLinks();
+        SetLightColorMode();
+
+        var siteTipCookie = cookie.get("siteTipsOnPageLoad");
+        if ((siteTipCookie != "") && (siteTipCookie != null) && (siteTipCookie != undefined)) {
+            appRemote_Config.siteTipsOnPageLoad = ConvertBitToBoolean(siteTipCookie);
+        }
+
+        SiteTipsOnPageLoad();
+        SetSiteToolTips(!appRemote_Config.showToolTips);
+
+        if ($(".app-icon.Icon_Only").length > 0) {
+            $(".app-icon.Icon_Only").each(function () {
+                if ($(this).parent().hasClass("app-category-div")) {
+                    $(this).parent().addClass("inline-block");
+                }
+            });
+        }
+        else if ($(".app-icon.Icon_And_Text_Only").length > 0) {
+            $(".app-icon.Icon_And_Text_Only").each(function () {
+                if ($(this).parent().hasClass("app-category-div")) {
+                    $(this).parent().addClass("inline-block");
+                }
+            });
+        }
+        else if ($(".app-icon.Icon_And_Color_Only").length > 0) {
+            $(".app-icon.Icon_And_Color_Only").each(function () {
+                if ($(this).parent().hasClass("app-category-div")) {
+                    $(this).parent().addClass("inline-block");
+                }
+            });
+        }
+        else if ($(".app-icon.Icon_Plus_Color_And_Text").length > 0) {
+            $(".app-icon.Icon_Plus_Color_And_Text").each(function () {
+                if ($(this).parent().hasClass("app-category-div")) {
+                    $(this).parent().addClass("inline-block");
+                }
+            });
+        }
     };
     function InitializeAdminPageLinks() {
         if ($("#pnl_adminPages").length > 0) {
             $("#pnl_adminPages").find(".app-icon-links, .app-icon-sub-links").each(function () {
                 var link = $(this).attr("href");
+                var blankPage = false;
+                if ($(this).attr("target") == "_blank") {
+                    blankPage = true;
+                }
 
                 if (link.indexOf("?") > 0) {
                     link += "&mobileMode=true";
@@ -654,8 +793,14 @@ var appRemote = function () {
                     link += "?mobileMode=true";
                 }
 
-                $(this).attr("onclick", "appRemote.LoadAdminPage('" + link + "');return false;");
-                $(this).attr("href", "#");
+                if (blankPage) {
+                    link += "&noHeader=true";
+                }
+                else {
+                    $(this).attr("onclick", "appRemote.StartLoadingOverlay('Loading');return true;");
+                }
+
+                $(this).attr("href", link);
             });
         }
     }
@@ -677,6 +822,151 @@ var appRemote = function () {
         isDemoMode = true;
         Load();
     }
+    function SetLightColorMode() {
+        if (appRemote_Config.needToSetColorMode) {
+            var $head = $("head");
+            var $styleCss = $head.find("style[type='text/css']");
+            var cssElements = "";
+
+            if (appRemote_Config.useDarkColor) {
+                cssElements += ".img-expand-sml{background-image:url('" + openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/expand-sml.png') !important}\n";
+                cssElements += ".img-collapse-sml{background-image:url('" + openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/collapse-sml.png') !important}\n";
+                cssElements += ".img-open{background:url('" + openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/open-dark.png') no-repeat left center !important}\n";
+                cssElements += ".img-workspace{background:url('" + openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/workspace-dark.png') no-repeat left center !important}\n";
+                cssElements += ".img-update{background:url('" + openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/update.png') no-repeat left center !important}\n";
+                cssElements += ".img-close{background:url('" + openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/close.png') no-repeat left center !important}\n";
+
+                $("#Category-Back").find("img").attr("src", openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/back-alt-dark.png");
+                $("#pnl_icons").find("img[alt='forward']").attr("src", openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/forward-dark.png");
+                $("a, a:link, a:visited").css("color", "#295ABE");
+            }
+            else {
+                $("a, a:link, a:visited").css("color", "#D8DFED");
+            }
+
+            cssElements += "#pnl_adminPages .menu-title, #pnl_AccountInfo #lbl_UserEmail, .title-dd-name, #no-notifications-id, .cb-links, #span_currStatus, h1, h2, h3, h4, h5, h6, #last-updated, .option-buttons, .app-icon .app-icon-font, .app-icon-links .app-icon-font, .app-icon-sub-links .app-icon-font, .app-icon-category-list .app-icon-font, .app-icon-admin .app-icon-font, .app-icon .workspace-reminder, #rememberme-holder label, .app-icon.Name_And_Description .app-description, .alert-panel-description, #app-load-options{color:" + appRemote_Config.foreColor + " !important}\n";
+            cssElements += "#pnl_chat_popup, #pnl_chat_users, #pnl_icons, #pnl_login, #pnl_options, #notifications-viewtable, #grouplogin-list, #pnl_AccountInfo, #pnl_adminPages, #pnl_adminPage_iframe{background:rgba(0, 0, 0, 0.0) !important}\n";
+
+            if ($styleCss.length > 0) {
+                $styleCss.eq($styleCss.length - 1).append(cssElements);
+            }
+            else {
+                $head.append("<style type='text/css'>" + cssElements + "</style>");
+            }
+        }
+    }
+    function SetSiteToolTips(isOn) {
+        if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i)) {
+            $(document).tooltip({ disabled: true });
+        }
+        else {
+            $(document).tooltip({ disabled: isOn });
+        }
+    }
+
+    var tipIndex = 0;
+    var tipArray = new Array();
+    function SiteTipsOnPageLoad() {
+        if (appRemote_Config.siteTipsOnPageLoad) {
+            $.ajax({
+                type: "GET",
+                dataType: "xml",
+                url: openWSE.siteRoot() + "SiteTips.xml",
+                cache: false,
+                complete: function (xml) {
+                    if (tipArray.length == 0) {
+                        $(xml.responseText).find("Hint").each(function () {
+                            var tipText = $.trim($(this).html());
+                            if (tipText != "") {
+                                tipArray.push(tipText);
+                            }
+                        });
+                    }
+
+                    if (tipArray.length > 0) {
+                        tipIndex = Math.round(Math.random() * (tipArray.length - 1));
+
+                        var ele = "<div id='SiteTip-element' class='Modal-element' style='display: block; visibility: visible;'>";
+                        ele += "<div class='Modal-overlay'>";
+                        ele += "<div class='Modal-element-align'>";
+                        ele += "<div class='Modal-element-modal' style='overflow:auto; min-width: " + ($(window).width() - 50) + "px; max-height: " + ($(window).height() - ($("#always-visible").outerHeight() + $("#container-footer").outerHeight() + 50)) + "px;'>";
+
+                        // Body
+                        var nextTipButton = "<input class='input-buttons nextprev-button' type='button' value='Next Tip' onclick=\"appRemote.NextSiteTip();\" style='width: 95px;' /><div class='clear-space-five'></div>";
+                        var prevTipButton = "<input class='input-buttons nextprev-button margin-bottom' type='button' value='Previous Tip' onclick=\"appRemote.PreviousSiteTip();\" style='width: 95px;' />";
+                        if (tipArray.length == 1) {
+                            nextTipButton = "";
+                            prevTipButton = "";
+                        }
+
+                        var closeButton = "<input class='input-buttons confirm-close-button float-left' type='button' value='Close' onclick=\"appRemote.CloseSiteTip();\" style='width: 95px;' />";
+                        var dontShowAgain = "<div class='dont-show-again'><input id='dont-show-again-cb' type='checkbox' checked='checked' /><label for='dont-show-again-cb'>Show Tips on Page Load</label></div>";
+
+                        if (appRemote_Config.siteTheme == "") {
+                            appRemote_Config.siteTheme = "Standard";
+                        }
+
+                        var img = "<img alt='light-bulb' src='" + openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/sitetip.png' />";
+                        var tipMessage = tipArray[tipIndex];
+
+                        ele += "<div class='ModalPadContent'>" + img + "<span class='tip-title'>Did you know?</span><div class='clear'></div><div class='message-text'>" + tipMessage + "</div>";
+                        ele += "<div class='button-holder'>" + dontShowAgain + "<div class='clear-space'></div><div class='clear-space'></div>" + prevTipButton + nextTipButton + closeButton + "<div class='clear'></div></div></div>";
+                        ele += "</div></div></div></div>";
+
+                        $("body").append(ele);
+                        AdjustSiteTipModal();
+                    }
+                }
+            });
+        }
+    }
+    function NextSiteTip() {
+        tipIndex++;
+        if (tipIndex >= tipArray.length) {
+            tipIndex = 0;
+        }
+
+        $("#SiteTip-element").find(".message-text").html(tipArray[tipIndex]);
+        AdjustSiteTipModal();
+    }
+    function PreviousSiteTip() {
+        tipIndex--;
+        if (tipIndex < 0) {
+            tipIndex = tipArray.length - 1;
+        }
+        $("#SiteTip-element").find(".message-text").html(tipArray[tipIndex]);
+        AdjustSiteTipModal();
+    }
+    function CloseSiteTip() {
+        if (!$("#dont-show-again-cb").prop("checked")) {
+            if (!isDemoMode) {
+                $.ajax({
+                    url: openWSE.siteRoot() + "WebServices/AcctSettings.asmx/TurnOffSiteTipsOnPageLoad",
+                    data: "",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8"
+                });
+            }
+
+            cookie.set("siteTipsOnPageLoad", "false", "30");
+        }
+
+        tipIndex = 0;
+        tipArray = new Array();
+
+        $('#SiteTip-element').remove();
+    }
+    function AdjustSiteTipModal() {
+        var top = $("#SiteTip-element").find(".Modal-element-modal").css("top");
+        if (top == "auto") {
+            $("#SiteTip-element").find(".Modal-element-align").css({
+                marginTop: -($("#SiteTip-element").find(".Modal-element-modal").height() / 2),
+                marginLeft: -($("#SiteTip-element").find(".Modal-element-modal").width() / 2)
+            });
+        }
+    }
+
 
     var canConnect = false;
     function CanConnectToWorkspace() {
@@ -705,11 +995,24 @@ var appRemote = function () {
                                 }
                             }
 
-                            Load();
+                            if ($("#pnl_options").css("display") == "none") {
+                                Load();
+                            }
+
+                            if (canConnect) {
+                                refreshSyncTimer = setTimeout(function () {
+                                    CanConnectToWorkspace();
+                                }, refreshSyncTimer_Interval);
+                            }
+                            else {
+                                clearTimeout(refreshSyncTimer);
+                            }
                         },
                         error: function () {
                             canConnect = false;
-                            Load();
+                            if ($("#pnl_options").css("display") == "none") {
+                                Load();
+                            }
                         }
                     });
                 }
@@ -735,16 +1038,21 @@ var appRemote = function () {
             bottom: $("#container-footer").outerHeight()
         });
 
+        var iframeHt = Math.abs($(window).height() - ($("#always-visible").outerHeight() + $("#container-footer").outerHeight()));
+        $(".pnl_overflowHolder").each(function () {
+            if ($(this).parent().find(".pnl_toplogo_banner").length > 0) {
+                $(this).css("height", iframeHt - $(this).parent().find(".pnl_toplogo_banner").outerHeight());
+            }
+        });
+
+        $(".pnl_overflowHolder").scroll();
+
         if ($(".iFrame-chat").length > 0) {
-            var h1 = $(window).height();
-            var h2 = $("#always-visible").height();
-            var h3 = $("#container-footer").height();
-            var finalHeight = h1 - (h2 + h3);
-            $(".iFrame-chat").height(finalHeight - 1);
+            $(".iFrame-chat").height(iframeHt - 1);
         }
+
         $(".loaded-app-holder").each(function () {
             if ($(this).css("visibility") != "hidden") {
-                var iframeHt = Math.abs($(window).height() - ($("#always-visible").outerHeight() + $("#container-footer").outerHeight()));
                 $(this).css({
                     height: iframeHt,
                     width: $(window).width()
@@ -758,9 +1066,11 @@ var appRemote = function () {
             currUrl = window.location.hash;
             ResetControls();
 
-            if (appRemote_Config.autoSync && !canConnect) {
+            if (appRemote_Config.autoSync && !canConnect && !skipAutoConnect) {
                 CanConnectToWorkspace();
             }
+
+            skipAutoConnect = false;
 
             if ($("#pnl_login").length > 0) {
                 $("#login_header_btn").show();
@@ -773,9 +1083,11 @@ var appRemote = function () {
             else {
                 if (currUrl == "") {
                     if ($("#pnl_login").length > 0 && $("#pnl_icons").length == 0) {
+                        AppendLogoHeaderToDiv("#pnl_login");
                         $("#pnl_login").show();
                     }
                     else {
+                        AppendLogoHeaderToDiv("#pnl_icons");
                         $("#pnl_icons").show();
 
                         HideApp();
@@ -785,6 +1097,7 @@ var appRemote = function () {
                 }
                 else if (currUrl.indexOf("acctInfo=true") != -1) {
                     if ($("#pnl_login").length > 0) {
+                        AppendLogoHeaderToDiv("#pnl_login");
                         $("#pnl_login").show();
                         $("#login_header_btn").hide();
                     }
@@ -795,6 +1108,7 @@ var appRemote = function () {
                     $("#pnl_icons").hide();
                 }
                 else if (currUrl.indexOf("loginPnl=true") != -1) {
+                    AppendLogoHeaderToDiv("#pnl_login");
                     $("#pnl_login").show();
                     $("#pnl_icons").hide();
                     $("#login_header_btn").hide();
@@ -815,6 +1129,7 @@ var appRemote = function () {
                 }
                 else {
                     if ($("#pnl_login").length > 0 && $("#pnl_icons").length == 0) {
+                        AppendLogoHeaderToDiv("#pnl_login");
                         $("#pnl_login").show();
                     }
                     else {
@@ -828,11 +1143,19 @@ var appRemote = function () {
                         appRemote_Config.remoteId = appId;
                         appRemote_Config.remoteName = name;
 
-                        if (id == "chatClient") {
+                        if (id == "chatClient" && $("#pnl_chat_users").length > 0) {
                             LoadChatClient(category, appId, name);
                         }
-                        else if (id == "adminPages") {
+                        else if (id == "adminPages" && $("#pnl_adminPages").length > 0) {
                             LoadAdminPages(id, category);
+                        }
+                        else if ((id == "adminPages" && $("#pnl_adminPages").length == 0) || (id == "chatClient" && $("#pnl_chat_users").length == 0)) {
+                            appRemote_Config.categoryId = "";
+                            appRemote_Config.categoryName = "";
+                            appRemote_Config.remoteId = "";
+                            appRemote_Config.remoteName = "";
+                            UpdateURL();
+                            LoadAppIcons("", "", "", "");
                         }
                         else {
                             LoadAppIcons(id, category, appId, name);
@@ -927,6 +1250,7 @@ var appRemote = function () {
 
     function LoadAdminPages(id, category) {
         if ($("#pnl_adminPages").length > 0) {
+            AppendLogoHeaderToDiv("#pnl_adminPages");
             if (category == "pageSelect") {
                 $("#pnl_adminPage_iframe").hide();
                 $("#pnl_adminPage_iframe").html("");
@@ -970,6 +1294,7 @@ var appRemote = function () {
 
     function LoadChatClient(category, appId, name) {
         if ($("#pnl_chat_users").length > 0) {
+            AppendLogoHeaderToDiv("#pnl_chat_users");
             if (appId != "") {
                 LoadChatClientPnl(appId, name);
             }
@@ -986,7 +1311,6 @@ var appRemote = function () {
                 $("#pnl_chat_users").hide();
                 try {
                     chatClient.BuildChatWindowMobile(appId);
-
                     $("#db-b").hide();
                     $("#db-c").show();
                 }
@@ -1003,7 +1327,9 @@ var appRemote = function () {
         }
     }
 
+    var skipAutoConnect = false;
     function LoadAppIcons(id, category, appId, name) {
+        AppendLogoHeaderToDiv("#pnl_icons");
         $("#pnl_icons").show();
 
         HideApp();
@@ -1027,6 +1353,10 @@ var appRemote = function () {
             appRemote_Config.categoryName = "";
         }
 
+        if (appRemote_Config.autoSync && !canConnect) {
+            skipAutoConnect = true;
+        }
+
         appRemote_Config.remoteId = id;
         appRemote_Config.remoteName = name;
         if (updateUrl) {
@@ -1034,6 +1364,15 @@ var appRemote = function () {
         }
     }
 
+    function AppendLogoHeaderToDiv(div) {
+        var $ele = $(div);
+        if ($ele.length > 0 && $("#pnl_icon_toplogo_banner").length > 0) {
+            if ($ele.find("#pnl_icon_toplogo_banner").length == 0) {
+                $ele.prepend($("#pnl_icon_toplogo_banner"));
+                $("#pnl_icon_toplogo_banner").show();
+            }
+        }
+    }
 
     function UpdateURL() {
         CloseMenu();
@@ -1075,10 +1414,14 @@ var appRemote = function () {
             return decodeURIComponent(r[1].replace(/\+/g, " "));
     }
 
+    var intervalCount = 0;
+    var messageLoadInterval;
     function StartLoadingOverlay(message) {
         if (message.indexOf("...") != -1) {
             message = message.replace("...", "");
         }
+
+        message = message + "<span class='progress inline-block'></span>";
 
         if ($("#loadoptions-selector-overlay").css("display") == "block") {
             $("#loadoptions-selector-overlay, #loadoptions-selector-modal").hide();
@@ -1086,9 +1429,71 @@ var appRemote = function () {
         }
 
         $("#loading-message").html(message);
+        StartMessageTickInterval($("#loading-message").find(".progress")[0]);
+
+        var $modalWindow = $("#loadoptions-selector-modal");
+        try {
+            var backgroundClr = "#151515";
+            var element = document.getElementById("always-visible");
+            if (element) {
+                var style = window.getComputedStyle(element);
+                backgroundClr = style.getPropertyValue("background");
+                if (backgroundClr == null || backgroundClr == "") {
+                    backgroundClr = style.getPropertyValue("background-color");
+                }
+            }
+
+            if (backgroundClr == null || backgroundClr == "") {
+                backgroundClr = "#151515";
+            }
+
+            $modalWindow.css("background", backgroundClr);
+        }
+        catch (evt) {
+            $modalWindow.css("background", "#151515");
+        }
+
+        if ($("#always-visible").css("display") != "none") {
+            $modalWindow.css("top", $("#always-visible").outerHeight());
+        }
+
+        var currUpdateWidth = -($modalWindow.outerWidth() / 2);
+        $modalWindow.css({
+            marginLeft: currUpdateWidth
+        });
+
         $("#loadoptions-selector-overlay, #loadoptions-selector-modal").show();
     }
+    function StartMessageTickInterval(elem) {
+        messageLoadInterval = setInterval(function () {
+            var messageWithTrail = "";
+            switch (intervalCount) {
+                case 0:
+                    messageWithTrail = ".";
+                    intervalCount++;
+                    break;
+                case 1:
+                    messageWithTrail = "..";
+                    intervalCount++;
+                    break;
+                case 2:
+                    messageWithTrail = "...";
+                    intervalCount++;
+                    break;
+                default:
+                    messageWithTrail = "";
+                    intervalCount = 0;
+                    break;
+            }
+            $(elem).html(messageWithTrail);
+        }, 400);
+    }
     function CloseStartLoadingOverlay() {
+        intervalCount = 0;
+        if (messageLoadInterval && messageLoadInterval != null) {
+            clearInterval(messageLoadInterval);
+        }
+
         $("#loadoptions-selector-overlay, #loadoptions-selector-modal").hide();
         $("#loading-message").html("");
     }
@@ -1330,10 +1735,11 @@ var appRemote = function () {
                         $("#load-option-text").next(".accordion-content").show();
                     }
 
-                    $(document).tooltip({ disabled: true });
+                    
+                    SetSiteToolTips(false);
                     $("#pnl_adminPages").hide();
                     $("#pnl_icons").hide();
-                    $(document).tooltip({ disabled: false });
+                    SetSiteToolTips(!appRemote_Config.showToolTips);
                     $("#pnl_options").show();
                 },
                 error: function () {
@@ -1377,7 +1783,13 @@ var appRemote = function () {
                                 $this.addClass("active");
 
                                 if (data.d[i][1] != "") {
-                                    var db = "<span class='workspace-reminder font-no-bold'>" + GetWorkspaceNumber(data.d[i][1]) + "</span>";
+                                    var style = "";
+                                    if ($this.find(".app-icon-font").length > 0 && ($this.hasClass("Icon_And_Color_Only") || $this.hasClass("Color_And_Description") || $this.hasClass("Icon_Plus_Color_And_Text"))) {
+                                        var ftColor = $this.find(".app-icon-font").css("color");
+                                        style = " style='color:" + ftColor + "!important;'";
+                                    }
+
+                                    var db = "<span class='workspace-reminder font-no-bold'" + style + ">" + GetWorkspaceNumber(data.d[i][1]) + "</span>";
                                     $this.append(db);
                                 }
                             }
@@ -1501,7 +1913,8 @@ var appRemote = function () {
 
         $(".app-icon[data-appid='" + appRemote_Config.remoteId + "']").addClass("active");
         $(".app-icon[data-appid='" + appRemote_Config.remoteId + "']").find(".app-icon-font").addClass("mobile-open");
-        $("#pnl_options").append("<div class='loading-background-holder'></div>");
+        AppendLoadingMessage($("#pnl_options"));
+
         $("#pnl_options").append("<iframe id='" + appRemote_Config.remoteId + "-loadedapp' src='" + href + "' frameborder='0' class='loaded-app-holder' style='width: " + $(window).width() + "; height: " + iframeHt + "px;'></iframe>");
         $(".loaded-app-holder").one("load", (function () {
             $(".loading-background-holder").remove();
@@ -1565,14 +1978,13 @@ var appRemote = function () {
         }
 
         $('#updatePnl_AppList').sortable({
-            axis: 'y',
             cancel: '.app-icon-category-list, #Category-Back',
             containment: '#updatePnl_AppList',
             opacity: 0.6,
             scrollSensitivity: 40,
             scrollSpeed: 40,
             start: function (event, ui) {
-                $(document).tooltip({ disabled: true });
+                SetSiteToolTips(false);
             },
             stop: function (event, ui) {
                 var listorder = '';
@@ -1591,10 +2003,25 @@ var appRemote = function () {
                     });
                 }
 
-                $(document).tooltip({ disabled: false });
+                SetSiteToolTips(!appRemote_Config.showToolTips);
             }
         });
+
+        if ($(".app-icon.Icon_Only").length == 0 && $(".app-icon.Icon_And_Text_Only").length == 0 && $(".app-icon.Icon_And_Color_Only").length == 0 && $(".app-icon.Icon_Plus_Color_And_Text").length == 0) {
+            $("#updatePnl_AppList").sortable("option", "axis", "y");
+        }
+
         $('#updatePnl_AppList').disableSelection();
+    }
+    function AppendLoadingMessage(_this) {
+        $(_this).append("<div class='loading-background-holder'></div>");
+        var $appIcon = $(".app-icon[data-appid='" + appRemote_Config.remoteId + "']");
+        if ($appIcon.length > 0 && $appIcon.find("img").length > 0 && $appIcon.find("img").css("display") != "none" && !$appIcon.find("img").hasClass("display-none")) {
+            $(_this).find(".loading-background-holder").css("background-image", "url('" + $appIcon.find("img").attr("src") + "')");
+            if ($appIcon.attr("data-appbgcolor")) {
+                $(_this).find(".loading-background-holder").css("background-color", $appIcon.attr("data-appbgcolor"));
+            }
+        }
     }
 
 
@@ -1820,7 +2247,13 @@ var appRemote = function () {
     function LoadCreateAccountHolder() {
         if ($("#Login-holder").css("display") != "none") {
             $("#Login-holder").hide();
-            $("#iframe-createaccount-holder").html("<iframe id='iframe-demo' src='" + openWSE.siteRoot() + "SiteTools/iframes/CreateAccount.aspx' frameborder='0' width='100%' style='visibility: hidden;'></iframe>");
+
+            var fullUrl = GetSiteRoot() + "SiteTools/iframes/CreateAccount.aspx";
+            if (GetSiteRoot() == "/Scripts/SiteCalls/Full/" || GetSiteRoot() == "/Scripts/SiteCalls/Min/") {
+                fullUrl = "/SiteTools/iframes/CreateAccount.aspx";
+            }
+
+            $("#iframe-createaccount-holder").html("<iframe id='iframe-demo' src='" + fullUrl + "' frameborder='0' width='100%' style='visibility: hidden;'></iframe>");
             $("#iframe-createaccount-holder").append("<div style='text-align: center;'><h3 id='loadingControls'>Loading Controls. Please Wait...</h3></div>");
             $("#CreateAccount-holder").show();
             $("#iframe-demo").load(function () {
@@ -1927,6 +2360,10 @@ var appRemote = function () {
         InitializeSwipeEvent: InitializeSwipeEvent,
         CloseAllOpened: CloseAllOpened,
         init: init,
+        NextSiteTip: NextSiteTip,
+        PreviousSiteTip: PreviousSiteTip,
+        CloseSiteTip: CloseSiteTip,
+        AdjustSiteTipModal: AdjustSiteTipModal,
         ConvertBitToBoolean: ConvertBitToBoolean,
         IsComplexWorkspaceMode: IsComplexWorkspaceMode,
         StartLoadingOverlay: StartLoadingOverlay,
@@ -2037,6 +2474,83 @@ var openWSE = function () {
 
         return window.location.protocol + "//" + window.location.host + "/" + sitePath;
     }
+    function UpdateAppSelector() {
+        $(".clear-applist").remove();
+
+        if ($(".app-icon.Icon_Only").length > 0) {
+            $("#updatePnl_AppList").append("<div class='clear-applist'></div>");
+
+            $("#pnl_icons").find(".pnl_overflowHolder").css("text-align", "center");
+
+            if ($(".app-category-div").length > 0) {
+                $(".app-icon.Icon_Only").each(function () {
+                    if ($(this).parent().hasClass("app-category-div")) {
+                        $(this).parent().addClass("inline-block");
+                    }
+                });
+            }
+        }
+        else if ($(".app-icon.Icon_And_Text_Only").length > 0) {
+            $("#updatePnl_AppList").append("<div class='clear-applist'></div>");
+
+            $("#pnl_icons").find(".pnl_overflowHolder").css("text-align", "center");
+
+            if ($(".app-category-div").length > 0) {
+                $(".app-icon.Icon_And_Text_Only").each(function () {
+                    if ($(this).parent().hasClass("app-category-div")) {
+                        $(this).parent().addClass("inline-block");
+                    }
+                });
+            }
+        }
+        else if ($(".app-icon.Icon_And_Color_Only").length > 0) {
+            $("#updatePnl_AppList").append("<div class='clear-applist'></div>");
+
+            $("#pnl_icons").find(".pnl_overflowHolder").css("text-align", "center");
+
+            if ($(".app-category-div").length > 0) {
+                $(".app-icon.Icon_And_Color_Only").each(function () {
+                    if ($(this).parent().hasClass("app-category-div")) {
+                        $(this).parent().addClass("inline-block");
+                    }
+                });
+            }
+        }
+        else if ($(".app-icon.Icon_Plus_Color_And_Text").length > 0) {
+            $("#updatePnl_AppList").append("<div class='clear-applist'></div>");
+
+            $("#pnl_icons").find(".pnl_overflowHolder").css("text-align", "center");
+
+            if ($(".app-category-div").length > 0) {
+                $(".app-icon.Icon_Plus_Color_And_Text").each(function () {
+                    if ($(this).parent().hasClass("app-category-div")) {
+                        $(this).parent().addClass("inline-block");
+                    }
+                });
+            }
+        }
+    }
+
+    /* A replacement function for $.getScript */
+    function GetScriptFunction(loc, callback) {
+        if (loc && $("head").find("script[src='" + loc + "']").length == 0) {
+            var scriptTag = document.createElement("script");
+            scriptTag.type = "text/javascript";
+            if (callback && typeof (callback) == "function") {
+                scriptTag.onload = callback;
+            }
+            scriptTag.src = loc;
+            document.getElementsByTagName("head")[0].appendChild(scriptTag);
+        }
+        else if (callback && typeof (callback) == "function") {
+            try {
+                callback();
+            }
+            catch (evt) {
+                openWSE.AlertWindow(evt.message, loc);
+            }
+        }
+    }
 
     return {
         NotiActionsHideInd: function (_this) {
@@ -2112,8 +2626,14 @@ var openWSE = function () {
                 $(_this).addClass("img-expand-sml");
                 $(_this).closest(".app-icon-links").parent().find("." + div).slideUp(appRemote_Config.animationSpeed);
             }
+
+            setTimeout(function () {
+                appRemote.CloseStartLoadingOverlay();
+            }, 150);
         },
-        BackgroundLoop: BackgroundLoop
+        BackgroundLoop: BackgroundLoop,
+        UpdateAppSelector: UpdateAppSelector,
+        GetScriptFunction: GetScriptFunction
     };
 }();
 
@@ -2126,6 +2646,15 @@ $(document).ready(function () {
 
     appRemote.Load();
     appRemote.InitializeSwipeEvent();
+
+    $(".pnl_overflowHolder").scroll(function () {
+        if ($(this).scrollTop() == 0) {
+            $(this).parent().find(".pnl_toplogo_banner").removeClass("scroll-shadow-remote");
+        }
+        else {
+            $(this).parent().find(".pnl_toplogo_banner").addClass("scroll-shadow-remote");
+        }
+    });
 });
 
 $(function () {
@@ -2149,6 +2678,12 @@ $(window).resize(function () {
     }
 
     var iframeHt = Math.abs($(window).height() - ($("#always-visible").outerHeight() + $("#container-footer").outerHeight()));
+    $(".pnl_overflowHolder").each(function () {
+        if ($(this).parent().find(".pnl_toplogo_banner").length > 0) {
+            $(this).css("height", iframeHt - $(this).parent().find(".pnl_toplogo_banner").outerHeight());
+        }
+    });
+
     $(".loaded-app-holder").each(function () {
         if ($(this).css("visibility") != "hidden") {
             $(this).css({
@@ -2164,6 +2699,12 @@ $(window).resize(function () {
         $(".alert-panel-description").each(function () {
             $(this).css("width", $(window).width() - 135);
         });
+    }
+
+    if ($("#SiteTip-element").length > 0) {
+        $("#SiteTip-element").find(".Modal-element-modal").css("min-width", $(window).width() - 50);
+        $("#SiteTip-element").find(".Modal-element-modal").css("max-height", ($(window).height() - ($("#always-visible").outerHeight() + $("#container-footer").outerHeight() + 50)));
+        appRemote.AdjustSiteTipModal();
     }
 });
 
@@ -2213,7 +2754,7 @@ $(window).resize(function () {
 })(jQuery, document);
 var cookie = {
     set: function (e, t, n) {
-        if (openWSE_Config.saveCookiesAsSessions) {
+        if (appRemote_Config.saveCookiesAsSessions) {
             var saveHandler = openWSE.siteRoot() + "WebServices/SaveControls.asmx/SetCookie";
             $.ajax({
                 url: saveHandler,
@@ -2234,7 +2775,7 @@ var cookie = {
     },
     get: function (e) {
         var cookieVal = null;
-        if (openWSE_Config.saveCookiesAsSessions) {
+        if (appRemote_Config.saveCookiesAsSessions) {
             var saveHandler = openWSE.siteRoot() + "WebServices/SaveControls.asmx/GetCookie";
             $.ajax({
                 url: saveHandler,
@@ -2264,7 +2805,7 @@ var cookie = {
         return cookieVal;
     },
     del: function (e) {
-        if (openWSE_Config.saveCookiesAsSessions) {
+        if (appRemote_Config.saveCookiesAsSessions) {
             var saveHandler = openWSE.siteRoot() + "WebServices/SaveControls.asmx/DelCookie";
             $.ajax({
                 url: saveHandler,

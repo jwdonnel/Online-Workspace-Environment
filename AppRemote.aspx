@@ -1,13 +1,12 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="AppRemote, App_Web_ravcmota" %>
+﻿<%@ page title="Mobile Workspace" language="C#" autoeventwireup="true" inherits="AppRemote, App_Web_jtoan5js" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Mobile Workspace</title>
     <meta name="author" content="John Donnelly" />
     <meta name="revisit-after" content="10 days" />
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-    <meta name="viewport" content="initial-scale=0.95, user-scalable=no" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <link id="Link1" runat="server" rel="shortcut icon" href="~/Standard_Images/favicon.ico"
@@ -15,7 +14,7 @@
     <link id="Link2" runat="server" rel="icon" href="~/Standard_Images/favicon.ico" type="image/ico" />
     <script type="text/javascript" src="Scripts/jquery/mootools.js"></script>
 </head>
-<body id="main_body" runat="server" style="overflow: hidden;">
+<body id="main_body" runat="server">
     <form id="form1" runat="server">
         <asp:ScriptManager ID="ScriptManager_Main" runat="server" AsyncPostBackTimeout="360000">
         </asp:ScriptManager>
@@ -84,7 +83,7 @@
         <div id="loadoptions-selector-overlay" style="display: none;">
         </div>
         <div id="loadoptions-selector-modal" style="display: none;">
-            <h3 id="loading-message" class="pad-top margin-top"></h3>
+            <h3 id="loading-message"></h3>
         </div>
         <asp:HiddenField ID="hf_LogoutOfGroup" runat="server" OnValueChanged="hf_LogoutOfGroup_ValueChanged" />
         <div id="notifications-viewtable">
@@ -132,8 +131,7 @@
                         <asp:Label ID="lbl_UserEmail" runat="server" Text=""></asp:Label>
                         <div class="clear-space-five"></div>
                         <div class="clear-space-two"></div>
-                        <asp:HyperLink ID="hyp_accountSettings" runat="server" Text="Account" NavigateUrl="~/SiteTools/UserMaintenance/AcctSettings.aspx?mobileMode=true" CssClass="account-link-style"></asp:HyperLink>
-                        <span class="account-link-style-seperator">-</span>
+                        <asp:HyperLink ID="hyp_accountSettings" runat="server" Text="Account" NavigateUrl="~/SiteTools/UserMaintenance/AcctSettings.aspx?mobileMode=true" CssClass="account-link-style margin-right"></asp:HyperLink>
                         <asp:HyperLink ID="hyp_accountCustomizations" runat="server" Text="Customize" NavigateUrl="~/SiteTools/UserMaintenance/AcctSettings.aspx?mobileMode=true&tab=SiteCustomizations" CssClass="account-link-style"></asp:HyperLink>
                     </div>
                 </div>
@@ -145,51 +143,64 @@
                 <asp:LinkButton ID="lb_signoff" runat="server" OnClick="SignOff_Clicked" CssClass="margin-left margin-right"><span class="img-logoff"></span>Log Out</asp:LinkButton>
             </div>
         </asp:Panel>
-        <asp:Panel ID="pnl_chat_users" runat="server" Style="display: none;">
-            <div id="statusDiv" class="pad-all-big">
-                <b class="float-left pad-right">Your Status:</b><a href="#" class="chatstatus_mid">
-                    <span id="currentStatus" style="width: 130px;"></span></a>
-                <div id="ul_StatusList" style="display: none;">
-                    <ul style="list-style: none;">
-                        <li class="updatestatus">
-                            <div class='statusUserDiv statusUserOnline'>
-                            </div>
-                            <a href="#Available">Available</a></li>
-                        <li class="updatestatus">
-                            <div class='statusUserDiv statusUserBusy'>
-                            </div>
-                            <a href="#Busy">Busy</a></li>
-                        <li class="updatestatus">
-                            <div class='statusUserDiv statusUserAway'>
-                            </div>
-                            <a href="#Away">Away</a></li>
-                        <li class="updatestatus">
-                            <div class='statusUserDiv statusUserOffline'>
-                            </div>
-                            <a href="#Out">Offline</a></li>
-                    </ul>
-                </div>
-                <div class="clear-margin">
-                    <span class="pad-right"><b>Users Online:</b></span><span id="header-total-online"></span>
-                </div>
-            </div>
-            <div id="chatuserlist">
-                <h3 class="pad-left-big pad-bottom-big">Loading users....
-                </h3>
+
+        <div id="pnl_icon_toplogo_banner" class="pnl_toplogo_banner" runat="server" style="display: none;">
+            <asp:Image ID="img_icon_logo" runat="server" ImageUrl="~/Standard_Images/logo.png" />
+        </div>
+
+        <asp:Panel ID="pnl_icons" runat="server">
+            <div class="pnl_overflowHolder">
+                <asp:UpdatePanel ID="updatePnl_AppList" runat="server" UpdateMode="Conditional">
+                    <ContentTemplate>
+                        <asp:PlaceHolder ID="ph_iconList" runat="server"></asp:PlaceHolder>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
             </div>
         </asp:Panel>
-        <asp:Panel ID="pnl_icons" runat="server">
-            <asp:UpdatePanel ID="updatePnl_AppList" runat="server" UpdateMode="Conditional">
-                <ContentTemplate>
-                    <asp:PlaceHolder ID="ph_iconList" runat="server"></asp:PlaceHolder>
-                </ContentTemplate>
-            </asp:UpdatePanel>
+        <asp:Panel ID="pnl_chat_users" runat="server" Style="display: none;">
+            <div class="pnl_overflowHolder">
+                <div id="statusDiv" class="pad-all-big">
+                    <b class="float-left pad-right">Your Status:</b><a href="#" class="chatstatus_mid">
+                        <span id="currentStatus" style="width: 130px;"></span></a>
+                    <div id="ul_StatusList" style="display: none;">
+                        <ul style="list-style: none;">
+                            <li class="updatestatus">
+                                <div class='statusUserDiv statusUserOnline'>
+                                </div>
+                                <a href="#Available">Available</a></li>
+                            <li class="updatestatus">
+                                <div class='statusUserDiv statusUserBusy'>
+                                </div>
+                                <a href="#Busy">Busy</a></li>
+                            <li class="updatestatus">
+                                <div class='statusUserDiv statusUserAway'>
+                                </div>
+                                <a href="#Away">Away</a></li>
+                            <li class="updatestatus">
+                                <div class='statusUserDiv statusUserOffline'>
+                                </div>
+                                <a href="#Out">Offline</a></li>
+                        </ul>
+                    </div>
+                    <div class="clear-margin">
+                        <span class="pad-right"><b>Users Online:</b></span><span id="header-total-online"></span>
+                    </div>
+                </div>
+                <div id="chatuserlist">
+                    <h3 class="pad-left-big pad-bottom-big">Loading users....
+                    </h3>
+                </div>
+            </div>
         </asp:Panel>
         <asp:Panel ID="pnl_adminPages" runat="server" Style="display: none;">
-        </asp:Panel>
-        <asp:Panel ID="pnl_adminPage_iframe" runat="server" Style="display: none;">
+            <div class="pnl_overflowHolder">
+                <div class="clear-space"></div>
+                <asp:PlaceHolder ID="ph_adminPageList" runat="server"></asp:PlaceHolder>
+            </div>
         </asp:Panel>
         <asp:Panel ID="pnl_chat_popup" runat="server" Style="display: none;">
+        </asp:Panel>
+        <asp:Panel ID="pnl_adminPage_iframe" runat="server" Style="display: none;">
         </asp:Panel>
         <asp:HiddenField ID="hf_chatsound" runat="server" ClientIDMode="Static" />
         <asp:Panel ID="pnl_options" runat="server" Style="display: none; text-align: center;">
@@ -230,11 +241,11 @@
                                 <h3 class="pad-left pad-right pad-bottom">App Position</h3>
                                 <div class="pad-all">
                                     <span class="pad-right">Top Pos:</span>
-                                    <input type="text" id="moveresize-top" /><span class="pad-left">px</span>
+                                    <input type="number" id="moveresize-top" /><span class="pad-left">px</span>
                                     <div class="clear-space">
                                     </div>
                                     <span class="pad-right">Left Pos:</span>
-                                    <input type="text" id="moveresize-left" /><span class="pad-left">px</span>
+                                    <input type="number" id="moveresize-left" /><span class="pad-left">px</span>
                                     <div class="clear-space">
                                     </div>
                                 </div>
@@ -244,11 +255,11 @@
                                     <h3 class="pad-left pad-right pad-bottom">App Size</h3>
                                     <div class="pad-all">
                                         <span class="pad-right">Width: </span>
-                                        <input type="text" id="moveresize-width" /><span class="pad-left">px</span>
+                                        <input type="number" id="moveresize-width" /><span class="pad-left">px</span>
                                         <div class="clear-space">
                                         </div>
                                         <span class="pad-right">Height:</span>
-                                        <input type="text" id="moveresize-height" /><span class="pad-left">px</span>
+                                        <input type="number" id="moveresize-height" /><span class="pad-left">px</span>
                                         <div class="clear-space">
                                         </div>
                                     </div>
@@ -278,142 +289,139 @@
                 </div>
             </div>
         </asp:Panel>
-        <asp:Panel ID="pnl_login" runat="server" CssClass="pad-all-big" Enabled="false" Visible="false">
-            <div align="center" class="pad-top pad-bottom-big">
-                <div class="logo-holder">
-                    <img id="groupLoginLogo" runat="server" alt="Logo" visible="false" />
-                    <div id="mainLoginLogo" runat="server" class="main-logo"></div>
-                </div>
-                <div class="clear"></div>
-            </div>
-            <div id="Login-holder">
-                <asp:Login ID="Login1" runat="server" FailureText="<span style='color: #D80000;'>Invalid Username or Password.</span>"
-                    LoginButtonText="Login" TitleText="" Width="100%" DestinationPageUrl="AppRemote.aspx"
-                    OnLoggingIn="Login_LoggingIn" OnLoggedIn="Login_Loggedin" OnLoginError="Login_error"
-                    Style="position: relative; z-index: 5000">
-                    <LayoutTemplate>
-                        <asp:Panel ID="pnl_Login" runat="server" DefaultButton="LoginButton">
-                            <table cellpadding="5" cellspacing="5" style="margin: 0 auto;">
-                                <tr>
-                                    <td>
-                                        <div style="position: relative;">
-                                            <asp:TextBox ID="UserName" runat="server" CssClass="signintextbox" placeholder="Username"></asp:TextBox>
-                                            <asp:RequiredFieldValidator ID="UserNameRequired" runat="server" ControlToValidate="UserName"
-                                                ErrorMessage="User Name is required." Font-Bold="True" ForeColor="Red" ToolTip="User Name is required."
-                                                ValidationGroup="ctl00$Login1">*</asp:RequiredFieldValidator>
-                                            <div class="username-login-img"></div>
-                                            <div class="clear-space"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div style="position: relative;">
-                                            <asp:TextBox ID="Password" runat="server" TextMode="Password" CssClass="signintextbox" placeholder="Password"></asp:TextBox>
-                                            <asp:RequiredFieldValidator ID="PasswordRequired" runat="server" ControlToValidate="Password"
-                                                ErrorMessage="Password is required." Font-Bold="True" ForeColor="Red" ToolTip="Password is required."
-                                                ValidationGroup="ctl00$Login1">*</asp:RequiredFieldValidator>
-                                            <div class="password-login-img"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="clear-space"></div>
-                                        <asp:Button ID="LoginButton" runat="server" CommandName="Login" ValidationGroup="ctl00$Login1"
-                                            Text="Login" CssClass="input-buttons-login" />
-                                        <div class="clear-space"></div>
-                                        <div id="rememberme-holder">
-                                            <asp:CheckBox ID="RememberMe" runat="server" Text=" Remember me" />
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                            <asp:UpdatePanel ID="updatepnl_Login" runat="server" UpdateMode="Conditional">
-                                <ContentTemplate>
-                                    <div align="center">
-                                        <div class="clear-space"></div>
-                                        <asp:Literal ID="FailureText" runat="server"></asp:Literal>
-                                        <asp:Literal ID="ltl_logingrouperror" runat="server"></asp:Literal>
-                                        <div class="clear-space"></div>
-                                    </div>
-                                </ContentTemplate>
-                                <Triggers>
-                                    <asp:AsyncPostBackTrigger ControlID="LoginButton" />
-                                </Triggers>
-                            </asp:UpdatePanel>
-                        </asp:Panel>
-                    </LayoutTemplate>
-                    <TextBoxStyle BackColor="White" />
-                    <ValidatorTextStyle Font-Bold="True" ForeColor="Red" />
-                </asp:Login>
-                <asp:UpdatePanel ID="updatepnl_LoginWith" runat="server" UpdateMode="Conditional">
-                    <ContentTemplate>
-                        <div align="center">
-                            <a id="hyp_groupLogin" runat="server" href="#?groupLogin=true">Select a Group to Login To</a>
-                            <asp:HyperLink ID="hyp_cancelGroupLogin" runat="server" NavigateUrl="~/AppRemote.aspx" Text="Cancel Group Login" Visible="false" Enabled="false"></asp:HyperLink>
-                            <div class="clear-space"></div>
-                            <a href="#" id="lnk_forgotpassword" onclick="appRemote.LoadRecoveryPassword();return false;">Forgot your Password?</a>
-                            <div class="clear-space"></div>
-                            <a href="#" id="login_register_link" onclick="appRemote.LoadCreateAccountHolder();return false;">Create a new account</a>
-                        </div>
-                    </ContentTemplate>
-                    <Triggers>
-                        <asp:AsyncPostBackTrigger ControlID="lbtn_signinwith_Google" />
-                        <asp:AsyncPostBackTrigger ControlID="lbtn_signinwith_Twitter" />
-                        <asp:AsyncPostBackTrigger ControlID="lbtn_signinwith_Facebook" />
-                    </Triggers>
-                </asp:UpdatePanel>
-                <div class="pad-top-big" align="center">
-                    <div class="loginwith-api-text">
-                        <div><span class="inline-block">Or Login with...</span></div>
-                        <hr class="soften" />
-                    </div>
-                    <div class="clear-space"></div>
-                    <asp:LinkButton ID="lbtn_signinwith_Google" runat="server" CssClass="loginwith-api" OnClick="lbtn_signinwith_Google_Click" ToolTip="Login with Google">
-                        <img id="google_login_logo" alt="" src="~/Standard_Images/ApiLoginImages/google_login.png" runat="server" />
-                    </asp:LinkButton>
-                    <asp:LinkButton ID="lbtn_signinwith_Twitter" runat="server" CssClass="loginwith-api" OnClick="lbtn_signinwith_Twitter_Click" ToolTip="Login with Twitter">
-                        <img id="twitter_login_logo" alt="" src="~/Standard_Images/ApiLoginImages/twitter_login.png" runat="server" />
-                    </asp:LinkButton>
-                    <asp:LinkButton ID="lbtn_signinwith_Facebook" runat="server" CssClass="loginwith-api" OnClick="lbtn_signinwith_Facebook_Click" ToolTip="Login with Facebook">
-                        <img id="facebook_login_logo" alt="" src="~/Standard_Images/ApiLoginImages/facebook_login.png" runat="server" />
-                    </asp:LinkButton>
-                </div>
-            </div>
-            <div id="CreateAccount-holder" style="display: none;">
-                <div id="iframe-createaccount-holder">
-                </div>
-                <div align="center" class="pad-top-big">
-                    <a href="#" onclick="appRemote.LoadCreateAccountHolder();return false;">Cancel</a>
-                </div>
-            </div>
-            <div id="ForgotPassword-holder" style="display: none;">
-                <div style="text-align: center;">
-                    <h4>Please provide your username. An email will be sent to this account using the email address associated with your account. Click the link in the email to recover your account. Always change your password after recovering your account.</h4>
-                </div>
-                <div class="clear-space"></div>
-                <asp:UpdatePanel ID="updatepnl_forgotPassword" runat="server" UpdateMode="Conditional">
-                    <ContentTemplate>
-                        <asp:Panel ID="pnl_forgotPassword" runat="server" DefaultButton="btn_passwordrecovery" Style="margin: 0 auto; width: 270px; text-align: center;">
-                            <asp:TextBox ID="tb_username_recovery" runat="server" CssClass="signintextbox margin-left" placeholder="Username"></asp:TextBox>
-                            <asp:RequiredFieldValidator ID="UserNameRequired_recovery" runat="server" ControlToValidate="tb_username_recovery"
-                                ErrorMessage="User Name is required." Font-Bold="True" ForeColor="Red" ToolTip="User Name is required."
-                                ValidationGroup="UsernameRecovery">*</asp:RequiredFieldValidator>
-                            <div class="clear-space"></div>
-                            <asp:Button ID="btn_passwordrecovery" runat="server" OnClick="btn_passwordrecovery_Click"
-                                CssClass="input-buttons-login" Text="Send Email" ValidationGroup="UsernameRecovery" />
-                            <div class="clear-space"></div>
-                            <div align="center" class="pad-top-big">
-                                <a href="#" onclick="appRemote.LoadRecoveryPassword();return false;">Cancel</a>
+        <asp:Panel ID="pnl_login" runat="server" Enabled="false" Visible="false">
+            <div class="pnl_overflowHolder">
+                <div class="margin-top-big">
+                    <div id="Login-holder">
+                        <asp:Login ID="Login1" runat="server" FailureText="<span style='color: #D80000;'>Invalid Username or Password.</span>"
+                            LoginButtonText="Login" TitleText="" Width="100%" DestinationPageUrl="AppRemote.aspx"
+                            OnLoggingIn="Login_LoggingIn" OnLoggedIn="Login_Loggedin" OnLoginError="Login_error"
+                            Style="position: relative; z-index: 5000">
+                            <LayoutTemplate>
+                                <asp:Panel ID="pnl_Login" runat="server" DefaultButton="LoginButton">
+                                    <table cellpadding="5" cellspacing="5" style="margin: 0 auto;">
+                                        <tr>
+                                            <td>
+                                                <div style="position: relative;">
+                                                    <asp:TextBox ID="UserName" runat="server" CssClass="signintextbox" placeholder="Username"></asp:TextBox>
+                                                    <asp:RequiredFieldValidator ID="UserNameRequired" runat="server" ControlToValidate="UserName"
+                                                        ErrorMessage="User Name is required." Font-Bold="True" ForeColor="Red" ToolTip="User Name is required."
+                                                        ValidationGroup="ctl00$Login1">*</asp:RequiredFieldValidator>
+                                                    <div class="username-login-img"></div>
+                                                    <div class="clear-space"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div style="position: relative;">
+                                                    <asp:TextBox ID="Password" runat="server" TextMode="Password" CssClass="signintextbox" placeholder="Password"></asp:TextBox>
+                                                    <asp:RequiredFieldValidator ID="PasswordRequired" runat="server" ControlToValidate="Password"
+                                                        ErrorMessage="Password is required." Font-Bold="True" ForeColor="Red" ToolTip="Password is required."
+                                                        ValidationGroup="ctl00$Login1">*</asp:RequiredFieldValidator>
+                                                    <div class="password-login-img"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="clear-space"></div>
+                                                <asp:Button ID="LoginButton" runat="server" CommandName="Login" ValidationGroup="ctl00$Login1"
+                                                    Text="Login" CssClass="input-buttons-login" />
+                                                <div class="clear-space"></div>
+                                                <div id="rememberme-holder">
+                                                    <asp:CheckBox ID="RememberMe" runat="server" Text=" Remember me" />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <asp:UpdatePanel ID="updatepnl_Login" runat="server" UpdateMode="Conditional">
+                                        <ContentTemplate>
+                                            <div align="center">
+                                                <div class="clear-space"></div>
+                                                <asp:Literal ID="FailureText" runat="server"></asp:Literal>
+                                                <asp:Literal ID="ltl_logingrouperror" runat="server"></asp:Literal>
+                                                <div class="clear-space"></div>
+                                            </div>
+                                        </ContentTemplate>
+                                        <Triggers>
+                                            <asp:AsyncPostBackTrigger ControlID="LoginButton" />
+                                        </Triggers>
+                                    </asp:UpdatePanel>
+                                </asp:Panel>
+                            </LayoutTemplate>
+                            <TextBoxStyle BackColor="White" />
+                            <ValidatorTextStyle Font-Bold="True" ForeColor="Red" />
+                        </asp:Login>
+                        <asp:UpdatePanel ID="updatepnl_LoginWith" runat="server" UpdateMode="Conditional">
+                            <ContentTemplate>
+                                <div align="center">
+                                    <a id="hyp_groupLogin" runat="server" href="#?groupLogin=true">Select a group to login to</a>
+                                    <asp:HyperLink ID="hyp_cancelGroupLogin" runat="server" NavigateUrl="~/AppRemote.aspx" Text="Cancel Group Login" Visible="false" Enabled="false"></asp:HyperLink>
+                                    <div class="clear-space"></div>
+                                    <a href="#" id="lnk_forgotpassword" onclick="appRemote.LoadRecoveryPassword();return false;">Forgot your Password?</a>
+                                    <div class="clear-space"></div>
+                                    <a href="#" id="login_register_link" onclick="appRemote.LoadCreateAccountHolder();return false;">Create a new account</a>
+                                </div>
+                            </ContentTemplate>
+                            <Triggers>
+                                <asp:AsyncPostBackTrigger ControlID="lbtn_signinwith_Google" />
+                                <asp:AsyncPostBackTrigger ControlID="lbtn_signinwith_Twitter" />
+                                <asp:AsyncPostBackTrigger ControlID="lbtn_signinwith_Facebook" />
+                            </Triggers>
+                        </asp:UpdatePanel>
+                        <div class="pad-top-big" align="center">
+                            <div class="loginwith-api-text">
+                                <div><span class="inline-block">Or Login with...</span></div>
+                                <hr class="soften" />
                             </div>
-                        </asp:Panel>
-                        <asp:Label ID="lbl_passwordResetMessage" runat="server" Text=""></asp:Label>
-                    </ContentTemplate>
-                    <Triggers>
-                        <asp:AsyncPostBackTrigger ControlID="btn_passwordrecovery" />
-                    </Triggers>
-                </asp:UpdatePanel>
+                            <div class="clear-space"></div>
+                            <asp:LinkButton ID="lbtn_signinwith_Google" runat="server" CssClass="loginwith-api" OnClick="lbtn_signinwith_Google_Click" ToolTip="Login with Google">
+                                <img id="google_login_logo" alt="" src="~/Standard_Images/ApiLoginImages/google_login.png" runat="server" />
+                            </asp:LinkButton>
+                            <asp:LinkButton ID="lbtn_signinwith_Twitter" runat="server" CssClass="loginwith-api" OnClick="lbtn_signinwith_Twitter_Click" ToolTip="Login with Twitter">
+                                <img id="twitter_login_logo" alt="" src="~/Standard_Images/ApiLoginImages/twitter_login.png" runat="server" />
+                            </asp:LinkButton>
+                            <asp:LinkButton ID="lbtn_signinwith_Facebook" runat="server" CssClass="loginwith-api" OnClick="lbtn_signinwith_Facebook_Click" ToolTip="Login with Facebook">
+                                <img id="facebook_login_logo" alt="" src="~/Standard_Images/ApiLoginImages/facebook_login.png" runat="server" />
+                            </asp:LinkButton>
+                        </div>
+                    </div>
+                    <div id="CreateAccount-holder" style="display: none;">
+                        <div id="iframe-createaccount-holder">
+                        </div>
+                        <div align="center" class="pad-top-big">
+                            <a href="#" onclick="appRemote.LoadCreateAccountHolder();return false;">Cancel</a>
+                        </div>
+                    </div>
+                    <div id="ForgotPassword-holder" style="display: none;">
+                        <div style="text-align: center;">
+                            <h4>Please provide your username. An email will be sent to this account using the email address associated with your account. Click the link in the email to recover your account. Always change your password after recovering your account.</h4>
+                        </div>
+                        <div class="clear-space"></div>
+                        <asp:UpdatePanel ID="updatepnl_forgotPassword" runat="server" UpdateMode="Conditional">
+                            <ContentTemplate>
+                                <asp:Panel ID="pnl_forgotPassword" runat="server" DefaultButton="btn_passwordrecovery" Style="margin: 0 auto; width: 270px; text-align: center;">
+                                    <asp:TextBox ID="tb_username_recovery" runat="server" CssClass="signintextbox margin-left" placeholder="Username"></asp:TextBox>
+                                    <asp:RequiredFieldValidator ID="UserNameRequired_recovery" runat="server" ControlToValidate="tb_username_recovery"
+                                        ErrorMessage="User Name is required." Font-Bold="True" ForeColor="Red" ToolTip="User Name is required."
+                                        ValidationGroup="UsernameRecovery">*</asp:RequiredFieldValidator>
+                                    <div class="clear-space"></div>
+                                    <asp:Button ID="btn_passwordrecovery" runat="server" OnClick="btn_passwordrecovery_Click"
+                                        CssClass="input-buttons-login" Text="Send Email" ValidationGroup="UsernameRecovery" />
+                                    <div class="clear-space"></div>
+                                    <div align="center" class="pad-top-big">
+                                        <a href="#" onclick="appRemote.LoadRecoveryPassword();return false;">Cancel</a>
+                                    </div>
+                                </asp:Panel>
+                                <asp:Label ID="lbl_passwordResetMessage" runat="server" Text=""></asp:Label>
+                            </ContentTemplate>
+                            <Triggers>
+                                <asp:AsyncPostBackTrigger ControlID="btn_passwordrecovery" />
+                            </Triggers>
+                        </asp:UpdatePanel>
+                    </div>
+                </div>
             </div>
         </asp:Panel>
         <div id="appremote-sidebar-menu">
@@ -454,7 +462,7 @@
         <div id="container-footer" class="footer">
             <div class="footer-padding" align="center">
                 <div id="footer-signdate">
-                    &copy; 2015 John Donnelly | <a href="About.aspx?redirect=AppRemote.aspx">About</a> |
+                    &copy; 2015 OpenWSE | <a href="About.aspx?redirect=AppRemote.aspx">About</a> | <a href="About.aspx?a=termsofuse&redirect=AppRemote.aspx">Terms</a> | 
                     <asp:Label ID="lblHomePageLink" runat="server" Text=""></asp:Label>
                 </div>
             </div>

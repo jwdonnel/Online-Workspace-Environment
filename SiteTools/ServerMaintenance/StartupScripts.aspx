@@ -1,4 +1,4 @@
-﻿<%@ page title="Startup Scripts" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_StartupScripts, App_Web_ogqsad33" %>
+﻿<%@ page title="Startup Scripts" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_StartupScripts, App_Web_txobhkq5" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
 </asp:Content>
@@ -6,11 +6,11 @@
     <div class="maincontent-padding margin-top">
         <asp:Literal ID="ltl_locked" runat="server"></asp:Literal>
         <div class="clear-space"></div>
-        <a href="#" id="aFindReplace" runat="server" onclick="openWSE.LoadModalWindow(true, 'FindReplace-element', 'Find and Replace');return false;" class="float-right input-buttons no-margin" title="Find and replace all script paths." style="position: relative; z-index: 1;"><span class="float-left img-replace margin-right-sml"></span>Find and Replace</a>
         <asp:Panel ID="pnlLinkBtns" runat="server">
         </asp:Panel>
         <div class="clear-space">
         </div>
+        <a href="#" id="aFindReplace" runat="server" onclick="openWSE.LoadModalWindow(true, 'FindReplace-element', 'Find and Replace');return false;" class="float-right input-buttons" title="Find and replace all script paths." style="position: relative; z-index: 1; margin-right: 0; margin-left: 10px; margin-bottom: 10px;"><span class="float-left img-replace margin-right-sml"></span>Find and Replace</a>
         <div id="FindReplace-element" class="Modal-element">
             <div class="Modal-overlay">
                 <div class="Modal-element-align">
@@ -36,9 +36,8 @@
                                             <asp:TextBox ID="tb_replacevalue" runat="server" CssClass="textEntry margin-right"
                                                 onfocus="if(this.value=='Replace with value')this.value=''" onblur="if(this.value=='')this.value='Replace with value'"
                                                 Text="Replace with value" Width="350px">
-                                            </asp:TextBox><asp:Button ID="btn_findreplace" runat="server" CssClass="input-buttons RandomActionBtns"
-                                                Text="Replace" OnClick="btn_findreplace_Clicked" />
-                                            <div class="clear-space"></div>
+                                            </asp:TextBox>
+                                            <div class="clear"></div>
                                         </asp:Panel>
                                     </ContentTemplate>
                                     <Triggers>
@@ -46,6 +45,11 @@
                                     </Triggers>
                                 </asp:UpdatePanel>
                             </div>
+                        </div>
+                        <div class="ModalButtonHolder">
+                            <asp:Button ID="btn_findreplace" runat="server" CssClass="input-buttons RandomActionBtns no-margin float-left" Text="Replace" OnClick="btn_findreplace_Clicked" />
+                            <input type="button" value="Cancel" class="input-buttons no-margin float-right" onclick="openWSE.LoadModalWindow(false, 'FindReplace-element', ''); $('#MainContent_tb_findvalue').val('Find value'); $('#MainContent_tb_replacevalue').val('Replace with value'); return false;" />
+                            <div class="clear"></div>
                         </div>
                     </div>
                 </div>

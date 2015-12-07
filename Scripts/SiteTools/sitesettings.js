@@ -5,7 +5,44 @@
 
     var url = location.href;
     load(url == "" ? "1" : url);
+
+    var style = window.getComputedStyle($("body")[0]);
+    if ($.trim($("#MainContent_tb_defaultfontsize").val()) == "") {
+        var fontsize = style.getPropertyValue("font-size");
+        if (fontsize) {
+            $("#MainContent_tb_defaultfontsize").val(fontsize.replace("px", ""));
+        }
+    }
+
+    if ($.trim($("#MainContent_tb_defaultfontcolor").val()) == "") {
+        var fontcolor = style.getPropertyValue("color");
+        if (fontcolor) {
+            $("#MainContent_tb_defaultfontcolor").val(rgbToHex(fontcolor));
+        }
+    }
 });
+
+function rgbToHex(fontcolor) {
+    if (fontcolor.indexOf("#") == 0) {
+        return fontcolor.replace("#", "");
+    }
+
+    fontcolor = fontcolor.toLowerCase().replace("rgb(", "").replace(")", "").replace(/ /g, "");
+    var splitColor = fontcolor.split(",");
+    if (splitColor.length == 3) {
+        var r = splitColor[0];
+        var g = splitColor[1];
+        var b = splitColor[2];
+
+        return byte2Hex(r) + byte2Hex(g) + byte2Hex(b);
+    }
+
+    return "515151";
+}
+function byte2Hex(n) {
+    var nybHexString = "0123456789ABCDEF";
+    return String(nybHexString.substr((n >> 4) & 0x0F, 1)) + nybHexString.substr(n & 0x0F, 1);
+}
 
 var currentTab = "";
 function BuildLinks() {
@@ -31,6 +68,25 @@ prm.add_endRequest(function () {
     openWSE.RadioButtonStyle();
     load(currentTab);
 });
+
+var serverTime_interval;
+function UpdateCurrentTime(timezone) {
+    window.clearInterval(serverTime_interval);
+    serverTime_interval = null;
+
+    serverTime_interval = window.setInterval(function () {
+        var now = new Date();
+        var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+        var x = now_utc.addHours(timezone);
+        var localDate = x.toLocaleDateString();
+        var localTime = x.toLocaleTimeString();
+        $("#lbl_currentServerTime").html(localDate + " " + localTime)
+    }, 1000)
+}
+Date.prototype.addHours = function (h) {
+    this.setHours(this.getHours() + h);
+    return this;
+}
 
 function BGDelete() {
     openWSE.ConfirmWindow("Are you sure you want to delete this background?",
@@ -162,7 +218,7 @@ $(document.body).on("keypress", ".keyword-split-array-input", function (e) {
         e.preventDefault();
     }
 });
-$(document.body).on("keypress", "#MainContent_tb_totalWorkspacesAllowed", function (e) {
+$(document.body).on("keypress", "#MainContent_tb_totalWorkspacesAllowed, #MainContent_tb_defaultfontsize", function (e) {
     var code = (e.which) ? e.which : e.keyCode;
     var val = String.fromCharCode(code);
 
@@ -218,18 +274,6 @@ $(document.body).on("change", "#MainContent_FileUpload2", function () {
     else {
         $("#MainContent_btn_uploadlogo").attr("disabled", "disabled");
         $("#fu_error_message").html("File type not valid");
-    }
-});
-
-$(document.body).on("change", "#MainContent_FileUpload1", function () {
-    var fu = $("#MainContent_FileUpload1").val().toLowerCase();
-    if ((fu.indexOf(".png") != -1) || (fu.indexOf(".jpg") != -1) || (fu.indexOf(".jpeg") != -1) || (fu.indexOf(".gif") != -1)) {
-        $("#MainContent_btn_alternativeuploadlogo").removeAttr("disabled");
-        $("#fu_error_message_alt").html("");
-    }
-    else {
-        $("#MainContent_btn_alternativeuploadlogo").attr("disabled", "disabled");
-        $("#fu_error_message_alt").html("File type not valid");
     }
 });
 

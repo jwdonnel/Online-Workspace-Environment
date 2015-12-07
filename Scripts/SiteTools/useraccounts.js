@@ -251,8 +251,11 @@ $(document.body).on("click", ".continue-create-user", function () {
     }
 });
 
-$(document.body).on("change", "#MainContent_ddl_sortby", function () {
+$(document.body).on("click", ".td-sort-click", function () {
     openWSE.LoadingMessage1('Updating. Please Wait...');
+    var sortname = $(this).attr("data-sortname");
+    $("#hf_sortusers").val(sortname);
+    __doPostBack("hf_sortusers", "");
 });
 
 

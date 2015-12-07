@@ -35,9 +35,22 @@ function AppMoreDetails(appId) {
 }
 
 function UninstallApp(appId) {
-    openWSE.LoadingMessage1("Removing...");
-    $("#hf_UninstallApp").val(appId);
-    __doPostBack("hf_UninstallApp", "");
+    if (appId != "") {
+        var $appHolder = $(".app-item-installer[data-appid='" + appId + "']");
+        if ($appHolder.length > 0) {
+            var appName = $.trim($appHolder.find(".app-name").html());
+            if (appName == "") {
+                appName = "this app";
+            }
+
+            openWSE.ConfirmWindow("Are you sure you want to uninstall " + appName + "?",
+                function () {
+                    openWSE.LoadingMessage1("Removing...");
+                    $("#hf_UninstallApp").val(appId);
+                    __doPostBack("hf_UninstallApp", "");
+                }, null);
+        }
+    }
 }
 
 function InstallApp(appId) {

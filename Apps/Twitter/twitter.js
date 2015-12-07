@@ -5,25 +5,56 @@ function pageLoad() {
     }
 }
 
+$(window).resize(function () {
+    twitterStation.ResizeAppWindow();
+});
+
 var twitterStation = function () {
-    var collapsedItems = new Array();
+    function ResizeAppWindow() {
+        setTimeout(function () {
+            $('.twitter-box-list').masonry({
+                itemSelector: '.twitter-feed-box',
+                columnWidth: '.twitter-feed-box',
+                isFitWidth: true
+            });
+        }, 1);
+
+        $(".app-main-holder[data-appid='app-twitterstation']").find(".twitter-box-list").removeClass("twitter-box-list-375-maxwidth");
+        $(".app-main-holder[data-appid='app-twitterstation']").find(".twitter-feed-box").removeClass("twitter-feed-box-375-maxwidth");
+        if ($(".app-main-holder[data-appid='app-twitterstation']").outerWidth() < 375) {
+            $(".app-main-holder[data-appid='app-twitterstation']").find(".twitter-box-list").addClass("twitter-box-list-375-maxwidth");
+            $(".app-main-holder[data-appid='app-twitterstation']").find(".twitter-feed-box").addClass("twitter-feed-box-375-maxwidth");
+
+            $(".twitter-feed-box").css({
+                position: "",
+                top: "",
+                left: ""
+            });
+
+            setTimeout(function () {
+                $('.twitter-box-list').masonry('destroy');
+            }, 1);
+        }
+    }
+
     var twitterService = openWSE.siteRoot() + "Apps/Twitter/TwitterStationService.asmx";
     var editId = "";
 
+    $(document.body).on("click", ".exit-button-app[href='#app-twitterstation']", function () {
+        clearInterval(twitterTimeOut);
+        twitterTimeOut = null;
+    });
+
     function Init(refreshInt) {
         if ($("#twitterstation-load").length > 0) {
+            twitterService = openWSE.siteRoot() + "Apps/Twitter/TwitterStationService.asmx";
+            editId = "";
 
             twitterStation.GetFeeds(true);
 
             if (refreshInt > 0) {
-                var minutePlural = "minutes";
-                if (refreshInt == 1) {
-                    minutePlural = "minute";
-                }
-                $("#update-int-text").html("Feeds are automatically updated every " + refreshInt + " " + minutePlural);
-
                 var interval = refreshInt * 60000;
-                twitterTimeOut = setTimeout(function () {
+                twitterTimeOut = setInterval(function () {
                     twitterStation.GetFeeds(false);
                 }, interval);
             }
@@ -41,7 +72,9 @@ var twitterStation = function () {
         }
     }
 
+    var inAddMode = false;
     function AddFeed() {
+        inAddMode = true;
         $("#lbl_errorTwitter").html("");
         $("#must-have-twitter-search").hide();
         $("#btn_add").show();
@@ -101,6 +134,7 @@ var twitterStation = function () {
                     $("#dd_mode").val(data.d[3]);
                     $("#dd_display_amount").val(data.d[4]);
 
+                    openWSE.LoadModalWindow(false, 'TwitterEditFeeds_element', '');
                     openWSE.LoadModalWindow(true, "TwitterAdd_element", "Edit Twitter Feed");
                     openWSE.RemoveUpdateModal();
                     $("#tb_twitteraccount").focus();
@@ -125,6 +159,7 @@ var twitterStation = function () {
                     success: function (data) {
                         editId = "";
                         openWSE.LoadModalWindow(false, "TwitterAdd_element", "");
+                        openWSE.LoadModalWindow(true, 'TwitterEditFeeds_element', 'Edit Feeds');
                         openWSE.RemoveUpdateModal();
                         GetFeeds(true);
                     },
@@ -167,11 +202,17 @@ var twitterStation = function () {
         editId = "";
         $("#must-have-twitter-search").hide();
         openWSE.LoadModalWindow(false, "TwitterAdd_element", "");
+        if (!inAddMode) {
+            openWSE.LoadModalWindow(true, 'TwitterEditFeeds_element', 'Edit Feeds');
+        }
+
+        inAddMode = false;
     }
 
     function GetFeeds(showLoading) {
         if (showLoading) {
-            openWSE.LoadingMessage1("Loading Tweets...");
+            $("#twitterstation-load").find("#twitterstation-posts").find(".loading-tweets").remove();
+            $("#twitterstation-load").find("#twitterstation-posts").prepend("<span class='loading-tweets'>Loading Tweets...</span>");
         }
 
         $.ajax({
@@ -180,6 +221,7 @@ var twitterStation = function () {
             data: '{ }',
             contentType: "application/json; charset=utf-8",
             success: function (data) {
+                var feedArray = new Array();
                 if (data.d.length > 0) {
                     var tweetHolder = "";
                     var enableEdit = data.d[0];
@@ -192,90 +234,93 @@ var twitterStation = function () {
                         var name = data.d[i][1];
                         var description = data.d[i][2];
                         var feeds = data.d[i][3];
+                        var screenName = "";
 
-                        if (data.d[i].length == 5) {
-                            tweetHolder += "<td style='width: 40px;'><img src='" + data.d[i][3] + "' alt='' /></td>";
-                            feeds = data.d[i][4];
+                        if (data.d[i].length == 6) {
+                            tweetHolder += "<td style='width: 50px;'><img src='" + data.d[i][3] + "' alt='' /></td>";
+                            screenName = data.d[i][4];
+                            feeds = data.d[i][5];
                         }
 
-                        tweetHolder += "<td><h3>" + name + "</h3><div class='clear-space-two'></div>";
+                        if (screenName != "" && screenName.indexOf("@") != 0) {
+                            screenName = "@" + screenName;
+                        }
+
+                        tweetHolder += "<td><h3 class='float-left pad-right-big'>" + name + "</h3><span class='float-left' style='color: #AAA; padding-top: 2px; font-size: 12px;'>" + screenName + "</span><div class='clear-space-two'></div>";
                         tweetHolder += "<h4>" + description + "</h4></td>";
-                        tweetHolder += "<td style='width: 90px;'><div class='float-right'><a href='#collapse-expand' class='collapse-expand-btn td-subtract-btn margin-right' onclick=\"twitterStation.CollapseExpand(this);return false;\" title='Collapse/Expand'></a>";
+                        tweetHolder += "<td style='width: 90px;'><div class='float-right'>";
                         if (enableEdit == "true") {
                             tweetHolder += "<a href='#edit' class='td-edit-btn margin-right' onclick=\"twitterStation.EditFeed('" + id + "');return false;\" title='Edit'></a>";
                             tweetHolder += "<a href='#delete' class='td-cancel-btn' onclick=\"twitterStation.DeleteFeed('" + id + "');return false;\" title='Delete'></a>";
                         }
                         tweetHolder += "</div></td></tr></table></div>";
-                        tweetHolder += "<div class='twitter-feed-list'><ul>";
 
-                        if (feeds.length > 0) {
-                            for (var j = 0; j < feeds.length; j++) {
-                                if (feeds[j].length == 2) {
-                                    tweetHolder += "<li>" + feeds[j][0] + "<div class='twitter-date'>" + feeds[j][1] + "</div></li>";
+                        for (var j = 0; j < feeds.length; j++) {
+                            if (feeds[j].length == 3) {
+                                feedArray.push({ "id": data.d[i][0], "name": name, "screenName": screenName, "description": description, "image": data.d[i][3], "feed": feeds[j][0], "datePretty": feeds[j][1], "date": parseInt(feeds[j][2]) });
+                            }
+                            else {
+                                var screenNameTemp = feeds[j][5];
+                                if (screenNameTemp != "" && screenNameTemp.indexOf("@") != 0) {
+                                    screenNameTemp = "@" + screenNameTemp;
                                 }
-                                else {
-                                    tweetHolder += "<li><table><tr><td valign='top'><img alt='' src='" + feeds[j][3] + "' /></td><td><b>" + feeds[j][2] + "</b><div class='clear-space-two'></div>" + feeds[j][0] + "<div class='twitter-date'>" + feeds[j][1] + "</div></td></tr></table></li>";
-                                }
+
+                                feedArray.push({ "id": data.d[i][0], "name": feeds[j][2], "screenName": screenNameTemp, "description": description, "image": feeds[j][3], "feed": feeds[j][0], "datePretty": feeds[j][1], "date": parseInt(feeds[j][4]) });
                             }
                         }
-                        else {
-                            tweetHolder += "<h3 class='pad-all'>No Tweets found for this feed.</h3>";
-                        }
 
-                        tweetHolder += "</ul></div>";
                         tweetHolder += "</div>";
                     }
 
-                    $("#twitterstation-load").find("#twitterstation-posts").html(tweetHolder);
+                    $("#TwitterEditFeeds_element").find("#twitter_edit_feeds_holder").html(tweetHolder);
 
-                    if ($.trim($("#twitterstation-load").find("#twitterstation-posts").html()) == "") {
-                        $("#twitterstation-load").find("#twitterstation-posts").html("<h3 class='pad-all'>No Twitter feeds found.</h3>");
-                    }
-                    
-                    for (var i = 0; i < collapsedItems.length; i++) {
-                        $("#" + collapsedItems[i]).find(".twitter-feed-list").hide();
-                        $("#" + collapsedItems[i]).find(".twitter-feed-list").addClass("collapsed");
-                        $("#" + collapsedItems[i]).find(".collapse-expand-btn").removeClass("td-subtract-btn").addClass("td-add-btn");
+                    if ($.trim($("#TwitterEditFeeds_element").find("#twitter_edit_feeds_holder").html()) == "") {
+                        $("#TwitterEditFeeds_element").find("#twitter_edit_feeds_holder").html("<h3 class='pad-all' style='background: rgba(0, 0, 0, 0.5); color: #FFF;'>No Twitter feeds found.</h3>");
                     }
                 }
                 else {
-                    $("#twitterstation-load").find("#twitterstation-posts").html("<h3 class='pad-all'>No Twitter feeds found.</h3>");
+                    $("#TwitterEditFeeds_element").find("#twitter_edit_feeds_holder").html("<h3 class='pad-all' style='background: rgba(0, 0, 0, 0.5); color: #FFF;'>No Twitter feeds found.</h3>");
                 }
 
-                openWSE.RemoveUpdateModal();
+                if (feedArray.length == 0) {
+                    $("#twitterstation-load").find("#twitterstation-posts").html("<h3 class='pad-all' style='background: rgba(0, 0, 0, 0.5); color: #FFF;'>No Twitter feeds found.</h3>");
+                }
+                else {
+                    feedArray.sort(function (a, b) {
+                        return b.date - a.date;
+                    });
+
+                    var innerFeedsHtml = "<div class='twitter-box-list'>";
+                    for (var i = 0; i < feedArray.length; i++) {
+                        innerFeedsHtml += "<div class='" + feedArray[i].id + " twitter-feed-box'>";
+                        innerFeedsHtml += "<img alt='' src='" + feedArray[i].image + "' class='twitter-feed-img' />";
+                        innerFeedsHtml += "<div class='twitter-feed-date'>" + feedArray[i].datePretty + "</div>";
+                        innerFeedsHtml += "<div class='float-left'><span class='twitter-feed-name'>" + feedArray[i].name + "</span><div class='clear-space-two'></div>";
+                        innerFeedsHtml += "<span class='twitter-feed-screenname'>" + feedArray[i].screenName + "</span></div><div class='clear'></div>";
+                        innerFeedsHtml += "<div class='twitter-feed-text'>" + feedArray[i].feed + "</div>";
+                        innerFeedsHtml += "</div>";
+                    }
+                    innerFeedsHtml += "</div>";
+
+                    $("#twitterstation-load").find("#twitterstation-posts").html(innerFeedsHtml + "<div class='clear'></div>");
+                }
+
+                $("#twitterstation-load").find("#twitterstation-posts").find(".loading-tweets").remove();
+
+                ResizeAppWindow();
             },
             error: function (err) {
                 openWSE.AlertWindow(err, window.location.href);
+                $("#twitterstation-load").find("#twitterstation-posts").find(".loading-tweets").remove();
+                $("#TwitterEditFeeds_element").find("#twitter_edit_feeds_holder").html("<h3 class='pad-all'>There was an error getting your feeds.</h3>");
                 $("#twitterstation-load").find("#twitterstation-posts").html("<h3 class='pad-all'>There was an error getting your feeds.</h3>");
                 openWSE.RemoveUpdateModal();
             }
         });
     }
 
-    function CollapseExpand(_this) {
-        var $holder = $(_this).closest(".twitter-header").parent().find(".twitter-feed-list");
-        if ($holder.length > 0) {
-            if ($(_this).hasClass("td-subtract-btn")) {
-                $(_this).removeClass("td-subtract-btn").addClass("td-add-btn");
-                $holder.addClass("collapsed");
-                $holder.slideUp(openWSE_Config.animationSpeed);
-            }
-            else {
-                $(_this).removeClass("td-add-btn").addClass("td-subtract-btn");
-                $holder.removeClass("collapsed");
-                $holder.slideDown(openWSE_Config.animationSpeed);
-            }
-        }
-
-        collapsedItems = new Array();
-        $(".twitter-feed-list").each(function () {
-            if ($(this).hasClass("collapsed")) {
-                collapsedItems.push($(this).parent().attr("id"));
-            }
-        });
-    }
-
     return {
+        ResizeAppWindow: ResizeAppWindow,
         Init: Init,
         AddFeed: AddFeed,
         FinishAdd:FinishAdd,
@@ -283,7 +328,6 @@ var twitterStation = function () {
         UpdateFeed: UpdateFeed,
         DeleteFeed: DeleteFeed,
         CloseModal: CloseModal,
-        GetFeeds: GetFeeds,
-        CollapseExpand: CollapseExpand
+        GetFeeds: GetFeeds
     }
 }();

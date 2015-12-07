@@ -1,10 +1,11 @@
-﻿<%@ master language="C#" autoeventwireup="true" inherits="SiteMaster, App_Web_ravcmota" %>
+﻿<%@ master language="C#" autoeventwireup="true" inherits="SiteMaster, App_Web_jtoan5js" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head runat="server">
-    <title>OnlineWSE - Online Workspace Environment</title>
     <meta name="author" content="John Donnelly" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="revisit-after" content="10 days" />
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <link id="Link1" runat="server" rel="shortcut icon" href="~/Standard_Images/favicon.ico"
@@ -126,8 +127,7 @@
                                                     <asp:Label ID="lbl_UserEmail" runat="server" Text=""></asp:Label>
                                                     <div class="clear-space-five"></div>
                                                     <div class="clear-space-two"></div>
-                                                    <asp:HyperLink ID="hyp_accountSettings" runat="server" Text="Account" NavigateUrl="~/SiteTools/UserMaintenance/AcctSettings.aspx" CssClass="account-link-style" Target="_blank"></asp:HyperLink>
-                                                    <span class="account-link-style-seperator">-</span>
+                                                    <asp:HyperLink ID="hyp_accountSettings" runat="server" Text="Account" NavigateUrl="~/SiteTools/UserMaintenance/AcctSettings.aspx" CssClass="account-link-style margin-right" Target="_blank"></asp:HyperLink>
                                                     <asp:HyperLink ID="hyp_accountCustomizations" runat="server" Text="Customize" NavigateUrl="~/SiteTools/UserMaintenance/AcctSettings.aspx?tab=SiteCustomizations" CssClass="account-link-style" Target="_blank"></asp:HyperLink>
                                                 </div>
                                             </div>
@@ -148,7 +148,7 @@
                                         <div class="li-header">
                                             <asp:Label ID="LoginOrRegister" runat="server" Text="Login or Register"></asp:Label>
                                         </div>
-                                        <div class="pad-left pad-right pad-bottom pad-top-sml">
+                                        <div id="login-modal-div" class="pad-left pad-right pad-bottom pad-top-sml">
                                             <div id="Login-holder">
                                                 <table border="0" cellpadding="0" cellspacing="0">
                                                     <tr>
@@ -358,7 +358,7 @@
                             </ul>
                         </div>
                     </td>
-                    <td valign="top">
+                    <td id="maincontent_overflow_cell" valign="top">
                         <div id="maincontent_overflow" runat="server">
                             <asp:UpdatePanel ID="MainContent_updatepnl_apploader" runat="server" ClientIDMode="Static"
                                 EnableViewState="False" ViewStateMode="Disabled">
@@ -400,7 +400,7 @@
         <asp:HiddenField ID="hf_chatsound" runat="server" />
         <div id="container-footer" class="footer">
             <div class="footer-padding">
-                <div id="copyright-footer" class="float-left">&copy; 2015 John Donnelly</div>
+                <div id="copyright-footer" class="float-left">&copy; 2015 OpenWSE</div>
                 <div class="help-icon" title="Need help?">
                 </div>
                 <asp:Panel ID="pnl_LoginGroupText" runat="server" Enabled="false" Visible="false">
@@ -409,7 +409,7 @@
                 <div onclick="openWSE.BackgroundSelector();return false;" class="bgchange-icon" title="Change your background"></div>
                 <div id="footer-signdate" class="float-right">
                     <a href="#" title="Open Mobile Workspace" class="my-app-remote-link" onclick="return openWSE.OpenMobileWorkspace();">Mobile</a> | 
-                    <a href="#iframecontent" onclick="openWSE.LoadIFrameContent('About.aspx', this);return false;">About</a>
+                    <a href="#iframecontent" onclick="openWSE.LoadIFrameContent('About.aspx', this);return false;">About</a> | <a href="#iframecontent" onclick="openWSE.LoadIFrameContent('About.aspx?a=termsofuse', this);return false;">Terms</a>
                 </div>
             </div>
         </div>
@@ -466,7 +466,7 @@
                                 </div>
                                 <div class="ModalButtonHolder">
                                     <a href="#" id="btn_uninstallApp" class="float-left" runat="server" visible="false">
-                                        <span class="td-subtract-btn float-left margin-right-sml" style="padding: 0px!important; margin-top: -2px!important;"></span>Uninstall</a>
+                                        <span class="td-subtract-btn float-left margin-right-sml" style="padding: 0px 2px 0 0!important; margin-top: 0px!important;"></span>Uninstall</a>
                                     <input type="button" value="Close" onclick="openWSE.LoadModalWindow(false, 'aboutApp-element', '');" class="input-buttons no-margin" />
                                 </div>
                             </ContentTemplate>

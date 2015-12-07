@@ -3,7 +3,7 @@
     <siteMapNode url="/">
         <siteMapNode url="~/SiteTools/UserMaintenance/AcctSettings.aspx" title="Account Settings" icon="SiteLinkIcons/accountsettings.png" category="User Management" tooltip="Manage your personal settings" />
         <siteMapNode url="~/SiteTools/AppMaintenance/AppCategory.aspx" title="App Categories" icon="SiteLinkIcons/appcategory.png" category="App Management" tooltip="Place Apps in categories for grouping" />
-        <siteMapNode url="~/SiteTools/AppMaintenance/AppInstaller.aspx" title="App Installer" icon="SiteLinkIcons/appinstaller.png" category="App Management" tooltip="Install/Uninstall Apps for your account" />
+        <siteMapNode url="~/SiteTools/Installers/AppInstaller.aspx" title="App Installer" icon="SiteLinkIcons/appinstaller.png" category="Installers" tooltip="Install/Uninstall Apps for your account" />
         <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx" title="App Manager" icon="SiteLinkIcons/appmanager.png" category="App Management" tooltip="Add/Edit/Delete Apps">
             <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?tab=edit" title="Edit Apps" />
             <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?tab=easycreate" title="Simple Create" />
@@ -11,30 +11,42 @@
             <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?tab=params" title="App Params" />
         </siteMapNode>
         <siteMapNode url="~/SiteTools/AppMaintenance/AppPackages.aspx" title="App Packages" icon="SiteLinkIcons/apppackages.png" category="App Management" tooltip="Create app packages to use for the App Installer or default group apps" />
+        <siteMapNode url="~/SiteTools/ServerMaintenance/BackgroundServices.aspx" title="Background Services" icon="SiteLinkIcons/backgroundservices.png" category="Site Management" tooltip="Add custom background stervices" />
         <siteMapNode url="~/SiteTools/CustomContent/CustomProjects.aspx" title="Custom Projects" icon="SiteLinkIcons/customprojects.png" category="Custom Tools" tooltip="Create custom projects with random file structures" />
-        <siteMapNode url="~/SiteTools/CustomContent/CustomTables.aspx" title="Custom Tables" icon="SiteLinkIcons/customtables.png" category="Custom Tools" tooltip="Create/Edit tables on your local database" />
-        <siteMapNode url="~/SiteTools/DBMaintenance/dbManager.aspx" title="Database Manager" icon="SiteLinkIcons/dbmanager.png" category="Database Tools" tooltip="Backup/Restore and manage auto backups" />
+        <siteMapNode url="~/SiteTools/DBMaintenance/CustomTables.aspx" title="Custom Tables" icon="SiteLinkIcons/customtables.png" category="Database Tools" tooltip="Create/Edit tables on your local database" />
+        <siteMapNode url="~/SiteTools/DBMaintenance/dbManager.aspx" title="Database Manager" icon="SiteLinkIcons/dbmanager.png" category="Database Tools" tooltip="Backup/Restore and manage auto backups">
+            <siteMapNode url="~/SiteTools/DBMaintenance/dbManager.aspx?tab=databaseRecovery" title="Backup/Recovery" />
+            <siteMapNode url="~/SiteTools/DBMaintenance/dbManager.aspx?tab=autobackstyem" title="Backup Schedule" />
+        </siteMapNode>
         <siteMapNode url="~/SiteTools/ServerMaintenance/FileManager.aspx" title="File Manager" icon="SiteLinkIcons/filemanager.png" category="Site Management" tooltip="View/Edit javascript and css files " />
         <siteMapNode url="~/SiteTools/UserMaintenance/GroupOrg.aspx" title="Group Organizer" icon="SiteLinkIcons/grouporg.png" category="User Management" tooltip="Create/Edit and manage groups" />
         <siteMapNode url="~/SiteTools/CustomContent/SitePlugins.aspx" title="Jquery Plugins" icon="SiteLinkIcons/siteplugins.png" category="Custom Tools" tooltip="Import jQuery plugins to use" />
         <siteMapNode url="~/SiteTools/ServerMaintenance/LicenseManager.aspx" title="License Manager" roles="Administrator" icon="SiteLinkIcons/license.png" category="Site Management" tooltip="View the site license information" />
         <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx" title="Network Log" icon="SiteLinkIcons/networklog.png" category="Site Management" tooltip="View network activity">
-            <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=activity" title="Activity" />
             <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=log" title="Events" />
             <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=ignore" title="Ignored" />
+            <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=activity" title="Activity" />
             <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=loginActivity" title="Logins" />
             <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=ipwatchlist" title="IP WatchList" />
             <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=iplistener" title="IP Listener" />
         </siteMapNode>
-        <siteMapNode url="~/SiteTools/CustomContent/NotifiManager.aspx" title="Notification Manager" icon="SiteLinkIcons/notifications.png" category="Custom Tools" tooltip="Create/Edit notifications used on this site" />
-        <siteMapNode url="~/SiteTools/CustomContent/Overlays.aspx" title="Overlay Manager" icon="SiteLinkIcons/overlays.png" category="Custom Tools" tooltip="Upload/Edit workspace overlays" />
-        <siteMapNode url="~/SiteTools/CustomContent/PluginInstaller.aspx" title="Plugin Installer" icon="SiteLinkIcons/plugininstaller.png" category="Custom Tools" tooltip="Install/Uninstall jQuery plugins for your account" />
+        <siteMapNode url="~/SiteTools/CustomContent/NotifiManager.aspx" title="Notification Manager" icon="SiteLinkIcons/notifications.png" category="Custom Tools" tooltip="Create/Edit notifications used on this site">
+            <siteMapNode url="~/SiteTools/CustomContent/NotifiManager.aspx?tab=NotificationList" title="Notification List" />
+            <siteMapNode url="~/SiteTools/CustomContent/NotifiManager.aspx?tab=AssociatedApps" title="Associated Apps" />
+        </siteMapNode>
+        <siteMapNode url="~/SiteTools/CustomContent/Overlays.aspx" title="Overlay Manager" icon="SiteLinkIcons/overlays.png" category="Custom Tools" tooltip="Upload/Edit workspace overlays">
+            <siteMapNode url="~/SiteTools/CustomContent/Overlays.aspx?tab=OverlayList" title="Overlay List" />
+            <siteMapNode url="~/SiteTools/CustomContent/Overlays.aspx?tab=AssociatedApps" title="Associated Apps" />
+        </siteMapNode>
+        <siteMapNode url="~/SiteTools/Installers/PluginInstaller.aspx" title="Plugin Installer" icon="SiteLinkIcons/plugininstaller.png" category="Installers" tooltip="Install/Uninstall jQuery plugins for your account" />
         <siteMapNode url="~/SiteTools/ServerMaintenance/SiteSettings.aspx" title="Site Settings" icon="SiteLinkIcons/sitesettings.png" category="Site Management" tooltip="Manage the server/site settings and behavior" />
         <siteMapNode url="~/SiteTools/ServerMaintenance/StartupScripts.aspx" title="Startup Scripts" icon="SiteLinkIcons/startupscripts.png" category="Site Management" tooltip="Add/Edit the scripts that are needed at run time">
             <siteMapNode url="~/SiteTools/ServerMaintenance/StartupScripts.aspx?tab=javascripts" title="Javascript" />
             <siteMapNode url="~/SiteTools/ServerMaintenance/StartupScripts.aspx?tab=stylesheets" title="Stylesheets" />
         </siteMapNode>
-        <siteMapNode url="~/SiteTools/DBMaintenance/dbImporter.aspx" title="Table Importer" icon="SiteLinkIcons/dbimporter.png" category="Database Tools" tooltip="Import tables from different types of databases" />
+        <siteMapNode url="~/SiteTools/DBMaintenance/dbImporter.aspx" title="Table Importer" icon="SiteLinkIcons/dbimporter.png" category="Database Tools" tooltip="Import tables from different types of databases">
+            <siteMapNode url="~/SiteTools/DBMaintenance/dbImporter.aspx?tab=SavedConnections" title="Saved Connections" />
+        </siteMapNode>
         <siteMapNode url="~/SiteTools/DBMaintenance/dbViewer.aspx" title="Table Viewer" icon="SiteLinkIcons/dbviewer.png" category="Database Tools" tooltip="View tables apart of the site" />
         <siteMapNode url="~/SiteTools/UserMaintenance/UserAccounts.aspx" title="User Accounts" icon="SiteLinkIcons/useraccounts.png" category="User Management" tooltip="Add/Edit users on this site" />
         <siteMapNode url="~/SiteTools/CustomContent/WebServices.aspx" title="Web Services" icon="SiteLinkIcons/webservices.png" category="Custom Tools" tooltip="Upload web services for this site to host" />

@@ -5,6 +5,45 @@
     load(url == "" ? "1" : url);
 });
 
+function rgbToHex(fontcolor) {
+    if (fontcolor.indexOf("#") == 0) {
+        return fontcolor.replace("#", "");
+    }
+
+    fontcolor = fontcolor.toLowerCase().replace("rgb(", "").replace(")", "").replace(/ /g, "");
+    var splitColor = fontcolor.split(",");
+    if (splitColor.length == 3) {
+        var r = splitColor[0];
+        var g = splitColor[1];
+        var b = splitColor[2];
+
+        return byte2Hex(r) + byte2Hex(g) + byte2Hex(b);
+    }
+
+    return "515151";
+}
+function byte2Hex(n) {
+    var nybHexString = "0123456789ABCDEF";
+    return String(nybHexString.substr((n >> 4) & 0x0F, 1)) + nybHexString.substr(n & 0x0F, 1);
+}
+
+function SetDefaultStyles() {
+    var style = window.getComputedStyle($("body")[0]);
+    if ($.trim($("#tb_defaultfontsize").val()) == "") {
+        var fontsize = style.getPropertyValue("font-size");
+        if (fontsize) {
+            $("#tb_defaultfontsize").val(fontsize.replace("px", ""));
+        }
+    }
+
+    if ($.trim($("#tb_defaultfontcolor").val()) == "") {
+        var fontcolor = style.getPropertyValue("color");
+        if (fontcolor) {
+            $("#tb_defaultfontcolor").val(rgbToHex(fontcolor));
+        }
+    }
+}
+
 $(function () {
     $(window).hashchange(function () {
         var url = location.href;
@@ -34,7 +73,16 @@ Sys.Application.add_load(function () {
     }
 });
 
-$(document.body).on("keypress", "#MainContent_tb_backgroundlooptimer", function (e) {
+$(document.body).on("change", "#dd_enablebg_edit", function () {
+    if ($(this).val() == "app-main") {
+        $("#backgroundcolorholder_edit").show();
+    }
+    else {
+        $("#backgroundcolorholder_edit").hide();
+    }
+});
+
+$(document.body).on("keypress", "#MainContent_tb_backgroundlooptimer, #MainContent_tb_defaultfontsize, #tb_updateintervals", function (e) {
     var code = (e.which) ? e.which : e.keyCode;
     var val = String.fromCharCode(code);
 
@@ -179,6 +227,25 @@ $(document.body).on("click", "#lb_clearbackground", function () {
 
 $(document.body).on("click", ".updatesettings", function () {
     openWSE.LoadingMessage1("Updating. Please Wait...");
+});
+
+$(document.body).on("change", "#dd_maxonload_edit", function () {
+    var $resize = $("#dd_allowresize_edit");
+    var $maximize = $("#dd_allowmax_edit");
+    var $minWidth = $("#tb_minwidth_edit");
+    var $minHeight = $("#tb_minheight_edit");
+    if (openWSE.ConvertBitToBoolean($(this).val())) {
+        $resize.attr("disabled", "disabled");
+        $maximize.attr("disabled", "disabled");
+        $minWidth.attr("disabled", "disabled");
+        $minHeight.attr("disabled", "disabled");
+    }
+    else {
+        $resize.removeAttr("disabled");
+        $maximize.removeAttr("disabled");
+        $minWidth.removeAttr("disabled");
+        $minHeight.removeAttr("disabled");
+    }
 });
 
 

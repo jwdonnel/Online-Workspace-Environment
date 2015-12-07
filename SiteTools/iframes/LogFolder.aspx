@@ -1,4 +1,4 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="SiteTools_iframes_LogFolder, App_Web_1sq1bxip" %>
+﻿<%@ page language="C#" autoeventwireup="true" inherits="SiteTools_iframes_LogFolder, App_Web_fcqplbhq" %>
 
 <!DOCTYPE html>
 
@@ -74,12 +74,8 @@
 
         .file-content
         {
-            padding: 15px;
-            border: 1px solid #DDD;
-            background: #F9F9F9;
-            -moz-border-radius: 5px;
-            -webkit-border-radius: 5px;
-            border-radius: 5px;
+            padding: 10px 0;
+            color: #212121;
         }
     </style>
 </head>

@@ -20,6 +20,10 @@ $(document.body).on("keypress", "#tb_filenameEdit, #tb_descriptionEdit", functio
     }
 });
 
+$(document.body).on("change", "#cb_hideStandardServices", function () {
+    openWSE.LoadingMessage1("Updating List...");
+});
+
 function DownloadWS(id) {
     $("#hf_wsId").val(id);
     $("#btn_download_hidden").trigger("click");
