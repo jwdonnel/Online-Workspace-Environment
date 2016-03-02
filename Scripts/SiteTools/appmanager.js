@@ -9,10 +9,6 @@ $(window).load(function () {
         LoadCategoryCookies(true);
     }
     catch (evt) { }
-
-    $(".sitemenu-selection").find("li").on("click", function () {
-        openWSE.LoadingMessage1("Loading...");
-    });
 });
 
 $(document).ready(function () {
@@ -538,7 +534,7 @@ function DeleteParameter(id) {
     __doPostBack('hf_appchange_params_delete', "");
 }
 
-$(document.body).on("keypress", "#txt_appparam_edit", function (event) {
+$(document.body).on("keypress", "#txt_appparam_edit, #txt_appparamdesc_edit", function (event) {
     if (event.which == 13) {
         UpdateParameter();
         event.preventDefault();
@@ -548,7 +544,9 @@ $(document.body).on("keypress", "#txt_appparam_edit", function (event) {
 function UpdateParameter() {
     openWSE.LoadingMessage1("Updating. Please Wait...");
 
-    document.getElementById('hf_appchange_params_update').value = $("#txt_appparam_edit").val();
+    document.getElementById('hf_appchange_paramsdesc_update').value = escape($.trim($("#txt_appparamdesc_edit").val()));
+    document.getElementById('hf_appchange_params_update').value = escape($.trim($("#txt_appparam_edit").val()));
+
     __doPostBack('hf_appchange_params_update', "");
 }
 
@@ -602,6 +600,7 @@ function CancelRequest() {
 function BeginWork() {
     openWSE.LoadModalWindow(false, "password-element", "");
     setTimeout(function () {
+        openWSE.LoadModalWindow(false, "password-element", "");
         openWSE.LoadingMessage1("Deleting App. Please Wait...");
     }, 100);
     $("#hf_appdeleteid").val(deleteId);
@@ -642,6 +641,46 @@ function GetAppsInCategory() {
             if (found == 0) {
                 $("#noItemsCategory").show();
             }
+        }
+    }
+}
+
+var canContinue = false;
+var tempId = "";
+function appchange(id) {
+    openWSE.LoadingMessage1("Loading...");
+    var inner = $.trim($("#MainContent_wlmd_holder").html());
+    if ((inner != "") && ($("#App-element").css("display") == "block")) {
+        setTimeout(function () {
+            openWSE.RemoveUpdateModal();
+        }, 500);
+        return false;
+    }
+    if ($("#MainContent_tb_title_edit").val() == "") {
+        if (id == "reset") {
+            id = tempId;
+        }
+
+        if (document.getElementById("MainContent_hf_appchange").value != id) {
+            if (document.getElementById("hf_isParams").value == "0") {
+                document.getElementById("MainContent_wlmd_holder").innerHTML = "";
+                document.getElementById("MainContent_hf_appchange").value = id;
+                __doPostBack("MainContent_hf_appchange", "");
+            }
+            else {
+                if (document.getElementById("MainContent_hf_appchange_params").value != id) {
+                    document.getElementById("MainContent_hf_appchange_params").value = id;
+                    __doPostBack("MainContent_hf_appchange_params", "");
+                }
+                else {
+                    setTimeout(function () { openWSE.RemoveUpdateModal(); }, 500);
+                }
+            }
+        }
+        else {
+            tempId = id;
+            document.getElementById("MainContent_hf_appchange").value = "reset";
+            __doPostBack("MainContent_hf_appchange", "");
         }
     }
 }

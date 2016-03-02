@@ -1,0 +1,48 @@
+﻿#Schedule_Vacation_Cal{display:block;border:1px solid #ccc;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;-moz-box-shadow:-3px 3px 3px rgba(0,0,0,.1);-webkit-box-shadow:0 5px 7px rgba(0,0,0,.1);box-shadow:0 5px 7px rgba(0,0,0,.1)}
+.font-year{display:block;font-weight:bold;color:#FFF;padding:5px 0;height:20px;font-size:18px;text-align:center;border-right:1px solid #b3c2dc;border-left:1px solid #b3c2dc;border-top:1px solid #b3c2dc;background:#abbcd9;background:-moz-linear-gradient(top,rgba(171,188,217,1) 0,rgba(99,128,179,1) 100%);background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,rgba(171,188,217,1)),color-stop(100%,rgba(99,128,179,1)));background:-webkit-linear-gradient(top,rgba(171,188,217,1) 0,rgba(99,128,179,1) 100%);background:-o-linear-gradient(top,rgba(171,188,217,1) 0,rgba(99,128,179,1) 100%);background:-ms-linear-gradient(top,rgba(171,188,217,1) 0,rgba(99,128,179,1) 100%);background:linear-gradient(to bottom,rgba(171,188,217,1) 0,rgba(99,128,179,1) 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#abbcd9',endColorstr='#6380b3',GradientType=0)}
+.days-of-week,.days-of-week-weekly{width:100%;border-bottom:1px solid #b7b7b7;background:#999}
+.days-of-week td{width:43px;height:18px;padding:3px 0;text-align:center;font-weight:bold;color:#FFF}
+.days-of-week-weekly td{height:18px;padding:3px 0;text-align:center;font-weight:bold;color:#FFF}
+.table-Days{width:100%;background-color:#fff}
+.table-Days td{width:100px;height:100px;padding-top:2px;border:1px solid #DDD;border-right:0px solid #DDD;border-top:0px solid #DDD;vertical-align:top;font-weight:bold}
+.table-WeekDays td{width:14%;padding-top:1px;border:1px solid #DDD;border-right:0px solid #DDD;border-top:0px solid #DDD;vertical-align:top;font-weight:bold}
+.not-apart-of-month{background:#efefef}
+.current-day{cursor:pointer;color:#FFF;font-weight:bold;padding:2px 4px;margin-left:-4px;margin-top:-2px;margin-right:-4px;background:#555656;-webkit-transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
+.current-day .calendar-td-day{background:#212222!important;color:#FFF!important}
+.calendar-td-day{margin-top:20px;padding:2px 4px;color:#505050;background:#DDD;-webkit-transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
+.calendar-td-day:hover{background:#CCC}
+.calendar-td-day:active{background:#B7B7B7}
+.calendar-event{position:absolute;text-align:center;overflow:hidden;z-index:1000;cursor:pointer}
+.calendar-event-hover{background-color:#777!important}
+.calendar-event:active{background-color:#555656!important}
+.calendar-event-font{background:rgba(48,48,48,.6);padding:1px 3px;color:#FFF;text-align:center;font-weight:bold;font-size:11px;overflow:hidden;margin-top:3px;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px}
+.calendar-event-hidden{visibility:hidden;display:none}
+.calendar-delivery-pickups{padding:5px}
+.calendar-delivery-pickups-title{padding:5px;vertical-align:middle;height:28px;color:White;font-size:12pt;font-weight:bold;border-top:1px solid #CCC;border-bottom:1px solid #CCC}
+td.day-picker-hover:hover{background-color:#CCC!important;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
+td.day-picker-alt-hover:hover{background-color:#CCC!important;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
+td.day-picker-alt-hover:hover a{color:#2d2d2d!important}
+.weekday-timesempty-cal{width:100%}
+.weekday-times-cal{margin-top:16px;width:100px}
+.weekday-times-cal td{text-align:center;color:#FFF;border-left:1px solid #999;border-bottom:1px solid #777;border-top:0px solid #999;vertical-align:middle;padding:10px 5px;height:16px;font-weight:bold}
+.weekday-timesempty-cal td{border-left:1px solid #DDD;border-bottom:1px solid #CCC;border-right:0px solid #DDD;border-top:0px solid #DDD;height:35px}
+.td-weekly-createnew{-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
+.td-weekly-createnew:hover{background:#E0E0E0}
+.td-weekly-createnew:active{background:#CCC}
+.currmonthBtns{float:right;padding-right:10px;position:relative;z-index:1000}
+#usercalendar_pc{display:block}
+.font-year-pc{display:block;padding:5px 0;text-align:center}
+.font-year-pc a{padding:0px!important}
+.calendar-bg-selectors.selected{border:2px solid #000;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;-moz-box-shadow:0 2px 4px rgba(0,0,0,.5);-o-box-shadow:0 2px 4px rgba(0,0,0,.5);-webkit-box-shadow:0 2px 4px rgba(0,0,0,.5);box-shadow:0 2px 4px rgba(0,0,0,.5)}
+.calendar-bg-selectors{filter:alpha(opacity=45);opacity:0.45;transition:all .1s ease-in-out;-moz-transition:all .1s ease-in-out;-webkit-transition:all .1s ease-in-out;width:10px;height:10px;border:2px solid #E0E0E0;margin-right:8px;padding:3px}
+.calendar-bg-selectors:hover{border:2px solid #555656;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px}
+.pc-menu-bar{background:#F5F5F5;border-top:1px solid #F5F5F5;border-bottom:1px solid #CCC;min-height:34px}
+.pc-menu-bar a.menu-btns{line-height:34px;color:#555656;font-size:15px;padding:9px 12px;text-decoration:none;transition:all .1s ease-in-out;-moz-transition:all .1s ease-in-out;-webkit-transition:all .1s ease-in-out}
+.pc-menu-bar a.menu-btns:hover{background-color:#DDD;background:rgba(50,50,50,0.2)}
+.pc-menu-bar a.menu-btns:active{background-color:#CCC;background:rgba(50,50,50,0.4)}
+.pc-menu-bar a.menu-btns.activeIn{background:#AD0000;color:#FFF}
+.pc-menu-bar a.menu-btns.activeOut{background:#E50000;color:#FFF}
+.pc-menu-bar select{padding:0px}
+.calendar-overview{margin-right:30px;margin-bottom:30px;min-width:425px;padding:10px;border-bottom:2px solid #B7B7B7;border-right:2px solid #CCC;border-top:1px solid #D0D0D0;border-left:1px solid #D0D0D0;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px}
+#rendering-print{position:fixed;left:0;right:0;top:0;bottom:0;background:#FFF;z-index:10000}
+#rendering-print .text{font-size:20px;text-align:center;margin-top:20%;color:#444}

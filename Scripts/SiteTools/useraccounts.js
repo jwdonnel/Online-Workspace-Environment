@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+    openWSE.RadioButtonStyle();
     CloseEditUserContent();
     $("#MainContent_tb_search").autocomplete({
         minLength: 0,
@@ -165,6 +166,8 @@ function ClearNewUserFields() {
 
 var prm = Sys.WebForms.PageRequestManager.getInstance();
 prm.add_endRequest(function () {
+    openWSE.RadioButtonStyle();
+
     if (passwordResetOpen) {
         $("#MainContent_ChangeUserPassword_ChangePasswordContainerID_NewPassword").val(passwordResetNewPassword);
         $("#MainContent_ChangeUserPassword_ChangePasswordContainerID_ConfirmNewPassword").val(passwordResetConfirmPassword);

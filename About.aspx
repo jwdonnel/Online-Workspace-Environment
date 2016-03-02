@@ -1,4 +1,4 @@
-﻿<%@ page title="About" language="C#" autoeventwireup="true" inherits="SiteTools_About, App_Web_jtoan5js" %>
+﻿<%@ Page Title="About" Language="C#" AutoEventWireup="true" CodeFile="About.aspx.cs" Inherits="SiteTools_About" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -253,7 +253,7 @@
         <div id="always-visible" style="display: none;">
             <div id="top-main-bar-top">
                 <div id="iframe-container-close-btn">
-                    <a href="~/Workspace.aspx" runat="server">Back to Workspace</a>
+                    <a href="~/Workspace.aspx" runat="server">Close Content</a>
                 </div>
             </div>
         </div>
@@ -359,9 +359,9 @@
                     </ul>
                     <div class="clear-space"></div>
                     <div style="text-align: center">
-                        <img alt="Workspace" src="Standard_Images/About Logos/openwse_v4.5.jpg" class="screenshot-img" />
+                        <img alt="Workspace" src="Standard_Images/About Logos/openwse_v4.6.jpg" class="screenshot-img" />
                         <div class="clear" style="height: 20px;"></div>
-                        <img alt="Workspace" src="Standard_Images/About Logos/openwse_v4.5_overlays.jpg" class="screenshot-img" />
+                        <img alt="Workspace" src="Standard_Images/About Logos/openwse_v4.6_overlays.jpg" class="screenshot-img" />
                     </div>
                     <div class="clear-space"></div>
                 </div>
@@ -404,7 +404,7 @@
                         <li>Create/Import your own database tables which also creates its own app for you to interact with.</li>
                         <li>Setup notifications that can alert users when a custom table or table import has been updated.</li>
                         <li>Add data charts to the custom tables and/or table imports.</li>
-                        <li>Upload custom projects such as full web sites that can be hosted from this site.</li>
+                        <li>Upload custom files and folders such as full web sites that can be hosted from this site.</li>
                         <li>Host web services.</li>
                         <li>Create and upload Site Plugins that can give the workspace extra functionality.</li>
                         <li>Track issues, user logins, site request, speeds, and enable the IP Listener which can make your site available to only certain IP addresses.</li>
@@ -457,6 +457,7 @@
                     An integration guide is available <a href="Integration.html" target="_blank">here.</a>
                     <div class="clear-space"></div>
                     OpenWSE is free for personal use as long as the copyright notices are intact. In order to remove the copyright, you must purchase a license. Download and run the OpenWSE_Installer.exe which will setup a website on your local machine using IIS. Once you buy the license, you can make any changes you want to the code. 
+                    <div class="clear-space"></div>
                 </div>
                 <div class="about-section">
                     <h2>Frameworks and Technologies Used</h2>
@@ -563,7 +564,6 @@
                     <option value="acctsettings">Account Settings</option>
                     <option value="appeditor">App Manager</option>
                     <option value="apppackages">App Packages</option>
-                    <option value="customprojects">Custom Projects</option>
                     <option value="customtables">Custom Tables</option>
                     <option value="dbimporter">Table Importer</option>
                     <option value="dbmanager">Database Manager</option>
@@ -578,7 +578,6 @@
                     <option value="siteplugins">Site Plugins</option>
                     <option value="startupscripts">Startup Scripts</option>
                     <option value="useraccounts">User Accounts</option>
-                    <option value="webservices">Webservices</option>
                 </select>
             </div>
             <div class="clear-space"></div>

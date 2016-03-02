@@ -1,8 +1,5 @@
 ﻿$(document).ready(function () {
-    BuildLinks();
-
-    var url = location.href;
-    load(url == "" ? "1" : url);
+    UpdateFontFamilyPreview();
 });
 
 function rgbToHex(fontcolor) {
@@ -44,25 +41,6 @@ function SetDefaultStyles() {
     }
 }
 
-$(function () {
-    $(window).hashchange(function () {
-        var url = location.href;
-        load(url == "" ? "1" : url);
-    });
-});
-
-var currentTab = "";
-function BuildLinks() {
-    $(".pnl-section").each(function (index) {
-        var id = $(this).attr("id").replace("pnl_", "");
-        $(".sitemenu-selection").append("<li><a href='#?tab=" + id + "'>" + $(this).attr("data-title") + "</a></li>");
-    });
-
-    $(".sitemenu-selection").find("li").on("click", function () {
-        load($(this).find("a").attr("href"));
-    });
-}
-
 Sys.Application.add_load(function () {
     openWSE.RadioButtonStyle();
     if (learMoreOn) {
@@ -93,7 +71,7 @@ $(document.body).on("keypress", "#MainContent_tb_backgroundlooptimer, #MainConte
 
 var prm = Sys.WebForms.PageRequestManager.getInstance();
 prm.add_endRequest(function () {
-    load(currentTab);
+    UpdateFontFamilyPreview();
 });
 
 $(document.body).on("keypress", "#tb_updateintervals, #txt_AppGridSize", function (e) {
@@ -334,36 +312,6 @@ $(document.body).on("click", "#pnl_images .delete-uploadedimg", function () {
        }, null);
 });
 
-function load(num) {
-    $(".pnl-section").hide();
-    $(".sitemenu-selection").find("li").removeClass("active");
-
-    currentTab = num;
-    var index = 0;
-
-    var arg1 = num.split("tab=");
-    if (arg1.length > 1) {
-        var arg2 = arg1[arg1.length - 1].split("#");
-        if (arg2.length == 1) {
-            index = GetPnlSectionIndex(arg2[0]);
-        }
-    }
-
-    $(".pnl-section").eq(index).show();
-    $(".sitemenu-selection").find("li").eq(index).addClass("active");
-}
-
-function GetPnlSectionIndex(ele) {
-    var pnlIndex = 0;
-    $(".pnl-section").each(function (index) {
-        if ($(this).attr("id") == "pnl_" + ele) {
-            pnlIndex = index;
-        }
-    });
-
-    return pnlIndex;
-}
-
 function DeleteUserAccount() {
     openWSE.ConfirmWindow("Are you sure you want to delete your account? There is no going back if once you click Ok.",
        function () {
@@ -426,4 +374,33 @@ function RemoveAllPlugins() {
     openWSE.LoadingMessage1("Uninstalling All Plugins...");
     document.getElementById("hf_removeAllPlugins").value = new Date().toString();
     __doPostBack("hf_removeAllPlugins", "");
+}
+
+$(document.body).on("change", "#dd_defaultbodyfontfamily", function (e) {
+    UpdateFontFamilyPreview();
+});
+
+function UpdateFontFamilyPreview() {
+    var x = "<iframe id='iframe_fontfamilypreview' style='width: 100%; height: 40px; border: none;'></iframe>";
+    $("#span_fontfamilypreview").html(x);
+
+    var doc = document.getElementById("iframe_fontfamilypreview");
+    if (doc) {
+        doc = doc.contentWindow.document;
+        if (doc) {
+            try {
+                var siteMainCss = openWSE.siteRoot() + "App_Themes/" + openWSE_Config.siteTheme + '/' + openWSE_Config.desktopCSS;
+
+                var cssFile = "";
+                if ($("#dd_defaultbodyfontfamily").val() != "inherit") {
+                    cssFile = "<link href='" + openWSE.siteRoot() + "CustomFonts/" + $("#dd_defaultbodyfontfamily").val() + "' type='text/css' rel='stylesheet' />";
+                }
+
+                doc.open();
+                doc.write("<link href='" + siteMainCss + "' type='text/css' rel='stylesheet' />" + cssFile + "<span style='font-size: 15px;'>This is the font preview</span>");
+                doc.close();
+            }
+            catch (evt) { }
+        }
+    }
 }

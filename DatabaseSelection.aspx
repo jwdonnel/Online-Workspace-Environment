@@ -1,4 +1,4 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="DatabaseSelection, App_Web_jtoan5js" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="DatabaseSelection.aspx.cs" Inherits="DatabaseSelection" %>
 
 <!DOCTYPE html>
 

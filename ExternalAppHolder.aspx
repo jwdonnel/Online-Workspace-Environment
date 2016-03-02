@@ -1,4 +1,5 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="WebControls_ExternalAppHolder, App_Web_jtoan5js" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="ExternalAppHolder.aspx.cs"
+    Inherits="WebControls_ExternalAppHolder" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -57,6 +58,19 @@
             -webkit-border-radius: 0px !important;
             border-radius: 0px !important;
         }
+
+        @media screen and (max-width: 750px)
+        {
+            .app-title-bg-color .float-left:first-child
+            {
+                float: left!important;
+            }
+
+            .app-title-bg-color .float-right
+            {
+                float: right!important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -103,6 +117,7 @@
         <script type="text/javascript">
             $(document).ready(function () {
                 openWSE_Config.workspaceMode = "simple";
+                openWSE.LoadCSSFilesInApp($("#hf_appId").val());
             });
 
             $(document.body).on("click", "#btn_refresh", function () {

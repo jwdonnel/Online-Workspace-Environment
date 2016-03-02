@@ -1,0 +1,13 @@
+<table cellspacing="0" rules="all" border="1" style="border-collapse:collapse;">
+	<tr>
+		<td>Year</td><td>Sales</td><td>Expenses</td>
+	</tr><tr>
+		<td>2013</td><td>1500</td><td>-1.01</td>
+	</tr><tr>
+		<td>1234</td><td>1</td><td>123123</td>
+	</tr><tr>
+		<td>2013</td><td>4356342</td><td>500</td>
+	</tr><tr>
+		<td>321321321</td><td>123123</td><td>123123</td>
+	</tr>
+</table>

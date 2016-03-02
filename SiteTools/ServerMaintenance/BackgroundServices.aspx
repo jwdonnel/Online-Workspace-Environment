@@ -1,46 +1,10 @@
-﻿<%@ page title="Background Services" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_BackgroundServices, App_Web_txobhkq5" %>
+﻿<%@ Page Title="Background Services" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="BackgroundServices.aspx.cs" Inherits="SiteTools_BackgroundServices" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
-    <style type="text/css">
-        .service-name-style
-        {
-        }
-
-        .state-Sleeping, .state-Running, .state-Stopped, .state-Error, .state-Stopping
-        {
-            font-weight: bold;
-        }
-
-        .state-Sleeping, .state-Stopping
-        {
-            color: #FE9525;
-        }
-
-        .state-Running
-        {
-            color: green;
-        }
-
-        .state-Stopped
-        {
-            color: #777;
-        }
-
-        .state-Error
-        {
-            color: red;
-        }
-
-        #log-list-scroll
-        {
-            border: 1px solid #DFDFDF;
-        }
-    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding margin-top">
+    <div class="maincontent-padding pad-top-big margin-top">
         <asp:Literal ID="ltl_locked" runat="server"></asp:Literal>
-        <div class="clear-space"></div>
         <asp:Panel ID="pnl_UploadBackgroundService" runat="server">
             <a href="#" class="margin-right-big input-buttons-create float-left" onclick="openWSE.LoadModalWindow(true, 'UploadService-element', 'Background Service Upload');return false;">Service Upload</a>
             <div class="searchwrapper float-left" style="width: 350px; margin-top: 3px;">
@@ -109,7 +73,7 @@
             <ContentTemplate>
                 <div class="clear-space"></div>
                 <asp:Label ID="lbl_TotalServices" runat="server"></asp:Label>
-                <div id="div_backgroundserviceTable" runat="server" class="table-settings-box no-border" style="margin-top: 0px!important;">
+                <div id="div_backgroundserviceTable" runat="server" class="table-settings-box no-border">
                     <div class="td-settings-ctrl">
                         <asp:LinkButton ID="lbtn_refresh" runat="server" Text="" CssClass="img-refresh float-right RandomActionBtns"
                             OnClick="lbtn_refresh_Click" ToolTip="Refresh"></asp:LinkButton>
@@ -158,5 +122,4 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript" src='<%=ResolveUrl("~/Scripts/SiteTools/backgroundservices.js")%>'> </script>
 </asp:Content>

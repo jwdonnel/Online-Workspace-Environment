@@ -1,4 +1,4 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_RSSFeed_RSSFeed, App_Web_5bdcjnne" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="RSSFeed.ascx.cs" Inherits="Apps_RSSFeed_RSSFeed" %>
 <div class="pad-all app-title-bg-color" style="display: none; position: relative;">
     <div class="float-left pad-bottom">
         <asp:Image ID="img_Title" runat="server" CssClass="app-img-titlebar" />
@@ -109,3 +109,5 @@
         </div>
     </div>
 </div>
+<input type="hidden" data-scriptelement="true" data-tagname="link" data-tagtype="text/css" data-tagrel="stylesheet" data-tagsrc="~/Apps/RSSFeed/rssfeed.css" />
+<input type="hidden" data-scriptelement="true" data-tagname="script" data-tagtype="text/javascript" data-tagsrc="~/Apps/RSSFeed/rssfeed.js" />

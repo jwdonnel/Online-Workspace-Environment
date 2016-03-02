@@ -6,7 +6,7 @@
             <RSSID>316b39ac-c043-4aba-9240-ad087fb81804</RSSID>
             <RSSTitle>CNN</RSSTitle>
             <RSSUrl>http://rss.cnn.com/rss/cnn_topstories.rss</RSSUrl>
-            <SourceImg>http://www.i.cdn.cnn.com/.a/1.160.0/assets/logo_cnn_badge_2up.png</SourceImg>
+            <SourceImg>http://img3.wikia.nocookie.net/__cb20140910201936/logopedia/images/4/47/CNN_International_logo_2014.png</SourceImg>
         </Item>
         <Item>
             <Category>World / U.S. News</Category>
@@ -14,6 +14,13 @@
             <RSSTitle>New York Times</RSSTitle>
             <RSSUrl>http://feeds.nytimes.com/nyt/rss/HomePage</RSSUrl>
             <SourceImg>https://lh6.googleusercontent.com/-AxnGfN8cSps/AAAAAAAAAAI/AAAAAAAABj4/HJ3gDwHwk0Q/photo.jpg?sz=48</SourceImg>
+        </Item>
+        <Item>
+            <Category>World / U.S. News</Category>
+            <RSSID>0436a4ee-aa6d-44bd-b788-0dd7aee2c364</RSSID>
+            <RSSTitle>Washington Post: Todays Highlights</RSSTitle>
+            <RSSUrl>http://www.washingtonpost.com/rss/</RSSUrl>
+            <SourceImg>https://img.washingtonpost.com/pb/resources/img/thewashingtonpost-white-2x.png</SourceImg>
         </Item>
         <Item>
             <Category>World / U.S. News</Category>
@@ -31,11 +38,26 @@
         </Item>
         <Item>
             <Category>World / U.S. News</Category>
+            <RSSID>bd047ebd-8496-4fe1-9f54-5a34ed51e798</RSSID>
+            <RSSTitle>NPR Topics: News</RSSTitle>
+            <RSSUrl>http://www.npr.org/rss/rss.php?id=1001</RSSUrl>
+            <SourceImg>http://media.npr.org/chrome/news/nprlogo_138x46.gif</SourceImg>
+        </Item>
+        <Item>
+            <Category>World / U.S. News</Category>
+            <RSSID>6ec23ca8-b40b-4952-ab34-6ce8f93035c8</RSSID>
+            <RSSTitle>Reuters: Top News</RSSTitle>
+            <RSSUrl>http://feeds.reuters.com/reuters/topNews</RSSUrl>
+            <SourceImg>https://lh3.googleusercontent.com/-BNBn3A6nYZk/AAAAAAAAAAI/AAAAAAAAfdQ/nOXNEzqdo_I/s0-c-k-no-ns/photo.jpg</SourceImg>
+        </Item>
+        <Item>
+            <Category>World / U.S. News</Category>
             <RSSID>58cb6242-e670-45b9-ae0a-85b6a3db28ed</RSSID>
             <RSSTitle>BBC News - Americas: World Edition</RSSTitle>
             <RSSUrl>http://newsrss.bbc.co.uk/rss/newsonline_world_edition/americas/rss.xml</RSSUrl>
             <SourceImg>http://static.bbci.co.uk/frameworks/barlesque/2.83.10/orb/4/img/bbc-blocks-dark.png</SourceImg>
         </Item>
+        
         <Item>
             <Category>Business / Stock Market</Category>
             <RSSID>7f7863b7-12e4-4efa-aa20-115ebefb39fe</RSSID>
@@ -69,7 +91,7 @@
             <RSSID>1f33b7a4-3d71-4252-bbc6-9daf8d3d6f57</RSSID>
             <RSSTitle>CNN News - Wall Street</RSSTitle>
             <RSSUrl>http://rss.cnn.com/rss/money_markets.rss</RSSUrl>
-            <SourceImg>http://www.i.cdn.cnn.com/.a/1.160.0/assets/logo_cnn_badge_2up.png</SourceImg>
+            <SourceImg>http://img3.wikia.nocookie.net/__cb20140910201936/logopedia/images/4/47/CNN_International_logo_2014.png</SourceImg>
         </Item>
         <Item>
             <Category>Business / Stock Market</Category>
@@ -78,6 +100,7 @@
             <RSSUrl>http://feeds.foxbusiness.com/foxbusiness/latest</RSSUrl>
             <SourceImg>https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Fox_News_Channel_logo.png/200px-Fox_News_Channel_logo.png</SourceImg>
         </Item>
+        
         <Item>
             <Category>Education</Category>
             <RSSID>9a8bca32-1fb6-41ec-b5ac-30c672f60f85</RSSID>
@@ -102,10 +125,18 @@
         <Item>
             <Category>Education</Category>
             <RSSID>e7967115-ef03-4993-8408-6454740b0c8c</RSSID>
-            <RSSTitle>NPR Topics: EducationAP Top U.S. News</RSSTitle>
+            <RSSTitle>TechLEARNing.com</RSSTitle>
             <RSSUrl>http://www.techlearning.com/RSS</RSSUrl>
             <SourceImg>http://media.npr.org/chrome/news/nprlogo_138x46.gif</SourceImg>
         </Item>
+        <Item>
+            <Category>Education</Category>
+            <RSSID>4070aa41-c938-401f-98f8-55638f310855</RSSID>
+            <RSSTitle>TechLEARNing.com</RSSTitle>
+            <RSSUrl>http://www.techlearning.com/RSS</RSSUrl>
+            <SourceImg>http://www.techlearning.com/images/logo.png</SourceImg>
+        </Item>
+        
         <Item>
             <Category>Science</Category>
             <RSSID>f4d812cc-b51e-4db7-84b7-76ba05a7bc13</RSSID>
@@ -122,11 +153,19 @@
         </Item>
         <Item>
             <Category>Science</Category>
+            <RSSID>0ad09cae-7859-4475-892c-bf0fc04d5c94</RSSID>
+            <RSSTitle>News at nature.com</RSSTitle>
+            <RSSUrl>http://feeds.nature.com/nature/rss/current</RSSUrl>
+            <SourceImg></SourceImg>
+        </Item>
+        <Item>
+            <Category>Science</Category>
             <RSSID>bfd64bad-aec9-4c99-9c93-942d0cabf182</RSSID>
             <RSSTitle>NASA Image of the Day</RSSTitle>
             <RSSUrl>http://www.nasa.gov/rss/image_of_the_day.rss</RSSUrl>
             <SourceImg>http://www.nasa.gov/sites/all/themes/custom/nasatwo/images/nasa-logo.svg</SourceImg>
         </Item>
+        
         <Item>
             <Category>Technology</Category>
             <RSSID>65976dcd-fa39-4a10-8418-1d532b4c9a8d</RSSID>
@@ -183,6 +222,14 @@
             <RSSUrl>http://rss.feedsportal.com/c/270/f/3547/index.rss</RSSUrl>
             <SourceImg>http://cdn3.techworld.com/graphics/techworld.jpg</SourceImg>
         </Item>
+
+        <Item>
+            <Category>Sports</Category>
+            <RSSID>c9e1ad7c-d1ba-4eeb-ac67-ca366086e487</RSSID>
+            <RSSTitle>Sports Illustrated</RSSTitle>
+            <RSSUrl>http://rss.cnn.com/rss/si_topstories.rss</RSSUrl>
+            <SourceImg>http://cdn-css.si.com/sites/all/themes/custom/si_desktop/assets/images/header/logo-white.png</SourceImg>
+        </Item>
         <Item>
             <Category>Sports</Category>
             <RSSID>cb2b0f58-38c8-4f1a-a059-1438dbf78492</RSSID>
@@ -219,6 +266,21 @@
             <SourceImg>https://cdn0.vox-cdn.com/images/widgets/yahoo-logo-transparent.v27d6ebb.png</SourceImg>
         </Item>
         <Item>
+            <Category>Sports</Category>
+            <RSSID>6ca370ba-d2aa-4016-9174-3db565e03e76</RSSID>
+            <RSSTitle>NBA.com = Jazz News</RSSTitle>
+            <RSSUrl>http://www.nba.com/jazz/rss.xml</RSSUrl>
+            <SourceImg>https://lh4.googleusercontent.com/-iykIxE6HFpM/AAAAAAAAAAI/AAAAAAABVkM/Fi56mxGGkCM/s0-c-k-no-ns/photo.jpg</SourceImg>
+        </Item>
+
+        <Item>
+            <Category>Entertainment</Category>
+            <RSSID>8a99142c-ec17-46ed-af1e-831a077eb300</RSSID>
+            <RSSTitle>New Yorker Humor</RSSTitle>
+            <RSSUrl>http://www.newyorker.com/feed/humor</RSSUrl>
+            <SourceImg>http://www.newyorker.com/wp-content/assets/dist/img/header_graphics/nyr-logo.png</SourceImg>
+        </Item>
+        <Item>
             <Category>Entertainment</Category>
             <RSSID>84f31f16-d9cf-4b53-b2d6-03c7361e59c4</RSSID>
             <RSSTitle>NPR Topics - Arts and Culture</RSSTitle>
@@ -253,6 +315,7 @@
             <RSSUrl>http://www.npr.org/rss/rss.php?id=1045</RSSUrl>
             <SourceImg>http://media.npr.org/chrome/news/nprlogo_138x46.gif</SourceImg>
         </Item>
+        
         <Item>
             <Category>Video Games</Category>
             <RSSID>7930b46c-ec72-41b2-b07c-83d7a048c749</RSSID>
@@ -261,6 +324,13 @@
             <SourceImg>http://oystatic.ignimgs.com/src/core/img/social/avatars/male2.jpg</SourceImg>
         </Item>
         <!--<Item>
+            <Category>Video Games</Category>
+            <RSSID>26b681d0-051a-433f-959e-3c59f7007e87</RSSID>
+            <RSSTitle>Game Informer</RSSTitle>
+            <RSSUrl>http://www.gameinformer.com/b/mainfeed.aspx?Tags=news</RSSUrl>
+            <SourceImg>http://media1.gameinformer.com/images/site/site-logo_beta.png</SourceImg>
+        </Item>
+        <Item>
             <Category>Video Games</Category>
             <RSSID>2b373ebe-8218-4696-97bf-b122dfb6347d</RSSID>
             <RSSTitle>Gamespot</RSSTitle>

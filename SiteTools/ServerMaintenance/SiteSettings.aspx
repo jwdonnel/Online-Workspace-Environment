@@ -1,26 +1,19 @@
-﻿<%@ page title="Site Settings" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_SiteSettings, App_Web_txobhkq5" %>
+﻿<%@ Page Title="Site Settings" Language="C#" MasterPageFile="~/Site.master"
+    AutoEventWireup="true" CodeFile="SiteSettings.aspx.cs" Inherits="SiteTools_SiteSettings" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
-    <style type="text/css">
-        .ajax__slider_h_rail
-        {
-            width: 178px !important;
-            margin-right: 10px;
-        }
-    </style>
 </asp:Content>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding pad-top-big margin-top">
+    <div class="maincontent-padding margin-top">
         <div id="sitesettings">
             <div id="MainSettings">
-                <ul class="sitemenu-selection">
-                </ul>
-                <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-                    <ContentTemplate>
-                        <asp:Panel ID="pnl_ServerSettings" CssClass="pnl-section" runat="server" data-title="Site/Server Settings">
-                            <div class="clear-space"></div>
-                            <div class="clear-space"></div>
+                <asp:Panel ID="pnlLinkBtns" runat="server">
+                </asp:Panel>
+                <asp:Panel ID="pnl_ServerSettings" ClientIDMode="Static" CssClass="pnl-section" runat="server">
+                    <asp:UpdatePanel ID="UpdatePanel4" runat="server">
+                        <ContentTemplate>
                             Server side settings and overrides will effect every user. Not Administrative users will not be able to edit certain settings.
+                            <div class="clear-space"></div>
                             <div class="table-settings-box">
                                 <div class="td-settings-title">
                                     Total Number of Workspaces Allowed
@@ -151,122 +144,16 @@
                                     </div>
                                 </div>
                             </asp:Panel>
-                        </asp:Panel>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                </asp:Panel>
 
-                        <asp:Panel ID="pnl_NetworkActivitySettings" runat="server" CssClass="pnl-section" data-title="Network Log Settings">
-                            <div class="clear-space"></div>
-                            <div class="table-settings-box">
-                                <div class="td-settings-title">
-                                    Record Network Activity
-                                </div>
-                                <div class="title-line"></div>
-                                <div class="td-settings-ctrl">
-                                    <div class="field switch inline-block">
-                                        <asp:RadioButton ID="cb_netactOn" runat="server" Text="On" CssClass="RandomActionBtns cb-enable"
-                                            OnCheckedChanged="cb_netactOn_CheckedChanged" AutoPostBack="True" />
-                                        <asp:RadioButton ID="cb_netactOff" runat="server" Text="Off" CssClass="RandomActionBtns cb-disable"
-                                            OnCheckedChanged="cb_netactOff_CheckedChanged" AutoPostBack="True" />
-                                    </div>
-                                </div>
-                                <div class="td-settings-desc">
-                                    Disable this feature if you dont want the website to track errors and Sql database changes.
-                                </div>
-                            </div>
-                            <div class="table-settings-box">
-                                <div class="td-settings-title">
-                                    Disable Javascript Error Alerts
-                                </div>
-                                <div class="title-line"></div>
-                                <div class="td-settings-ctrl">
-                                    <div class="field switch inline-block">
-                                        <asp:RadioButton ID="rb_DisableJavascriptErrorAlerts_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                            OnCheckedChanged="rb_DisableJavascriptErrorAlerts_on_CheckedChanged" AutoPostBack="True" />
-                                        <asp:RadioButton ID="rb_DisableJavascriptErrorAlerts_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                            OnCheckedChanged="rb_DisableJavascriptErrorAlerts_off_CheckedChanged" AutoPostBack="True" />
-                                    </div>
-                                </div>
-                                <div class="td-settings-desc">
-                                    Set this to no to allow the javascript to notify errors to the user .
-                                </div>
-                            </div>
-                            <asp:Panel ID="pnl_RecordLogFile" runat="server">
-                                <div class="table-settings-box">
-                                    <div class="td-settings-title">
-                                        Record Login Activity
-                                    </div>
-                                    <div class="title-line"></div>
-                                    <div class="td-settings-ctrl">
-                                        <div class="field switch inline-block">
-                                            <asp:RadioButton ID="rb_recordLoginActivity_on" runat="server" Text="On" CssClass="RandomActionBtns cb-enable"
-                                                OnCheckedChanged="rb_recordLoginActivity_on_CheckedChanged" AutoPostBack="True" />
-                                            <asp:RadioButton ID="rb_recordLoginActivity_off" runat="server" Text="Off" CssClass="RandomActionBtns cb-disable"
-                                                OnCheckedChanged="rb_recordLoginActivity_off_CheckedChanged" AutoPostBack="True" />
-                                        </div>
-                                    </div>
-                                    <div class="td-settings-desc">
-                                        Disable this feature if you dont want the website to track
-                                                user logins and logoffs.
-                                    </div>
-                                </div>
-                                <div class="table-settings-box">
-                                    <div class="td-settings-title">
-                                        Record Errors Only
-                                    </div>
-                                    <div class="title-line"></div>
-                                    <div class="td-settings-ctrl">
-                                        <div class="field switch inline-block">
-                                            <asp:RadioButton ID="rb_RecordErrorsOnly_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                                OnCheckedChanged="rb_RecordErrorsOnly_on_CheckedChanged" AutoPostBack="True" />
-                                            <asp:RadioButton ID="rb_RecordErrorsOnly_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                                OnCheckedChanged="rb_RecordErrorsOnly_off_CheckedChanged" AutoPostBack="True" />
-                                        </div>
-                                    </div>
-                                    <div class="td-settings-desc">
-                                        Enable this feature if you only want to record errors.
-                                    </div>
-                                </div>
-                                <div class="table-settings-box">
-                                    <div class="td-settings-title">
-                                        Record Errors To Log File
-                                    </div>
-                                    <div class="title-line"></div>
-                                    <div class="td-settings-ctrl">
-                                        <div class="field switch inline-block">
-                                            <asp:RadioButton ID="rb_recordLogFile_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                                OnCheckedChanged="rb_recordLogFile_on_CheckedChanged" AutoPostBack="True" />
-                                            <asp:RadioButton ID="rb_recordLogFile_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                                OnCheckedChanged="rb_recordLogFile_off_CheckedChanged" AutoPostBack="True" />
-                                        </div>
-                                    </div>
-                                    <div class="td-settings-desc">
-                                        Disable this feature if you dont want to save a physical log file to the Logging folder.
-                                    </div>
-                                </div>
-                            </asp:Panel>
-                            <div id="tableEmailAct" runat="server" class="table-settings-box">
-                                <div class="td-settings-title">
-                                    Alert Upon Error
-                                </div>
-                                <div class="title-line"></div>
-                                <div class="td-settings-ctrl">
-                                    <div class="field switch inline-block">
-                                        <asp:RadioButton ID="cb_emailon" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                            OnCheckedChanged="cb_emailon_CheckedChanged" AutoPostBack="True" />
-                                        <asp:RadioButton ID="cb_emailoff" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                            OnCheckedChanged="cb_emailoff_CheckedChanged" AutoPostBack="True" />
-                                    </div>
-                                </div>
-                                <div class="td-settings-desc">
-                                    Disable this feature if you dont want to recieve error alerts.
-                                </div>
-                            </div>
-                        </asp:Panel>
-
-                        <asp:Panel ID="pnl_emailSettings" runat="server" CssClass="pnl-section" data-title="Mail Settings">
-                            <div class="clear-space"></div>
-                            <div class="clear-space"></div>
+                <asp:Panel ID="pnl_emailSettings" runat="server" ClientIDMode="Static" CssClass="pnl-section" Style="display: none;">
+                    <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+                        <ContentTemplate>
                             The mail settings are used for outgoing email such as the notifications, updates,
                             and message forwarding.
+                            <div class="clear-space"></div>
                             <asp:Panel ID="pnl_mailsettings" runat="server">
                                 <div class="clear-margin" style="font-size: 12px;">
                                     <div class="float-left pad-right-big">
@@ -282,6 +169,7 @@
                                             <span class="pad-right font-bold">Status:</span><asp:Label ID="lbl_emailStatus" runat="server"></asp:Label></h3>
                                     </div>
                                 </div>
+                                <div class="clear-space"></div>
                                 <div class="table-settings-box">
                                     <div class="td-settings-title">
                                         Email Status
@@ -389,11 +277,18 @@
                                     </div>
                                 </asp:Panel>
                             </asp:Panel>
-                        </asp:Panel>
+                        </ContentTemplate>
+                        <Triggers>
+                            <asp:AsyncPostBackTrigger ControlID="lbtn_testconnection" />
+                        </Triggers>
+                    </asp:UpdatePanel>
+                </asp:Panel>
 
-                        <asp:Panel ID="pnl_admincontrolsonly" CssClass="pnl-section" runat="server" data-title="Administrative Settings" Visible="false" Enabled="false">
-                            <div class="clear-space"></div>
+                <asp:Panel ID="pnl_admincontrolsonly" CssClass="pnl-section" ClientIDMode="Static" runat="server" Visible="false" Enabled="false" Style="display: none;">
+                    <asp:UpdatePanel ID="UpdatePanel3" runat="server">
+                        <ContentTemplate>
                             These settings are only for the Administrator user. No users can see or modify these settings.
+                            <div class="clear-space"></div>
                             <div class="table-settings-box">
                                 <div class="td-settings-title">
                                     Update Server Settings Cache
@@ -739,26 +634,6 @@
                                     Select Yes to hide all app and sidebar icons.
                                 </div>
                             </div>
-
-                            <asp:Panel ID="pnl_HideSiteSettingIcons" runat="server">
-                                <div class="table-settings-box">
-                                    <div class="td-settings-title">
-                                        Hide Site Setting Icons
-                                    </div>
-                                    <div class="title-line"></div>
-                                    <div class="td-settings-ctrl">
-                                        <div class="field switch inline-block">
-                                            <asp:RadioButton ID="rb_HideSiteSettingIcons_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                                OnCheckedChanged="rb_HideSiteSettingIcons_on_CheckedChanged" AutoPostBack="True" />
-                                            <asp:RadioButton ID="rb_HideSiteSettingIcons_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                                OnCheckedChanged="rb_HideSiteSettingIcons_off_CheckedChanged" AutoPostBack="True" />
-                                        </div>
-                                    </div>
-                                    <div class="td-settings-desc">
-                                        Select Yes to hide the site settings icons in the sidebar.
-                                    </div>
-                                </div>
-                            </asp:Panel>
                             <div class="table-settings-box">
                                 <div class="td-settings-title">
                                     Force Group Login
@@ -830,7 +705,7 @@
                                             </div>
                                         </div>
                                         <div class="td-settings-desc">
-                                            Set to Yes to force the login modal window on page load. This will only apply when user is attempting to access the Workspace on No Login/Demo mode. Will not apply for the App Remote (Mobile).
+                                            Set to Yes to force the login modal window on page load. This will only apply when user is attempting to access the Workspace on No Login/Demo mode.
                                         </div>
                                     </div>
                                 </asp:Panel>
@@ -1190,179 +1065,13 @@
                                     </div>
                                 </div>
                             </asp:Panel>
-                        </asp:Panel>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                </asp:Panel>
 
-                        <asp:Panel ID="pnl_UserRegister" runat="server" CssClass="pnl-section" data-title="User Registration Settings">
-                            <div class="clear-space"></div>
-                            <div id="userReg">
-                                <div id="rb_usersignup_holder" runat="server">
-                                    <div class="table-settings-box">
-                                        <div class="td-settings-title">
-                                            Allow User Signup
-                                        </div>
-                                        <div class="title-line"></div>
-                                        <div class="td-settings-ctrl">
-                                            <div class="field switch inline-block">
-                                                <asp:RadioButton ID="rb_allowusersignup_on" runat="server" Text="On" CssClass="RandomActionBtns cb-enable"
-                                                    OnCheckedChanged="rb_allowusersignup_on_Checked" AutoPostBack="true" />
-                                                <asp:RadioButton ID="rb_allowusersignup_off" runat="server" Text="Off" CssClass="RandomActionBtns cb-disable"
-                                                    OnCheckedChanged="rb_allowusersignup_off_Checked" AutoPostBack="true" />
-                                            </div>
-                                        </div>
-                                        <div class="td-settings-desc">
-                                            Select On if you want to allow users to sign up for a new account on the login
-                                                        screen.
-                                        </div>
-                                    </div>
-                                    <asp:Panel ID="pnl_socialSignIn_UserSignup" runat="server" Visible="false" Enabled="false">
-                                        <div class="table-settings-box">
-                                            <div class="td-settings-title">
-                                                Google+ Login
-                                            </div>
-                                            <div class="title-line"></div>
-                                            <div class="td-settings-ctrl">
-                                                <div class="field switch inline-block">
-                                                    <asp:RadioButton ID="rb_googlePlusSignIn_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                                        OnCheckedChanged="rb_googlePlusSignIn_on_Checked" AutoPostBack="true" />
-                                                    <asp:RadioButton ID="rb_googlePlusSignIn_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                                        OnCheckedChanged="rb_googlePlusSignIn_off_Checked" AutoPostBack="true" />
-                                                </div>
-                                            </div>
-                                            <div class="td-settings-desc">
-                                                Allow users to login using their Google+ accounts. <a href="https://developers.google.com/+/quickstart/csharp" target="_blank">Integration Information</a>
-                                            </div>
-                                        </div>
-                                        <div class="table-settings-box">
-                                            <div class="td-settings-title">
-                                                Twitter Login
-                                            </div>
-                                            <div class="title-line"></div>
-                                            <div class="td-settings-ctrl">
-                                                <div class="field switch inline-block">
-                                                    <asp:RadioButton ID="rb_twitterSignIn_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                                        OnCheckedChanged="rb_twitterSignIn_on_Checked" AutoPostBack="true" />
-                                                    <asp:RadioButton ID="rb_twitterSignIn_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                                        OnCheckedChanged="rb_twitterSignIn_off_Checked" AutoPostBack="true" />
-                                                </div>
-                                            </div>
-                                            <div class="td-settings-desc">
-                                                Allow users to login using their Twitter accounts. <a href="https://dev.twitter.com/web/sign-in/implementing" target="_blank">Integration Information</a>
-                                            </div>
-                                        </div>
-                                        <div class="table-settings-box">
-                                            <div class="td-settings-title">
-                                                Facebook Login
-                                            </div>
-                                            <div class="title-line"></div>
-                                            <div class="td-settings-ctrl">
-                                                <div class="field switch inline-block">
-                                                    <asp:RadioButton ID="rb_facebookSignIn_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                                        OnCheckedChanged="rb_facebookSignIn_on_Checked" AutoPostBack="true" />
-                                                    <asp:RadioButton ID="rb_facebookSignIn_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                                        OnCheckedChanged="rb_facebookSignIn_off_Checked" AutoPostBack="true" />
-                                                </div>
-                                            </div>
-                                            <div class="td-settings-desc">
-                                                Allow users to login using their Facebook accounts. <a href="https://developers.facebook.com/docs/facebook-login/login-flow-for-web/v2.2" target="_blank">Integration Information</a>
-                                            </div>
-                                        </div>
-                                    </asp:Panel>
-                                    <asp:Panel ID="pnl_ConfirmationEmailSignUp" runat="server">
-                                        <div class="table-settings-box">
-                                            <div class="td-settings-title">
-                                                Send Confirmation Email
-                                            </div>
-                                            <div class="title-line"></div>
-                                            <div class="td-settings-ctrl">
-                                                <div class="field switch inline-block">
-                                                    <asp:RadioButton ID="rb_SignUpConfirmationEmail_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                                        OnCheckedChanged="rb_SignUpConfirmationEmail_on_Checked" AutoPostBack="true" />
-                                                    <asp:RadioButton ID="rb_SignUpConfirmationEmail_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                                        OnCheckedChanged="rb_SignUpConfirmationEmail_off_Checked" AutoPostBack="true" />
-                                                </div>
-                                            </div>
-                                            <div class="td-settings-desc">
-                                                Select Yes if you want to send a confirmation email to the user to verify email. Emails will only be sent if creating new account (Not signing in through other service).
-                                            </div>
-                                        </div>
-                                    </asp:Panel>
-                                    <asp:Panel ID="pnl_UserSignUp" runat="server">
-                                        <div class="table-settings-box">
-                                            <div class="td-settings-title">
-                                                Email Association
-                                            </div>
-                                            <div class="title-line"></div>
-                                            <div class="td-settings-ctrl">
-                                                <div class="field switch inline-block">
-                                                    <asp:RadioButton ID="rb_emailassociation_on" runat="server" Text="On" CssClass="RandomActionBtns cb-enable"
-                                                        OnCheckedChanged="rb_emailassociation_on_Checked" AutoPostBack="true" />
-                                                    <asp:RadioButton ID="rb_emailassociation_off" runat="server" Text="Off" CssClass="RandomActionBtns cb-disable"
-                                                        OnCheckedChanged="rb_emailassociation_off_Checked" AutoPostBack="true" />
-                                                </div>
-                                            </div>
-                                            <div class="td-settings-desc">
-                                                Select On if you want to limit the user sign up to be associated with a certain
-                                                            email address.
-                                            </div>
-                                        </div>
-                                        <asp:Panel ID="pnl_emailassociation" runat="server" DefaultButton="btn_UpdateEmailAssociation">
-                                            <div class="table-settings-box">
-                                                <div class="td-settings-title">
-                                                    Email Address
-                                                </div>
-                                                <div class="title-line"></div>
-                                                <div class="td-settings-ctrl">
-                                                    <b>@</b><asp:TextBox ID="tb_EmailAssociation" runat="server" CssClass="textEntry margin-left margin-right"
-                                                        Width="150px"></asp:TextBox><div class="clear-space-five">
-                                                        </div>
-                                                    <asp:Button ID="btn_UpdateEmailAssociation" runat="server" Text="Update" CssClass="input-buttons RandomActionBtns"
-                                                        OnClick="btn_UpdateEmailAssociation_Click" Style="margin-left: 22px" />
-                                                    <div id="emailassociation_error" style="color: Red; padding-left: 25px">
-                                                    </div>
-                                                </div>
-                                                <div class="td-settings-desc">
-                                                    Email address that can only be used during sign up. (Email is validated with
-                                                            an activation link)
-                                                </div>
-                                            </div>
-                                        </asp:Panel>
-                                    </asp:Panel>
-                                    <div class="table-settings-box">
-                                        <div class="td-settings-title">
-                                            User Sign Up Role
-                                        </div>
-                                        <div class="title-line"></div>
-                                        <div class="td-settings-ctrl">
-                                            <asp:DropDownList ID="dd_usersignuprole" runat="server" CssClass="margin-right">
-                                            </asp:DropDownList>
-                                            <asp:Button ID="btn_usersignuprole" runat="server" OnClick="dd_usersignuprole_Changed" CssClass="input-buttons RandomActionBtns" Text="Update" />
-                                        </div>
-                                        <div class="td-settings-desc">
-                                            Select an initial role for the user registering an account. (To create new roles, go to User Accounts and select Manage Roles at the top)
-                                        </div>
-                                    </div>
-                                    <div class="table-settings-box">
-                                        <div class="td-settings-title">
-                                            New User Settings Setup
-                                        </div>
-                                        <div class="title-line"></div>
-                                        <div class="td-settings-ctrl">
-                                            <a id="btn_customizeua" href="#iframecontent" class="margin-right float-left input-buttons-create"
-                                                onclick="openWSE.LoadIFrameContent('SiteTools/UserMaintenance/AcctSettings.aspx?toolview=true&u=NewUserDefaults&NoRegistration=true', this);return false;"
-                                                style="display: block;">Setup New User</a>
-                                            <div class="clear"></div>
-                                        </div>
-                                        <div class="td-settings-desc">
-                                            Set up a new user based on the User Sign Up Role.
-                                        </div>
-                                    </div>
-                                    <div class="clear"></div>
-                                </div>
-                            </div>
-                        </asp:Panel>
-
-                        <asp:Panel ID="pnl_Customizations" runat="server" CssClass="pnl-section" data-title="Site Customizations">
-                            <div class="clear-space"></div>
+                <asp:Panel ID="pnl_Customizations" ClientIDMode="Static" runat="server" CssClass="pnl-section" Style="display: none;">
+                    <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                        <ContentTemplate>
                             <asp:Panel ID="pnl_meteTagCustomizations" runat="server">
                                 <div class="table-settings-box">
                                     <div class="td-settings-title">
@@ -1415,6 +1124,8 @@
                                             <asp:Button ID="btn_defaultbodyfontfamily" runat="server" Text="Update" OnClick="btn_defaultbodyfontfamily_Click"
                                                 CssClass="RandomActionBtns input-buttons margin-left" />
                                         </asp:Panel>
+                                        <div class="clear-space"></div>
+                                        <div id="span_fontfamilypreview"></div>
                                     </div>
                                     <div class="td-settings-desc">
                                         Set the default site font family. Some fonts may not work with certain browsers. Visit <a href="https://www.google.com/fonts" target="_blank">https://www.google.com/fonts</a> to get custom fonts. (Must refresh the page to see changes)
@@ -1656,16 +1367,14 @@
                                     Setting an image as the default will only set it for the users current theme.
                                 </div>
                             </div>
-                        </asp:Panel>
-                    </ContentTemplate>
-                    <Triggers>
-                        <asp:AsyncPostBackTrigger ControlID="lbtn_testconnection" />
-                        <asp:AsyncPostBackTrigger ControlID="lbtn_defaultfontsize_clear" />
-                        <asp:AsyncPostBackTrigger ControlID="lbtn_defaultfontcolor_clear" />
-                        <asp:AsyncPostBackTrigger ControlID="rb_allowusersignup_on" />
-                        <asp:AsyncPostBackTrigger ControlID="rb_allowusersignup_off" />
-                    </Triggers>
-                </asp:UpdatePanel>
+                        </ContentTemplate>
+                        <Triggers>
+                            <asp:AsyncPostBackTrigger ControlID="lbtn_defaultfontsize_clear" />
+                            <asp:AsyncPostBackTrigger ControlID="lbtn_defaultfontcolor_clear" />
+                        </Triggers>
+                    </asp:UpdatePanel>
+                </asp:Panel>
+
             </div>
             <div id="CustomizationIFrame" style="display: none; margin-left: -60px; margin-right: -40px; margin-top: 4px;">
             </div>
@@ -1673,6 +1382,5 @@
         <div class="clear-space">
         </div>
         <script type="text/javascript" src='<%=ResolveUrl("~/WebControls/jscolor/jscolor.js")%>'></script>
-        <script type="text/javascript" src='<%=ResolveUrl("~/Scripts/SiteTools/sitesettings.js")%>'></script>
     </div>
 </asp:Content>

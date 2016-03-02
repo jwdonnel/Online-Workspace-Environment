@@ -1,9 +1,10 @@
-﻿<%@ page title="Group Organizer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_GroupOrg, App_Web_fk34kkkf" %>
+﻿<%@ Page Title="Group Organizer" Language="C#" MasterPageFile="~/Site.master"
+    AutoEventWireup="true" CodeFile="GroupOrg.aspx.cs" Inherits="SiteTools_GroupOrg" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding margin-top">
+    <div class="maincontent-padding pad-top-big margin-top">
         <asp:UpdatePanel ID="updatepnl_refresh" runat="server">
             <ContentTemplate>
                 <asp:HiddenField ID="hf_edit" runat="server" OnValueChanged="hf_edit_ValueChanged"
@@ -41,8 +42,6 @@
         </asp:UpdatePanel>
         <asp:UpdatePanel ID="updatepnl_header" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
-                <div class="clear-space">
-                </div>
                 <asp:Panel ID="pnl_addgroupbtn" runat="server">
                     <a class="margin-right-big input-buttons-create float-left" onclick="ResetControls();return false;">Create Group</a>
                     <div class="searchwrapper float-left" style="margin-top: 3px;">
@@ -243,6 +242,5 @@
                 </div>
             </div>
         </div>
-        <script type="text/javascript" src='<%=ResolveUrl("~/Scripts/SiteTools/grouporg.js")%>'></script>
     </div>
 </asp:Content>

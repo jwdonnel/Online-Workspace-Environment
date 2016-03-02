@@ -1,0 +1,9 @@
+﻿.td-sort-click a{text-decoration:none!important}
+.GridNormalRow td,.GridAlternate td{padding:7px 5px}
+.GridNormalRow{border-left:1px solid #DFDFDF}
+.collapse-expand-schemebtn{margin-left:20px;float:right}
+@media screen and (max-width:650px){
+    .myHeaderStyle{border-color:#FFF!important}
+    .myHeaderStyle,.myItemStyle,.GridNormalRow{border-left:1px solid #FFF}
+    .GridNormalRow td,.myItemStyle td,.myHeaderStyle td,.myHeaderStyle th{border-top:1px solid rgba(0,0,0,0)}
+}

@@ -346,14 +346,14 @@ var customTables = function () {
                         selectedClass = " tsactive";
                     }
                     x += "<div id=\"expand_" + id + "_All\" class=\"tsdiv" + selectedClass + "\" onclick=\"customTables.MonthSelect('" + id + "', 'all')\"><div class=\"pad-all-sml\"><h4>All Dates</h4></div></div>";
-                    x += "<div class=\"sidebar-divider-no-margin\"></div>";
+                    x += "<div class=\"clear-space-two\"></div>";
                     for (var i = 0; i < data.d.length; i++) {
                         selectedClass = "";
                         if (dateSelected == data.d[i][0]) {
                             selectedClass = " tsactive";
                         }
                         x += "<div id=\"expand_" + id + "_" + data.d[i][0] + "\" class=\"tsdiv" + selectedClass + "\" onclick=\"customTables.MonthSelect('" + id + "', '" + data.d[i][0] + "')\"><div class=\"pad-all-sml\">" + data.d[i][1] + "</div></div>";
-                        x += "<div class=\"sidebar-divider-no-margin\"></div>";
+                        x += "<div class=\"clear-space-two\"></div>";
                     }
 
                     $("#month-selector-" + id).html(x);

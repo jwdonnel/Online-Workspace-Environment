@@ -44,6 +44,27 @@
 	top: 0; /* #8656 */
 	cursor: default;
 }
+    .ui-autocomplete .ui-menu-item {
+        font-size: 12px;
+    }
+        .ui-autocomplete .ui-menu-item > img {
+            height: 12px;
+            margin-right: 5px;
+            margin-top: 1px;
+            float: left;
+        }
+
+.ui-autocomplete-category {
+    font-weight: bold;
+    padding: 2px 5px;
+    margin: 20px 0 4px 0;
+    line-height: 15px;
+    font-size: 16px;
+}
+    .ui-autocomplete-category:first-child
+    {
+        margin-top: 5px!important;
+    }
 
 /* workarounds */
 * html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */

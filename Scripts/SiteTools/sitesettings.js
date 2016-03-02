@@ -1,10 +1,8 @@
 ﻿$(document).ready(function () {
     openWSE.RadioButtonStyle();
     openWSE.RemoveUpdateModal();
-    BuildLinks();
-
-    var url = location.href;
-    load(url == "" ? "1" : url);
+    UpdateFontFamilyPreview();
+    openWSE.InitializeSiteMenuTabs();
 
     var style = window.getComputedStyle($("body")[0]);
     if ($.trim($("#MainContent_tb_defaultfontsize").val()) == "") {
@@ -44,29 +42,10 @@ function byte2Hex(n) {
     return String(nybHexString.substr((n >> 4) & 0x0F, 1)) + nybHexString.substr(n & 0x0F, 1);
 }
 
-var currentTab = "";
-function BuildLinks() {
-    $(".pnl-section").each(function (index) {
-        var id = $(this).attr("id").replace("MainContent_pnl_", "");
-        $(".sitemenu-selection").append("<li><a href='#?tab=" + id + "'>" + $(this).attr("data-title") + "</a></li>");
-    });
-
-    $(".sitemenu-selection").find("li").on("click", function () {
-        load($(this).find("a").attr("href"));
-    });
-}
-
-$(function () {
-    $(window).hashchange(function () {
-        var url = location.href;
-        load(url == "" ? "1" : url);
-    });
-});
-
 var prm = Sys.WebForms.PageRequestManager.getInstance();
 prm.add_endRequest(function () {
     openWSE.RadioButtonStyle();
-    load(currentTab);
+    UpdateFontFamilyPreview();
 });
 
 var serverTime_interval;
@@ -352,32 +331,31 @@ $(window).resize(function () {
     });
 });
 
-function load(num) {
-    $(".pnl-section").hide();
-    $(".sitemenu-selection").find("li").removeClass("active");
+$(document.body).on("change", "#MainContent_dd_defaultbodyfontfamily", function (e) {
+    UpdateFontFamilyPreview();
+});
 
-    var index = 0;
-    currentTab = num;
+function UpdateFontFamilyPreview() {
+    var x = "<iframe id='iframe_fontfamilypreview' style='width: 100%; height: 40px; border: none;'></iframe>";
+    $("#span_fontfamilypreview").html(x);
 
-    var arg1 = num.split("tab=");
-    if (arg1.length > 1) {
-        var arg2 = arg1[arg1.length - 1].split("#");
-        if (arg2.length == 1) {
-            index = GetPnlSectionIndex(arg2[0]);
+    var doc = document.getElementById("iframe_fontfamilypreview");
+    if (doc) {
+        doc = doc.contentWindow.document;
+        if (doc) {
+            try {
+                var siteMainCss = openWSE.siteRoot() + "App_Themes/" + openWSE_Config.siteTheme + '/' + openWSE_Config.desktopCSS;
+
+                var cssFile = "";
+                if ($("#MainContent_dd_defaultbodyfontfamily").val()) {
+                    cssFile = "<link href='" + openWSE.siteRoot() + "CustomFonts/" + $("#MainContent_dd_defaultbodyfontfamily").val() + "' type='text/css' rel='stylesheet' />";
+                }
+
+                doc.open();
+                doc.write("<link href='" + siteMainCss + "' type='text/css' rel='stylesheet' />" + cssFile + "<span style='font-size: 15px;'>This is the font preview</span>");
+                doc.close();
+            }
+            catch (evt) { }
         }
     }
-
-    $(".pnl-section").eq(index).show();
-    $(".sitemenu-selection").find("li").eq(index).addClass("active");
-}
-
-function GetPnlSectionIndex(ele) {
-    var pnlIndex = 0;
-    $(".pnl-section").each(function (index) {
-        if ($(this).attr("id") == "MainContent_pnl_" + ele) {
-            pnlIndex = index;
-        }
-    });
-
-    return pnlIndex;
 }

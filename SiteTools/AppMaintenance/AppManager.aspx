@@ -1,43 +1,36 @@
-﻿<%@ page title="App Editor" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppManager, App_Web_emlx5cno" %>
+﻿<%@ Page Title="App Editor" Language="C#" MasterPageFile="~/Site.master"
+    AutoEventWireup="true" CodeFile="AppManager.aspx.cs" Inherits="SiteTools_AppManager" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
-    <style type="text/css">
-        #editor
-        {
-            position: relative;
-            top: 0;
-            width: 100%;
-            left: 0;
-            font-size: 14px;
-        }
-
-        #MainContent_cb_associatedOverlay td, #MainContent_cc_associatedOverlayNew td
-        {
-            padding-bottom: 5px;
-        }
-
-        #MainContent_dd_category td, #MainContent_dd_category_edit td, #MainContent_dd_package td
-        {
-            padding-bottom: 3px;
-            padding-right: 15px;
-        }
-
-        .rating-column
-        {
-            background-color: #F9F9F9;
-        }
-    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding pad-top-big margin-top">
-        <asp:Panel ID="pnlLinkBtns" runat="server">
+    <div class="maincontent-padding margin-top">
+        <asp:Panel ID="pnlLinkBtns" runat="server" data-overwriteevent="true">
         </asp:Panel>
-        <div class="clear-space"></div>
         <asp:HiddenField ID="hf_isParams" runat="server" ClientIDMode="Static" Value="0" />
         <div class="actions-bg action-margin-fix">
-            <input type="button" class="input-buttons" value="Download App Template" onclick="openWSE.LoadModalWindow(true, 'DownloadAppTemplate-element', 'Select Type');" />
-            <asp:Panel ID="pnl_app_params" runat="server" Enabled="false" Visible="false">
+            <a href="#" id="app_templatebtn" runat="server" visible="false" class="margin-right-big float-left input-buttons-create" onclick="openWSE.LoadModalWindow(true, 'DownloadAppTemplate-element', 'Select Type'); return false;">App Templates</a>
+            <asp:Panel ID="pnl_searchwrapper" runat="server" ClientIDMode="Static" CssClass="searchwrapper float-left" Style="width: 350px; margin-top: 3px;">
+                <asp:Panel ID="Panel1_Installer" runat="server" DefaultButton="imgbtn_search">
+                    <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
+                        onfocus="if(this.value=='Search Apps')this.value=''" onblur="if(this.value=='')this.value='Search Apps'"
+                        Text="Search Apps"></asp:TextBox>
+                    <a href="#" onclick="$('#MainContent_tb_search').val('Search Apps');return false;"
+                        class="searchbox_clear" title="Clear search"></a>
+                    <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
+                        OnClick="imgbtn_search_Click" />
+                </asp:Panel>
+            </asp:Panel>
+            <asp:Panel ID="pnl_appcount" runat="server" ClientIDMode="Static">
                 <div class="clear-space"></div>
+                <asp:UpdatePanel ID="updatePnl_AppTotals" runat="server" UpdateMode="Conditional">
+                    <ContentTemplate>
+                        <b class="pad-right">App Count</b><asp:Label ID="lbl_AppsAvailable" runat="server" ClientIDMode="Static"></asp:Label>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+            </asp:Panel>
+            <div class="clear-space"></div>
+            <asp:Panel ID="pnl_app_params" runat="server" Enabled="false" Visible="false">
                 <table cellpadding="0" cellspacing="0" border="0" width="100%">
                     <tr>
                         <td class="pad-right-big" valign="top" style="min-width: 230px; width: 230px;">
@@ -58,12 +51,13 @@
                                         OnValueChanged="hf_appchange_params_delete_Changed" />
                                     <asp:HiddenField ID="hf_appchange_params_update" runat="server" ClientIDMode="Static"
                                         OnValueChanged="hf_appchange_params_update_Changed" />
+                                    <asp:HiddenField ID="hf_appchange_paramsdesc_update" runat="server" ClientIDMode="Static" />
                                     <asp:HiddenField ID="hf_appchange_params_cancel" runat="server" ClientIDMode="Static"
                                         OnValueChanged="hf_appchange_params_cancel_Changed" />
                                     <asp:Label ID="lbl_params_tip" runat="server" CssClass="pad-left"
                                         Text="Select a app to view/add/edit parameters"></asp:Label>
                                     <asp:Panel ID="pnl_params_holder" runat="server" Enabled="false" Visible="false">
-                                        <div class="clear-margin" style="width: 612px">
+                                        <div class="clear-margin" style="width: 642px">
                                             <asp:LinkButton ID="lbtn_close_params" CssClass="rbbuttons float-right"
                                                 OnClick="lbtn_close_params_Click" runat="server" ToolTip="Close">Close Parameters</asp:LinkButton>
                                             <asp:Literal ID="ltl_app_params" runat="server"></asp:Literal>
@@ -95,35 +89,19 @@
                 </table>
             </asp:Panel>
             <asp:Panel ID="pnl_app_EditList" runat="server" ClientIDMode="Static">
-                <div class="table-settings-box" style="margin-top: 10px!important;">
+                <div class="table-settings-box">
                     <div class="td-settings-title">
-                        <div class="searchwrapper" style="width: 350px;">
-                            <asp:Panel ID="Panel1_Installer" runat="server" DefaultButton="imgbtn_search">
-                                <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
-                                    onfocus="if(this.value=='Search Apps')this.value=''" onblur="if(this.value=='')this.value='Search Apps'"
-                                    Text="Search Apps"></asp:TextBox>
-                                <a href="#" onclick="$('#MainContent_tb_search').val('Search Apps');return false;"
-                                    class="searchbox_clear" title="Clear search"></a>
-                                <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
-                                    OnClick="imgbtn_search_Click" />
-                            </asp:Panel>
+                        <div class="clear-space"></div>
+                        <div class="float-left">
+                            <b class="pad-right">Category</b>
+                            <asp:DropDownList ID="ddl_categories" runat="server" ClientIDMode="Static">
+                            </asp:DropDownList>
                         </div>
                         <asp:Panel ID="pnl_backupAllApps" runat="server" CssClass="float-right">
                             <iframe src="../iframes/AppDownloadBtn.aspx?backup=true" frameborder="0" height="31px"
                                 width="190px" scrolling="no"></iframe>
                         </asp:Panel>
-                        <div class="clear-space">
-                        </div>
-                        <asp:UpdatePanel ID="updatePnl_AppTotals" runat="server" UpdateMode="Conditional">
-                            <ContentTemplate>
-                                <asp:Label ID="lbl_AppsAvailable" runat="server" ClientIDMode="Static"></asp:Label>
-                            </ContentTemplate>
-                        </asp:UpdatePanel>
-                        <div class="float-right" style="margin-top: -20px;">
-                            <b class="pad-right">Category</b>
-                            <asp:DropDownList ID="ddl_categories" runat="server" ClientIDMode="Static">
-                            </asp:DropDownList>
-                        </div>
+                        <div class="clear"></div>
                     </div>
                     <div class="title-line"></div>
                     <div class="td-settings-ctrl">
@@ -145,10 +123,6 @@
             </asp:Panel>
             <asp:Panel ID="pnl_app_information" runat="server" Enabled="false" Visible="false" ClientIDMode="Static">
                 <div class="clear-space"></div>
-                Use the controls below to create a custom app. The apps will be coded with
-                                html and javascript.
-                <div class="clear-space" style="height: 20px;">
-                </div>
                 <div class="float-left">
                     <asp:Button ID="btn_create_easy" runat="server" Text="Create App" CssClass="input-buttons-create margin-right float-left"
                         Enabled="false" Visible="false" OnClick="btn_createEasy_Click" />
@@ -156,7 +130,9 @@
                         Enabled="false" Visible="false" OnClick="btn_uploadnew_Click" OnClientClick="if (!ValidateForm()){return false;}" />
                     <asp:Button ID="btn_clear_controls" runat="server" OnClick="btn_clear_controls_Click"
                         Text="Clear Controls" CssClass="input-buttons-create margin-right margin-left float-left"
-                        OnClientClick="openWSE.LoadingMessage1('Clearing Controls. Please Wait...');" />
+                        OnClientClick="openWSE.LoadingMessage1('Clearing Controls. Please Wait...');" style="margin-right: 20px!important;" />
+                    <span class="float-left pad-top-big">Use the controls below to create a custom app. The apps will be coded with
+                                html and javascript.</span>
                     <div class="clear-space">
                     </div>
                     <span id="lbl_ErrorUpload"></span>
@@ -196,7 +172,7 @@
                             </td>
                             <td>
                                 <asp:TextBox ID="tb_filename_create" CssClass="textEntry" runat="server" Width="210px"
-                                    Enabled="false" MaxLength="150" BackColor="#EFEFEF"></asp:TextBox>
+                                    Enabled="false" MaxLength="150" BackColor="#EFEFEF" data-allowallchars="true"></asp:TextBox>
                                 <asp:Label ID="lbl_dotHtml" runat="server" Text=".html" Enabled="false" Visible="false"></asp:Label>
                                 <div class="clear-space-five">
                                 </div>
@@ -264,7 +240,7 @@
                             <td class="settings-name-column">HTML Link
                             </td>
                             <td>
-                                <asp:TextBox ID="tb_html_create" runat="server" CssClass="textEntry" AutoPostBack="False" Width="90%"></asp:TextBox>
+                                <asp:TextBox ID="tb_html_create" runat="server" CssClass="textEntry" AutoPostBack="False" Width="90%" data-allowallchars="true"></asp:TextBox>
                                 <div class="clear-space-five">
                                 </div>
                                 <small><b class="pad-right-sml">Note:</b>Icon will be downloaded from html link
@@ -351,7 +327,7 @@
                         </td>
                         <td style="width: 200px;">
                             <asp:TextBox ID="tb_minwidth_create" runat="server" CssClass="TextBoxEdit" Width="50px"
-                                MaxLength="4" Text="500"></asp:TextBox><span class="pad-left">px</span>
+                                MaxLength="4" Text="500" TextMode="Number"></asp:TextBox><span class="pad-left">px</span>
                         </td>
                         <td><small>Set the minimum width of the app.</small>
                         </td>
@@ -365,7 +341,7 @@
                         </td>
                         <td style="width: 200px;">
                             <asp:TextBox ID="tb_minheight_create" runat="server" CssClass="TextBoxEdit" Width="50px"
-                                MaxLength="4" Text="400"></asp:TextBox><span class="pad-left">px</span>
+                                MaxLength="4" Text="400" TextMode="Number"></asp:TextBox><span class="pad-left">px</span>
                         </td>
                         <td><small>Set the minimum height of the app.</small>
                         </td>
@@ -426,7 +402,7 @@
                                 <span id="span1">Pop Out Location</span>
                             </td>
                             <td>
-                                <asp:TextBox ID="tb_popoutLoc_create" runat="server" CssClass="textEntry" Width="90%"></asp:TextBox>
+                                <asp:TextBox ID="tb_popoutLoc_create" runat="server" CssClass="textEntry" Width="90%" data-allowallchars="true"></asp:TextBox>
                             </td>
                         </tr>
                     </table>
@@ -741,14 +717,14 @@
                                                     <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
                                                         Min Width
                                                     </div>
-                                                    <asp:TextBox ID="tb_minwidth_edit" runat="server" CssClass="TextBoxEdit" Width="50px"></asp:TextBox><span
+                                                    <asp:TextBox ID="tb_minwidth_edit" runat="server" CssClass="TextBoxEdit" Width="50px" TextMode="Number"></asp:TextBox><span
                                                         class="pad-left">px</span>
                                                     <div class="clear-space">
                                                     </div>
                                                     <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
                                                         Min Height
                                                     </div>
-                                                    <asp:TextBox ID="tb_minheight_edit" runat="server" CssClass="TextBoxEdit" Width="50px"></asp:TextBox><span
+                                                    <asp:TextBox ID="tb_minheight_edit" runat="server" CssClass="TextBoxEdit" Width="50px" TextMode="Number"></asp:TextBox><span
                                                         class="pad-left">px</span>
                                                     <div class="clear-space">
                                                     </div>
@@ -877,13 +853,13 @@
                                                 <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
                                                     Pop Out Location
                                                 </div>
-                                                <asp:TextBox ID="tb_allowpopout_edit" runat="server" CssClass="TextBoxEdit" Width="345px"></asp:TextBox>
+                                                <asp:TextBox ID="tb_allowpopout_edit" runat="server" CssClass="TextBoxEdit" Width="345px" data-allowallchars="true"></asp:TextBox>
                                                 <div id="changeLoadFile_holder" runat="server">
                                                     <div class="clear-space"></div>
                                                     <div class="inline-block font-bold pad-right" align="right" style="width: 130px;">
-                                                        Filename
+                                                        Location
                                                     </div>
-                                                    <asp:TextBox ID="tb_filename_edit" runat="server" CssClass="TextBoxEdit margin-top" Enabled="False" Visible="false" Width="345px"></asp:TextBox>
+                                                    <asp:TextBox ID="tb_filename_edit" runat="server" CssClass="TextBoxEdit margin-top" data-allowallchars="true" Enabled="False" Visible="false" Width="345px"></asp:TextBox>
                                                     <span id="changeLoadFile" runat="server">
                                                         <small><a href="#" onclick="LoadDefaultPageSelector();return false;"
                                                             style="color: Blue">Change Load File</a></small>
@@ -1061,48 +1037,6 @@
         </div>
         <input id="hidden_temp_script" type="hidden" value="" />
         <script src='<%=ResolveUrl("~/Scripts/AceEditor/ace.js")%>' type="text/javascript" charset="utf-8"></script>
-        <script src='<%=ResolveUrl("~/Scripts/SiteTools/appmanager.js")%>' type="text/javascript"></script>
         <script type="text/javascript" src='<%=ResolveUrl("~/WebControls/jscolor/jscolor.js")%>'></script>
-        <script type="text/javascript">
-            var canContinue = false;
-            var tempId = "";
-            function appchange(id) {
-                openWSE.LoadingMessage1("Loading...");
-                var inner = $.trim($("#MainContent_wlmd_holder").html());
-                if ((inner != "") && ($("#App-element").css("display") == "block")) {
-                    setTimeout(function () {
-                        openWSE.RemoveUpdateModal();
-                    }, 500);
-                    return false;
-                }
-                if ($("#MainContent_tb_title_edit").val() == "") {
-                    if (id == "reset") {
-                        id = tempId;
-                    }
-
-                    if (document.getElementById('<%=hf_appchange.ClientID%>').value != id) {
-                        if (document.getElementById('<%=hf_isParams.ClientID%>').value == "0") {
-                            document.getElementById('<%=wlmd_holder.ClientID%>').innerHTML = "";
-                            document.getElementById('<%=hf_appchange.ClientID %>').value = id;
-                            __doPostBack('<%=hf_appchange.ClientID%>', "");
-                        }
-                        else {
-                            if (document.getElementById('<%=hf_appchange_params.ClientID%>').value != id) {
-                                document.getElementById('<%=hf_appchange_params.ClientID %>').value = id;
-                                __doPostBack('<%=hf_appchange_params.ClientID %>', "");
-                            }
-                            else {
-                                setTimeout(function () { openWSE.RemoveUpdateModal(); }, 500);
-                            }
-                        }
-                    }
-                    else {
-                        tempId = id;
-                        document.getElementById('<%=hf_appchange.ClientID %>').value = "reset";
-                        __doPostBack('<%=hf_appchange.ClientID%>', "");
-                    }
-                }
-            }
-        </script>
     </div>
 </asp:Content>

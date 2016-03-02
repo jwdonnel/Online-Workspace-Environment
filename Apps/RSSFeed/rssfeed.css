@@ -1,0 +1,58 @@
+﻿/* RSS Feed
+----------------------------------*/
+.rssFeed{width:100%!important;display:block;text-align:center}
+.rssFeed .feed-preview{text-align:left;cursor:pointer;float:left;width:25%;margin:0px;min-height:160px;position:relative;overflow:hidden}
+.rssFeed .feed-preview:hover .rss-title-preview{text-decoration:underline}
+.rss-inner-overlay{position:absolute;top:0;bottom:0;left:0;right:0;z-index:1;border:1px solid #DDD}
+.rss-inner-padding{padding:10px;position:relative;z-index:2}
+.rss-has-no-image{background:#FFF url('Images/empty-rssfeed.png') no-repeat center bottom;background-size:cover}
+.rss-has-image .rss-inner-overlay{background:rgba(0,0,0,0.45)}
+.rss-content,.rss-description{line-height:20px;font-size:15px;display:none}
+.rssFeed p{line-height:20px;font-size:15px;display:block;clear:both;margin-top:5px}
+.rssFeed iframe{margin:10px 0}
+.rss-content img{float:left;margin:2px;margin-right:8px}
+.rss-title{font-weight:bold;color:#252525;font-size:18px;display:none}
+.rss-title-preview{font-weight:bold;font-style:normal!important;margin-bottom:10px}
+.rss-title-preview,.rss-source-preview{color:#252525;font-size:14px}
+.rss-has-image .rss-title-preview,.rss-has-image .rss-source-preview{color:#FFF!important}
+.rss-source-preview{font-size:11px;position:absolute;bottom:10px;right:10px;z-index:2}
+.rss-source-preview img{float:left;height:16px;padding-right:5px;margin-top:-2px}
+.rss-author{font-size:12px;display:block;padding-bottom:5px;display:none}
+.rss-article-source{display:none;font-size:15px;color:#151515;float:left;padding-top:24px;font-style:italic}
+.rss-article-source img{max-height:32px}
+#rssfeed_overflow{overflow:auto;position:relative;left:0;right:0;bottom:0;top:0;z-index:0}
+.rss-description img,.rss-content img,.rss-content .img-container{max-width:100%!important;display:block;padding:5px 0}
+.rss-description .size-full,.rss-content .size-full{height:100%!important}
+.rss-content figcaption{display:block;clear:both;font-size:11px;padding-bottom:15px}
+.rss-description .feedflare,.rss-description .item-share-buttons,.rss-content .feedflare,.rss-content .item-share-buttons{display:none}
+.rss-content p{padding-bottom:2px}
+.rss-content h3,.rss-description h3{padding-top:20px;font-size:15px;font-weight:normal}
+.rss-content a[rel="nofollow"],.rss-description a[rel="nofollow"]{display:none}
+.rss-content h2,.rss-description h2{padding:12px 0 3px 0}
+.rss-content ul,.rss-description ul{list-style:circle;padding:5px 10px 5px 20px}
+.rss-content li,.rss-description li{padding:5px 0}
+.rssFeed .feed-hidden{display:none!important}
+.rssFeed .feed-open,.feed-open .rss-title,.feed-open .rss-content,.feed-open .rss-description,.feed-open .rss-author,.feed-open .rss-article-source{display:block!important;font-style:normal!important}
+.rssFeed .feed-open{margin:0!important;cursor:default!important;float:none!important;width:100%!important;max-width:100%!important;height:auto!important;position:relative!important;text-overflow:initial;overflow:hidden;background:#FFF!important}
+.feed-open .rss-inner-overlay{display:none!important}
+#rssfeed-load,#rssfeed_overflow{background-color:#FFF}
+.feed-open .rss-inner-padding{position:relative;padding-bottom:75px;background:none!important}
+#rssfeed-load .close-rss-feed{cursor:pointer;position:absolute;z-index:1000;right:10px;width:50px;height:50px;background:url('Images/go-back.png') no-repeat center center;opacity:0.7;filter:alpha(opacity=70)}
+#rssfeed-load .close-rss-feed:hover{opacity:1.0;filter:alpha(opacity=100)}
+.feed-open .rss-title-preview,.feed-open .rss-source-preview{display:none}
+#Saved-RSSFeeds .rss-feed-selector{padding:7px 10px;margin-right:10px;margin-bottom:4px;cursor:pointer;border-bottom:1px solid transparent;background:transparent;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
+#Saved-RSSFeeds .rss-feed-selector.selected-feed{cursor:default;font-weight:bold;padding:10px 5px;font-size:120%;text-decoration:underline;margin-top:-5px}
+#Saved-RSSFeeds .rss-feed-selector:hover{background:#EFEFEF}
+#Saved-RSSFeeds .rss-feed-selector:active{background:#DDD}
+#Saved-RSSFeeds .rss-feed-selector.selected-feed:hover,#Saved-RSSFeeds .rss-feed-selector.selected-feed:active{background:transparent!important}
+.rss-feed-overlaymenu{position:absolute;top:0;bottom:0;left:0;right:0;z-index:2}
+#rssfeeds_pnl_entries .rss-title,#rssfeeds_pnl_entries .rss-author,#rssfeeds_pnl_entries .rss-description,#rssfeeds_pnl_entries .rss-content,#rssfeeds_pnl_entries .rss-article-source{display:block}
+ul.share-buttons{list-style:none;height:30px;padding:2px 0 2px 0;display:block}
+ul.share-buttons li{float:left;padding:0 8px 0 0}
+ul.share-buttons a{cursor:pointer}
+ul.share-buttons img{height:20px}
+.add-rss-list-contents,#myfeedsholder{display:none}
+.go-to-top{cursor:pointer;position:absolute;bottom:10px;right:10px;color:#FFF;background-color:rgba(0,0,0,.3);background-image:url('Images/back-to-top.png');padding:0;height:50px;width:50px;opacity:.7;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";filter:alpha(opacity=70);z-index:1000;display:none}
+.go-to-top:hover{opacity:.9;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";filter:alpha(opacity=90);background-color:rgba(0,0,0,.6)}
+.rss-feed-800-maxwidth .feed-preview{width:50%;margin:0!important;float:left!important}
+.scroll-shadow-rss-topmenubar{position:relative;left:0;right:0;z-index:1000;-moz-box-shadow:0 5px 10px rgba(0,0,0,.4);-o-box-shadow:0 5px 10px rgba(0,0,0,.4);-webkit-box-shadow:0 5px 10px rgba(0,0,0,.4);box-shadow:0 5px 10px rgba(0,0,0,.4)}

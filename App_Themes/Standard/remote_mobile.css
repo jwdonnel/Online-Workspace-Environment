@@ -18,19 +18,20 @@
 #Category-Back,#Category-Back-moveresize{margin-bottom:0px;-moz-border-radius:0px;-webkit-border-radius:0px;border-radius:0px}
 .app-icon,.app-icon-links,.app-icon-category-list,.app-icon-admin,.app-icon-sub-links{padding:4px 7px 6px 8px;margin-bottom:0px;border-bottom:1px solid rgba(0,0,0,0.15);-moz-border-radius:0px;-webkit-border-radius:0px;border-radius:0px}
 .app-icon,.app-icon-links,.app-icon-category-list,.app-icon-sub-links{min-height:32px}
-#Category-Back:hover,#Category-Back-ChatRemote-Close:hover,#Category-Back-options:hover,#Category-Back-moveresize:hover{background-color:rgba(0,0,0,0.2)}
-#Category-Back:active,#Category-Back-ChatRemote-Close:active,#Category-Back-options:active,#Category-Back-moveresize:active{background-color:rgba(0,0,0,0.4);outline:0}
+#Category-Back:hover{background-color:rgba(0,0,0,0.2)}
+#Category-Back:active{background-color:rgba(0,0,0,0.4);outline:0}
 .app-icon.active{background:transparent}
 .app-icon:hover,.app-icon-parms:hover,.app-icon-category-list:hover,.site-tools-tablist .app-icon-links:hover,.site-tools-tablist .app-icon-sub-links:hover{background-color:rgba(0,0,0,0.1)}
 .app-icon:active,.app-icon-parms:active,.app-icon-category-list:active,.site-tools-tablist .active{background-color:rgba(0,0,0,0.25);outline:0}
 .site-tools-tablist .app-icon-links:active,.site-tools-tablist .app-icon-sub-links:active{background:rgba(0,0,0,0.25)}
 .app-icon .workspace-reminder{top:7px;color:#FFF}
-.app-icon-category-list img{float:right;height:12px;margin-top:-22px;padding-right:5px}
-.app-icon .app-icon-font,.app-icon-links .app-icon-font,.app-icon-sub-links .app-icon-font,.app-icon-category-list .app-icon-font,.app-icon-admin .app-icon-font{color:#FFF;display:block;padding-top:10px;height:23px}
+.app-icon-category-list .app-category-nextpage{float:right;height:12px;margin-top:-22px;margin-right:5px}
+#statusDiv{color:#FFF}
+.app-icon .app-icon-font,.app-icon-links .app-icon-font,.app-icon-sub-links .app-icon-font,.app-icon-category-list .app-icon-font,.app-icon-admin .app-icon-font{color:#FFF;display:block;padding-top:10px;min-height:23px}
 .app-icon-sub-links .app-icon-font{font-size:13px}
 .app-icon img,.app-icon-links img{border:0 solid rgba(0, 0, 0, 0);height:22px;padding-right:10px;padding-top:6px;float: left}
 .site-tools-tablist .app-icon-links,.site-tools-tablist .app-icon-sub-links{background:none;padding-bottom:4px;padding-left:12px;margin-bottom:0px!important;-moz-border-radius:0px!important;-webkit-border-radius:0px!important;border-radius:0px!important}
-#Category-Back h4,#Category-Back-moveresize h4{font-size:14px;line-height:20px}
+#Category-Back h4,#Category-Back-moveresize h4{font-size:14px;line-height:22px}
 #Category-Back,#Category-Back-moveresize{border-bottom:1px solid rgba(0,0,0,0.2);background:rgba(0,0,0,0.1)}
 .app-icon-sub-links{padding-left:25px!important}
 .app-icon.active .app-icon-font{font-weight:bold;font-size:14px;text-shadow:4px 4px 9px rgba(0, 0, 0, 0.25)}
@@ -43,7 +44,7 @@
 ----------------------------------*/
 .app-icon.Name_And_Description{padding:15px 10px 10px 10px}
 .app-icon.Name_And_Description .app-icon-font{font-size:16px!important;padding-top:3px}
-.app-icon.Name_And_Description .app-description{font-size:12px!important;line-height:15px;padding-bottom:1px!important;color:#EFEFEF}
+.app-icon.Name_And_Description .app-description{font-size:12px!important;line-height:15px;padding-bottom:1px!important;padding-top:5px!important;color:#EFEFEF}
 
 
 
@@ -51,7 +52,7 @@
 ----------------------------------*/
 .app-icon.Color_And_Description{padding:15px 10px 10px 10px;margin-top:2px;margin-bottom:2px}
 .app-icon.Color_And_Description .app-icon-font{font-size:16px!important;padding-top:3px}
-.app-icon.Color_And_Description .app-description{font-size:12px!important;line-height:15px}
+.app-icon.Color_And_Description .app-description{font-size:12px!important;line-height:15px;padding-bottom:1px!important;padding-top:5px!important}
 
 
 
@@ -108,7 +109,6 @@
 ----------------------------------*/
 #last-updated{padding:5px 0;width:100%;display:block;font-size:12px;color:#EFEFEF;clear:both}
 .mobile-open{font-weight:bold}
-.sidebar-divider{background:url(Body/transparent-hr.png) top left no-repeat}
 .menu-title{cursor:default!important}
 body{font-size:14px}
 html,body{height:100%}
@@ -119,6 +119,8 @@ h1,h2,h3,h4,h5,h6{color:#FFF}
 .pnl_toplogo_banner{background:rgba(0,0,0,0.59);padding:10px;border-bottom:1px solid rgba(0,0,0,0.3);position:relative;z-index:1}
 .pnl_toplogo_banner img{max-height:40px}
 #pnl_AccountInfo #lbl_UserEmail,#pnl_adminPages .menu-title,.alert-panel-description{color:#FFF}
+#lbl_UserEmail{float:left}
+.profile-tab-acctimg{margin-top:10px}
 
 
 

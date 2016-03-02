@@ -1,4 +1,5 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_AlarmClock_AlarmClock, App_Web_e5rfrdao" clientidmode="Static" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="AlarmClock.ascx.cs" Inherits="Apps_AlarmClock_AlarmClock"
+    ClientIDMode="Static" %>
 <asp:HiddenField ID="hf_currUser_AlarmClock" runat="server" />
 <div class="pad-all">
     <div id="alarm-time">
@@ -209,3 +210,5 @@
         </div>
     </div>
 </div>
+<input type="hidden" data-scriptelement="true" data-tagname="link" data-tagtype="text/css" data-tagrel="stylesheet" data-tagsrc="~/Apps/AlarmClock/alarmClock.css" />
+<input type="hidden" data-scriptelement="true" data-tagname="script" data-tagtype="text/javascript" data-tagsrc="~/Apps/AlarmClock/alarmClock.js" />

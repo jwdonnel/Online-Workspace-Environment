@@ -1,18 +1,8 @@
-﻿$(window).resize(function () {
-    RSSFeedApp.ResizeAppWindow();
-});
-
-function pageLoad() {
-    RSSFeedApp.StartRSSFeeder();
-    RSSFeedApp.StartRSSFeederOverlay();
-}
-
-var RSSFeedApp = function () {
+﻿var RSSFeedApp = function () {
     /* -- Private Variables -- */
     var rssTimer;
     var rssTimerInterval = (60000 * 5) // 5 minutes
     var gettingFeeds = false;
-    var gettingFeeds_Overlay = false;
     var currRSSselected = "";
     var rssFeedIsOpen = false;
     var scrollPosBeforeClick = 0;
@@ -22,7 +12,6 @@ var RSSFeedApp = function () {
 
     function ResizeAppWindow() {
         try {
-            RSSFeedApp.SetRSSOverlayMaxHeight();
             var scrolltop = 0;
 
             if ($(".app-main-holder[data-appid='app-rssfeed']").find(".app-body").length > 0) {
@@ -174,23 +163,11 @@ var RSSFeedApp = function () {
             }
         }
     }
-    function StartRSSFeederOverlay() {
-        if ($("#rssfeeds_pnl_entries").length > 0) {
-            $("#rssfeeds_pnl_entries").html("<h3 class='pad-all'>Loading RSS Feeds...</h3>");
-            GetRSSFeeds_Overlay(true);
-            if ((rssTimer == null) || (rssTimer == undefined)) {
-                StartRSSTimer();
-            }
-        }
-    }
     function StartRSSTimer() {
         rssTimer = setInterval(function () {
             if (!rssFeedIsOpen) {
                 if ($("#rssfeed-load").length > 0) {
                     GetRSSFeeds(false);
-                }
-                if ($("#rssfeeds_pnl_entries").length > 0) {
-                    GetRSSFeeds_Overlay(true);
                 }
             }
         }, rssTimerInterval);
@@ -395,7 +372,7 @@ var RSSFeedApp = function () {
             else if (data[i].Source != "" && data[i].Source != null) {
                 feedList += "<span class='rss-source-preview'>" + data[i].Source + "</span>";
             }
-            
+
             feedList += "</div>";
         }
 
@@ -438,102 +415,6 @@ var RSSFeedApp = function () {
         }
     }
 
-    function GetRSSFeeds_Overlay(showLoading) {
-        if (!gettingFeeds_Overlay) {
-            if (showLoading) {
-                $("#rssfeeds_pnl_entries").html("<h3 class='pad-all'>Loading RSS Feeds...</h3>");
-            }
-
-            SetRSSOverlayMaxHeight();
-
-            gettingFeeds_Overlay = true;
-            $.ajax({
-                url: openWSE.siteRoot() + "Apps/RSSFeed/RSSFeed.asmx/GetRSSFeed",
-                type: "POST",
-                data: '{ "category": "' + "" + '","search": "", "feedsToPull": "1", "forOverlay": "true" }',
-                contentType: "application/json; charset=utf-8",
-                success: function (data) {
-                    if (data.d.length > 0) {
-                        BuildRSSOverlayFeed($.parseJSON(data.d[0]));
-                    }
-
-                    gettingFeeds_Overlay = false;
-                },
-                error: function (data) {
-                    $("#rssfeeds_pnl_entries").html("<h3 class='pad-all' style='color: Red'>There seems to be an error getting the requested feeds.</h3>");
-                    gettingFeeds_Overlay = false;
-                }
-            });
-        }
-    }
-    function BuildRSSOverlayFeed(data) {
-        var feedList = "";
-
-        if (data) {
-            for (var i = 0; i < data.length; i++) {
-                var title = data[i].Title;
-                var link = data[i].Link;
-                var summary = data[i].Summary;
-                var content = data[i].Content;
-                var pubDate = new Date(parseInt(data[i].PubDate.replace("/Date(", "").replace(")/", "")));
-                var creator = "";
-
-                if (pubDate && pubDate != null) {
-                    pubDate = pubDate.toLocaleString();
-                }
-
-                if (creator != "N/A" && creator != "") {
-                    creator = " by " + data[i].Creator;
-                }
-
-                if (title != "") {
-                    if (link != "") {
-                        feedList += "<a class='rss-title' href='" + link + "' target='_blank'>" + title + "</a><br />";
-                    }
-                    else {
-                        feedList += "<span class='rss-title'>" + title + "</span><br />";
-                    }
-                }
-
-                feedList += "<div class='rss-author'>" + pubDate + creator + "</div>";
-
-                var shareBtns = "";
-                if (showShareBtns && title != "" && link != "") {
-                    var rssShareLink = encodeURIComponent(link);
-                    var rssShareTitle = encodeURIComponent(title);
-                    shareBtns = BuildShareButtons(rssShareLink, rssShareTitle);
-                }
-
-                feedList += "<div class='rss-description'>" + shareBtns + summary + "</div>";
-                feedList += "<div class='rss-content'>" + content + "</div>";
-                feedList += "<div class='clear-space'></div>";
-                if (data[i].SourceImage != "" && data[i].SourceImage != null && data[i].SourceImage != "null" && data[i].Source != "") {
-                    feedList += "<div class='rss-article-source'><img alt='' src='" + data[i].SourceImage + "' /><div class='clear-space-five'></div>- " + data[i].Source + " -</div>";
-                }
-                else if (data[i].SourceImage != "" && data[i].SourceImage != null && data[i].SourceImage != "null") {
-                    feedList += "<div class='rss-article-source'><img alt='' src='" + data[i].SourceImage + "' /><div class='clear'></div></div>";
-                }
-                else if (data[i].Source != "" && data[i].Source != null) {
-                    feedList += "<div class='rss-article-source'> - " + data[i].Source + " - </div>";
-                }
-            }
-        }
-        var refreshBtn = "<a href='#' class='float-right' onclick='RSSFeedApp.GetRSSFeeds_Overlay(true);return false;'>Refresh</a>";
-
-        if (feedList == "") {
-            $("#rssfeeds_pnl_entries").html(refreshBtn + "<div class='clear-space-two'></div><div class='pad-all'>No feeds founds.</div>");
-        }
-        else {
-            $("#rssfeeds_pnl_entries").html(refreshBtn + "<div class='clear-space-two'></div>" + feedList);
-            CorrectHrefLinks_RssFeeds("rssfeeds_pnl_entries");
-        }
-    }
-
-    function SetRSSOverlayMaxHeight() {
-        if ($("#rssfeeds_pnl_entries").length > 0) {
-            $("#rssfeeds_pnl_entries").css("max-height", $(window).height() - 120);
-        }
-    }
     function CorrectHrefLinks_RssFeeds(elem) {
         $("#" + elem).find("a").each(function () {
             var $this = $(this);
@@ -1085,14 +966,12 @@ var RSSFeedApp = function () {
     return {
         ResizeAppWindow: ResizeAppWindow,
         StartRSSFeeder: StartRSSFeeder,
-        StartRSSFeederOverlay: StartRSSFeederOverlay,
         MenuClick: MenuClick,
         Admin_GrabLatestFeeds: Admin_GrabLatestFeeds,
         Admin_ClearFeedList: Admin_ClearFeedList,
         Admin_LoadStoredFeedList: Admin_LoadStoredFeedList,
         Admin_GetLoadStoredFeedListCount: Admin_GetLoadStoredFeedListCount,
         GetRSSFeeds: GetRSSFeeds,
-        GetRSSFeeds_Overlay: GetRSSFeeds_Overlay,
         OpenRSSFeedContent: OpenRSSFeedContent,
         CloseRSSFeedContent: CloseRSSFeedContent,
         SetPositionOfRSSCloseButton: SetPositionOfRSSCloseButton,
@@ -1103,7 +982,6 @@ var RSSFeedApp = function () {
         EditFeedHeaderClick: EditFeedHeaderClick,
         AddFeed: AddFeed,
         AddCustomRSSUrl: AddCustomRSSUrl,
-        SetRSSOverlayMaxHeight: SetRSSOverlayMaxHeight,
         UpdateViewMode: UpdateViewMode,
         ShowBackToTop: ShowBackToTop,
         BackToTop: BackToTop,
@@ -1112,3 +990,15 @@ var RSSFeedApp = function () {
     };
 
 }();
+
+$(window).resize(function () {
+    RSSFeedApp.ResizeAppWindow();
+});
+
+$(document).ready(function () {
+    RSSFeedApp.StartRSSFeeder();
+});
+
+Sys.Application.add_load(function () {
+    RSSFeedApp.StartRSSFeeder();
+});

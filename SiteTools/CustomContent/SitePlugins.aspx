@@ -1,38 +1,10 @@
-﻿<%@ page title="Site Plugins" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_SitePlugins, App_Web_5emrkdig" %>
+﻿<%@ Page Title="Site Plugins" Language="C#" MasterPageFile="~/Site.master"
+    AutoEventWireup="true" CodeFile="SitePlugins.aspx.cs" Inherits="SiteTools_SitePlugins" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
-    <style type="text/css">
-        #editor
-        {
-            height: 195px;
-            width: 600px;
-            font-size: 14px;
-        }
-
-        #updateEditor
-        {
-            height: 150px;
-            width: 98%;
-            font-size: 14px;
-            position: relative;
-        }
-
-        #MainContent_radioButton_FileList td, #MainContent_checkbox_FileList td
-        {
-            padding: 3px 0;
-        }
-
-        #MainContent_radioButton_FileList input, #MainContent_checkbox_FileList input
-        {
-            float: left;
-            margin-right: 2px;
-            margin-top: 1px;
-        }
-    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding margin-top">
-        <div class="clear-space"></div>
+    <div class="maincontent-padding pad-top-big margin-top">
         <asp:Literal ID="ltl_locked" runat="server"></asp:Literal>
         <asp:Panel ID="pnl_AddControls" runat="server" ClientIDMode="Static">
             <a href="#" class="margin-right-big input-buttons-create float-left" onclick="openWSE.LoadModalWindow(true, 'UploadService-element', 'JQuery Plugin Upload');return false;">Plugin Upload</a>
@@ -55,7 +27,7 @@
                     </Triggers>
                 </asp:UpdatePanel>
             </div>
-	    <a href="https://plugins.jquery.com/tag/jquery/" target="_blank" class="float-right">Jquery Plugins Site</a>
+            <a href="https://plugins.jquery.com/tag/jquery/" target="_blank" class="float-right">Jquery Plugins Site</a>
             <div class="clear"></div>
             <asp:Label ID="lbl_uploadMessage" runat="server" ClientIDMode="Static" CssClass="float-right pad-right"></asp:Label>
             <div id="UploadService-element" class="Modal-element" style="display: none;">
@@ -161,15 +133,13 @@
         </asp:Panel>
         <asp:UpdatePanel ID="updatepnl_SitePlugins" runat="server">
             <ContentTemplate>
-                <div class="clear-space-two"></div>
-                <div class="clear-margin">
-                    <b class="pad-right">Total Plugins</b><asp:Label ID="lbl_TotalPlugins"
-                        runat="server"></asp:Label>
-                    <div class="clear-space-five"></div>
-                    <b class="pad-right">Plugins Enabled</b><asp:Label ID="lbl_TotalEnabledPlugins" runat="server"></asp:Label>
-                    <div class="clear-space"></div>
-                    <asp:LinkButton ID="lbtn_associationBack" runat="server" OnClick="lbtn_associationBack_Click" CssClass="float-left RandomActionBtns" Text="Back to Main Plugins" Enabled="false" Visible="false"></asp:LinkButton>
-                </div>
+                <div class="clear-space"></div>
+                <b class="pad-right">Total Plugins</b><asp:Label ID="lbl_TotalPlugins"
+                    runat="server"></asp:Label>
+                <div class="clear-space-five"></div>
+                <b class="pad-right">Plugins Enabled</b><asp:Label ID="lbl_TotalEnabledPlugins" runat="server"></asp:Label>
+                <div class="clear-space"></div>
+                <asp:LinkButton ID="lbtn_associationBack" runat="server" OnClick="lbtn_associationBack_Click" CssClass="float-left RandomActionBtns" Text="Back to Main Plugins" Enabled="false" Visible="false"></asp:LinkButton>
                 <div class="clear-space"></div>
                 <asp:Panel ID="pnl_siteplugins" runat="server" CssClass="clear-margin">
                 </asp:Panel>
@@ -243,6 +213,5 @@
             </div>
         </div>
         <script src='<%=ResolveUrl("~/Scripts/AceEditor/ace.js")%>' type="text/javascript" charset="utf-8"></script>
-        <script type="text/javascript" src='<%=ResolveUrl("~/Scripts/SiteTools/siteplugins.js")%>'></script>
     </div>
 </asp:Content>

@@ -1,10 +1,9 @@
-﻿<%@ page title="Plugin Installer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_PluginInstaller, App_Web_4nltmjgh" %>
+﻿<%@ Page Title="Plugin Installer" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="PluginInstaller.aspx.cs" Inherits="SiteTools_PluginInstaller" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding margin-top">
-        <div class="clear-space"></div>
+    <div class="maincontent-padding pad-top-big margin-top">
         <div class="searchwrapper" style="width: 350px;">
             <asp:Panel ID="Panel1_Installer" runat="server" DefaultButton="imgbtn_search">
                 <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
@@ -47,26 +46,4 @@
             </Triggers>
         </asp:UpdatePanel>
     </div>
-    <script type="text/javascript">
-        function UninstallPlugin(id, name) {
-            if (id != "") {
-                if (name == "") {
-                    name = "this plugin";
-                }
-
-                openWSE.ConfirmWindow("Are you sure you want to uninstall " + name + "?",
-                    function () {
-                        openWSE.LoadingMessage1("Uninstalling...");
-                        $("#hf_UninstallPlugin").val(id);
-                        __doPostBack("hf_UninstallPlugin", "");
-                    }, null);
-            }
-        }
-
-        function InstallPlugin(id) {
-            openWSE.LoadingMessage1("Installing...");
-            $("#hf_InstallPlugin").val(id);
-            __doPostBack("hf_InstallPlugin", "");
-        }
-    </script>
 </asp:Content>

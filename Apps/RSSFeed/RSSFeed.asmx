@@ -142,6 +142,64 @@ public class RSSFeed : System.Web.Services.WebService {
     }
 
     [WebMethod]
+    public string GetRSSFeedStation(string category, string search) {
+        List<RSSItem> nodeList = new List<RSSItem>();
+        category = HttpUtility.UrlDecode(category);
+        if (category == "null" || category == "undefined") {
+            category = string.Empty;
+        }
+
+        search = HttpUtility.UrlDecode(search).ToLower().Trim();
+        if (search == "search current feeds") {
+            search = string.Empty;
+        }
+
+        List<string[]> feedUrls = RSSFeeds.GetFeedLinksFromCategory(category, string.Empty);
+
+        RSSFeeds.LoadRSSFeedListFile(feedUrls);
+
+        bool needToUpdate = true;
+        if (OpenWSE_Tools.AppServices.RSSFeedUpdater.GetCurrentState == OpenWSE_Library.Core.BackgroundServices.BackgroundStates.Running ||
+            OpenWSE_Tools.AppServices.RSSFeedUpdater.GetCurrentState == OpenWSE_Library.Core.BackgroundServices.BackgroundStates.Sleeping) {
+            needToUpdate = false;
+        }
+        else {
+            TimeSpan timeSpan = ServerSettings.ServerDateTime.Subtract(RSSFeeds.FeedListDateUpdated);
+            if (_forceUpdateInterval > 0 && timeSpan.TotalMinutes < _forceUpdateInterval) {
+                needToUpdate = false;
+            }
+        }
+
+        foreach (string[] strItem in feedUrls) {
+            if (!needToUpdate) {
+                if (RSSFeeds.LoadedFeedList.ContainsKey(strItem[0])) {
+                    RSSFeeds.UpdateNodeList(strItem[0], nodeList, search);
+                    continue;
+                }
+            }
+
+            if (!RSSFeeds.LoadedFeedList.ContainsKey(strItem[0]) && OpenWSE_Tools.AppServices.RSSFeedUpdater.GetCurrentState != OpenWSE_Library.Core.BackgroundServices.BackgroundStates.Running) {
+                RSSFeeds.GetNewFeeds(strItem[0], strItem[1], strItem[2], nodeList, search);
+            }
+        }
+
+        if (needToUpdate) {
+            RSSFeeds.FeedListDateUpdated = ServerSettings.ServerDateTime;
+        }
+
+        try {
+            nodeList.Sort((x, y) => DateTime.Compare(y.PubDate, x.PubDate));
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            return js.Serialize(nodeList);
+        }
+        catch (Exception e) {
+            AppLog.AddError(e);
+        }
+            
+        return string.Empty;
+    }
+
+    [WebMethod]
     public object[] GetUserFeeds() {
         object[] obj = new object[4];
         List<RSSFeeds_Coll> feedColl = new List<RSSFeeds_Coll>();

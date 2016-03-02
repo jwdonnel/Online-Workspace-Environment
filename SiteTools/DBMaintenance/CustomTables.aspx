@@ -1,35 +1,10 @@
-﻿<%@ page title="Custom Tables" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_CustomTables, App_Web_h3zobxng" %>
+﻿<%@ Page Title="Custom Tables" Language="C#" MasterPageFile="~/Site.master"
+    AutoEventWireup="true" CodeFile="CustomTables.aspx.cs" Inherits="SiteTools_CustomTables" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
-    <style type="text/css">
-        .GridNormalRow
-        {
-            cursor: move;
-        }
-
-        .entryIDRow
-        {
-            display: none;
-        }
-
-        .entryIDRow, .border-right
-        {
-            cursor: default !important;
-        }
-
-        .checkbox-click
-        {
-            cursor: default;
-        }
-
-        .settings-name-column
-        {
-            width: 100px!important;
-        }
-    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding margin-top">
+    <div class="maincontent-padding pad-top-big margin-top">
         <asp:Literal ID="ltl_locked" runat="server"></asp:Literal>
         <asp:Panel ID="pnl_columnEditor" runat="server">
             <div id="ImportWizard-element" class="Modal-element">
@@ -310,7 +285,7 @@
                 </div>
             </div>
         </asp:Panel>
-        <asp:Panel ID="pnl_TableEntries" runat="server" CssClass="pnl-section pad-top-big margin-top" data-title="Custom Tables">
+        <asp:Panel ID="pnl_TableEntries" runat="server">
             <div class="clear"></div>
             <a href="#" id="btn_customTable_create" runat="server" class="input-buttons-create margin-right-big margin-bottom float-left" onclick="StartCreateWizard();return false;">Table Wizard</a>
             <asp:UpdatePanel ID="updatepnl_tableList" runat="server">
@@ -379,6 +354,5 @@
             </div>
         </div>
         <script type="text/javascript" src='<%=ResolveUrl("~/WebControls/jscolor/jscolor.js")%>'></script>
-        <script type="text/javascript" src='<%=ResolveUrl("~/Scripts/SiteTools/customtables.js")%>'></script>
     </div>
 </asp:Content>

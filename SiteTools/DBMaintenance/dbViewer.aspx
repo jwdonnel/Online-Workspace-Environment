@@ -1,49 +1,10 @@
-﻿<%@ page title="Database Viewer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_dbViewer, App_Web_h3zobxng" %>
+﻿<%@ Page Title="Database Viewer" Language="C#" MasterPageFile="~/Site.master"
+    AutoEventWireup="true" CodeFile="dbViewer.aspx.cs" Inherits="SiteTools_dbViewer" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
-    <style type="text/css">
-        .td-sort-click a
-        {
-            text-decoration: none !important;
-        }
-
-        .GridNormalRow td, .GridAlternate td
-        {
-            padding: 7px 5px;
-        }
-
-        .GridNormalRow
-        {
-            border-left: 1px solid #DFDFDF;
-        }
-
-        @media screen and (max-width: 650px)
-        {
-            .myHeaderStyle
-            {
-                border-color: #FFF !important;
-            }
-
-            .myHeaderStyle, .myItemStyle, .GridNormalRow
-            {
-                border-left: 1px solid #FFF;
-            }
-
-            .GridNormalRow td, .myItemStyle td, .myHeaderStyle td, .myHeaderStyle th
-            {
-                border-top: 1px solid rgba(0, 0, 0, 0);
-            }
-        }
-
-        .collapse-expand-schemebtn
-        {
-            margin-left: 20px;
-            float: right;
-        }
-    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding margin-top">
+    <div class="maincontent-padding pad-top-big margin-top">
         <div class="table-settings-box">
             <div class="td-settings-ctrl">
                 <span class="settings-name-column float-left" style="padding-top: 0px!important;">Update Interval</span>
@@ -159,6 +120,5 @@
                 <asp:AsyncPostBackTrigger ControlID="imgbtn_search" />
             </Triggers>
         </asp:UpdatePanel>
-        <script type='text/javascript' src='<%=ResolveUrl("~/Scripts/SiteTools/dbViewer.js")%>'></script>
     </div>
 </asp:Content>

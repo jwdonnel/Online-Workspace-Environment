@@ -1,4 +1,4 @@
-﻿<%@ page title="Mobile Workspace" language="C#" autoeventwireup="true" inherits="AppRemote, App_Web_jtoan5js" %>
+﻿<%@ Page Title="Mobile Workspace" Language="C#" AutoEventWireup="true" CodeFile="AppRemote.aspx.cs" Inherits="AppRemote" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -131,8 +131,7 @@
                         <asp:Label ID="lbl_UserEmail" runat="server" Text=""></asp:Label>
                         <div class="clear-space-five"></div>
                         <div class="clear-space-two"></div>
-                        <asp:HyperLink ID="hyp_accountSettings" runat="server" Text="Account" NavigateUrl="~/SiteTools/UserMaintenance/AcctSettings.aspx?mobileMode=true" CssClass="account-link-style margin-right"></asp:HyperLink>
-                        <asp:HyperLink ID="hyp_accountCustomizations" runat="server" Text="Customize" NavigateUrl="~/SiteTools/UserMaintenance/AcctSettings.aspx?mobileMode=true&tab=SiteCustomizations" CssClass="account-link-style"></asp:HyperLink>
+                        <asp:HyperLink ID="hyp_accountSettings" runat="server" Text="My Account Settings" NavigateUrl="~/SiteTools/UserMaintenance/AcctSettings.aspx?mobileMode=true" CssClass="account-link-style margin-right"></asp:HyperLink>
                     </div>
                 </div>
             </div>
@@ -462,7 +461,7 @@
         <div id="container-footer" class="footer">
             <div class="footer-padding" align="center">
                 <div id="footer-signdate">
-                    &copy; 2015 OpenWSE | <a href="About.aspx?redirect=AppRemote.aspx">About</a> | <a href="About.aspx?a=termsofuse&redirect=AppRemote.aspx">Terms</a> | 
+                    &copy; 2016 OpenWSE | <a href="About.aspx?redirect=AppRemote.aspx">About</a> | <a href="About.aspx?a=termsofuse&redirect=AppRemote.aspx">Terms</a> | 
                     <asp:Label ID="lblHomePageLink" runat="server" Text=""></asp:Label>
                 </div>
             </div>

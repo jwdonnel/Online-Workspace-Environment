@@ -141,7 +141,7 @@ $(window).resize(function () {
 
 $(document).ready(function () {
     FDPostBackCall();
-    equalizerDiv = "<div class='equalizer-img' style='background-image: url(\"" + openWSE.siteRoot() + "App_Themes/" + openWSE_Config.siteTheme + "/App/equalizer.gif\");'></div>";
+    equalizerDiv = "<div class='equalizer-img' style='background-image: url(\"" + openWSE.siteRoot() + "Apps/FileDrive/Images/equalizer.gif\");'></div>";
 
     $(".content-overflow-app").scroll(function () {
         if ($.trim($("#audioPlayer").html()) != "") {

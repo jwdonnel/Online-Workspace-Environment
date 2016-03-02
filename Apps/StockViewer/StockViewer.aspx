@@ -1,4 +1,4 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="Apps_StockViewer_StockViewer, App_Web_y0innsij" %>
+<%@ Page Language="C#" AutoEventWireup="true" CodeFile="StockViewer.aspx.cs" Inherits="Apps_StockViewer_StockViewer" %>
 
 <!DOCTYPE html>
 

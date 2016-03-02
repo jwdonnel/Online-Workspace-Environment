@@ -1,8 +1,4 @@
-﻿Sys.Application.add_load(function () {
-    GetChatTimeout();
-});
-
-function GetChatTimeout() {
+﻿function GetChatTimeout() {
     openWSE.RadioButtonStyle();
     $.ajax({
         type: "POST",
@@ -16,6 +12,14 @@ function GetChatTimeout() {
         }
     });
 }
+
+Sys.Application.add_load(function () {
+    GetChatTimeout();
+});
+
+$(document).ready(function () {
+    GetChatTimeout();
+});
 
 $(document.body).on("click", ".RandomActionBtns-mmes, .catButtons-mmes", function() {
     UpdateScreen_MyMessages();

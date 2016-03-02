@@ -1,69 +1,10 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="Apps_FileDrive, App_Web_gerstv2b" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="FileDrive.aspx.cs" Inherits="Apps_FileDrive" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>File Drive</title>
-    <style type="text/css">
-        .td-sort-click a
-        {
-            text-decoration: none !important;
-        }
-
-        #AjaxFileUpload1
-        {
-            overflow: auto;
-            max-height: 300px;
-        }
-
-        .hidden-img-lnk
-        {
-            opacity: 1.0!important;
-            filter: alpha(opacity=100)!important;
-        }
-
-        .folder-checkboxlist input
-        {
-            float: left;
-            margin-right: 4px;
-        }
-
-        .tsdivclick, #expand_View_All_Documents, #expand_PersonalFolder_Documents
-        {
-            font-size: 14px;
-        }
-
-        .header-shadow
-        {
-            background-color: #FAFAFA;
-            -webkit-box-shadow: 0px 5px 10px rgba(100, 100, 100, 0.4);
-            -moz-box-shadow: 0px 5px 10px rgba(100, 100, 100, 0.4);
-            box-shadow: 0px 5px 10px rgba(100, 100, 100, 0.4);
-            z-index: 5000;
-        }
-
-        .equalizer-holder
-        {
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            z-index: 0;
-            opacity: 0.55;
-            filter: alpha(opacity=55);
-            display: none;
-        }
-
-        .equalizer-img
-        {
-            background-position: right center;
-            background-repeat: no-repeat;
-            background-size: contain;
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+    <link type="text/css" rel="Stylesheet" href="filedrive.css" />
 </head>
 <body>
     <div id="mydocuments-load" class="main-div-app-bg">
@@ -121,7 +62,7 @@
                                             </div>
                                             <div class="sidebar-divider">
                                             </div>
-                                            <div class="clear">
+                                            <div class="clear-space">
                                             </div>
                                         </div>
                                     </asp:Panel>
@@ -358,6 +299,7 @@
     <noscript>
         <meta http-equiv="refresh" content="0; URL=../browserchecker_nojs.html" />
     </noscript>
+    <script type="text/javascript" src="filedrive.js"></script>
     <script type="text/javascript">
         //$get('mf_View_All').style.fontWeight = "bold";
         function folderChange(x) {

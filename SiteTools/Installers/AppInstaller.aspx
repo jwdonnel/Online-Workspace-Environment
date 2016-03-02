@@ -1,10 +1,9 @@
-﻿<%@ page title="App Installer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppInstaller, App_Web_4nltmjgh" %>
+﻿<%@ Page Title="App Installer" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="AppInstaller.aspx.cs" Inherits="SiteTools_AppInstaller" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding margin-top">
-        <div class="clear-space"></div>
+    <div class="maincontent-padding pad-top-big margin-top">
         <div class="searchwrapper" style="width: 300px;">
             <asp:Panel ID="Panel1_Installer" runat="server" DefaultButton="imgbtn_search">
                 <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
@@ -24,10 +23,11 @@
             </ContentTemplate>
         </asp:UpdatePanel>
         <div class="clear-space"></div>
+        <div class="clear-space"></div>
         <b class="pad-right">Category</b>
         <asp:DropDownList ID="ddl_categories" runat="server" ClientIDMode="Static">
         </asp:DropDownList>
-        <div class="clear"></div>
+        <div class="clear-space"></div>
         <div class="table-settings-box no-border">
             <div class="td-settings-ctrl">
                 <asp:UpdatePanel ID="updatePnl_AppList" runat="server" UpdateMode="Conditional">
@@ -83,5 +83,4 @@
             </Triggers>
         </asp:UpdatePanel>
     </div>
-    <script type="text/javascript" src='<%=ResolveUrl("~/Scripts/SiteTools/appinstaller.js")%>'></script>
 </asp:Content>

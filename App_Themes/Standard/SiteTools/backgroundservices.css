@@ -1,0 +1,7 @@
+﻿.service-name-style{}
+.state-Sleeping,.state-Running,.state-Stopped,.state-Error,.state-Stopping{font-weight:bold}
+.state-Sleeping,.state-Stopping{color:#FE9525}
+.state-Running{color:green}
+.state-Stopped{color:#777}
+.state-Error{color:red}
+#log-list-scroll{border:1px solid #DFDFDF}

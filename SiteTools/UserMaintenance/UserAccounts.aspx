@@ -1,42 +1,32 @@
-﻿<%@ page title="User Accounts" async="true" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_UserAccounts, App_Web_fk34kkkf" %>
+﻿<%@ Page Title="User Accounts" Async="true" Language="C#" MasterPageFile="~/Site.master"
+    AutoEventWireup="true" CodeFile="UserAccounts.aspx.cs" Inherits="SiteTools_UserAccounts" %>
 
 <asp:Content ID="HeaderContent" ContentPlaceHolderID="HeadContent" runat="Server">
-    <style type="text/css">
-        .ui-autocomplete
-        {
-            max-height: 400px;
-        }
-
-        .sch_ColorCode
-        {
-            top: 3px;
-        }
-    </style>
 </asp:Content>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding pad-top-big margin-top">
-        <div id="useraccounts">
-            <asp:Panel ID="pnl_admin_tools" runat="server">
-                <a href="#" class="float-left input-buttons-create margin-right-big" onclick="ClearNewUserFields();openWSE.LoadModalWindow(true, 'NewUser-element', 'Create New User');return false;">Create User</a>
-                <div class="float-left" style="margin-top: 3px;">
-                    <div class="searchwrapper">
-                        <asp:Panel ID="Panel1_usersearch" runat="server" DefaultButton="imgbtn_search">
-                            <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
-                                onfocus="if(this.value=='Search Users')this.value=''" onblur="if(this.value=='')this.value='Search Users'"
-                                Text="Search Users"></asp:TextBox>
-                            <a href="#" onclick="return false;" class="searchbox_clear" title="Clear search"></a>
-                            <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
-                                OnClick="imgbtn_search_Click" />
-                        </asp:Panel>
-                    </div>
+    <div class="maincontent-padding margin-top">
+        <asp:Panel ID="pnlLinkBtns" runat="server">
+        </asp:Panel>
+        <div id="pnl_useraccounts" class="pnl-section">
+            <a href="#" id="btn_CreateNewUsers" runat="server" class="float-left input-buttons-create margin-right-big" onclick="ClearNewUserFields();openWSE.LoadModalWindow(true, 'NewUser-element', 'Create New User');return false;">Create User</a>
+            <div class="float-left" style="margin-top: 3px;">
+                <div class="searchwrapper">
+                    <asp:Panel ID="Panel1_usersearch" runat="server" DefaultButton="imgbtn_search">
+                        <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
+                            onfocus="if(this.value=='Search Users')this.value=''" onblur="if(this.value=='')this.value='Search Users'"
+                            Text="Search Users"></asp:TextBox>
+                        <a href="#" onclick="return false;" class="searchbox_clear" title="Clear search"></a>
+                        <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
+                            OnClick="imgbtn_search_Click" />
+                    </asp:Panel>
                 </div>
-                <div class="clear-space"></div>
-                <asp:Label ID="lbl_totalUsers" runat="server"></asp:Label>
-                <div class="clear-space"></div>
-                <div class="clear-space"></div>
+            </div>
+            <div class="clear-space"></div>
+            <asp:Label ID="lbl_totalUsers" runat="server"></asp:Label>
+            <div class="clear-space"></div>
+            <div class="clear-space"></div>
+            <asp:Panel ID="pnl_admin_tools" runat="server">
                 <div id="customizeBtns" class="float-left">
-                    <a id="btn_customizeua" href="#iframecontent" class="display-inline margin-right-big margin-bottom" onclick="openWSE.LoadIFrameContent('SiteTools/UserMaintenance/AcctSettings.aspx?toolview=true&u=NewUserDefaults', this);return false;">
-                        <span class="img-customize margin-right-sml float-left"></span>Customize New Users</a>
                     <a id="btn_appsusers" href="#iframecontent" class="margin-right-big margin-bottom"
                         onclick="openWSE.LoadIFrameContent('SiteTools/iframes/UsersAndApps.aspx', this);return false;">
                         <span class="img-app-dark margin-right-sml float-left"></span>User Apps and Plugins</a>
@@ -44,130 +34,312 @@
                 <div class="float-left">
                     <asp:UpdatePanel ID="UpdatePanel3" runat="server">
                         <ContentTemplate>
-                            <asp:LinkButton ID="btn_manageRoles" runat="server" CssClass="RandomActionBtns margin-right-big margin-bottom"
-                                OnClick="btn_manageRoles_Click"><span class="td-edit-btn float-left margin-right-sml" style="padding: 0!important;"></span>Manage Custom Roles</asp:LinkButton>
                             <asp:LinkButton ID="btn_rebuild_uc" runat="server" CssClass="RandomActionBtns margin-right-big margin-bottom"
                                 OnClick="btn_rebuild_uc_Clicked"><span class="img-refresh float-left margin-right-sml"></span>Rebuild Users</asp:LinkButton>
                         </ContentTemplate>
                     </asp:UpdatePanel>
                 </div>
-                <div id="ManageRoles-element" class="Modal-element">
-                    <div class="Modal-overlay">
-                        <div class="Modal-element-align">
-                            <div class="Modal-element-modal" data-setwidth="510">
-                                <div class="ModalHeader">
-                                    <div>
-                                        <div class="app-head-button-holder-admin">
-                                            <a href="#" onclick="openWSE.LoadModalWindow(false, 'ManageRoles-element', '');return false;"
-                                                class="ModalExitButton"></a>
-                                        </div>
-                                        <span class="Modal-title"></span>
+            </asp:Panel>
+            <div class="clear-space-two"></div>
+            <asp:UpdatePanel ID="updatepnl_Users" runat="server">
+                <ContentTemplate>
+                    <asp:HiddenField ID="hf_sortusers" runat="server" ClientIDMode="Static" OnValueChanged="hf_sortusers_Changed" />
+                    <asp:HiddenField ID="hf_clearsearch" runat="server" ClientIDMode="Static" OnValueChanged="hf_clearsearch_Changed" />
+                    <div class="clear-space">
+                    </div>
+                    <asp:Panel ID="pnl_Users" runat="server">
+                    </asp:Panel>
+                    <div class="clear-space"></div>
+                    <asp:HiddenField ID="hf_deleteUser" runat="server" OnValueChanged="hf_deleteUser_Changed"
+                        ClientIDMode="Static" />
+                    <asp:HiddenField ID="hf_lockUser" runat="server" OnValueChanged="hf_lockUser_Changed"
+                        ClientIDMode="Static" />
+                    <asp:HiddenField ID="hf_refreshList" runat="server" OnValueChanged="hf_refreshList_Changed"
+                        ClientIDMode="Static" />
+                    <asp:HiddenField ID="hf_resetPassword" runat="server" OnValueChanged="hf_resetPassword_Changed"
+                        ClientIDMode="Static" />
+                    <asp:HiddenField ID="hf_emailUser" runat="server" OnValueChanged="hf_emailUser_Changed"
+                        ClientIDMode="Static" />
+                    <asp:HiddenField ID="hf_noemailUser" runat="server" OnValueChanged="hf_noemailUser_Changed"
+                        ClientIDMode="Static" />
+                </ContentTemplate>
+                <Triggers>
+                    <asp:AsyncPostBackTrigger ControlID="imgbtn_search" />
+                </Triggers>
+            </asp:UpdatePanel>
+        </div>
+
+        <div id="pnl_usersettings" runat="server" clientidmode="Static" class="pnl-section" style="display: none;">
+            <div class="table-settings-box">
+                <div class="td-settings-title">
+                    User Customizations
+                </div>
+                <div class="title-line"></div>
+                <div class="td-settings-ctrl">
+                    <a id="btn_customizeua" href="#iframecontent" class="input-buttons-create" onclick="openWSE.LoadIFrameContent('SiteTools/UserMaintenance/AcctSettings.aspx?toolview=true&u=NewUserDefaults', this);return false;">Customize New Users</a>
+                    <div class="clear"></div>
+                </div>
+                <div class="td-settings-desc">
+                    Customize new users based on their role.
+                </div>
+            </div>
+            <div class="table-settings-box">
+                <div class="td-settings-title">
+                    User Roles
+                </div>
+                <div class="title-line"></div>
+                <div class="td-settings-ctrl">
+                    <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+                        <ContentTemplate>
+                            <asp:LinkButton ID="btn_manageRoles" runat="server" CssClass="RandomActionBtns input-buttons-create"
+                                OnClick="btn_manageRoles_Click">Manage Custom Roles</asp:LinkButton>
+                            <div class="clear"></div>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                </div>
+                <div class="td-settings-desc">
+                    Edit and create new custom roles to be assigned to new and current users.
+                </div>
+            </div>
+            <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                <ContentTemplate>
+                    <div id="rb_usersignup_holder" runat="server">
+                        <div class="table-settings-box">
+                            <div class="td-settings-title">
+                                Allow User Signup
+                            </div>
+                            <div class="title-line"></div>
+                            <div class="td-settings-ctrl">
+                                <div class="field switch inline-block">
+                                    <asp:RadioButton ID="rb_allowusersignup_on" runat="server" Text="On" CssClass="RandomActionBtns cb-enable"
+                                        OnCheckedChanged="rb_allowusersignup_on_Checked" AutoPostBack="true" />
+                                    <asp:RadioButton ID="rb_allowusersignup_off" runat="server" Text="Off" CssClass="RandomActionBtns cb-disable"
+                                        OnCheckedChanged="rb_allowusersignup_off_Checked" AutoPostBack="true" />
+                                </div>
+                            </div>
+                            <div class="td-settings-desc">
+                                Select On if you want to allow users to sign up for a new account on the login
+                                                        screen.
+                            </div>
+                        </div>
+                        <asp:Panel ID="pnl_UserSignUp" runat="server">
+                            <div class="table-settings-box">
+                                <div class="td-settings-title">
+                                    Email Association
+                                </div>
+                                <div class="title-line"></div>
+                                <div class="td-settings-ctrl">
+                                    <div class="field switch inline-block">
+                                        <asp:RadioButton ID="rb_emailassociation_on" runat="server" Text="On" CssClass="RandomActionBtns cb-enable"
+                                            OnCheckedChanged="rb_emailassociation_on_Checked" AutoPostBack="true" />
+                                        <asp:RadioButton ID="rb_emailassociation_off" runat="server" Text="Off" CssClass="RandomActionBtns cb-disable"
+                                            OnCheckedChanged="rb_emailassociation_off_Checked" AutoPostBack="true" />
                                     </div>
                                 </div>
-                                <div class="ModalScrollContent">
-                                    <div class="ModalPadContent">
-                                        <asp:UpdatePanel ID="UpdatePanel21" runat="server" UpdateMode="Conditional">
-                                            <ContentTemplate>
-                                                <asp:Panel ID="pnl_createCustomRole" runat="server" DefaultButton="btn_NewRoleName" Visible="false" Enabled="false">
-                                                    Create a new role for new and existing users. After you finish creating your new role,<br />
-                                                    you can go to the Customize New Users link to customize the role.
-                                                <div class="clear-space">
-                                                </div>
-                                                    <table cellpadding="0" cellspacing="0" border="0">
-                                                        <tr>
-                                                            <td><span class="font-bold pad-right">Role Name</span></td>
-                                                            <td>
-                                                                <asp:TextBox ID="tb_NewRoleName" runat="server" CssClass="textEntry margin-right" Width="150px" MaxLength="25"></asp:TextBox>
-                                                            </td>
-                                                            <td>
-                                                                <asp:Button ID="btn_NewRoleName" runat="server" OnClick="btn_NewRoleName_Click" CssClass="input-buttons no-margin RandomActionBtns" Text="Create" Style="margin-right: 5px!important;" />
-                                                                <asp:Button ID="btn_CancelNewRole" runat="server" OnClick="btn_CancelNewRole_Click" CssClass="input-buttons no-margin RandomActionBtns" Text="Cancel" />
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                    <div class="clear-space"></div>
-                                                    <asp:Label ID="lbl_NewRoleNameError" runat="server" ForeColor="Red"></asp:Label>
-                                                    <div class="clear-space"></div>
-                                                </asp:Panel>
-                                            </ContentTemplate>
-                                            <Triggers>
-                                                <asp:AsyncPostBackTrigger ControlID="btn_NewRoleName" />
-                                                <asp:AsyncPostBackTrigger ControlID="btn_CancelNewRole" />
-                                            </Triggers>
-                                        </asp:UpdatePanel>
-                                        <asp:UpdatePanel ID="UpdatePanel22" runat="server" UpdateMode="Conditional">
-                                            <ContentTemplate>
-                                                <asp:Panel ID="pnl_manageRoles" runat="server" DefaultButton="btn_roleEditUpdate">
-                                                    Manage your custom user roles here. Custom roles will have the Standard Role applied to it.<br />
-                                                    Deleting a custom role will move all users in that role to the Standard role.
-                                                <div class="clear-space">
-                                                </div>
-                                                    <table cellpadding="0" cellspacing="0" border="0">
-                                                        <tr>
-                                                            <td><span class="font-bold pad-right">Role Name</span></td>
-                                                            <td>
-                                                                <asp:DropDownList ID="ddl_roleNameSelect" runat="server" CssClass="margin-right"></asp:DropDownList>
-                                                                <asp:TextBox ID="tb_roleNameEdit" runat="server" CssClass="textEntry margin-right-big" Width="150px" MaxLength="25" Visible="false" Enabled="false"></asp:TextBox>
-                                                            </td>
-                                                            <td>
-                                                                <asp:LinkButton ID="btn_roleEdit" runat="server" OnClick="btn_roleEdit_Click" CssClass="td-edit-btn RandomActionBtns margin-right-sml" Text="" />
-                                                                <asp:LinkButton ID="btn_roleDelete" runat="server" OnClientClick="return ConfirmDeleteRole(this);" CssClass="td-delete-btn RandomActionBtns" Text="" />
-                                                                <asp:Button ID="btn_roleEditUpdate" runat="server" OnClick="btn_roleEditUpdate_Click" CssClass="input-buttons no-margin RandomActionBtns" Text="Update" Visible="false" Enabled="false" Style="margin-right: 5px!important;" />
-                                                                <asp:Button ID="btn_roleEditCancel" runat="server" OnClick="btn_roleEditCancel_Click" CssClass="input-buttons no-margin RandomActionBtns" Text="Cancel" Visible="false" Enabled="false" />
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                    <asp:LinkButton ID="lbtn_CreateNewRole" runat="server" OnClick="lbtn_CreateNewRole_Click" CssClass="RandomActionBtns margin-left input-buttons float-right" Style="margin-top: -25px;">Create New Role</asp:LinkButton>
-                                                    <div class="clear-space"></div>
-                                                    <asp:Label ID="lbl_roleEditError" runat="server" ForeColor="Red"></asp:Label>
-                                                    <div class="clear-space"></div>
-                                                </asp:Panel>
-                                            </ContentTemplate>
-                                            <Triggers>
-                                                <asp:AsyncPostBackTrigger ControlID="btn_roleEdit" />
-                                                <asp:AsyncPostBackTrigger ControlID="btn_roleDelete" />
-                                                <asp:AsyncPostBackTrigger ControlID="btn_roleEditUpdate" />
-                                                <asp:AsyncPostBackTrigger ControlID="btn_roleEditCancel" />
-                                                <asp:AsyncPostBackTrigger ControlID="lbtn_CreateNewRole" />
-                                            </Triggers>
-                                        </asp:UpdatePanel>
+                                <div class="td-settings-desc">
+                                    Select On if you want to limit the user sign up to be associated with a certain
+                                                            email address.
+                                </div>
+                            </div>
+                            <asp:Panel ID="pnl_emailassociation" runat="server" DefaultButton="btn_UpdateEmailAssociation">
+                                <div class="table-settings-box">
+                                    <div class="td-settings-title">
+                                        Email Address
                                     </div>
+                                    <div class="title-line"></div>
+                                    <div class="td-settings-ctrl">
+                                        <b>@</b><asp:TextBox ID="tb_EmailAssociation" runat="server" CssClass="textEntry margin-left margin-right"
+                                            Width="150px"></asp:TextBox><div class="clear-space-five">
+                                            </div>
+                                        <asp:Button ID="btn_UpdateEmailAssociation" runat="server" Text="Update" CssClass="input-buttons RandomActionBtns"
+                                            OnClick="btn_UpdateEmailAssociation_Click" Style="margin-left: 22px" />
+                                        <div id="emailassociation_error" style="color: Red; padding-left: 25px">
+                                        </div>
+                                    </div>
+                                    <div class="td-settings-desc">
+                                        Email address that can only be used during sign up. (Email is validated with
+                                                            an activation link)
+                                    </div>
+                                </div>
+                            </asp:Panel>
+                        </asp:Panel>
+                        <div class="table-settings-box">
+                            <div class="td-settings-title">
+                                User Sign Up Role
+                            </div>
+                            <div class="title-line"></div>
+                            <div class="td-settings-ctrl">
+                                <asp:DropDownList ID="dd_usersignuprole" runat="server" CssClass="margin-right">
+                                </asp:DropDownList>
+                                <asp:Button ID="btn_usersignuprole" runat="server" OnClick="dd_usersignuprole_Changed" CssClass="input-buttons RandomActionBtns" Text="Update" />
+                            </div>
+                            <div class="td-settings-desc">
+                                Select an initial role for the user registering an account. (To create new roles, go to User Accounts and select Manage Roles at the top)
+                            </div>
+                        </div>
+                        <asp:Panel ID="pnl_socialSignIn_UserSignup" runat="server" Visible="false" Enabled="false">
+                            <div class="table-settings-box">
+                                <div class="td-settings-title">
+                                    Google+ Login
+                                </div>
+                                <div class="title-line"></div>
+                                <div class="td-settings-ctrl">
+                                    <div class="field switch inline-block">
+                                        <asp:RadioButton ID="rb_googlePlusSignIn_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                            OnCheckedChanged="rb_googlePlusSignIn_on_Checked" AutoPostBack="true" />
+                                        <asp:RadioButton ID="rb_googlePlusSignIn_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                            OnCheckedChanged="rb_googlePlusSignIn_off_Checked" AutoPostBack="true" />
+                                    </div>
+                                </div>
+                                <div class="td-settings-desc">
+                                    Allow users to login using their Google+ accounts. <a href="https://developers.google.com/+/quickstart/csharp" target="_blank">Integration Information</a>
+                                </div>
+                            </div>
+                            <div class="table-settings-box">
+                                <div class="td-settings-title">
+                                    Twitter Login
+                                </div>
+                                <div class="title-line"></div>
+                                <div class="td-settings-ctrl">
+                                    <div class="field switch inline-block">
+                                        <asp:RadioButton ID="rb_twitterSignIn_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                            OnCheckedChanged="rb_twitterSignIn_on_Checked" AutoPostBack="true" />
+                                        <asp:RadioButton ID="rb_twitterSignIn_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                            OnCheckedChanged="rb_twitterSignIn_off_Checked" AutoPostBack="true" />
+                                    </div>
+                                </div>
+                                <div class="td-settings-desc">
+                                    Allow users to login using their Twitter accounts. <a href="https://dev.twitter.com/web/sign-in/implementing" target="_blank">Integration Information</a>
+                                </div>
+                            </div>
+                            <div class="table-settings-box">
+                                <div class="td-settings-title">
+                                    Facebook Login
+                                </div>
+                                <div class="title-line"></div>
+                                <div class="td-settings-ctrl">
+                                    <div class="field switch inline-block">
+                                        <asp:RadioButton ID="rb_facebookSignIn_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                            OnCheckedChanged="rb_facebookSignIn_on_Checked" AutoPostBack="true" />
+                                        <asp:RadioButton ID="rb_facebookSignIn_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                            OnCheckedChanged="rb_facebookSignIn_off_Checked" AutoPostBack="true" />
+                                    </div>
+                                </div>
+                                <div class="td-settings-desc">
+                                    Allow users to login using their Facebook accounts. <a href="https://developers.facebook.com/docs/facebook-login/login-flow-for-web/v2.2" target="_blank">Integration Information</a>
+                                </div>
+                            </div>
+                        </asp:Panel>
+                        <asp:Panel ID="pnl_ConfirmationEmailSignUp" runat="server">
+                            <div class="table-settings-box">
+                                <div class="td-settings-title">
+                                    Send Confirmation Email
+                                </div>
+                                <div class="title-line"></div>
+                                <div class="td-settings-ctrl">
+                                    <div class="field switch inline-block">
+                                        <asp:RadioButton ID="rb_SignUpConfirmationEmail_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
+                                            OnCheckedChanged="rb_SignUpConfirmationEmail_on_Checked" AutoPostBack="true" />
+                                        <asp:RadioButton ID="rb_SignUpConfirmationEmail_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
+                                            OnCheckedChanged="rb_SignUpConfirmationEmail_off_Checked" AutoPostBack="true" />
+                                    </div>
+                                </div>
+                                <div class="td-settings-desc">
+                                    Select Yes if you want to send a confirmation email to the user to verify email. Emails will only be sent if creating new account (Not signing in through other service).
+                                </div>
+                            </div>
+                        </asp:Panel>
+                        <div class="clear"></div>
+                    </div>
+                </ContentTemplate>
+            </asp:UpdatePanel>
+            <div id="ManageRoles-element" class="Modal-element">
+                <div class="Modal-overlay">
+                    <div class="Modal-element-align">
+                        <div class="Modal-element-modal" data-setwidth="510">
+                            <div class="ModalHeader">
+                                <div>
+                                    <div class="app-head-button-holder-admin">
+                                        <a href="#" onclick="openWSE.LoadModalWindow(false, 'ManageRoles-element', '');return false;"
+                                            class="ModalExitButton"></a>
+                                    </div>
+                                    <span class="Modal-title"></span>
+                                </div>
+                            </div>
+                            <div class="ModalScrollContent">
+                                <div class="ModalPadContent">
+                                    <asp:UpdatePanel ID="UpdatePanel21" runat="server" UpdateMode="Conditional">
+                                        <ContentTemplate>
+                                            <asp:Panel ID="pnl_createCustomRole" runat="server" DefaultButton="btn_NewRoleName" Visible="false" Enabled="false">
+                                                Create a new role for new and existing users. After you finish creating your new role,<br />
+                                                you can go to the Customize New Users link to customize the role.
+                                                <div class="clear-space">
+                                                </div>
+                                                <table cellpadding="0" cellspacing="0" border="0">
+                                                    <tr>
+                                                        <td><span class="font-bold pad-right">Role Name</span></td>
+                                                        <td>
+                                                            <asp:TextBox ID="tb_NewRoleName" runat="server" CssClass="textEntry margin-right" Width="150px" MaxLength="25"></asp:TextBox>
+                                                        </td>
+                                                        <td>
+                                                            <asp:Button ID="btn_NewRoleName" runat="server" OnClick="btn_NewRoleName_Click" CssClass="input-buttons no-margin RandomActionBtns" Text="Create" Style="margin-right: 5px!important;" />
+                                                            <asp:Button ID="btn_CancelNewRole" runat="server" OnClick="btn_CancelNewRole_Click" CssClass="input-buttons no-margin RandomActionBtns" Text="Cancel" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <div class="clear-space"></div>
+                                                <asp:Label ID="lbl_NewRoleNameError" runat="server" ForeColor="Red"></asp:Label>
+                                                <div class="clear-space"></div>
+                                            </asp:Panel>
+                                        </ContentTemplate>
+                                        <Triggers>
+                                            <asp:AsyncPostBackTrigger ControlID="btn_NewRoleName" />
+                                            <asp:AsyncPostBackTrigger ControlID="btn_CancelNewRole" />
+                                        </Triggers>
+                                    </asp:UpdatePanel>
+                                    <asp:UpdatePanel ID="UpdatePanel22" runat="server" UpdateMode="Conditional">
+                                        <ContentTemplate>
+                                            <asp:Panel ID="pnl_manageRoles" runat="server" DefaultButton="btn_roleEditUpdate">
+                                                Manage your custom user roles here. Custom roles will have the Standard Role applied to it.<br />
+                                                Deleting a custom role will move all users in that role to the Standard role.
+                                                <div class="clear-space">
+                                                </div>
+                                                <table cellpadding="0" cellspacing="0" border="0">
+                                                    <tr>
+                                                        <td><span class="font-bold pad-right">Role Name</span></td>
+                                                        <td>
+                                                            <asp:DropDownList ID="ddl_roleNameSelect" runat="server" CssClass="margin-right"></asp:DropDownList>
+                                                            <asp:TextBox ID="tb_roleNameEdit" runat="server" CssClass="textEntry margin-right-big" Width="150px" MaxLength="25" Visible="false" Enabled="false"></asp:TextBox>
+                                                        </td>
+                                                        <td>
+                                                            <asp:LinkButton ID="btn_roleEdit" runat="server" OnClick="btn_roleEdit_Click" CssClass="td-edit-btn RandomActionBtns margin-right-sml" Text="" />
+                                                            <asp:LinkButton ID="btn_roleDelete" runat="server" OnClientClick="return ConfirmDeleteRole(this);" CssClass="td-delete-btn RandomActionBtns" Text="" />
+                                                            <asp:Button ID="btn_roleEditUpdate" runat="server" OnClick="btn_roleEditUpdate_Click" CssClass="input-buttons no-margin RandomActionBtns" Text="Update" Visible="false" Enabled="false" Style="margin-right: 5px!important;" />
+                                                            <asp:Button ID="btn_roleEditCancel" runat="server" OnClick="btn_roleEditCancel_Click" CssClass="input-buttons no-margin RandomActionBtns" Text="Cancel" Visible="false" Enabled="false" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <asp:LinkButton ID="lbtn_CreateNewRole" runat="server" OnClick="lbtn_CreateNewRole_Click" CssClass="RandomActionBtns margin-left input-buttons float-right" Style="margin-top: -25px;">Create New Role</asp:LinkButton>
+                                                <div class="clear-space"></div>
+                                                <asp:Label ID="lbl_roleEditError" runat="server" ForeColor="Red"></asp:Label>
+                                                <div class="clear-space"></div>
+                                            </asp:Panel>
+                                        </ContentTemplate>
+                                        <Triggers>
+                                            <asp:AsyncPostBackTrigger ControlID="btn_roleEdit" />
+                                            <asp:AsyncPostBackTrigger ControlID="btn_roleEditUpdate" />
+                                            <asp:AsyncPostBackTrigger ControlID="btn_roleEditCancel" />
+                                            <asp:AsyncPostBackTrigger ControlID="lbtn_CreateNewRole" />
+                                        </Triggers>
+                                    </asp:UpdatePanel>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </asp:Panel>
-            <div class="clear-space-five"></div>
-            <div id="UserList">
-                <asp:UpdatePanel ID="updatepnl_Users" runat="server">
-                    <ContentTemplate>
-                        <asp:HiddenField ID="hf_sortusers" runat="server" ClientIDMode="Static" OnValueChanged="hf_sortusers_Changed" />
-                        <asp:HiddenField ID="hf_clearsearch" runat="server" ClientIDMode="Static" OnValueChanged="hf_clearsearch_Changed" />
-                        <div class="clear-space">
-                        </div>
-                        <asp:Panel ID="pnl_Users" runat="server">
-                        </asp:Panel>
-                        <div class="clear-space"></div>
-                        <asp:HiddenField ID="hf_deleteUser" runat="server" OnValueChanged="hf_deleteUser_Changed"
-                            ClientIDMode="Static" />
-                        <asp:HiddenField ID="hf_lockUser" runat="server" OnValueChanged="hf_lockUser_Changed"
-                            ClientIDMode="Static" />
-                        <asp:HiddenField ID="hf_refreshList" runat="server" OnValueChanged="hf_refreshList_Changed"
-                            ClientIDMode="Static" />
-                        <asp:HiddenField ID="hf_resetPassword" runat="server" OnValueChanged="hf_resetPassword_Changed"
-                            ClientIDMode="Static" />
-                        <asp:HiddenField ID="hf_emailUser" runat="server" OnValueChanged="hf_emailUser_Changed"
-                            ClientIDMode="Static" />
-                        <asp:HiddenField ID="hf_noemailUser" runat="server" OnValueChanged="hf_noemailUser_Changed"
-                            ClientIDMode="Static" />
-                    </ContentTemplate>
-                    <Triggers>
-                        <asp:AsyncPostBackTrigger ControlID="imgbtn_search" />
-                    </Triggers>
-                </asp:UpdatePanel>
             </div>
         </div>
+
         <div id="NewUser-element" class="Modal-element">
             <div class="Modal-overlay">
                 <div class="Modal-element-align">
@@ -297,7 +469,7 @@
                                                         Account has been created. Click continue to refresh page.
                                                         <asp:Button ID="ContinueCreateUserButton" runat="server" OnClick="RegisterUser_Continue"
                                                             CssClass="input-buttons RandomActionBtns margin-bottom float-right" Text="Continue"
-                                                            Style="margin-top: -20px;"></asp:Button>
+                                                            Style="margin-top: -5px;"></asp:Button>
                                                         <div class="clear">
                                                         </div>
                                                     </ContentTemplate>
@@ -439,6 +611,5 @@
             </div>
         </div>
         <script type="text/javascript" src='<%=ResolveUrl("~/WebControls/jscolor/jscolor.js")%>'></script>
-        <script type="text/javascript" src='<%=ResolveUrl("~/Scripts/SiteTools/useraccounts.js")%>'></script>
     </div>
 </asp:Content>

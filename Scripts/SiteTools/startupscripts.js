@@ -198,18 +198,6 @@ var fixHelper = function (e, ui) {
 var prelistorder_js = "";
 var prelistorder_css = "";
 $(document).ready(function () {
-    var url = location.href;
-    load(url == "" ? "1" : url);
-
-    if ($("#startupjs").css("display") == "none") {
-        $("#hdl2").addClass("active");
-        $("#hdl1").removeClass("active");
-    }
-    else {
-        $("#hdl2").removeClass("active");
-        $("#hdl1").addClass("active");
-    }
-
     $(function () {
         $("#js_sortable-table tbody").sortable({
             axis: 'y',
@@ -309,19 +297,6 @@ $(document).ready(function () {
                 }
             }
         });
-    });
-});
-
-$(function () {
-    $(".sitemenu-selection").find("li").on("click", function () {
-        load($(this).find("a").attr("href"));
-    });
-});
-
-$(function () {
-    $(window).hashchange(function () {
-        var url = location.href;
-        load(url == "" ? "1" : url);
     });
 });
 
@@ -333,17 +308,6 @@ var prm = Sys.WebForms.PageRequestManager.getInstance();
 prm.add_endRequest(function () {
     openWSE.RadioButtonStyle();
 
-    setTimeout(function () {
-        if ($("#startupjs").css("display") == "none") {
-            $("#hdl2").addClass("active");
-            $("#hdl1").removeClass("active");
-        }
-        else {
-            $("#hdl2").removeClass("active");
-            $("#hdl1").addClass("active");
-        }
-    }, 1500);
-
     $(function () {
         $("#js_sortable-table tbody").sortable({
             axis: 'y',
@@ -446,53 +410,13 @@ prm.add_endRequest(function () {
     });
 });
 
-
-function load(num) {
-    $(".RadioButton-Toggle-Overlay").remove();
-    openWSE.RadioButtonStyle();
-
-    if (window.location.href.indexOf("?css_view=true") > 0) {
-        try
-        {
-            var loc = window.location.href.split("?css_view=true");
-            window.location.href = loc[0] + "#?a=stylesheets";
-        }
-        catch (evt) { }
-    }
-
-    arg1 = num.split("?tab=");
-    if (arg1.length > 1) {
-        arg2 = arg1[1].split("#");
-        if (arg2.length == 1) {
-            arg2 = arg2[0].split("&");
-            if (arg2[0] == "javascripts") {
-                $('#hdl2').removeClass('active');
-                $('#hdl1').addClass('active');
-                $('#startupcss').hide();
-                $('#startupjs').show();
-                document.title = "Startup Scripts: Javascripts";
-            }
-            else if (arg2[0] == "stylesheets") {
-                $('#hdl1').removeClass('active');
-                $('#hdl2').addClass('active');
-                $('#startupjs').hide();
-                $('#startupcss').show();
-                document.title = "Startup Scripts: Style Sheets";
-            }
-            else {
-                $('#hdl2').removeClass('active');
-                $('#hdl1').addClass('active');
-                $('#startupcss').hide();
-                $('#startupjs').show();
-                document.title = "Network Activity: Statistics";
-            }
-        }
+function ReAssignButtonSelected() {
+    if ($("#startupjs").css("display") != "none") {
+        $('#MainContent_lbtn_css').removeClass('selected');
+        $('#MainContent_lbtn_js').addClass('selected');
     }
     else {
-        $('#hdl2').removeClass('active');
-        $('#hdl1').addClass('active');
-        $('#startupcss').hide();
-        $('#startupjs').show(openWSE_Config.animationSpeed);
-        document.title = "Startup Scripts: Javascripts";
+        $('#MainContent_lbtn_js').removeClass('selected');
+        $('#MainContent_lbtn_css').addClass('selected');
     }
 }

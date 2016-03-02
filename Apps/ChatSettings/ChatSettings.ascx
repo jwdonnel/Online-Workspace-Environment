@@ -1,4 +1,5 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_ChatSettings, App_Web_ibay5ibm" clientidmode="Static" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="ChatSettings.ascx.cs"
+    Inherits="Apps_ChatSettings" ClientIDMode="Static" %>
 <div class="pad-all app-title-bg-color">
     <div class="float-left">
         <asp:Image ID="img_Title" runat="server" CssClass="app-img-titlebar" />
@@ -128,9 +129,10 @@
                     <span class="pad-right font-bold font-color-black">Chat Timeout</span>
                 </td>
                 <td style="width: 197px;">
-                    <input type="text" id="tb_updateintervals_chatSettings" class="textEntry" maxlength="3"
-                        onkeypress="ChatIntervalUpdate(event)" style="width: 35px;" /><span class="pad-left">minute(s)</span>
-                    <input type="button" id="btn_updateintervals_chatSettings" class="margin-left input-buttons"
+                    <input type="number" id="tb_updateintervals_chatSettings" class="textEntry" maxlength="3"
+                        onkeypress="ChatIntervalUpdate(event)" style="width: 55px;" /><span class="pad-left">minute(s)</span>
+                    <div class="clear-space"></div>
+                    <input type="button" id="btn_updateintervals_chatSettings" class="input-buttons"
                         value="Update" />
                 </td>
                 <td>
@@ -143,3 +145,4 @@
 </div>
 <asp:Panel ID="emoticons_log_chatsettings" runat="server" Style="display: none;">
 </asp:Panel>
+<input type="hidden" data-scriptelement="true" data-tagname="script" data-tagtype="text/javascript" data-tagsrc="~/Apps/ChatSettings/chatsettings.js" />

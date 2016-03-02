@@ -1,30 +1,17 @@
-﻿<%@ page title="Notification Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_NotifiManager, App_Web_5emrkdig" %>
+﻿<%@ Page Title="Notification Manager" Language="C#" MasterPageFile="~/Site.master"
+    AutoEventWireup="true" CodeFile="NotifiManager.aspx.cs" Inherits="SiteTools_NotifiManager" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
-    <style type="text/css">
-        .app-span-modify
-        {
-            color: #555 !important;
-        }
-
-        .app-icon-admin
-        {
-            margin-left: 0px !important;
-            margin-right: 0px !important;
-        }
-    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding pad-top-big margin-top">
+    <div class="maincontent-padding margin-top">
         <asp:Literal ID="ltl_locked" runat="server"></asp:Literal>
-        <div class="clear-space-five"></div>
-        <ul class="sitemenu-selection">
-        </ul>
-        <div class="clear-space"></div>
-        <asp:Panel ID="pnl_NotificationList" runat="server" CssClass="pnl-section margin-top" data-title="Notification List">
+        <asp:Panel ID="pnlLinkBtns" runat="server">
+        </asp:Panel>
+        <asp:Panel ID="pnl_NotificationList" ClientIDMode="Static" runat="server" CssClass="pnl-section">
             <asp:UpdatePanel ID="updatepnl_notifi" runat="server" UpdateMode="Conditional">
                 <ContentTemplate>
-                    <div class="table-settings-box no-border" style="margin-bottom: 0px!important;">
+                    <div class="table-settings-box no-border">
                         <div class="td-settings-ctrl" style="padding-top: 0px!important;">
                             <a id="aAddNewNoti" runat="server" class="margin-right-big input-buttons-create float-left" onclick="openWSE.LoadModalWindow(true, 'AddNotification-element', 'Add New Notification');$('#MainContent_txt_uploadNotifiName').focus();return false;">Create Notification</a>
                             <div class="searchwrapper float-left" style="width: 350px; margin-top: 3px;">
@@ -65,8 +52,8 @@
                 </ContentTemplate>
             </asp:UpdatePanel>
         </asp:Panel>
-        <asp:Panel ID="pnl_AssociatedApps" runat="server" CssClass="pnl-section pad-top-big" data-title="Associated Apps">
-            <div class="table-settings-box no-border" style="padding-top: 0px!important; margin-top: 0px!important;">
+        <asp:Panel ID="pnl_AssociatedApps" ClientIDMode="Static" runat="server" CssClass="pnl-section" style="display: none;">
+            <div class="table-settings-box no-border">
                 <div class="td-settings-ctrl">
                     <asp:UpdatePanel ID="updatepnl_Associations" runat="server" UpdateMode="Conditional">
                         <ContentTemplate>
@@ -117,7 +104,7 @@
                                             <div class="font-bold pad-bottom-sml pad-top">
                                                 Description
                                             </div>
-                                            <asp:TextBox ID="txt_uploadNotifiDesc" runat="server" CssClass="pad-all-sml" Width="400px" MaxLength="500" placeholder="Description"></asp:TextBox>
+                                            <asp:TextBox ID="txt_uploadNotifiDesc" runat="server" CssClass="textEntry" Width="400px" MaxLength="500" placeholder="Description"></asp:TextBox>
                                             <div class="clear-space">
                                             </div>
                                             <div class="font-bold pad-bottom-sml pad-top">
@@ -204,6 +191,5 @@
                 </div>
             </div>
         </div>
-        <script type="text/javascript" src='<%=ResolveUrl("~/Scripts/SiteTools/notifiManager.js")%>'></script>
     </div>
 </asp:Content>

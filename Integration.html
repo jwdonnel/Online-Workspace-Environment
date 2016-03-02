@@ -230,7 +230,7 @@
                     <h4>In the Page_Load method, create a new instance of the _overlayInit.</h4>
                     <div id="code13" class="code" data-mode="csharp">
                         protected void Page_Load(object sender, EventArgs e) {
-                        &nbsp;&nbsp;&nbsp;_overlayInit = new OverlayInitializer(string.Empty, "Overlays/RSSFeed_Overlay.ascx");
+                        &nbsp;&nbsp;&nbsp;_overlayInit = new OverlayInitializer(string.Empty, "Overlays/RSSFeed/RSSFeed_Overlay.ascx");
                         &nbsp;&nbsp;&nbsp;if (_overlayInit.TryLoadOverlay) {
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LoadOverlay();
                         &nbsp;&nbsp;&nbsp;}

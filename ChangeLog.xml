@@ -1,6 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Items>
-    <version>Ver. 4.5.9</version>
+    <version>Ver. 4.6</version>
+    <log name="2/29/2016">
+        <h3 class="font-bold">
+            New to Version 4.6
+        </h3>
+        <br />
+        Added new column to aspnet_WebEvent_Events table that will log the IP Address from where the error occured.
+        Apps that require javascript and css files no longer have to be added to the Startup Script page.<br />
+        Updated search to use the actual page name and not the page link.<br />
+        Minor fixes made in the openWSE javascript object.<br />
+        Updated Overlay folder to allow overlays to have their own styles and javascript files.<br />
+        New setting under Startup Scripts that allows the administrator to append a timestamp to all loaded scripts (.js and .css) for all users.
+    </log>
+    <log name="12/29/2015">
+        Fixes to app categories and uncategorized items.
+    </log>
+    <log name="12/22/2015">
+        Fixes to background timer and multiple backgrounds on workspace.<br />
+        Added support for sidebar and top bar transparency.<br />
+        Account Settings have been moved around.
+    </log>
     <log name="12/4/2015">
         New custom fonts added.<br />
         Fixes to uploading and creating new apps.<br />
@@ -11,7 +31,7 @@
     </log>
     <log name="10/29/2015">
         Removed the Summary Table Creator/Editor.<br />
-        Search boxes added to Custom Projects, Jquery Plugins, Notification Manager, Overlay Manager, Web Services, and Background Services pages.
+        Search boxes added to Jquery Plugins, Notification Manager, Overlay Manager, Web Services, and Background Services pages.
     </log>
     <log name="10/13/2015">
         Added ability to disable javascript error alerts.<br />
@@ -211,7 +231,7 @@
         Fixed some issues when first deploying the site. After user selects their database, the Administrator is automatically logged in and prompted to change their password.<br />
         New feature under Site Customizations that allows you to edit the site description meta tag and keywords meta tag.<br />
         Administrators can now create new Standard Roles under the Customize New Users link in User Accounts.<br />
-        New feature that allows users to add custom projects by connecting to an FTP location.<br />
+        New feature that allows users to add custom files and folders by connecting to an FTP location.<br />
         Removed feature to hide sidebar.<br />
         New feature that allows users to choose the type of workspace they want to use. There are 2 options - Paged and App Mode. Paged mode uses more of a standard click and load new page environment while App mode uses the existing workspace.<br />
         Webservices used by the site can now be accessed through the Web Services page in Settings / Tools. This only applies to Administrators.<br />
@@ -273,7 +293,7 @@
         Faster load times with apps.
     </log>
     <log name="9/4/2014">
-        Major bug fix to deleting dlls when deleting any app/table import/overlay/custom projects. If folder isn't found, it would delete the Bin directory instead.<br />
+        Major bug fix to deleting dlls when deleting any app/table import/overlay/custom files and folders. If folder isn't found, it would delete the Bin directory instead.<br />
         Added new feature to Group Organizer - Users can now setup the IP Listener for a specific group.<br />
         Security fixes to Group Organizer and IP Listener.
     </log>
@@ -281,7 +301,6 @@
         Tablet/Mobile version of the App Remote is now available.<br />
         You can now invite users to a group through the Group Organizer. This will only work if the end user has the Group Alerts notification enabled.<br />
         When adding an RSS feed to the Message Board, this will automatically create the RSS in the RSS News Feed app for all users associated with that RSS group.<br />
-        New Custom Project Editor available under the Custom Projects screen.<br />
         New setting under Account Settings that allows you to access the app list anywhere on the workspace by clicking the right mouse button.<br />
         Increased upload file size to max.<br />
         Table Import app updated to automatically fill in any unique ID fields.
@@ -311,7 +330,6 @@
         openWSE.js has been modified to allow for easier stylesheet theme integration.
     </log>
     <log name="5/20/2014">
-        New Custom Projects page (Formerly known as Integrated Pages) in the Site Tools. Upload your own pages that can be hosted from this site.<br />
         Fixes to app DLLs.<br />
         New layout to Site Tools that features the tool links on the left hand side of the page instead of the very top.<br />
         Disabled app tab on the app remote when the Chat Client is disabled.<br />
@@ -490,7 +508,7 @@
         </h3>
         New customizations under Site Manager. You can now customize your emails with a header and footer.<br />
         Bug fixes to the File Drive and Chat Client. (<b>File Drive:</b> Personal Folder showing up on other accounts. Errors when uploading to a folder other than the Root directory. <b>Chat Client:</b> Time was incorrect, would display pm instead of am.)<br/>
-        New Custom Projects folder - Add custom content for different sites. (eRequests, Contact forms, etc...)<br />
+        New CustomFiles folder - Add custom content for different sites. (eRequests, Contact forms, etc...)<br />
         New Bookmark Viewer - Import your bookmarks from google or add them manually. YouTube links will display the video preview image instead of the YouTube logo.<br />
         New To the File Drive - Listen to music from within the app. Postbacks will not effect playback of the file. Image previews will also appear for an image type file.<br />
         Upgraded TinyMCE html editor from 4.0b1 to 4.0 release.<br />

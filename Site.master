@@ -1,4 +1,4 @@
-﻿<%@ master language="C#" autoeventwireup="true" inherits="SiteMaster, App_Web_jtoan5js" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="SiteMaster" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -14,7 +14,7 @@
     <asp:ContentPlaceHolder ID="HeadContent" runat="server">
     </asp:ContentPlaceHolder>
 </head>
-<body onbeforeunload="openWSE.OnBrowserClose();">
+<body id="site_mainbody" runat="server" onbeforeunload="openWSE.OnBrowserClose();">
     <form runat="server" id="ct101" enctype="multipart/form-data">
         <asp:ScriptManager ID="ScriptManager_Main" runat="server" AsyncPostBackTimeout="360000">
         </asp:ScriptManager>
@@ -127,8 +127,7 @@
                                                     <asp:Label ID="lbl_UserEmail" runat="server" Text=""></asp:Label>
                                                     <div class="clear-space-five"></div>
                                                     <div class="clear-space-two"></div>
-                                                    <asp:HyperLink ID="hyp_accountSettings" runat="server" Text="Account" NavigateUrl="~/SiteTools/UserMaintenance/AcctSettings.aspx" CssClass="account-link-style margin-right" Target="_blank"></asp:HyperLink>
-                                                    <asp:HyperLink ID="hyp_accountCustomizations" runat="server" Text="Customize" NavigateUrl="~/SiteTools/UserMaintenance/AcctSettings.aspx?tab=SiteCustomizations" CssClass="account-link-style" Target="_blank"></asp:HyperLink>
+                                                    <asp:HyperLink ID="hyp_accountSettings" runat="server" Text="My Account Settings" NavigateUrl="~/SiteTools/UserMaintenance/AcctSettings.aspx" CssClass="account-link-style margin-right" Target="_blank"></asp:HyperLink>
                                                 </div>
                                             </div>
                                             <div class="clear">
@@ -284,28 +283,14 @@
                 </div>
             </div>
         </div>
-        <div id="container">
-            <div id="app_title_bg" runat="server" class="app-Settings-title-bg-color-main">
-                <div class="pad-all">
-                    <div class="app-Settings-title-user-info">
-                        <div class="float-left">
-                            <asp:Panel ID="pnl_groupHolder" runat="server" CssClass="group-logo-holder" Enabled="false" Visible="false">
-                                <asp:Image ID="img_LoginGroup" runat="server" />
-                            </asp:Panel>
-                            <span class="page-title">Loading...</span>
-                        </div>
-                        <div class="float-right">
-                            <asp:Panel ID="pnl_extraitems" runat="server">
-                            </asp:Panel>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <table cellpadding="0" cellspacing="0" width="100%">
+        <div id="alwaysvisible_backgroundblur" runat="server" visible="false"></div>
+        <div id="container" runat="server" style="overflow: hidden;">
+            <table id="container_main_table" cellpadding="0" cellspacing="0" style="height: 100%;">
                 <tr>
                     <td id="sidebar_menulinks" runat="server" valign="top" class="sidebar-padding-menulinks">
+                        <div id="sidebar_backgroundblur" runat="server" visible="false"></div>
                         <div id="accordian-sidebar">
-                            <a class="sidebar-showhide-ctrl sidebar-hide" onclick="openWSE.ShowHideAccordianSidebar();return false;" title="Click to show/hide the sidebar"><span class="hide-text">Hide Controls</span></a>
+                            <a class="sidebar-showhide-ctrl sidebar-hide" onclick="openWSE.ShowHideAccordianSidebar(event);return false;" title="Click to show/hide the sidebar"><span class="hide-text">Hide</span></a>
                             <ul id="sidebar-accordian">
                                 <li id="app_tab_body" runat="server" class="a-body">
                                     <div id="app_menu_title" runat="server" class="menu-title" title="Collapse Menu">My Apps</div>
@@ -359,6 +344,22 @@
                         </div>
                     </td>
                     <td id="maincontent_overflow_cell" valign="top">
+                        <div id="app_title_bg" runat="server" class="app-Settings-title-bg-color-main">
+                            <div class="pad-all">
+                                <div class="app-Settings-title-user-info">
+                                    <div class="float-left">
+                                        <asp:Panel ID="pnl_groupHolder" runat="server" CssClass="group-logo-holder" Enabled="false" Visible="false">
+                                            <asp:Image ID="img_LoginGroup" runat="server" />
+                                        </asp:Panel>
+                                        <span class="page-title">Loading...</span>
+                                    </div>
+                                    <div class="float-right">
+                                        <asp:Panel ID="pnl_extraitems" runat="server">
+                                        </asp:Panel>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div id="maincontent_overflow" runat="server">
                             <asp:UpdatePanel ID="MainContent_updatepnl_apploader" runat="server" ClientIDMode="Static"
                                 EnableViewState="False" ViewStateMode="Disabled">
@@ -400,7 +401,7 @@
         <asp:HiddenField ID="hf_chatsound" runat="server" />
         <div id="container-footer" class="footer">
             <div class="footer-padding">
-                <div id="copyright-footer" class="float-left">&copy; 2015 OpenWSE</div>
+                <div id="copyright-footer" class="float-left">&copy; 2016 OpenWSE</div>
                 <div class="help-icon" title="Need help?">
                 </div>
                 <asp:Panel ID="pnl_LoginGroupText" runat="server" Enabled="false" Visible="false">

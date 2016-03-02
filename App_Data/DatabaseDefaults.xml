@@ -51,13 +51,6 @@
             <Column id="LogDate" type="datetime" nullable="false"></Column>
         </Columns>
     </Table>
-    <Table name="aspnet_CustomProjectDLLs" primaryKey="ID">
-        <Columns>
-            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
-            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
-            <Column id="ProjectFolder" type="nvarchar" length="250" nullable="true"></Column>
-        </Columns>
-    </Table>
     <Table name="aspnet_GroupIPListener" primaryKey="ID">
         <Columns>
             <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
@@ -187,7 +180,6 @@
             <Column id="RecordErrorsOnly" type="bit" nullable="true"></Column>
             <Column id="LockIPListenerWatchlist" type="bit" nullable="true"></Column>
             <Column id="SaveCookiesAsSessions" type="bit" nullable="true"></Column>
-            <Column id="HideSiteSettingIcons" type="bit" nullable="true"></Column>
             <Column id="SidebarToolCategoryIcons" type="nvarchar" length="4000" nullable="true"></Column>
             <Column id="ForceGroupLogin" type="bit" nullable="true"></Column>
             <Column id="AddBackgroundToLogo" type="bit" nullable="true"></Column>
@@ -202,6 +194,7 @@
             <Column id="DefaultBodyFontSize" type="nvarchar" length="50" nullable="true"></Column>
             <Column id="DefaultBodyFontColor" type="nvarchar" length="10" nullable="true"></Column>
             <Column id="ShowLoginModalOnDemoMode" type="bit" nullable="true"></Column>
+            <Column id="AppendTimestampOnScripts" type="bit" nullable="true"></Column>
         </Columns>
     </Table>
     <Table name="aspnet_ShowUpdates">
@@ -370,6 +363,13 @@
             <Column id="DefaultBodyFontFamily" type="nvarchar" length="500" nullable="true"></Column>
             <Column id="DefaultBodyFontSize" type="nvarchar" length="50" nullable="true"></Column>
             <Column id="DefaultBodyFontColor" type="nvarchar" length="10" nullable="true"></Column>
+            <Column id="UseAltSidebarTheme" type="bit" nullable="true"></Column>
+            <Column id="TopbarTransparencyMode" type="bit" nullable="true"></Column>
+            <Column id="SidebarTransparencyMode" type="bit" nullable="true"></Column>
+            <Column id="ShowSiteToolsPageDescription" type="bit" nullable="true"></Column>
+            <Column id="ShowSiteToolsIcons" type="bit" nullable="true"></Column>
+            <Column id="HideSidebarMenuIcons" type="bit" nullable="true"></Column>
+            <Column id="ShowSiteToolsInCategories" type="bit" nullable="true"></Column>
         </Columns>
     </Table>
     <Table name="aspnet_UserNotificationMessages" primaryKey="ID">
@@ -427,6 +427,7 @@
             <Column id="ExceptionType" type="nvarchar" length="2000" nullable="true"></Column>
             <Column id="StackTrace" type="nvarchar" length="4000" nullable="true"></Column>
             <Column id="UserName" type="nvarchar" length="256" nullable="true"></Column>
+            <Column id="IPAddress" type="nvarchar" length="250" nullable="true"></Column>
         </Columns>
     </Table>
     <Table name="aspnet_WebEvents_Ignored" primaryKey="ID">
@@ -453,18 +454,6 @@
             <Column id="BackupDay" type="nvarchar" length="500" nullable="false"></Column>
             <Column id="BackupTime" type="nvarchar" length="500" nullable="false"></Column>
             <Column id="BackupType" type="nvarchar" length="50" nullable="false"></Column>
-        </Columns>
-    </Table>
-    <Table name="CustomProjects" primaryKey="ProjectID">
-        <Columns>
-            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
-            <Column id="ProjectID" type="uniqueidentifier" nullable="false"></Column>
-            <Column id="Folder" type="nvarchar" length="2000" nullable="false"></Column>
-            <Column id="Description" type="nvarchar" length="500" nullable="true"></Column>
-            <Column id="UploadDate" type="datetime" nullable="false"></Column>
-            <Column id="UploadedBy" type="nvarchar" length="250" nullable="false"></Column>
-            <Column id="UploadName" type="nvarchar" length="250" nullable="true"></Column>
-            <Column id="DefaultPage" type="nvarchar" length="250" nullable="true"></Column>
         </Columns>
     </Table>
     <Table name="CustomTables" primaryKey="ID">
@@ -652,6 +641,13 @@
             <Column id="DefaultBodyFontFamily" type="nvarchar" length="500" nullable="true"></Column>
             <Column id="DefaultBodyFontSize" type="nvarchar" length="50" nullable="true"></Column>
             <Column id="DefaultBodyFontColor" type="nvarchar" length="10" nullable="true"></Column>
+            <Column id="UseAltSidebarTheme" type="bit" nullable="true"></Column>
+            <Column id="TopbarTransparencyMode" type="bit" nullable="true"></Column>
+            <Column id="SidebarTransparencyMode" type="bit" nullable="true"></Column>
+            <Column id="ShowSiteToolsPageDescription" type="bit" nullable="true"></Column>
+            <Column id="ShowSiteToolsIcons" type="bit" nullable="true"></Column>
+            <Column id="HideSidebarMenuIcons" type="bit" nullable="true"></Column>
+            <Column id="ShowSiteToolsInCategories" type="bit" nullable="true"></Column>
             <Column id="DateUpdated" type="datetime" nullable="true"></Column>
         </Columns>
     </Table>
@@ -784,16 +780,6 @@
             <Column id="Maximized" type="bit" nullable="false"></Column>
             <Column id="Workspace" type="nvarchar" length="50" nullable="false"></Column>
             <Column id="DateTime" type="datetime" nullable="false"></Column>
-        </Columns>
-    </Table>
-    <Table name="WebServices" primaryKey="ID">
-        <Columns>
-            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
-            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
-            <Column id="Filename" type="nvarchar" length="250" nullable="false"></Column>
-            <Column id="Description" type="nvarchar" length="500" nullable="true"></Column>
-            <Column id="UploadDate" type="datetime" nullable="false"></Column>
-            <Column id="UploadedBy" type="nvarchar" length="250" nullable="false"></Column>
         </Columns>
     </Table>
     <Table name="AppCategory" primaryKey="ID">

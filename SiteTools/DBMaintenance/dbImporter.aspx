@@ -1,47 +1,32 @@
-﻿<%@ page title="Database Importer" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_dbImporter, App_Web_h3zobxng" %>
+﻿<%@ Page Title="Database Importer" Language="C#" MasterPageFile="~/Site.master"
+    AutoEventWireup="true" CodeFile="dbImporter.aspx.cs" Inherits="SiteTools_dbImporter" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
-    <style type="text/css">
-        .checkbox-new-click, .checkbox-edit-click
-        {
-            cursor: default;
-        }
-
-        #MainContent_cb_ddselect td
-        {
-            padding: 5px 0;
-        }
-    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
     <div class="maincontent-padding margin-top">
-        <div class="clear-space"></div>
-        <div class="clear-space-two"></div>
-        <ul class="sitemenu-selection">
-        </ul>
-        <div class="clear-space"></div>
-        <asp:Panel ID="pnl_TableEntries" runat="server" CssClass="pnl-section margin-top" data-title="Imported Tables">
-            <div class="pad-top-big">
-                <a href="#" class="input-buttons-create float-left margin-right-big" onclick="StartImportWizard();return false;">Import Wizard</a>
-                <div class="searchwrapper float-left" style="width: 350px; margin-top: 3px;">
-                    <asp:Panel ID="Panel1_Installer" runat="server" DefaultButton="imgbtn_search">
-                        <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
-                            onfocus="if(this.value=='Search Imports')this.value=''" onblur="if(this.value=='')this.value='Search Imports'"
-                            Text="Search Imports"></asp:TextBox>
-                        <asp:LinkButton ID="imgbtn_clearsearch" runat="server" ToolTip="Clear search" CssClass="searchbox_clear RandomActionBtns"
-                            OnClick="imgbtn_clearsearch_Click" />
-                        <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
-                            OnClick="imgbtn_search_Click" />
-                    </asp:Panel>
-                </div>
+        <asp:Panel ID="pnlLinkBtns" runat="server">
+        </asp:Panel>
+        <asp:Panel ID="pnl_TableEntries" runat="server" ClientIDMode="Static" CssClass="pnl-section">
+            <a href="#" class="input-buttons-create float-left margin-right-big" onclick="StartImportWizard();return false;">Import Wizard</a>
+            <div class="searchwrapper float-left" style="width: 350px; margin-top: 3px;">
+                <asp:Panel ID="Panel1_Installer" runat="server" DefaultButton="imgbtn_search">
+                    <asp:TextBox ID="tb_search" runat="server" CssClass="searchbox" Font-Size="Small"
+                        onfocus="if(this.value=='Search Imports')this.value=''" onblur="if(this.value=='')this.value='Search Imports'"
+                        Text="Search Imports"></asp:TextBox>
+                    <asp:LinkButton ID="imgbtn_clearsearch" runat="server" ToolTip="Clear search" CssClass="searchbox_clear RandomActionBtns"
+                        OnClick="imgbtn_clearsearch_Click" />
+                    <asp:LinkButton ID="imgbtn_search" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
+                        OnClick="imgbtn_search_Click" />
+                </asp:Panel>
             </div>
             <div class="clear-space">
             </div>
-            <div class="table-settings-box no-border" style="margin-top: 0">
+            <div class="table-settings-box no-border">
                 <div class="td-settings-ctrl">
                     <asp:UpdatePanel ID="UpdatePanel2" runat="server">
                         <ContentTemplate>
-                            <div style="width: 100%; min-width: 1040px;">
+                            <div style="width: 100%;">
                                 <asp:Panel ID="pnl_ImportedTables" runat="server">
                                 </asp:Panel>
                                 <asp:HiddenField ID="hf_deleteimport" runat="server" ClientIDMode="Static" />
@@ -405,12 +390,10 @@
                 </div>
             </div>
         </asp:Panel>
-        <asp:Panel ID="pnl_SavedConnections" runat="server" CssClass="pnl-section margin-top" data-title="Saved Connections">
-            <div class="pad-top-big">
-                <a href="#" class="input-buttons-create float-left margin-right-big" onclick="openWSE.LoadModalWindow(true, 'AddConnectionString-Element', 'Add New Connection');return false;">Add Connection</a>
-            </div>
+        <asp:Panel ID="pnl_SavedConnections" runat="server" ClientIDMode="Static" CssClass="pnl-section" Style="display: none;">
+            <a href="#" class="input-buttons-create float-left margin-right-big" onclick="openWSE.LoadModalWindow(true, 'AddConnectionString-Element', 'Add New Connection');return false;">Add Connection</a>
             <div class="clear-space"></div>
-            <div class="table-settings-box no-border" style="margin-top: 0">
+            <div class="table-settings-box no-border">
                 <div class="td-settings-ctrl">
                     <asp:UpdatePanel ID="UpdatePanel10" runat="server">
                         <ContentTemplate>
@@ -521,57 +504,5 @@
             </div>
         </div>
         <script type="text/javascript" src='<%=ResolveUrl("~/WebControls/jscolor/jscolor.js")%>'></script>
-        <script type="text/javascript" src='<%=ResolveUrl("~/Scripts/SiteTools/dbImport.js")%>'></script>
-        <script type="text/javascript">
-            $(document.body).on("change", "#<%=dd_ddtables.ClientID %>", function () {
-                openWSE.LoadingMessage1("Updating...");
-            });
-
-            function UseConnectionString(x, y) {
-                $("#<%=hf_usestring.ClientID %>").val("Use connection string " + y + " - '" + x + "'");
-                openWSE.LoadingMessage1("Updating...");
-                __doPostBack("<%=hf_usestring.ClientID %>", "");
-            }
-
-            function DeleteConnectionString(x) {
-                openWSE.ConfirmWindow("Are you sure you want to delete this connection string?",
-                   function () {
-                       $("#<%=hf_deletestring.ClientID %>").val(x);
-                       openWSE.LoadingMessage1("Updating...");
-                       __doPostBack("<%=hf_deletestring.ClientID %>", "");
-                   }, null);
-               }
-
-               function EditConnectionString(x) {
-                   $("#<%=hf_editstring.ClientID %>").val(x);
-                   openWSE.LoadingMessage1("Loading...");
-                   __doPostBack("<%=hf_editstring.ClientID %>", "");
-               }
-
-               function UpdateConnectionString(x) {
-                   $("#<%=hf_updatestring.ClientID %>").val(x);
-                   $("#<%=hf_connectionNameEdit.ClientID %>").val(escape($("#tb_connNameedit").val()));
-                   $("#<%=hf_connectionStringEdit.ClientID %>").val(escape($("#tb_connStringedit").val()));
-                   $("#<%=hf_databaseProviderEdit.ClientID %>").val(escape($("#edit-databaseProvider").val()));
-                   openWSE.LoadingMessage1("Updating...");
-                   __doPostBack("<%=hf_updatestring.ClientID %>", "");
-               }
-
-               function KeyPressEdit_Connection(event, x) {
-                   try {
-                       if (event.which == 13) {
-                           event.preventDefault();
-                           UpdateConnectionString(x);
-                       }
-                   }
-                   catch (evt) {
-                       if (event.keyCode == 13) {
-                           event.preventDefault();
-                           UpdateConnectionString(x);
-                       }
-                       delete evt;
-                   }
-               }
-        </script>
     </div>
 </asp:Content>

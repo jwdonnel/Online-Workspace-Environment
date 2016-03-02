@@ -1,4 +1,4 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_Feedback, App_Web_pcermj0w" clientidmode="Static" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="Feedback.ascx.cs" Inherits="Apps_Feedback" ClientIDMode="Static" %>
 <div class="pad-all">
     <h3 class="float-left pad-top">Give me your feedback on the site.</h3>
     <div class="clear-space"></div>

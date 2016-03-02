@@ -1,35 +1,15 @@
-﻿<%@ page title="Database Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_DbManager, App_Web_h3zobxng" %>
+﻿<%@ Page Title="Database Manager" Language="C#" MasterPageFile="~/Site.master"
+    AutoEventWireup="true" CodeFile="dbManager.aspx.cs" Inherits="SiteTools_DbManager" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
-    <style type="text/css">
-        .up-to-date-text, .out-of-date-text
-        {
-            font-size: 14px;
-            font-weight: bold;
-            padding: 2px 7px 14px 2px;
-            clear: both;
-        }
-
-        .up-to-date-text
-        {
-            color: green;
-        }
-
-        .out-of-date-text
-        {
-            color: red;
-        }
-    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding pad-top-big margin-top">
-        <div class="clear-space-five"></div>
-        <ul class="sitemenu-selection">
-        </ul>
-        <div class="clear-space"></div>
+    <div class="maincontent-padding margin-top">
+        <asp:Panel ID="pnlLinkBtns" runat="server">
+        </asp:Panel>
         <div id="dbviewer-load">
             <asp:Panel ID="DBMaintenance" runat="server">
-                <asp:Panel ID="pnl_databaseRecovery" runat="server" CssClass="pnl-section" data-title="Backup/Recovery">
+                <asp:Panel ID="pnl_databaseRecovery" runat="server" ClientIDMode="Static" CssClass="pnl-section">
                     <div class="table-settings-box no-border">
                         <div class="td-settings-ctrl">
                             <div class="float-left pad-bottom-big" style="width: 475px;">
@@ -182,10 +162,9 @@
                         </div>
                     </div>
                 </asp:Panel>
-                <asp:Panel ID="pnl_adminOnly_RestoreDefaults" runat="server" Visible="false" Enabled="false" CssClass="pnl-section" data-title="Defaults">
+                <asp:Panel ID="pnl_adminOnly_RestoreDefaults" ClientIDMode="Static" runat="server" Visible="false" Enabled="false" CssClass="pnl-section" style="display: none;">
                     <div class="table-settings-box no-border">
                         <div class="td-settings-ctrl">
-                            <div class="clear-space"></div>
                             <asp:UpdatePanel ID="updatepnl_tableDefaults" runat="server" UpdateMode="Conditional">
                                 <ContentTemplate>
                                     <asp:DropDownList ID="dd_defaultTableList" AutoPostBack="true" runat="server" CssClass="margin-right-big" ClientIDMode="Static" OnSelectedIndexChanged="dd_defaultTableList_SelectedIndexChanged"></asp:DropDownList>
@@ -210,8 +189,8 @@
                         </div>
                     </div>
                 </asp:Panel>
-                <asp:Panel ID="pnl_adminOnly_DbScanner" runat="server" CssClass="pnl-section" data-title="Database Scanner">
-                    <div class="table-settings-box no-border" style="margin-top: 0px;">
+                <asp:Panel ID="pnl_adminOnly_DbScanner" runat="server" ClientIDMode="Static" CssClass="pnl-section" style="display: none;">
+                    <div class="table-settings-box no-border">
                         <div class="td-settings-ctrl">
                             <asp:UpdatePanel ID="updatepnl_DbScanner" runat="server">
                                 <ContentTemplate>
@@ -237,7 +216,7 @@
                         </div>
                     </div>
                 </asp:Panel>
-                <asp:Panel ID="pnl_autobackstyem" runat="server" CssClass="pnl-section" data-title="Backup Schedule">
+                <asp:Panel ID="pnl_autobackstyem" runat="server" CssClass="pnl-section" ClientIDMode="Static" style="display: none;">
                     <div class="table-settings-box no-border">
                         <div class="td-settings-ctrl">
                             <asp:UpdatePanel ID="UpdatePanel7" runat="server">
@@ -426,6 +405,5 @@
                 </div>
             </div>
         </div>
-        <script type='text/javascript' src='<%=ResolveUrl("~/Scripts/SiteTools/dbManager.js")%>'></script>
     </div>
 </asp:Content>

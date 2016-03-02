@@ -11,10 +11,9 @@ $(document).ready(function () {
     });
 
     openWSE.RadioButtonStyle();
-    BuildGraphs();
 
-    var url = location.href;
-    load(url == "" ? "1" : url);
+    graphWidth = $("#maincontent_overflow").outerWidth();
+    BuildGraphs();
 
     $("#MainContent_tb_search").autocomplete({
         minLength: 0,
@@ -39,12 +38,11 @@ $(document).ready(function () {
     }).focus(function () {
         $(this).autocomplete("search", "");
     });
-});
 
-$(function () {
-    $(window).hashchange(function () {
-        var url = location.href;
-        load(url == "" ? "1" : url);
+    $(".sitemenu-selection").find("li").on("click", function () {
+        if ($(this).find("a").attr("href").indexOf("activity") > 0) {
+            $(window).resize();
+        }
     });
 });
 
@@ -254,6 +252,7 @@ function ResetStatus(_this) {
 $(window).resize(function () {
     graphWidth = $("#maincontent_overflow").outerWidth();
     BuildGraphs();
+    FinishBuildingGraph(graphWidth - 500, 300);
 });
 
 var runningGraph = false;
@@ -298,37 +297,47 @@ function BuildGraphs() {
     }
 }
 
+var finalArray = new Array();
 function BuildRequests(data, _width, _height) {
     try {
         var rows = data.length;
-        var finalArray = new Array();
+        finalArray = new Array();
         finalArray.push(["Interval", "Requests"]);
         for (var i = 0; i < rows; i++) {
             finalArray.push([i.toString(), parseInt(data[i])]);
         }
 
-        var _data = google.visualization.arrayToDataTable(finalArray);
-        var options = {
-            curveType: _curveType,
-            title: 'Site Requests',
-            vAxis: { title: '# Requests', minValue: 0 },
-            hAxis: { title: 'Interval' },
-            width: _width,
-            height: _height,
-            lineWidth: _lineWidth,
-            backgroundColor: "transparent"
-        };
-
-        if (_isAreaGraph) {
-            var chart = new google.visualization.AreaChart(document.getElementById('ChartRequests'));
-            chart.draw(_data, options);
-        }
-        else {
-            var chart = new google.visualization.LineChart(document.getElementById('ChartRequests'));
-            chart.draw(_data, options);
-        }
+        FinishBuildingGraph(_width, _height);
     }
     catch (evt) { }
+}
+function FinishBuildingGraph(_width, _height) {
+    try {
+        if (finalArray.length > 0) {
+            var _data = google.visualization.arrayToDataTable(finalArray);
+            var options = {
+                curveType: _curveType,
+                title: 'Site Requests',
+                vAxis: { title: '# Requests', minValue: 0 },
+                hAxis: { title: 'Interval' },
+                width: _width,
+                height: _height,
+                lineWidth: _lineWidth,
+                backgroundColor: "transparent"
+            };
+
+            if (_isAreaGraph) {
+                var chart = new google.visualization.AreaChart(document.getElementById('ChartRequests'));
+                chart.draw(_data, options);
+            }
+            else {
+                var chart = new google.visualization.LineChart(document.getElementById('ChartRequests'));
+                chart.draw(_data, options);
+            }
+        }
+    }
+    catch (evt) {
+    }
 }
 
 var paused = false;
@@ -356,11 +365,9 @@ $(document.body).on("change", "#dd_interval", function () {
 });
 
 
-var currentTab = "";
 var prm = Sys.WebForms.PageRequestManager.getInstance();
 prm.add_endRequest(function () {
     openWSE.RadioButtonStyle();
-    load(currentTab);
     SearchLoginIp(ipSearch);
 
     $("#MainContent_tb_search").autocomplete({
@@ -418,57 +425,6 @@ function DeleteEvent(id) {
             $("#MainContent_hf_deleteError").val(id);
             __doPostBack("MainContent_hf_deleteError", "");
         }, null);
-}
-
-$(function () {
-    $(".sitemenu-selection").find("li").on("click", function () {
-        load($(this).find("a").attr("href"));
-    });
-});
-
-function load(num) {
-    paused = true;
-    currentTab = num;
-
-    $("#search_box").hide();
-    $(".pnl-section").hide();
-    $(".sitemenu-selection").find("li").removeClass("active");
-
-    var index = 0;
-
-    var arg1 = num.split("?tab=");
-    if (arg1.length > 1) {
-        var arg2 = arg1[arg1.length - 1].split("#");
-        if (arg2.length == 1) {
-            index = GetPnlSectionIndex(arg2[0]);
-        }
-    }
-
-    $(".pnl-section").eq(index).show();
-    $(".sitemenu-selection").find("li").eq(index).addClass("active");
-
-    switch (index) {
-        case 0:
-        case 1:
-            $("#search_box").show();
-            break;
-
-        case 2:
-            BuildGraphs();
-            paused = false;
-            break;
-    }
-}
-
-function GetPnlSectionIndex(ele) {
-    var pnlIndex = 0;
-    $(".pnl-section").each(function (index) {
-        if ($(this).attr("id") == ele) {
-            pnlIndex = index;
-        }
-    });
-
-    return pnlIndex;
 }
 
 var ipSearch = "";

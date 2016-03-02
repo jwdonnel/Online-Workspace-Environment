@@ -1,4 +1,5 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_Bookmark_Viewer_BookmarkViewer, App_Web_s3b2d2no" clientidmode="Static" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="BookmarkViewer.ascx.cs"
+    Inherits="Apps_Bookmark_Viewer_BookmarkViewer" ClientIDMode="Static" %>
 <div id="bookmarkviewer_scroller" class="pad-all app-title-bg-color">
     <div class="float-left">
         <asp:Image ID="img_Title" runat="server" CssClass="app-img-titlebar" />
@@ -167,3 +168,5 @@
         </div>
     </div>
 </div>
+<input type="hidden" data-scriptelement="true" data-tagname="link" data-tagtype="text/css" data-tagrel="stylesheet" data-tagsrc="~/Apps/Bookmark_Viewer/bookmarks.css" />
+<input type="hidden" data-scriptelement="true" data-tagname="script" data-tagtype="text/javascript" data-tagsrc="~/Apps/Bookmark_Viewer/bookmarks.js" />

@@ -1,4 +1,5 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_MessageBoard_MessageBoard, App_Web_r5ppqa53" clientidmode="Static" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="MessageBoard.ascx.cs"
+    Inherits="Apps_MessageBoard_MessageBoard" ClientIDMode="Static" %>
 <div class="pad-all app-title-bg-color">
     <div class="float-left">
         <asp:Image ID="img_Title" runat="server" CssClass="app-img-titlebar" />
@@ -65,3 +66,5 @@
         </div>
     </div>
 </div>
+<input type="hidden" data-scriptelement="true" data-tagname="link" data-tagtype="text/css" data-tagrel="stylesheet" data-tagsrc="~/Apps/MessageBoard/messageboard.css" />
+<input type="hidden" data-scriptelement="true" data-tagname="script" data-tagtype="text/javascript" data-tagsrc="~/Apps/MessageBoard/messageboard.js" />

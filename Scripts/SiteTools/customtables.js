@@ -388,7 +388,7 @@ function CreateUpdateTable() {
         else {
             openWSE.LoadingMessage1("Creating Table. Please Wait...");
 
-            $("#UsersAllowed-element").find(".checkbox-usersallowed").each(function () {
+            $("#MainContent_pnl_usersAllowedToEdit").find(".checkbox-usersallowed").each(function () {
                 if ($(this).prop("checked")) {
                     usersAllowed += $(this).val().toLowerCase() + ";";
                 }

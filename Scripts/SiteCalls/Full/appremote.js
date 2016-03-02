@@ -1,8 +1,8 @@
 ﻿// -----------------------------------------------------------------------------------
 //
-//	appRemote v4.5
+//	appRemote v4.8
 //	by John Donnelly
-//	Last Modification: 11/12/2015
+//	Last Modification: 2/23/2016
 //
 //	Licensed under the Creative Commons Attribution 2.5 License - http://creativecommons.org/licenses/by/2.5/
 //  	- Free for use in both personal and commercial projects
@@ -34,7 +34,9 @@ var appRemote_Config = {
     needToSetColorMode: false,
     showToolTips: true,
     siteTipsOnPageLoad: false,
-    saveCookiesAsSessions: false
+    saveCookiesAsSessions: false,
+    backgroundTimerLoop: 30,
+    ShowLoginModalOnDemoMode: false
 };
 
 var appRemote = function () {
@@ -442,20 +444,7 @@ var appRemote = function () {
         }
     });
     $(document.body).on("click", "#login-s", function () {
-        CloseMenu();
-        if ($("#pnl_login").css("display") != "block") {
-            if (window.location.href.indexOf("?") == -1) {
-                if (window.location.href.indexOf("#") == -1) {
-                    window.location += "#?loginPnl=true";
-                }
-                else {
-                    window.location += "?loginPnl=true";
-                }
-            }
-            else {
-                window.location = GetLocationWithPartialSearch() + "loginPnl=true";
-            }
-        }
+        LoadLoginPanel();
     });
     $(document.body).on("click", "#ap-s", function () {
         appRemote_Config.categoryId = "adminPages";
@@ -480,15 +469,36 @@ var appRemote = function () {
                 }
             }
             else {
-                window.location = GetLocationWithPartialSearch() + "acctInfo=true";
+                window.location = GetLocationWithPartialSearch("acctInfo=true");
             }
         }
     });
 
-    function GetLocationWithPartialSearch() {
-        var loc = window.location.href.replace(window.location.href.substring(window.location.href.indexOf("&")), "");
+    function LoadLoginPanel() {
+        CloseMenu();
+        if ($("#pnl_login").css("display") != "block") {
+            if (window.location.href.indexOf("?") == -1) {
+                if (window.location.href.indexOf("#") == -1) {
+                    window.location += "#?loginPnl=true";
+                }
+                else {
+                    window.location += "?loginPnl=true";
+                }
+            }
+            else {
+                window.location = GetLocationWithPartialSearch("loginPnl=true");
+            }
+        }
+    }
+
+    function GetLocationWithPartialSearch(searchLoc) {
+        var loc = window.location.href.replace(window.location.href.substring(window.location.href.lastIndexOf("&" + searchLoc)), "");
         if (loc == "") {
-            loc = window.location.href.replace(window.location.href.substring(window.location.href.indexOf("?")), "");
+            loc = window.location.href.replace(window.location.href.substring(window.location.href.lastIndexOf("?" + searchLoc)), "");
+        }
+
+        if (loc == "") {
+            loc = window.location.href;
         }
 
         if (loc.indexOf("?") == -1) {
@@ -501,7 +511,7 @@ var appRemote = function () {
             loc += "&";
         }
 
-        return loc;
+        return loc + searchLoc;
     }
 
     $(document.body).on("click", "#workspace-selector-overlay", function () {
@@ -618,7 +628,7 @@ var appRemote = function () {
                 window.location += "?notiOn=true";
             }
             else {
-                window.location = GetLocationWithPartialSearch() + "notiOn=true";
+                window.location = GetLocationWithPartialSearch("notiOn=true");
             }
         }
     });
@@ -642,7 +652,7 @@ var appRemote = function () {
                 window.location += "?groupLogin=true";
             }
             else {
-                window.location = GetLocationWithPartialSearch() + "groupLogin=true";
+                window.location = GetLocationWithPartialSearch("groupLogin=true");
             }
         }
     });
@@ -786,6 +796,13 @@ var appRemote = function () {
                     blankPage = true;
                 }
 
+                var linkSplit = link.split("#?");
+                link = linkSplit[0];
+                var linkTab = "";
+                if (linkSplit.length > 1) {
+                    linkTab = "#?" + linkSplit[1];
+                }
+
                 if (link.indexOf("?") > 0) {
                     link += "&mobileMode=true";
                 }
@@ -799,6 +816,8 @@ var appRemote = function () {
                 else {
                     $(this).attr("onclick", "appRemote.StartLoadingOverlay('Loading');return true;");
                 }
+
+                link += linkTab;
 
                 $(this).attr("href", link);
             });
@@ -823,11 +842,11 @@ var appRemote = function () {
         Load();
     }
     function SetLightColorMode() {
-        if (appRemote_Config.needToSetColorMode) {
-            var $head = $("head");
-            var $styleCss = $head.find("style[type='text/css']");
-            var cssElements = "";
+        var $head = $("head");
+        var $styleCss = $head.find("style[type='text/css']");
+        var cssElements = "";
 
+        if (appRemote_Config.needToSetColorMode) {
             if (appRemote_Config.useDarkColor) {
                 cssElements += ".img-expand-sml{background-image:url('" + openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/expand-sml.png') !important}\n";
                 cssElements += ".img-collapse-sml{background-image:url('" + openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/collapse-sml.png') !important}\n";
@@ -835,24 +854,30 @@ var appRemote = function () {
                 cssElements += ".img-workspace{background:url('" + openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/workspace-dark.png') no-repeat left center !important}\n";
                 cssElements += ".img-update{background:url('" + openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/update.png') no-repeat left center !important}\n";
                 cssElements += ".img-close{background:url('" + openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/close.png') no-repeat left center !important}\n";
-
-                $("#Category-Back").find("img").attr("src", openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/back-alt-dark.png");
-                $("#pnl_icons").find("img[alt='forward']").attr("src", openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/forward-dark.png");
+                cssElements += ".category-back-img{background-image:url('" + openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/prevpage.png')!important}\n";
+                cssElements += ".app-category-nextpage{background-image:url('" + openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/nextpage.png')!important}\n";
                 $("a, a:link, a:visited").css("color", "#295ABE");
             }
             else {
+                cssElements += ".category-back-img{background-image:url('" + openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/prevpage-alt.png')!important}\n";
+                cssElements += ".app-category-nextpage{background-image:url('" + openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/nextpage-alt.png')!important}\n";
                 $("a, a:link, a:visited").css("color", "#D8DFED");
             }
 
-            cssElements += "#pnl_adminPages .menu-title, #pnl_AccountInfo #lbl_UserEmail, .title-dd-name, #no-notifications-id, .cb-links, #span_currStatus, h1, h2, h3, h4, h5, h6, #last-updated, .option-buttons, .app-icon .app-icon-font, .app-icon-links .app-icon-font, .app-icon-sub-links .app-icon-font, .app-icon-category-list .app-icon-font, .app-icon-admin .app-icon-font, .app-icon .workspace-reminder, #rememberme-holder label, .app-icon.Name_And_Description .app-description, .alert-panel-description, #app-load-options{color:" + appRemote_Config.foreColor + " !important}\n";
+            cssElements += "#pnl_adminPages .menu-title, #pnl_AccountInfo #lbl_UserEmail, .title-dd-name, #no-notifications-id, .cb-links, #span_currStatus, h1, h2, h3, h4, h5, h6, #last-updated, .option-buttons, .app-icon .app-icon-font, .app-icon-links .app-icon-font, .app-icon-sub-links .app-icon-font, .app-icon-category-list .app-icon-font, .app-icon-admin .app-icon-font, .app-icon .workspace-reminder, #rememberme-holder label, .app-icon.Name_And_Description .app-description, .alert-panel-description, #app-load-options, #statusDiv{color:" + appRemote_Config.foreColor + " !important}\n";
             cssElements += "#pnl_chat_popup, #pnl_chat_users, #pnl_icons, #pnl_login, #pnl_options, #notifications-viewtable, #grouplogin-list, #pnl_AccountInfo, #pnl_adminPages, #pnl_adminPage_iframe{background:rgba(0, 0, 0, 0.0) !important}\n";
+        }
+        else {
+            cssElements += ".category-back-img{background-image:url('" + openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/prevpage-alt.png')!important}\n";
+            cssElements += ".app-category-nextpage{background-image:url('" + openWSE.siteRoot() + "App_Themes/" + appRemote_Config.siteTheme + "/Icons/nextpage-alt.png')!important}\n";
+            $("a, a:link, a:visited").css("color", "#D8DFED");
+        }
 
-            if ($styleCss.length > 0) {
-                $styleCss.eq($styleCss.length - 1).append(cssElements);
-            }
-            else {
-                $head.append("<style type='text/css'>" + cssElements + "</style>");
-            }
+        if ($styleCss.length > 0) {
+            $styleCss.eq($styleCss.length - 1).append(cssElements);
+        }
+        else {
+            $head.append("<style type='text/css'>" + cssElements + "</style>");
         }
     }
     function SetSiteToolTips(isOn) {
@@ -915,6 +940,12 @@ var appRemote = function () {
 
                         $("body").append(ele);
                         AdjustSiteTipModal();
+
+                        $("#SiteTip-element").find(".Modal-overlay").on("click", function (e) {
+                            if (e.target.className == "Modal-overlay") {
+                                appRemote.CloseSiteTip();
+                            }
+                        });
                     }
                 }
             });
@@ -2369,6 +2400,7 @@ var appRemote = function () {
         StartLoadingOverlay: StartLoadingOverlay,
         CloseStartLoadingOverlay: CloseStartLoadingOverlay,
         AppsSortUnlocked: AppsSortUnlocked,
+        LoadLoginPanel: LoadLoginPanel,
         LoadOptions: LoadOptions,
         LoadAdminPage: LoadAdminPage,
         LoginAsGroup: LoginAsGroup,
@@ -2398,8 +2430,17 @@ var openWSE = function () {
 
     // Background Loop Timer
     var backgroundLoopTimer = new Array();
-    function BackgroundLoop(backgrounds, timer, div) {
+    function BackgroundLoop(backgrounds, div) {
         if ($(div).length > 0) {
+            var timer = parseInt(appRemote_Config.backgroundTimerLoop);
+            if (isNaN(timer) || timer === 0) {
+                timer = 30;
+            }
+
+            if (timer < 1000) {
+                timer = timer * 1000;
+            }
+
             var list = backgrounds.split('|');
             var modifiedList = new Array();
             for (var i = 0; i < list.length; i++) {
@@ -2638,6 +2679,8 @@ var openWSE = function () {
 }();
 
 $(document).ready(function () {
+    console.log(appRemote_Config);
+
     appRemote.init();
     var loc = window.location.href.split("#");
     if (loc.length == 1) {
@@ -2655,6 +2698,12 @@ $(document).ready(function () {
             $(this).parent().find(".pnl_toplogo_banner").addClass("scroll-shadow-remote");
         }
     });
+});
+
+$(window).load(function () {
+    if ($("#pnl_login").length > 0 && $("#pnl_icons").length > 0 && appRemote_Config.ShowLoginModalOnDemoMode) {
+        appRemote.LoadLoginPanel();
+    }
 });
 
 $(function () {

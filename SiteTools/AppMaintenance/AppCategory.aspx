@@ -1,22 +1,10 @@
-﻿<%@ page title="App Categories" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_AppCategory, App_Web_emlx5cno" %>
+﻿<%@ Page Title="App Categories" Language="C#" MasterPageFile="~/Site.master"
+    AutoEventWireup="true" CodeFile="AppCategory.aspx.cs" Inherits="SiteTools_AppCategory" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
-    <style type="text/css">
-        .app-span-modify
-        {
-            color: #555 !important;
-        }
-
-        .app-icon-admin
-        {
-            margin-left: 0px !important;
-            margin-right: 0px !important;
-        }
-    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding margin-top">
-        <div class="clear-space"></div>
+    <div class="maincontent-padding pad-top-big margin-top">
         <asp:UpdatePanel ID="updatepnl_refresh" runat="server">
             <ContentTemplate>
                 <asp:HiddenField ID="hf_edit" runat="server" OnValueChanged="hf_edit_ValueChanged"
@@ -173,6 +161,5 @@
                 </div>
             </div>
         </div>
-        <script type="text/javascript" src='<%=ResolveUrl("~/Scripts/SiteTools/packagecategory.js")%>'> </script>
     </div>
 </asp:Content>

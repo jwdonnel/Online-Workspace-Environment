@@ -1,13 +1,14 @@
-﻿<%@ control language="C#" autoeventwireup="true" inherits="Apps_Twitter_TwitterStation, App_Web_sygbdj0f" clientidmode="Static" %>
-<div class="pad-all app-title-bg-color-alt">
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="TwitterStation.ascx.cs" Inherits="Apps_Twitter_TwitterStation" ClientIDMode="Static" %>
+<div class="pad-all app-title-bg-color">
     <div class="float-left">
         <asp:Image ID="img_Title" runat="server" CssClass="app-img-titlebar" style="margin-top: 4px;" />
         <asp:Label ID="lbl_Title" runat="server" Text="" CssClass="app-text-titlebar"></asp:Label>
+        <div class="clear"></div>
     </div>
     <div class="float-right margin-top">
-        <a href="#update" title="Refresh" class="img-refresh-alt margin-left-big" onclick="twitterStation.GetFeeds(true);return false;"></a>
-        <a href="#edit" id="btn_editTwitterFeeds" runat="server" title="Edit Feeds" class="img-edit margin-left-big" onclick="openWSE.LoadModalWindow(true, 'TwitterEditFeeds_element', 'Edit Feeds');return false;"></a>
-        <a href="#add" id="btn_addNewTwitterFeed" runat="server" title="Add New Feed" class="img-add margin-left-big" onclick="twitterStation.AddFeed();return false;"></a>
+        <a href="#update" title="Refresh" class="img-refresh margin-left-big" onclick="twitterStation.GetFeeds(true);return false;"></a>
+        <a href="#edit" id="btn_editTwitterFeeds" runat="server" title="Edit Feeds" class="td-edit-btn margin-left-big" style="padding:0!important;" onclick="openWSE.LoadModalWindow(true, 'TwitterEditFeeds_element', 'Edit Feeds');return false;"></a>
+        <a href="#add" id="btn_addNewTwitterFeed" runat="server" title="Add New Feed" class="td-add-btn margin-left-big" style="padding:0!important;" onclick="twitterStation.AddFeed();return false;"></a>
     </div>
     <div class="clear"></div>
 </div>
@@ -102,3 +103,5 @@
         </div>
     </div>
 </div>
+<input type="hidden" data-scriptelement="true" data-tagname="link" data-tagtype="text/css" data-tagrel="stylesheet" data-tagsrc="~/Apps/Twitter/twitter.css" />
+<input type="hidden" data-scriptelement="true" data-tagname="script" data-tagtype="text/javascript" data-tagsrc="~/Apps/Twitter/twitter.js" />

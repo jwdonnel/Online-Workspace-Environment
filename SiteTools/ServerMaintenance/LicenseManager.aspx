@@ -1,4 +1,5 @@
-﻿<%@ page title="License Manager" language="C#" masterpagefile="~/Site.master" autoeventwireup="true" inherits="SiteTools_LicenseManager, App_Web_txobhkq5" %>
+﻿<%@ Page Title="License Manager" Language="C#" MasterPageFile="~/Site.master"
+    AutoEventWireup="true" CodeFile="LicenseManager.aspx.cs" Inherits="SiteTools_LicenseManager" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
     <style type="text/css">
@@ -10,7 +11,7 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div class="maincontent-padding margin-top">
+    <div class="maincontent-padding pad-top-big margin-top">
         <asp:UpdatePanel ID="updatepnl1" runat="server">
             <ContentTemplate>
                 <asp:Panel ID="pnl_nonTrialVersion" runat="server">

@@ -186,3 +186,21 @@ function DownloadFile(file) {
     $("#hf_downloadFile").val(file);
     __doPostBack("hf_downloadFile", "");
 }
+
+$(document).ready(function () {
+    $(document).tooltip({ disabled: true });
+    $(window).resize();
+});
+
+$(window).resize(function () {
+    try {
+        var h = $(window).height();
+        $("#editor, #ace_scroller").css("height", h - 290);
+        $("#editor, #ace_scroller").css("width", $("#MainContent_pnl2").outerWith());
+    }
+    catch (evt) { }
+});
+
+$(document.body).on("change", "#dd_viewtype", function () {
+    openWSE.LoadingMessage1("Updating. Please Wait...");
+});

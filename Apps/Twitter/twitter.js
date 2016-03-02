@@ -1,39 +1,36 @@
 ﻿var twitterTimeOut = null;
-function pageLoad() {
-    if (twitterTimeOut == null) {
-        twitterStation.Init(5);
-    }
-}
-
-$(window).resize(function () {
-    twitterStation.ResizeAppWindow();
-});
-
 var twitterStation = function () {
+    var numColumns = 4;
+    var mobileWidth = 850;
+
     function ResizeAppWindow() {
-        setTimeout(function () {
-            $('.twitter-box-list').masonry({
-                itemSelector: '.twitter-feed-box',
-                columnWidth: '.twitter-feed-box',
-                isFitWidth: true
+        $(".app-main-holder[data-appid='app-twitterstation']").find(".twitter-feed-box-padding").css("min-height", "");
+
+        $(".app-main-holder[data-appid='app-twitterstation']").find(".app-title-bg-color").removeClass("twitter-box-list-" + mobileWidth + "-maxwidth");
+        $(".app-main-holder[data-appid='app-twitterstation']").find(".twitter-box-list").removeClass("twitter-box-list-" + mobileWidth + "-maxwidth");
+        $(".app-main-holder[data-appid='app-twitterstation']").find(".twitter-feed-box").removeClass("twitter-feed-box-" + mobileWidth + "-maxwidth");
+
+        if ($(".app-main-holder[data-appid='app-twitterstation']").outerWidth() < mobileWidth) {
+            $(".app-main-holder[data-appid='app-twitterstation']").find(".app-title-bg-color").addClass("twitter-box-list-" + mobileWidth + "-maxwidth");
+            $(".app-main-holder[data-appid='app-twitterstation']").find(".twitter-box-list").addClass("twitter-box-list-" + mobileWidth + "-maxwidth");
+            $(".app-main-holder[data-appid='app-twitterstation']").find(".twitter-feed-box").addClass("twitter-feed-box-" + mobileWidth + "-maxwidth");
+        }
+        else {
+            var maxHeight = 0;
+            $("#twitterstation-load").find(".twitter-feed-box").each(function (index) {
+                if (index % numColumns == 0 && index > 0 && maxHeight > 0) {
+                    for (var i = index - 1; i >= (index - numColumns) ; i--) {
+                        $("#twitterstation-load").find(".twitter-feed-box-padding").eq(i).css("min-height", maxHeight + "px");
+                    }
+                    maxHeight = 0;
+                }
+                else {
+                    var tempHeight = $(this).find(".twitter-feed-box-padding").outerHeight() - 10;
+                    if (tempHeight > maxHeight) {
+                        maxHeight = tempHeight;
+                    }
+                }
             });
-        }, 1);
-
-        $(".app-main-holder[data-appid='app-twitterstation']").find(".twitter-box-list").removeClass("twitter-box-list-375-maxwidth");
-        $(".app-main-holder[data-appid='app-twitterstation']").find(".twitter-feed-box").removeClass("twitter-feed-box-375-maxwidth");
-        if ($(".app-main-holder[data-appid='app-twitterstation']").outerWidth() < 375) {
-            $(".app-main-holder[data-appid='app-twitterstation']").find(".twitter-box-list").addClass("twitter-box-list-375-maxwidth");
-            $(".app-main-holder[data-appid='app-twitterstation']").find(".twitter-feed-box").addClass("twitter-feed-box-375-maxwidth");
-
-            $(".twitter-feed-box").css({
-                position: "",
-                top: "",
-                left: ""
-            });
-
-            setTimeout(function () {
-                $('.twitter-box-list').masonry('destroy');
-            }, 1);
         }
     }
 
@@ -275,15 +272,15 @@ var twitterStation = function () {
                     $("#TwitterEditFeeds_element").find("#twitter_edit_feeds_holder").html(tweetHolder);
 
                     if ($.trim($("#TwitterEditFeeds_element").find("#twitter_edit_feeds_holder").html()) == "") {
-                        $("#TwitterEditFeeds_element").find("#twitter_edit_feeds_holder").html("<h3 class='pad-all' style='background: rgba(0, 0, 0, 0.5); color: #FFF;'>No Twitter feeds found.</h3>");
+                        $("#TwitterEditFeeds_element").find("#twitter_edit_feeds_holder").html("<h3 class='pad-all' style='color: #353535;'>No Twitter feeds found.</h3>");
                     }
                 }
                 else {
-                    $("#TwitterEditFeeds_element").find("#twitter_edit_feeds_holder").html("<h3 class='pad-all' style='background: rgba(0, 0, 0, 0.5); color: #FFF;'>No Twitter feeds found.</h3>");
+                    $("#TwitterEditFeeds_element").find("#twitter_edit_feeds_holder").html("<h3 class='pad-all' style='color: #353535;'>No Twitter feeds found.</h3>");
                 }
 
                 if (feedArray.length == 0) {
-                    $("#twitterstation-load").find("#twitterstation-posts").html("<h3 class='pad-all' style='background: rgba(0, 0, 0, 0.5); color: #FFF;'>No Twitter feeds found.</h3>");
+                    $("#twitterstation-load").find("#twitterstation-posts").html("<h3 class='pad-all' style='color: #353535;'>No Twitter feeds found.</h3>");
                 }
                 else {
                     feedArray.sort(function (a, b) {
@@ -292,13 +289,17 @@ var twitterStation = function () {
 
                     var innerFeedsHtml = "<div class='twitter-box-list'>";
                     for (var i = 0; i < feedArray.length; i++) {
-                        innerFeedsHtml += "<div class='" + feedArray[i].id + " twitter-feed-box'>";
+                        if (i % numColumns == 0) {
+                            innerFeedsHtml += "<div class='clear'></div>";
+                        }
+
+                        innerFeedsHtml += "<div class='" + feedArray[i].id + " twitter-feed-box'><div class='twitter-feed-box-padding'>";
                         innerFeedsHtml += "<img alt='' src='" + feedArray[i].image + "' class='twitter-feed-img' />";
                         innerFeedsHtml += "<div class='twitter-feed-date'>" + feedArray[i].datePretty + "</div>";
                         innerFeedsHtml += "<div class='float-left'><span class='twitter-feed-name'>" + feedArray[i].name + "</span><div class='clear-space-two'></div>";
-                        innerFeedsHtml += "<span class='twitter-feed-screenname'>" + feedArray[i].screenName + "</span></div><div class='clear'></div>";
+                        innerFeedsHtml += "<span class='twitter-feed-screenname'><a href='https://twitter.com/" + feedArray[i].screenName.replace(/@/g, "") + "' target='_blank'>" + feedArray[i].screenName + "</a></span></div><div class='clear'></div>";
                         innerFeedsHtml += "<div class='twitter-feed-text'>" + feedArray[i].feed + "</div>";
-                        innerFeedsHtml += "</div>";
+                        innerFeedsHtml += "</div></div>";
                     }
                     innerFeedsHtml += "</div>";
 
@@ -331,3 +332,19 @@ var twitterStation = function () {
         GetFeeds: GetFeeds
     }
 }();
+
+$(window).resize(function () {
+    twitterStation.ResizeAppWindow();
+});
+
+$(document).ready(function () {
+    if (twitterTimeOut == null) {
+        twitterStation.Init(5);
+    }
+});
+
+Sys.Application.add_load(function () {
+    if (twitterTimeOut == null) {
+        twitterStation.Init(5);
+    }
+});

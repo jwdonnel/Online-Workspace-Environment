@@ -1,4 +1,4 @@
-﻿<%@ page language="C#" autoeventwireup="true" inherits="SiteTools_iframes_UserProfileImageUpload, App_Web_fcqplbhq" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="UserProfileImageUpload.aspx.cs" Inherits="SiteTools_iframes_UserProfileImageUpload" %>
 
 <!DOCTYPE html>
 
