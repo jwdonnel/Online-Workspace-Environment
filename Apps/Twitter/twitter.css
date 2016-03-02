@@ -3,6 +3,7 @@
 .app-main-holder[data-appid="app-twitterstation"] .app-body,#container[data-appid="app-twitterstation"]{background-color:#ECECEC!important}
 #twitterstation-posts{padding-bottom:20px}
 #twitterstation-load{background:transparent!important}
+#twitterstation-load .app-title-bg-color{border-bottom:1px solid #ECECEC!important}
 .twitter-header{padding:10px;min-height:34px;border-bottom:1px solid #DDD;transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out}
 .twitter-header a{opacity:0.4;filter:alpha(opacity=40)}
 .twitter-header img{max-width:34px;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px}
