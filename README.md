@@ -58,7 +58,7 @@ Create/Import your own database tables which also creates its own app for you to
 Upload custom projects such as full web sites that can be hosted from this site.<br />
 Host web services.<br />
 Create and upload Site Plugins that can give the workspace extra functionality.<br />
-Track issues, user logins, site request, speeds, and enable the IP Listener which can make your site available to only certain IP addresses.<br />
+Track issues, user logins, site request, speeds, and enable the IP Listener which can make your site available to only certain IP addresses.<br /> 
 <table style="width: 100%;">
                         <tbody><tr>
                             <td align="center" valign="top">
