@@ -132,7 +132,7 @@ public partial class SiteTools_AcctSettings : Page {
                             LoadNewUserDefaults();
                             break;
                         case "demouser":
-                            if (userId.Name.ToLower() == ServerSettings.AdminUserName.ToLower()) {
+                            if (Roles.IsUserInRole(userId.Name, ServerSettings.AdminUserName)) {
                                 LoadDemoUserSettings();
                             }
                             else {
@@ -193,7 +193,7 @@ public partial class SiteTools_AcctSettings : Page {
                     NewDefaults.DefaultTable = DrDefaults;
                     break;
                 case "demouser":
-                    if (HttpContext.Current.User.Identity.Name.ToLower() == ServerSettings.AdminUserName.ToLower()) {
+                    if (Roles.IsUserInRole(HttpContext.Current.User.Identity.Name, ServerSettings.AdminUserName)) {
                         NewDefaults = new NewUserDefaults(RoleSelect);
                         NewDefaults.DefaultTable = DrDefaults;
                     }
