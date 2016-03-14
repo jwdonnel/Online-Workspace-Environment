@@ -16,7 +16,9 @@ using System.Web.Services;
 [System.Web.Script.Services.ScriptService]
 public class FTPConnect : System.Web.Services.WebService {
 
-    public FTPConnect() { }
+    public FTPConnect() {
+        GetSiteRequests.AddRequest();
+    }
 
     [WebMethod]
     public string TryConnect(string ftpLocation, string username, string password) {

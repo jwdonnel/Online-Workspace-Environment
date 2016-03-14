@@ -24,5 +24,15 @@ public class TestServices  : System.Web.Services.WebService {
     public string GetLocalTime() {
         return ServerSettings.ServerDateTime.ToLocalTime().ToString();
     }
+
+    [WebMethod]
+    public string GetUrlEncoded(string url) {
+        return HttpUtility.UrlEncode(url);
+    }
+
+    [WebMethod]
+    public string GetUrlDecoded(string url) {
+        return HttpUtility.UrlDecode(url);
+    }
     
 }

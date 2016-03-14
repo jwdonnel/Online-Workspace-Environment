@@ -27,6 +27,7 @@ public class NotificationRetrieve : System.Web.Services.WebService {
     private string _serverLoc;
 
     public NotificationRetrieve() {
+        GetSiteRequests.AddRequest();
 
         //Uncomment the following line if using designed components 
         //InitializeComponent(); 

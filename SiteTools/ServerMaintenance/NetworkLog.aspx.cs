@@ -41,6 +41,8 @@ public partial class SiteTools_NetworkLog : Page {
                 LoadEvents(ref GV_Requests);
                 LoadIgnoredEvents(ref gv_Ignore);
                 LoadLoginActivity(ref gv_LoginActivity);
+                BuildPageViewsTable();
+                BuildUsersToIgnoreSettings();
 
                 if (!IsPostBack) {
                     PageLoadInit.BuildLinks(pnlLinkBtns, _username, this.Page);
@@ -222,6 +224,21 @@ public partial class SiteTools_NetworkLog : Page {
         else {
             rb_recordLoginActivity_on.Checked = false;
             rb_recordLoginActivity_off.Checked = true;
+        }
+
+        if (_ss.RecordPageViews) {
+            rb_RecordPageViews_on.Checked = true;
+            rb_RecordPageViews_off.Checked = false;
+            pnl_individualpageviews.Visible = true;
+            pnl_userstoignore_holder.Enabled = true;
+            pnl_userstoignore_holder.Visible = true;
+        }
+        else {
+            rb_RecordPageViews_on.Checked = false;
+            rb_RecordPageViews_off.Checked = true;
+            pnl_individualpageviews.Visible = false;
+            pnl_userstoignore_holder.Enabled = false;
+            pnl_userstoignore_holder.Visible = false;
         }
     }
 
@@ -417,6 +434,7 @@ public partial class SiteTools_NetworkLog : Page {
         LoadEvents(ref GV_Requests);
         LoadIgnoredEvents(ref gv_Ignore);
     }
+    protected void cb_ViewErrorsOnly_CheckedChanged(object sender, EventArgs e) { }
 
     #endregion
 
@@ -446,7 +464,7 @@ public partial class SiteTools_NetworkLog : Page {
                 }
             }
 
-            if ((x.ToLower() == "search events") || (string.IsNullOrEmpty(x))) {
+            if ((x.ToLower() == "search ignored events") || (string.IsNullOrEmpty(x))) {
                 cancontinue = true;
             }
             else if ((al.DatePosted.ToLower().Contains(x)) || (al.EventComment.ToLower().Contains(x))) {
@@ -531,6 +549,118 @@ public partial class SiteTools_NetworkLog : Page {
     #endregion
 
 
+    #region Network Activity
+
+    private readonly PageViews pageViews = new PageViews();
+    private readonly PageViewsUsersToIgnore pageViewsUsersToIgnore = new PageViewsUsersToIgnore();
+    private void BuildPageViewsTable() {
+        pnl_individualPageRequests.Controls.Clear();
+        StringBuilder str = new StringBuilder();
+
+        Dictionary<string, PageViewsCount_Coll> pageCounts = pageViews.GetCountForEachPage();
+
+        int totalRows = 1;
+        // Build Header
+        str.Append("<table style='width: 100%;' cellpadding='5' cellspacing='0'><tbody>");
+        str.Append("<tr class='myHeaderStyle'><td width='45px'></td><td style='min-width: 200px;'>Page Name</td><td class='page-url-column'>Page Url</td><td width='75px'>Views</td>");
+        if (Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
+            str.Append("<td width='75px'>Actions</td>");
+        }
+        str.Append("</tr>");
+        foreach (KeyValuePair<string, PageViewsCount_Coll> coll in pageCounts) {
+            str.Append("<tr class='myItemStyle GridNormalRow'>");
+            str.Append("<td class='GridViewNumRow border-bottom' align='center'><div class='pad-top-sml pad-bottom-sml'>" + totalRows.ToString() + "</div></td>");
+            str.Append("<td class='border-right border-bottom page-view-name' data-pageviewname='" + HttpUtility.UrlEncode(coll.Value.PageName).Replace("+", " ") + "' align='left'>" + coll.Value.PageName + "</td>");
+            str.Append("<td class='border-right border-bottom page-url-column' align='left'>" + coll.Value.PageUrl + "</td>");
+            str.Append("<td class='border-right border-bottom page-view-count' data-pageviewcount='" + HttpUtility.UrlEncode(coll.Value.PageName).Replace("+", " ").ToLower() + "' align='center'>" + coll.Value.Count.ToString() + "</td>");
+            if (Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
+                str.Append("<td class='border-right border-bottom' align='center'>");
+                str.Append("<a href='javascript:void(0);' class='td-details-btn margin-right' title='View Details' onclick=\"ViewPageDetails('" + coll.Key + "', '" + HttpUtility.UrlEncode(coll.Value.PageName) + "');return false;\"></a>");
+                str.Append("<a href='javascript:void(0);' class='td-cancel-btn' title='Reset page view count' onclick=\"ResetPageViewCount('" + coll.Key + "');return false;\"></a>");
+                str.Append("</td>");
+            }
+            str.Append("</tr>");
+            totalRows++;
+        }
+        str.Append("</tbody></table>");
+
+        if (pageCounts.Count == 0) {
+            str.Append("<div class='emptyGridView'>No Data Available.</div>");
+        }
+
+        pnl_individualPageRequests.Controls.Add(new LiteralControl(str.ToString()));
+    }
+    private void BuildUsersToIgnoreSettings() {
+        if (Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
+            List<PageViewsToIgnore_Coll> usersToIgnore = pageViewsUsersToIgnore.GetListOfUsersToIgnore();
+
+            StringBuilder str = new StringBuilder();
+
+            foreach (PageViewsToIgnore_Coll item in usersToIgnore) {
+                string encodedUsername = HttpUtility.UrlEncode(item.Username);
+                MembershipUser mu = Membership.GetUser(item.Username);
+                if (mu != null) {
+                    MemberDatabase tempMember = new MemberDatabase(mu.UserName);
+                    str.Append("<div class='usertoignore-item'>");
+                    str.Append("<div class='float-left pad-all-sml margin-right'><h4 class='font-bold'>" + item.Username + "</h4><div class='clear'></div><small>" + HelperMethods.MergeFMLNames(tempMember) + "</small><div class='clear'></div></div>");
+                    str.Append("<a href='#' class='td-delete-btn float-left' title='Delete User' onclick=\"DeleteUserToIgnore('" + encodedUsername + "');return false;\"></a>");
+                    str.Append("<div class='clear'></div>");
+                    str.Append("</div>");
+                }
+            }
+
+            pnl_userstoignore.Controls.Clear();
+            pnl_userstoignore.Controls.Add(new LiteralControl(str.ToString()));
+        }
+        else {
+            pnl_userstoignore_holder.Enabled = false;
+            pnl_userstoignore_holder.Visible = false;
+        }
+    }
+    protected void hf_resetPageCount_ValueChanged(object sender, EventArgs e) {
+        if (!string.IsNullOrEmpty(hf_resetPageCount.Value)) {
+            pageViews.DeleteItemsByPageName(hf_resetPageCount.Value);
+        }
+
+        hf_resetPageCount.Value = string.Empty;
+        BuildPageViewsTable();
+    }
+    protected void btn_AddUserToIgnore_Clicked(object sender, EventArgs e) {
+        string val = tb_AddUserToIgnore.Text.Trim().ToLower();
+        if (!string.IsNullOrEmpty(val)) {
+            bool canAdd = true;
+            List<PageViewsToIgnore_Coll> coll = pageViewsUsersToIgnore.GetListOfUsersToIgnore();
+            foreach (PageViewsToIgnore_Coll item in coll) {
+                if (item.Username.ToLower() == val) {
+                    canAdd = false;
+                    break;
+                }
+            }
+
+            if (canAdd) {
+                MembershipUser mu = Membership.GetUser(val);
+                if (mu != null) {
+                    pageViewsUsersToIgnore.AddItem(val, _username);
+                    tb_AddUserToIgnore.Text = string.Empty;
+                }
+                else {
+                    RegisterPostbackScripts.RegisterStartupScript(this, "openWSE.AlertWindow('Username does not exists. Please try again.');");
+                }
+            }
+            else {
+                RegisterPostbackScripts.RegisterStartupScript(this, "openWSE.AlertWindow('Username already exists. Please enter a new username.');");
+            }
+        }
+
+        BuildUsersToIgnoreSettings();
+    }
+    protected void btn_refreshPageViews_Click(object sender, EventArgs e) {
+        BuildPageViewsTable();
+    }
+
+    #endregion
+
+
     #region Login Activity
 
     public void LoadLoginActivity(ref GridView gv) {
@@ -563,6 +693,7 @@ public partial class SiteTools_NetworkLog : Page {
         dtlist.Columns.Add(new DataColumn("UserName"));
         dtlist.Columns.Add(new DataColumn("IpAddress"));
         dtlist.Columns.Add(new DataColumn("Message"));
+        dtlist.Columns.Add(new DataColumn("HttpReferer"));
         dtlist.Columns.Add(new DataColumn("Success"));
         dtlist.Columns.Add(new DataColumn("ActType"));
         dtlist.Columns.Add(new DataColumn("Delete"));
@@ -583,101 +714,131 @@ public partial class SiteTools_NetworkLog : Page {
         groups.getEntries();
         List<Dictionary<string, string>> drGroups = groups.group_dt;
 
+        string x = tb_SearchLogins.Text.ToLower();
+
+        if (x.Length > 3) {
+            if (x.Substring(x.Length - 3) == "...") {
+                x = x.Substring(0, x.Length - 3);
+            }
+        }
+
         foreach (var act in _la.ActivityList) {
-            DataRow drlist = dtlist.NewRow();
-            drlist["ID"] = act.ID;
-            drlist["Date"] = act.DateAdded.ToString();
-            drlist["UserName"] = act.UserName;
-            drlist["IpAddress"] = "<a href='#' onclick=\"SearchLoginIp('" + act.IpAddress + "');return false;\" style='opacity: 1.0!important; filter:  alpha(opacity=100)!important;'>" + act.IpAddress + "</a>";
-            drlist["IpAddressNoLink"] = act.IpAddress;
-            if (act.IsSuccessful) {
-                if (act.ActType == ActivityType.Login || act.ActType == ActivityType.Social) {
-                    if (string.IsNullOrEmpty(act.LoginGroup)) {
-                        drlist["Message"] = act.UserName + " logged in successfully from " + act.IpAddress;
-                    }
-                    else {
-                        drlist["Message"] = act.UserName + " logged in successfully to the Group " + GetGroupName(drGroups, act.LoginGroup) + " from " + act.IpAddress;
-                    }
-                }
-                else if (act.ActType == ActivityType.Guest) {
-                    if (string.IsNullOrEmpty(act.LoginGroup)) {
-                        drlist["Message"] = act.UserName + " visited site from " + act.IpAddress;
-                    }
-                    else {
-                        drlist["Message"] = act.UserName + " visited site for Group " + GetGroupName(drGroups, act.LoginGroup) + " from " + act.IpAddress;
-                    }
-                }
-                else {
-                    if (string.IsNullOrEmpty(act.LoginGroup)) {
-                        drlist["Message"] = act.UserName + " logged out from " + act.IpAddress;
-                    }
-                    else {
-                        drlist["Message"] = act.UserName + " logged out of the Group " + GetGroupName(drGroups, act.LoginGroup) + " from " + act.IpAddress;
-                    }
-                }
-
-                drlist["Success"] = "<span class='img-checkmark'></span>";
+            var cancontinue = false;
+            if ((x == "search logins") || (string.IsNullOrEmpty(x))) {
+                cancontinue = true;
             }
-            else {
-                if (act.ActType == ActivityType.Login || act.ActType == ActivityType.Social) {
-                    if (string.IsNullOrEmpty(act.LoginGroup)) {
-                        drlist["Message"] = act.IpAddress + " attempted to login using the name " + act.UserName + ". Login Failed.";
-                    }
-                    else {
-                        drlist["Message"] = act.IpAddress + " attempted to login to the Group " + GetGroupName(drGroups, act.LoginGroup) + " using the name " + act.UserName + ". Login Failed.";
-                    }
-                }
-                else if (act.ActType == ActivityType.Guest) {
-                    if (string.IsNullOrEmpty(act.LoginGroup)) {
-                        drlist["Message"] = act.UserName + " was not able to visit site from " + act.IpAddress;
-                    }
-                    else {
-                        drlist["Message"] = act.UserName + " was not able to visit site for Group " + GetGroupName(drGroups, act.LoginGroup) + " from " + act.IpAddress;
-                    }
-                }
-                else {
-                    if (string.IsNullOrEmpty(act.LoginGroup)) {
-                        drlist["Message"] = act.IpAddress + " attempted to log out using the name " + act.UserName + ". Login Failed.";
-                    }
-                    else {
-                        drlist["Message"] = act.IpAddress + " attempted to log out from the Group " + GetGroupName(drGroups, act.LoginGroup) + " using the name " + act.UserName + ". Login Failed.";
-                    }
-                }
-
-                drlist["Success"] = "";
+            else if ((act.DateAdded.ToString().ToLower().Contains(x)) || (act.HttpReferer.ToLower().Contains(x) && !string.IsNullOrEmpty(act.HttpReferer))
+                 || (act.IpAddress.ToLower().Contains(x) && !string.IsNullOrEmpty(act.IpAddress)) || (act.LoginGroup.ToLower().Contains(x) && !string.IsNullOrEmpty(act.LoginGroup))
+                 || (act.UserName.ToLower().Contains(x) && !string.IsNullOrEmpty(act.UserName)) || (act.ActType.ToString().ToLower().Contains(x))) {
+                cancontinue = true;
             }
 
-            drlist["ActType"] = act.ActType.ToString();
-
-            if (Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
-                drlist["Delete"] = "<a href='#Delete' class='td-delete-btn' onclick=\"DeleteLoginActivity('" + act.ID + "');return false;\" title='Delete Login Event'></a>";
-
-                _ipwatch = new IPWatch(true);
-                bool found = false;
-                foreach (Dictionary<string, string> dr in _ipwatch.ipwatchdt) {
-                    if (dr["IPAddress"].ToString() == act.IpAddress) {
-                        if (HelperMethods.ConvertBitToBoolean(dr["Blocked"])) {
-                            drlist["AllowBlock"] = "<a href='#allow' class='img-ignore pad-all-sml margin-right RandomActionBtns' onclick=\"AllowBlockLoginEvent('" + act.ID + "');return false;\" title='Click to allow IP Address'></a>";
+            if (cancontinue) {
+                DataRow drlist = dtlist.NewRow();
+                drlist["ID"] = act.ID;
+                drlist["Date"] = act.DateAdded.ToString();
+                drlist["UserName"] = act.UserName;
+                drlist["IpAddress"] = "<a href='#' onclick=\"SearchLoginIp('" + act.IpAddress + "');return false;\" style='opacity: 1.0!important; filter:  alpha(opacity=100)!important;'>" + act.IpAddress + "</a>";
+                drlist["IpAddressNoLink"] = act.IpAddress;
+                if (act.IsSuccessful) {
+                    if (act.ActType == ActivityType.Login || act.ActType == ActivityType.Social) {
+                        if (string.IsNullOrEmpty(act.LoginGroup)) {
+                            drlist["Message"] = act.UserName + " logged in successfully from " + act.IpAddress;
                         }
                         else {
-                            drlist["AllowBlock"] = "<a href='#block' class='img-allow pad-all-sml margin-right RandomActionBtns' onclick=\"AllowBlockLoginEvent('" + act.ID + "');return false;\" title='Click to block IP Address'></a>";
+                            drlist["Message"] = act.UserName + " logged in successfully to the Group " + GetGroupName(drGroups, act.LoginGroup) + " from " + act.IpAddress;
                         }
+                    }
+                    else if (act.ActType == ActivityType.Guest) {
+                        if (string.IsNullOrEmpty(act.LoginGroup)) {
+                            drlist["Message"] = act.UserName + " visited site from " + act.IpAddress;
+                        }
+                        else {
+                            drlist["Message"] = act.UserName + " visited site for Group " + GetGroupName(drGroups, act.LoginGroup) + " from " + act.IpAddress;
+                        }
+                    }
+                    else {
+                        if (string.IsNullOrEmpty(act.LoginGroup)) {
+                            drlist["Message"] = act.UserName + " logged out from " + act.IpAddress;
+                        }
+                        else {
+                            drlist["Message"] = act.UserName + " logged out of the Group " + GetGroupName(drGroups, act.LoginGroup) + " from " + act.IpAddress;
+                        }
+                    }
 
-                        found = true;
-                        break;
+                    drlist["Success"] = "<span class='img-checkmark'></span>";
+                }
+                else {
+                    if (act.ActType == ActivityType.Login || act.ActType == ActivityType.Social) {
+                        if (string.IsNullOrEmpty(act.LoginGroup)) {
+                            drlist["Message"] = act.IpAddress + " attempted to login using the name " + act.UserName + ". Login Failed.";
+                        }
+                        else {
+                            drlist["Message"] = act.IpAddress + " attempted to login to the Group " + GetGroupName(drGroups, act.LoginGroup) + " using the name " + act.UserName + ". Login Failed.";
+                        }
+                    }
+                    else if (act.ActType == ActivityType.Guest) {
+                        if (string.IsNullOrEmpty(act.LoginGroup)) {
+                            drlist["Message"] = act.UserName + " was not able to visit site from " + act.IpAddress;
+                        }
+                        else {
+                            drlist["Message"] = act.UserName + " was not able to visit site for Group " + GetGroupName(drGroups, act.LoginGroup) + " from " + act.IpAddress;
+                        }
+                    }
+                    else {
+                        if (string.IsNullOrEmpty(act.LoginGroup)) {
+                            drlist["Message"] = act.IpAddress + " attempted to log out using the name " + act.UserName + ". Login Failed.";
+                        }
+                        else {
+                            drlist["Message"] = act.IpAddress + " attempted to log out from the Group " + GetGroupName(drGroups, act.LoginGroup) + " using the name " + act.UserName + ". Login Failed.";
+                        }
+                    }
+
+                    drlist["Success"] = "<span class='img-xmark'></span>";
+                }
+
+                drlist["HttpReferer"] = "Unknown";
+                if (!string.IsNullOrEmpty(act.HttpReferer)) {
+                    if (!act.HttpReferer.EndsWith("...")) {
+                        drlist["HttpReferer"] = "<a href='" + act.HttpReferer + "' target='_blank'>" + act.HttpReferer + "</a>";
+                    }
+                    else {
+                        drlist["HttpReferer"] = act.HttpReferer;
                     }
                 }
 
-                if (!found) {
-                    drlist["AllowBlock"] = "<a href='#allow' class='img-allow pad-all-sml margin-right RandomActionBtns' onclick=\"AllowBlockLoginEvent('" + act.ID + "');return false;\" title='Click to block IP Address'></a>";
-                }
-            }
-            else {
-                drlist["Delete"] = "N/A";
-                drlist["AllowBlock"] = "";
-            }
+                drlist["ActType"] = act.ActType.ToString();
 
-            dtlist.Rows.Add(drlist);
+                if (Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
+                    drlist["Delete"] = "<a href='#Delete' class='td-delete-btn' onclick=\"DeleteLoginActivity('" + act.ID + "');return false;\" title='Delete Login Event'></a>";
+
+                    _ipwatch = new IPWatch(true);
+                    bool found = false;
+                    foreach (Dictionary<string, string> dr in _ipwatch.ipwatchdt) {
+                        if (dr["IPAddress"].ToString() == act.IpAddress) {
+                            if (HelperMethods.ConvertBitToBoolean(dr["Blocked"])) {
+                                drlist["AllowBlock"] = "<a href='#allow' class='img-ignore pad-all-sml margin-right RandomActionBtns' onclick=\"AllowBlockLoginEvent('" + act.ID + "');return false;\" title='Click to allow IP Address'></a>";
+                            }
+                            else {
+                                drlist["AllowBlock"] = "<a href='#block' class='img-allow pad-all-sml margin-right RandomActionBtns' onclick=\"AllowBlockLoginEvent('" + act.ID + "');return false;\" title='Click to block IP Address'></a>";
+                            }
+
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        drlist["AllowBlock"] = "<a href='#allow' class='img-allow pad-all-sml margin-right RandomActionBtns' onclick=\"AllowBlockLoginEvent('" + act.ID + "');return false;\" title='Click to block IP Address'></a>";
+                    }
+                }
+                else {
+                    drlist["Delete"] = "N/A";
+                    drlist["AllowBlock"] = "";
+                }
+
+                dtlist.Rows.Add(drlist);
+            }
         }
         var dvlist = new DataView(dtlist);
         return dvlist;
@@ -795,6 +956,18 @@ public partial class SiteTools_NetworkLog : Page {
             tb_daystokeepLoginActivity.Text = daysToKeepInt.ToString();
         }
 
+        LoadEvents(ref GV_Requests);
+        LoadIgnoredEvents(ref gv_Ignore);
+        LoadLoginActivity(ref gv_LoginActivity);
+    }
+
+    protected void imgbtn_searchLogins_Click(object sender, EventArgs e) {
+        LoadEvents(ref GV_Requests);
+        LoadIgnoredEvents(ref gv_Ignore);
+        LoadLoginActivity(ref gv_LoginActivity);
+    }
+
+    protected void hf_searchipaddresses_ValueChanged(object sender, EventArgs e) {
         LoadEvents(ref GV_Requests);
         LoadIgnoredEvents(ref gv_Ignore);
         LoadLoginActivity(ref gv_LoginActivity);
@@ -1231,10 +1404,36 @@ public partial class SiteTools_NetworkLog : Page {
         ServerSettings.update_EmailActivity(false);
     }
 
-    #endregion
+    protected void hf_DeleteUserToIgnore_ValueChanged(object sender, EventArgs e) {
+        string val = hf_DeleteUserToIgnore.Value.Trim().ToLower();
+        if (!string.IsNullOrEmpty(val)) {
+            pageViewsUsersToIgnore.DeleteItemsByUsername(HttpUtility.UrlDecode(val));
+        }
 
-    protected void cb_ViewErrorsOnly_CheckedChanged(object sender, EventArgs e) {
-
+        BuildUsersToIgnoreSettings();
     }
+
+    protected void rb_RecordPageViews_on_CheckedChanged(object sender, EventArgs e) {
+        rb_RecordPageViews_on.Checked = true;
+        rb_RecordPageViews_off.Checked = false;
+        pnl_individualpageviews.Visible = true;
+        pnl_userstoignore_holder.Enabled = true;
+        pnl_userstoignore_holder.Visible = true;
+
+        BuildPageViewsTable();
+        BuildUsersToIgnoreSettings();
+
+        ServerSettings.update_RecordPageViews(true);
+    }
+    protected void rb_RecordPageViews_off_CheckedChanged(object sender, EventArgs e) {
+        rb_RecordPageViews_on.Checked = false;
+        rb_RecordPageViews_off.Checked = true;
+        pnl_individualpageviews.Visible = false;
+        pnl_userstoignore_holder.Enabled = false;
+        pnl_userstoignore_holder.Visible = false;
+        ServerSettings.update_RecordPageViews(false);
+    }
+
+    #endregion
 
 }

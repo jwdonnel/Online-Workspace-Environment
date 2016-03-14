@@ -16,7 +16,7 @@
         <siteMapNode url="~/SiteTools/AppMaintenance/AppCategory.aspx" title="App Categories" icon="SiteLinkIcons/appcategory.png" category="App Management" tooltip="Place Apps in categories for grouping" />
         <siteMapNode url="~/SiteTools/Installers/AppInstaller.aspx" title="App Installer" icon="SiteLinkIcons/appinstaller.png" category="Installers" tooltip="Install/Uninstall Apps for your account" />
         <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx" title="App Manager" icon="SiteLinkIcons/appmanager.png" category="App Management" tooltip="Add/Edit/Delete Apps">
-            <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?tab=edit" title="Edit Apps" overwriteevent="true" />
+            <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?tab=edit" title="Edit Created Apps" overwriteevent="true" />
             <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?tab=easycreate" title="Simple Create" overwriteevent="true" />
             <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?tab=upload" title="App Upload" overwriteevent="true" />
             <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?tab=params" title="App Params" overwriteevent="true" />
@@ -37,7 +37,7 @@
         <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx" title="Network Log" icon="SiteLinkIcons/networklog.png" category="Site Management" tooltip="View network activity">
             <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=log" title="Recorded Events" />
             <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=ignore" title="Ignored Events" />
-            <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=activity" title="Network Activity" />
+            <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=activity" title="Traffic" />
             <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=loginActivity" title="Site Logins" />
             <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=ipwatchlist" title="IP WatchList" />
             <siteMapNode url="~/SiteTools/ServerMaintenance/NetworkLog.aspx?tab=iplistener" title="IP Listener" />

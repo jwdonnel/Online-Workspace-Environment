@@ -17,6 +17,8 @@ public class GroupSettings : System.Web.Services.WebService {
 
     [WebMethod]
     public List<string> CheckIfGroupNameExists() {
+        GetSiteRequests.AddRequest();
+
         List<string> temp = new List<string>();
         if (HttpContext.Current.User.Identity.IsAuthenticated) {
             Groups tempGroups = new Groups();

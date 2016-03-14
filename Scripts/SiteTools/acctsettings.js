@@ -226,6 +226,10 @@ $(document.body).on("change", "#dd_maxonload_edit", function () {
     }
 });
 
+$(document.body).on("change", "#rb_sitetipsonload_on, #rb_sitetipsonload_off", function () {
+    cookie.del("siteTipsOnPageLoad");
+});
+
 
 /* Background Selector Functions
 ----------------------------------*/

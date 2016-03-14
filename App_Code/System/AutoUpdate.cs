@@ -28,7 +28,9 @@ public class AutoUpdate : System.Web.Services.WebService {
     #endregion
 
 
-    public AutoUpdate() { }
+    public AutoUpdate() {
+        GetSiteRequests.AddRequest();
+    }
 
     [WebMethod]
     public object[] StartAUSystem(string _appId) {

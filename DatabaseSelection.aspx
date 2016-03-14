@@ -69,7 +69,7 @@
 
         a
         {
-            color: #84B2FF;
+            color: #EFEFEF;
             cursor: pointer;
             padding: 3px;
             text-decoration: underline;

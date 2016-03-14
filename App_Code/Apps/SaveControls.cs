@@ -25,14 +25,17 @@ public class SaveControls : System.Web.Services.WebService {
 
 
     public SaveControls() {
+        GetSiteRequests.AddRequest();
+
         IIdentity userId = HttpContext.Current.User.Identity;
         if (userId.IsAuthenticated) {
             _username = userId.Name;
             _app = new App(_username);
             _member = new MemberDatabase(_username);
         }
-        else
+        else {
             _app = new App("DemoNoLogin");
+        }
     }
 
 

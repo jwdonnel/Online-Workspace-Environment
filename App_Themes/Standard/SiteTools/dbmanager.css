@@ -1,3 +1,4 @@
 ﻿.up-to-date-text,.out-of-date-text{font-size:14px;font-weight:bold;padding:2px 7px 14px 2px;clear:both}
 .up-to-date-text{color:green}
 .out-of-date-text{color:red}
+.db-issue-text{font-weight:bold;font-style:italic}

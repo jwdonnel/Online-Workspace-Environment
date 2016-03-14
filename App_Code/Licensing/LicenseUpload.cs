@@ -14,7 +14,9 @@ using OpenWSE.Core.Licensing;
 [System.Web.Script.Services.ScriptService]
 public class LicenseUpload : System.Web.Services.WebService {
 
-    public LicenseUpload() { }
+    public LicenseUpload() {
+        GetSiteRequests.AddRequest();
+    }
 
     [WebMethod]
     public string UploadLicense(string siteUrl, string host, string siteName, string emailAddress, string issued, string expiration, string licenseId, string type, string ccLicenseType) {

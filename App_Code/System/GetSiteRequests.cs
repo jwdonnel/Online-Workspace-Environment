@@ -9,60 +9,31 @@ using System.Collections.Generic;
 ///     Summary description for GetSiteRequests
 /// </summary>
 public static class GetSiteRequests {
-    private static List<DateTime> Siterequests = new List<DateTime>();
-    private static int _hitCount = 0;
-    private static string _currHitDate = "";
-    private static bool _getrequests = true;
+    private static List<DateTime> _siteRequests = new List<DateTime>();
+    private const int maxSiteRequestSize = 4000;
 
     public static List<DateTime> SiteRequests {
-        get { return Siterequests; }
-    }
-
-    public static bool GetRequests {
-        get { return _getrequests; }
+        get { return _siteRequests; }
     }
 
     public static void AddRequest() {
-        if (_getrequests) {
-            try {
-                ShrinkRequests();
+        try {
+            ShrinkRequests();
 
-                DateTime now = ServerSettings.ServerDateTime;
-                if (!Siterequests.Contains(now)) {
-                    Siterequests.Add(now);
-                }
-            }
-            catch {
-                ClearRequests();
+            DateTime now = ServerSettings.ServerDateTime;
+            if (!_siteRequests.Contains(now)) {
+                _siteRequests.Add(now);
             }
         }
-        else {
+        catch {
             ClearRequests();
-        }
-    }
-
-    public static void AddHitCount() {
-        string currDate = ServerSettings.ServerDateTime.ToShortDateString();
-        if ((string.IsNullOrEmpty(_currHitDate)) || (_currHitDate == currDate)) {
-            _hitCount++;
-        }
-        else {
-            _hitCount = 0;
-        }
-
-        _currHitDate = currDate;
-    }
-
-    public static int HitCountTotal {
-        get {
-            return _hitCount;
         }
     }
 
     private static void ShrinkRequests() {
         try {
-            if (Siterequests.Count > 400) {
-                Siterequests.RemoveRange(0, 375);
+            if (_siteRequests.Count > maxSiteRequestSize) {
+                _siteRequests.RemoveRange(0, maxSiteRequestSize - 1);
             }
         }
         catch { }
@@ -70,17 +41,8 @@ public static class GetSiteRequests {
 
     public static void ClearRequests() {
         try {
-            Siterequests.Clear();
+            _siteRequests.Clear();
         }
         catch { }
-
-        _hitCount = 0;
-    }
-
-    public static void UpdateGetRequests(bool x) {
-        _getrequests = x;
-        if (!x) {
-            ClearRequests();
-        }
     }
 }

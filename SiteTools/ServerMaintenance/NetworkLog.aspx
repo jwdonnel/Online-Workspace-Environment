@@ -72,7 +72,7 @@
                                 <HeaderTemplate>
                                     <table class="myHeaderStyle" cellpadding="5" cellspacing="0">
                                         <tr>
-                                            <td style="width: 40px;"></td>
+                                            <td width="40px"></td>
                                             <td>Event Information
                                             </td>
                                             <td style="width: 75px; text-align: center;">Actions
@@ -144,11 +144,11 @@
             <asp:UpdatePanel ID="UpdatePanel3" runat="server">
                 <ContentTemplate>
                     <div class="searchwrapper" style="min-width: 385px; width: 50%">
-                        <asp:Panel ID="Panel1" runat="server" DefaultButton="imgbtn_search">
+                        <asp:Panel ID="Panel1" runat="server" DefaultButton="imgbtn_searchIgnore">
                             <asp:TextBox ID="tb_SearchIgnore" runat="server" CssClass="searchbox" Font-Size="Small"
-                                onfocus="if(this.value=='Search Events')this.value=''" onblur="if(this.value=='')this.value='Search Events'"
-                                Text="Search Events"></asp:TextBox>
-                            <a href="#" onclick="$('#MainContent_tb_SearchIgnore').val('Search Events');return false;"
+                                onfocus="if(this.value=='Search Ignored Events')this.value=''" onblur="if(this.value=='')this.value='Search Ignored Events'"
+                                Text="Search Ignored Events"></asp:TextBox>
+                            <a href="#" onclick="$('#MainContent_tb_SearchIgnore').val('Search Ignored Events');return false;"
                                 class="searchbox_clear"></a>
                             <asp:LinkButton ID="imgbtn_searchIgnore" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
                                 OnClick="imgbtn_search_Click" />
@@ -181,7 +181,7 @@
                                 <HeaderTemplate>
                                     <table class="myHeaderStyle" cellpadding="5" cellspacing="0">
                                         <tr>
-                                            <td style="width: 41px;"></td>
+                                            <td width="40px"></td>
                                             <td style="width: 150px;">Date
                                             </td>
                                             <td style="width: 65px;">Hits
@@ -222,90 +222,112 @@
             </asp:UpdatePanel>
         </div>
         <div id="activity" class="pnl-section" style="display: none">
-            <asp:UpdatePanel ID="UpdatePanel4" runat="server">
-                <ContentTemplate>
-                    <div class="table-settings-box no-border">
-                        <div class="td-settings-ctrl">
-                            <div class="float-left pad-right-big">
-                                <b class="pad-right">Update Interval</b>
-                                <asp:DropDownList ID="dd_interval" CssClass="margin-left" runat="server" ClientIDMode="Static">
-                                    <asp:ListItem Text="1 Second" Value="1000"></asp:ListItem>
-                                    <asp:ListItem Text="2 Seconds" Value="2000"></asp:ListItem>
-                                    <asp:ListItem Text="5 Seconds" Value="5000" Selected="True"></asp:ListItem>
-                                    <asp:ListItem Text="10 Seconds" Value="10000"></asp:ListItem>
-                                    <asp:ListItem Text="15 Seconds" Value="15000"></asp:ListItem>
-                                </asp:DropDownList>
-                            </div>
-                            <a href="#" id="imgPausePlay" class="margin-left-sml margin-top-sml margin-right-sml float-left cursor-pointer img-pause"
-                                title="Pause/Play"></a>
-                            <div class="float-left pad-left-big">
-                                <b class="pad-right">Time to Track</b>
-                                <asp:DropDownList ID="dd_track" CssClass="margin-left" runat="server" ClientIDMode="Static">
-                                    <asp:ListItem Text="5 Second" Value="5"></asp:ListItem>
-                                    <asp:ListItem Text="10 Seconds" Value="10"></asp:ListItem>
-                                    <asp:ListItem Text="15 Seconds" Value="15"></asp:ListItem>
-                                    <asp:ListItem Text="20 Seconds" Value="20"></asp:ListItem>
-                                    <asp:ListItem Text="25 Seconds" Value="25"></asp:ListItem>
-                                    <asp:ListItem Text="30 Seconds" Value="30" Selected="True"></asp:ListItem>
-                                    <asp:ListItem Text="1 Minute" Value="60"></asp:ListItem>
-                                    <asp:ListItem Text="2 Minute" Value="120"></asp:ListItem>
-                                    <asp:ListItem Text="3 Minute" Value="180"></asp:ListItem>
-                                    <asp:ListItem Text="4 Minute" Value="240"></asp:ListItem>
-                                    <asp:ListItem Text="5 Minute" Value="300"></asp:ListItem>
-                                    <asp:ListItem Text="1 hour" Value="3600"></asp:ListItem>
-                                    <asp:ListItem Text="12 hour" Value="7200"></asp:ListItem>
-                                    <asp:ListItem Text="1 Day" Value="86400"></asp:ListItem>
-                                </asp:DropDownList>
-                            </div>
-                            <div class="clear-space">
-                            </div>
-                            <table width="100%" cellpadding="10" cellspacing="10" border="0">
-                                <tr>
-                                    <td valign="top" style="width: 250px;">
-                                        <div id="network-info-div" class="pad-right-big">
-                                            <h3 align="center" class="font-bold">Network Information</h3>
-                                            <div class="clear-space">
-                                            </div>
-                                            <div id="pnl_NetworkInfoHolder">
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td valign="top">
-                                        <asp:Panel ID="pnl_interactivityholder" runat="server">
-                                            <table width="100%">
-                                                <tbody>
-                                                    <tr>
-                                                        <td valign="top">
-                                                            <div id="ChartRequests">
-                                                                <h3>Loading Google Chart. Please Wait...</h3>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td valign="top">
-                                                            <div id="statholder">
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </asp:Panel>
-                                    </td>
-                                </tr>
-                            </table>
+            <div id="pnl_individualpageviews" clientidmode="Static" runat="server" class="table-settings-box">
+                <div class="td-settings-title">
+                    Page Views
+                    <asp:LinkButton ID="btn_refreshPageViews" runat="server" OnClientClick="openWSE.LoadingMessage1('Updating...');" OnClick="btn_refreshPageViews_Click" CssClass="img-refresh pad-all-sml float-right"></asp:LinkButton>
+                </div>
+                <div class="title-line"></div>
+                <div class="td-settings-ctrl">
+                    <div id="page-view-textcol">
+                        <asp:UpdatePanel ID="UpdatePanel4" runat="server">
+                            <ContentTemplate>
+                                <asp:HiddenField ID="hf_resetPageCount" runat="server" ClientIDMode="Static" OnValueChanged="hf_resetPageCount_ValueChanged" />
+                                <asp:Panel ID="pnl_individualPageRequests" runat="server" ClientIDMode="Static">
+                                </asp:Panel>
+                            </ContentTemplate>
+                            <Triggers>
+                                <asp:AsyncPostBackTrigger ControlID="btn_refreshPageViews" />
+                            </Triggers>
+                        </asp:UpdatePanel>
+                    </div>
+                    <div class="clear-space"></div>
+                    <div id="page-view-chartcol">
+                    </div>
+                    <div class="clear-space"></div>
+                </div>
+                <div class="td-settings-desc">
+                    The list above shows all the views for a page. You can reset the totals for each individual page by clicking the "X" button.
+                </div>
+            </div>
+            <div class="table-settings-box no-border">
+                <div class="td-settings-title">
+                    Network Traffic and Requests
+                </div>
+                <div class="title-line"></div>
+                <div class="td-settings-ctrl">
+                    <div class="float-left pad-right-big">
+                        <b class="pad-right">Update Interval</b>
+                        <asp:DropDownList ID="dd_interval" CssClass="margin-left" runat="server" ClientIDMode="Static">
+                            <asp:ListItem Text="1 Second" Value="1000"></asp:ListItem>
+                            <asp:ListItem Text="2 Seconds" Value="2000"></asp:ListItem>
+                            <asp:ListItem Text="5 Seconds" Value="5000" Selected="True"></asp:ListItem>
+                            <asp:ListItem Text="10 Seconds" Value="10000"></asp:ListItem>
+                            <asp:ListItem Text="15 Seconds" Value="15000"></asp:ListItem>
+                        </asp:DropDownList>
+                    </div>
+                    <a href="#" id="imgPausePlay" class="margin-left-sml margin-top-sml margin-right-sml float-left cursor-pointer img-pause"
+                        title="Pause/Play"></a>
+                    <div id="timetotrack-networklog" class="float-left pad-left-big">
+                        <b class="pad-right">Time to Track</b>
+                        <asp:DropDownList ID="dd_track" CssClass="margin-left" runat="server" ClientIDMode="Static">
+                            <asp:ListItem Text="5 Second" Value="5"></asp:ListItem>
+                            <asp:ListItem Text="10 Seconds" Value="10"></asp:ListItem>
+                            <asp:ListItem Text="15 Seconds" Value="15"></asp:ListItem>
+                            <asp:ListItem Text="20 Seconds" Value="20"></asp:ListItem>
+                            <asp:ListItem Text="25 Seconds" Value="25"></asp:ListItem>
+                            <asp:ListItem Text="30 Seconds" Value="30" Selected="True"></asp:ListItem>
+                            <asp:ListItem Text="1 Minute" Value="60"></asp:ListItem>
+                            <asp:ListItem Text="2 Minute" Value="120"></asp:ListItem>
+                            <asp:ListItem Text="3 Minute" Value="180"></asp:ListItem>
+                            <asp:ListItem Text="4 Minute" Value="240"></asp:ListItem>
+                            <asp:ListItem Text="5 Minute" Value="300"></asp:ListItem>
+                            <asp:ListItem Text="1 hour" Value="3600"></asp:ListItem>
+                            <asp:ListItem Text="12 hour" Value="7200"></asp:ListItem>
+                            <asp:ListItem Text="1 Day" Value="86400"></asp:ListItem>
+                        </asp:DropDownList>
+                    </div>
+                    <asp:Panel ID="pnl_interactivityholder" runat="server">
+                        <div class="clear-space"></div>
+                        <div id="ChartRequests">
+                            <h3 class="pad-top-big pad-bottom-big">Loading Google Chart. Please Wait...</h3>
                         </div>
-                        <div class="td-settings-desc">
-                            If charts are not updating every given time
-            interval, switch to another browser. (Works best in Google Chrome and Internet Explorer
-            8+).
+                        <div class="clear-space"></div>
+                    </asp:Panel>
+                    <div class="clear-space">
+                    </div>
+                    <div id="network-info-div">
+                        <div id="pnl_NetworkInfoHolder">
                         </div>
                     </div>
-                </ContentTemplate>
-            </asp:UpdatePanel>
+                    <div class="clear"></div>
+                </div>
+                <div class="td-settings-desc">
+                    If charts are not updating every given time
+            interval, switch to another browser. (Works best in Google Chrome and Internet Explorer
+            8+).
+                </div>
+            </div>
         </div>
         <div id="loginActivity" class="pnl-section" style="display: none;">
             <asp:UpdatePanel ID="UpdatePanel5" runat="server">
                 <ContentTemplate>
+                    <asp:HiddenField ID="hf_searchipaddresses" runat="server" ClientIDMode="Static" OnValueChanged="hf_searchipaddresses_ValueChanged" />
+                    <div class="searchwrapper" style="min-width: 385px; width: 50%">
+                        <asp:Panel ID="Panel2" runat="server" DefaultButton="imgbtn_searchLogins">
+                            <asp:TextBox ID="tb_SearchLogins" runat="server" CssClass="searchbox" Font-Size="Small"
+                                onfocus="if(this.value=='Search Logins')this.value=''" onblur="if(this.value=='')this.value='Search Logins'"
+                                Text="Search Logins"></asp:TextBox>
+                            <a href="#" onclick="$('#MainContent_tb_SearchLogins').val('Search Logins');ipSearch='';return false;"
+                                class="searchbox_clear"></a>
+                            <asp:LinkButton ID="imgbtn_searchLogins" runat="server" ToolTip="Start search" CssClass="searchbox_submit RandomActionBtns"
+                                OnClick="imgbtn_searchLogins_Click" OnClientClick="ipSearch='';" />
+                        </asp:Panel>
+                    </div>
+                    <span class="float-right margin-left-big">Leave search textbox blank to search
+                    all events</span>
+                    <div class="clear-space">
+                    </div>
                     <div class="table-settings-box no-border">
                         <div class="td-settings-ctrl">
                             <div class="float-left pad-right">
@@ -314,8 +336,6 @@
                             <div class="float-left pad-left">
                                 <span class="img-ignore float-left" style="margin-top: -1px; margin-right: 2px;"></span><b>Blocked</b>
                             </div>
-                            <a id="clearloginsearch" href="#" class="float-left pad-left-big margin-left-big" onclick="ClearIpSearch();return false;" style="display: none;">Clear Search
-                            </a>
                             <div class="float-left pad-left-big margin-left-big">
                                 <span id="loginactError"></span>
                             </div>
@@ -339,18 +359,8 @@
                                         <HeaderTemplate>
                                             <table class="myHeaderStyle" cellpadding="5" cellspacing="0">
                                                 <tr>
-                                                    <td style="width: 41px;"></td>
-                                                    <td style="width: 100px;">IP Address
-                                                    </td>
-                                                    <td style="width: 205px;">Name Used
-                                                    </td>
-                                                    <td>Event Message
-                                                    </td>
-                                                    <td style="width: 65px;">Type
-                                                    </td>
-                                                    <td style="width: 50px;">Valid
-                                                    </td>
-                                                    <td style="width: 165px;">Date
+                                                    <td width="40px"></td>
+                                                    <td>Login Information
                                                     </td>
                                                     <td style="width: 75px; text-align: center;">Actions
                                                     </td>
@@ -360,42 +370,55 @@
                                         <ItemTemplate>
                                             <table class="myItemStyle ipsearchrow" cellpadding="5" cellspacing="0">
                                                 <tbody>
-                                                    <td class="GridViewNumRow" style="width: 40px; text-align: center;">
-                                                        <%#Container.DataItemIndex + 1 %>
-                                                    </td>
-                                                    <td class="border-right" style="width: 100px; text-align: center;">
-                                                        <span class="ipsearchval" style="display: none;"><%#Eval("IpAddressNoLink") %></span>
-                                                        <%#Eval("IpAddress") %>
-                                                    </td>
-                                                    <td class="border-right" style="width: 205px; text-align: center;">
-                                                        <%#Eval("UserName") %>
-                                                    </td>
-                                                    <td class="border-right" valign="middle">
-                                                        <%#Eval("Message") %>
-                                                    </td>
-                                                    <td class="border-right" style="width: 65px; text-align: center;">
-                                                        <%#Eval("ActType") %>
-                                                    </td>
-                                                    <td class="border-right" style="width: 50px; text-align: center;">
-                                                        <%#Eval("Success") %>
-                                                    </td>
-                                                    <td class="border-right" style="width: 165px; text-align: center;">
-                                                        <%#Eval("Date") %>
-                                                    </td>
-                                                    <td class='border-right' style="width: 75px; text-align: center;">
-                                                        <%#Eval("AllowBlock") %>
-                                                        <%#Eval("Delete") %>
-                                                    </td>
+                                                    <tr>
+                                                        <td class="GridViewNumRow" style="width: 40px; text-align: center;">
+                                                            <%#Container.DataItemIndex + 1 %>
+                                                        </td>
+                                                        <td class="border-right" valign="middle">
+                                                            <div class="login-entry-holder ipaddress-login-entry">
+                                                                <div class="login-entry-title">IP Address</div>
+                                                                <div class="login-entry-text">
+                                                                    <span class="ipsearchval" style="display: none;"><%#Eval("IpAddressNoLink") %></span>
+                                                                    <%#Eval("IpAddress") %>
+                                                                </div>
+                                                            </div>
+                                                            <div class="login-entry-holder nameused-login-entry">
+                                                                <div class="login-entry-title">Name Used</div>
+                                                                <div class="login-entry-text"><%#Eval("UserName") %></div>
+                                                            </div>
+                                                            <div class="login-entry-holder type-login-entry">
+                                                                <div class="login-entry-title">Type</div>
+                                                                <div class="login-entry-text"><%#Eval("ActType") %></div>
+                                                            </div>
+                                                            <div class="login-entry-holder valid-login-entry">
+                                                                <div class="login-entry-title">Valid</div>
+                                                                <div class="login-entry-text"><%#Eval("Success") %></div>
+                                                            </div>
+                                                            <div class="login-entry-holder date-login-entry">
+                                                                <div class="login-entry-title">Date</div>
+                                                                <div class="login-entry-text"><%#Eval("Date") %></div>
+                                                            </div>
+                                                            <div class="login-entry-holder message-login-entry">
+                                                                <div class="login-entry-title">Event Message</div>
+                                                                <div class="login-entry-text"><%#Eval("Message") %></div>
+                                                            </div>
+                                                            <div class="login-entry-holder httpreferer-login-entry">
+                                                                <div class="login-entry-title">Http Referer</div>
+                                                                <div class="login-entry-text http-referer-text"><%#Eval("HttpReferer") %></div>
+                                                            </div>
+                                                        </td>
+                                                        <td class='border-right' style="width: 75px; text-align: center;">
+                                                            <%#Eval("AllowBlock") %>
+                                                            <%#Eval("Delete") %>
+                                                        </td>
+                                                    </tr>
+
                                                 </tbody>
                                             </table>
                                         </ItemTemplate>
                                     </asp:TemplateField>
                                 </Columns>
                             </asp:GridView>
-                            <div id="loginactivitysearch" class="emptyGridView" style="display: none;">
-                                No Login Activity Found
-                            </div>
-                            <div class="clear-space"></div>
                         </div>
                         <div class="td-settings-desc">
                             This list is partially populated from the IP Watchlist. Blocking or allowing an IP Address on this activity log will update the IP Watchlist. Sorted from newest to oldest.
@@ -439,7 +462,7 @@
                                         <HeaderTemplate>
                                             <table class="myHeaderStyle" cellpadding="5" cellspacing="0">
                                                 <tr>
-                                                    <td style="width: 41px;"></td>
+                                                    <td width="40px"></td>
                                                     <td>IP Address
                                                     </td>
                                                     <td width="60px">Attempts
@@ -744,6 +767,46 @@
                                 </div>
                             </div>
                         </asp:Panel>
+                    </asp:Panel>
+                    <div class="table-settings-box">
+                        <div class="td-settings-title">
+                            Record Page Views
+                        </div>
+                        <div class="title-line"></div>
+                        <div class="td-settings-ctrl">
+                            <div class="field switch inline-block">
+                                <asp:RadioButton ID="rb_RecordPageViews_on" runat="server" Text="On" CssClass="RandomActionBtns cb-enable"
+                                    OnCheckedChanged="rb_RecordPageViews_on_CheckedChanged" AutoPostBack="True" />
+                                <asp:RadioButton ID="rb_RecordPageViews_off" runat="server" Text="Off" CssClass="RandomActionBtns cb-disable"
+                                    OnCheckedChanged="rb_RecordPageViews_off_CheckedChanged" AutoPostBack="True" />
+                            </div>
+                        </div>
+                        <div class="td-settings-desc">
+                            Set this to Off if you don't want to record the page view count for when users navigate the site.
+                        </div>
+                    </div>
+                    <asp:Panel ID="pnl_userstoignore_holder" runat="server">
+                        <div class="table-settings-box">
+                            <div class="td-settings-title">
+                                Page View Count - Users to Ignore
+                            </div>
+                            <div class="title-line"></div>
+                            <div class="td-settings-ctrl">
+                                <asp:Panel ID="Panel3" runat="server" DefaultButton="btn_AddUserToIgnore">
+                                    <asp:TextBox ID="tb_AddUserToIgnore" runat="server" placeholder="Enter Username" CssClass="textEntry margin-right users-to-ignore-tb float-left"
+                                        Width="250px"></asp:TextBox><asp:LinkButton ID="btn_AddUserToIgnore" runat="server" CssClass="td-add-btn float-left RandomActionBtns margin-top-sml"
+                                            ToolTip="Add User" OnClick="btn_AddUserToIgnore_Clicked" />
+                                    <div class="clear"></div>
+                                </asp:Panel>
+                                <div class="clear-space"></div>
+                                <asp:HiddenField ID="hf_DeleteUserToIgnore" runat="server" ClientIDMode="Static" OnValueChanged="hf_DeleteUserToIgnore_ValueChanged" />
+                                <asp:Panel ID="pnl_userstoignore" runat="server">
+                                </asp:Panel>
+                            </div>
+                            <div class="td-settings-desc">
+                                Add/Delete users to that you would like to ignore when incrementing the Page View count. 
+                            </div>
+                        </div>
                     </asp:Panel>
                 </ContentTemplate>
             </asp:UpdatePanel>

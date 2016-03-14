@@ -173,12 +173,7 @@ public class AppIconBuilder {
         if (groupIcons) {
             appCategory = new AppCategory(true);
             appCategoryScript.Append("<div id='Category-Back' style='display:none'>");
-            if (MainContent != null) {
-                appCategoryScript.Append("<span class='category-back-img'></span>");
-            }
-            else {
-                appCategoryScript.Append("<span class='category-back-img'></span>");
-            }
+            appCategoryScript.Append("<span class='category-back-img'></span>");
             appCategoryScript.Append("<h4 id='Category-Back-btn' class='float-left'>" + "</h4>"); // Place 'Back' text if needed
             appCategoryScript.Append("<h4 id='Category-Back-Name' class='float-left'></h4></div>");
             appCategoryScript.Append("<div id='Category-Back-Name-id' style='display:none'></div>");
@@ -313,12 +308,7 @@ public class AppIconBuilder {
         if (groupIcons) {
             appCategory = new AppCategory(true);
             appCategoryScript.Append("<div id='Category-Back' style='display:none'>");
-            if (MainContent != null) {
-                appCategoryScript.Append("<img alt='back' src='" + _page.ResolveUrl("~/App_Themes/" + _sitetheme + "/Icons/prevpage.png") + "' />");
-            }
-            else {
-                appCategoryScript.Append("<img alt='back' src='" + _page.ResolveUrl("~/App_Themes/" + _sitetheme + "/Icons/back.png") + "' />");
-            }
+            appCategoryScript.Append("<span class='category-back-img'></span>");
             appCategoryScript.Append("<h4 id='Category-Back-btn' class='float-left'>" + "</h4>"); // Place 'Back' text if needed
             appCategoryScript.Append("<h4 id='Category-Back-Name' class='float-left'></h4></div>");
             appCategoryScript.Append("<div id='Category-Back-Name-id' style='display:none'></div>");

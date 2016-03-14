@@ -213,6 +213,27 @@ h1,h2,h3,h4,h5,h6{color:#FFF}
 #opened_apps_header .workspace-reminder{display:none}
 
 
+
+/* Site Tip Modal
+----------------------------------*/
+#SiteTip-element .Modal-element-modal{min-height:115px;min-width:370px;z-index:20000;position:absolute!important;background:rgba(0,0,0,0.8)!important;border:none!important;-moz-border-radius:15px;-webkit-border-radius:15px;border-radius:15px;-moz-box-shadow:0 2px 4px rgba(0,0,0,.5);-o-box-shadow:0 2px 4px rgba(0,0,0,.5);-webkit-box-shadow:0 2px 4px rgba(0,0,0,.5);box-shadow:0 2px 4px rgba(0,0,0,.5)}
+#SiteTip-element .ModalPadContent{padding:15px}
+#SiteTip-element .Modal-overlay{background:none!important}
+#SiteTip-element .message-text{color:#FFF;clear:both;margin:5px 0;word-wrap:normal;overflow:auto;font-size:12px}
+#SiteTip-element img{float:left;max-height:22px;margin-right:5px;margin-bottom:5px}
+#SiteTip-element .tip-title{float:left;font-size:18px;font-weight:bold;color:#FFF}
+#SiteTip-element .button-holder{clear:both;padding-top:5px;padding-bottom:5px;text-align:right}
+#SiteTip-element .button-holder > .input-buttons{font-size:13px}
+#SiteTip-element .confirm-close-button{margin-right:0px}
+#SiteTip-element .nextprev-button{background:#E0E0E0;border:1px solid #CCC;color:#333;font-weight:normal;float:left;text-shadow:none!important}
+#SiteTip-element .nextprev-button:hover{background:#D5D5D5}
+#SiteTip-element .nextprev-button:active{background:#CFCFCF}
+#SiteTip-element .dont-show-again{float:left;font-size:11px}
+#SiteTip-element #dont-show-again-cb{float:left;margin-top:1px;margin-right:3px}
+#SiteTip-element .dont-show-again > input,#SiteTip-element .dont-show-again > label{cursor:pointer;color:#FFF}
+
+
+
 /* Top Bar
 ----------------------------------*/
 .divider{background:transparent url(Body/transparent-hr.png) top center no-repeat;height:1px;margin:5px 30px 15px 30px}

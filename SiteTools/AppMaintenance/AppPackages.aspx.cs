@@ -49,11 +49,6 @@ public partial class SiteTools_AppPackages : Page {
                     pnl_demo_installer.Visible = false;
                 }
 
-                if (_username.ToLower() != ServerSettings.AdminUserName.ToLower()) {
-                    pnl_demo_installer.Enabled = false;
-                    pnl_demo_installer.Visible = false;
-                }
-
                 using (var sm = ScriptManager.GetCurrent(Page)) {
                     string ctlId = null;
                     if (sm != null) ctlId = sm.AsyncPostBackSourceElementID;

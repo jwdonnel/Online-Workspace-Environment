@@ -159,7 +159,7 @@ public partial class SiteTools_StartupScripts : Page {
         str.Append(CreateNew_StartupScripts());
         str.Append("</tbody></table></div>");
         if (startupscripts.StartupscriptsList.Count == 0)
-            str.Append("<div class='clear-margin'>No Data Available.</div>");
+            str.Append("<div class='emptyGridView'>No Data Available.</div>");
 
         str.Append("<div class='clear-space'></div><div class='clear-space'></div>");
         pnl_startupscripts.Controls.Add(new LiteralControl(str.ToString()));
@@ -202,7 +202,7 @@ public partial class SiteTools_StartupScripts : Page {
         str.Append("</tbody></table></div>");
 
         if (startupscripts.StartupscriptsList.Count == 0)
-            str.Append("<div class='clear-margin'>No Data Available.</div>");
+            str.Append("<div class='emptyGridView'>No Data Available.</div>");
 
         str.Append("<div class='clear-space'></div>");
         pnl_startupscripts.Controls.Add(new LiteralControl(str.ToString()));
@@ -347,7 +347,7 @@ public partial class SiteTools_StartupScripts : Page {
         str.Append("</tbody></table></div>");
 
         if (startupscripts.StartupscriptsList.Count == 0)
-            str.Append("<div class='clear-margin'>No Data Available.</div>");
+            str.Append("<div class='emptyGridView'>No Data Available.</div>");
 
         str.Append("<div class='clear-space'></div><div class='clear-space'></div>");
         pnl_startupscripts.Controls.Add(new LiteralControl(str.ToString()));
@@ -390,7 +390,7 @@ public partial class SiteTools_StartupScripts : Page {
         str.Append("</tbody></table></div>");
 
         if (startupscripts.StartupScriptsSheetsList.Count == 0)
-            str.Append("<div class='clear-margin'>No Data Available.</div>");
+            str.Append("<div class='emptyGridView'>No Data Available.</div>");
 
         str.Append("<div class='clear-space'></div><div class='clear-space'></div>");
         pnl_startupscripts_css.Controls.Add(new LiteralControl(str.ToString()));
@@ -439,7 +439,7 @@ public partial class SiteTools_StartupScripts : Page {
         str.Append("</tbody></table></div>");
 
         if (startupscripts.StartupScriptsSheetsList.Count == 0)
-            str.Append("<div class='clear-margin'>No Data Available.</div>");
+            str.Append("<div class='emptyGridView'>No Data Available.</div>");
 
         str.Append("<div class='clear-space'></div>");
         pnl_startupscripts_css.Controls.Add(new LiteralControl(str.ToString()));
@@ -646,7 +646,7 @@ public partial class SiteTools_StartupScripts : Page {
             str.Append("</tbody></table></div>");
 
             if (startupscripts.StartupScriptsSheetsList.Count == 0)
-                str.Append("<div class='clear-margin'>No Data Available.</div>");
+                str.Append("<div class='emptyGridView'>No Data Available.</div>");
 
             str.Append("<div class='clear-space'></div><div class='clear-space'></div>");
             pnl_startupscripts_css.Controls.Add(new LiteralControl(str.ToString()));

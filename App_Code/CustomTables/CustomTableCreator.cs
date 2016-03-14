@@ -30,6 +30,8 @@ public class CustomTableCreator : System.Web.Services.WebService {
     private string _userName;
 
     public CustomTableCreator() {
+        GetSiteRequests.AddRequest();
+
         IIdentity userID = HttpContext.Current.User.Identity;
         if (userID.IsAuthenticated) {
             _canContinue = true;

@@ -37,6 +37,8 @@ public class ChatService : WebService {
 
 
     public ChatService() {
+        GetSiteRequests.AddRequest();
+
         _userId = HttpContext.Current.User.Identity;
         if (!_userId.IsAuthenticated) return;
         _canContinue = true;

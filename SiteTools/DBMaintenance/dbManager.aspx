@@ -204,8 +204,10 @@
                                         <div class="clear-space"></div>
                                         <asp:CheckBox ID="cbAutoFixDB" ClientIDMode="Static" runat="server" Text="&nbsp;Automatically fix any database issues" Visible="false" Enabled="false" OnCheckedChanged="cbAutoFixDB_CheckedChanged" AutoPostBack="true" />
                                         <div class="clear-space"></div>
-                                        <asp:Label ID="lbl_updatedbHint" runat="server" Font-Size="Small" Visible="false" Enabled="false" Text="You may have to update the database more than once to completely update it."></asp:Label>
+                                        <asp:Label ID="lbl_updatedbHint" runat="server" Font-Size="X-Small" Visible="false" Enabled="false" Text="You may have to update the database more than once to completely update it."></asp:Label>
                                         <div class="clear-space-five"></div>
+                                        <asp:Panel ID="pnl_databaseissues" runat="server">
+                                        </asp:Panel>
                                     </div>
                                 </ContentTemplate>
                             </asp:UpdatePanel>

@@ -22,6 +22,7 @@ public class DefaultDBTables {
     public static int TotalNumberOfRows = 0;
     private static int timeOutDelay = 100;
     private const string ApplicationId_Name = "ApplicationId";
+    public static List<string> DatabaseScannerIssues = new List<string>();
 
     #endregion
 
@@ -120,6 +121,7 @@ public class DefaultDBTables {
         DatabaseUpToDate = true;
         TotalNumberOfColumns = 0;
         TotalNumberOfRows = 0;
+        DatabaseScannerIssues = new List<string>();
 
         string defaultsXml = ServerSettings.GetServerMapLocation + "App_Data\\DatabaseDefaults.xml";
         if (File.Exists(defaultsXml)) {
@@ -155,6 +157,8 @@ public class DefaultDBTables {
                 DataTable dbTable = dbCall.CallGetDataTable(tableName);
 
                 if (dbTable == null || (dbTable.Columns.Count == 0 && string.IsNullOrEmpty(dbTable.TableName))) {
+                    string issueStr = string.Format("<span class='db-issue-text'>{0}</span> table does not exist.", tableName);
+                    AddDatabaseIssue(issueStr);
                     DatabaseUpToDate = false;
                 }
                 else {
@@ -175,16 +179,22 @@ public class DefaultDBTables {
             string dataType = attrs[3];
             string length = attrs[4];
 
+            string errorMessage = string.Empty;
             foreach (DataColumn dColumn in dbTable.Columns) {
-                if (DoesColumnExist(dColumn, columnName, length, dataType, nullable)) {
+                if (DoesColumnExist(dColumn, columnName, length, dataType, nullable, tableName, out errorMessage)) {
                     foundColumn = true;
                     break;
                 }
             }
 
             if (!foundColumn) {
+                string issueStr = string.Format("Column <span class='db-issue-text'>{0}</span> does not exist in <span class='db-issue-text'>{1}</span> or data type does not match.", columnName, tableName);
+                if (!string.IsNullOrEmpty(errorMessage)) {
+                    issueStr = errorMessage;
+                }
+
+                AddDatabaseIssue(issueStr);
                 DatabaseUpToDate = false;
-                break;
             }
         }
 
@@ -199,8 +209,9 @@ public class DefaultDBTables {
             }
 
             if (!columnList.Contains(dColumn.ColumnName)) {
+                string issueStr = string.Format("Column <span class='db-issue-text'>{0}</span> does not exist in database defaults for <span class='db-issue-text'>{1}</span> table.", dColumn.ColumnName, tableName);
+                AddDatabaseIssue(issueStr);
                 DatabaseUpToDate = false;
-                break;
             }
         }
     }
@@ -215,6 +226,11 @@ public class DefaultDBTables {
                 }
             }
             catch { }
+        }
+    }
+    private static void AddDatabaseIssue(string issue) {
+        if (!DatabaseScannerIssues.Contains(issue)) {
+            DatabaseScannerIssues.Add(issue);
         }
     }
 
@@ -280,8 +296,9 @@ public class DefaultDBTables {
             string dataType = attrs[3];
             string length = attrs[4];
 
+            string errorMessage = string.Empty;
             foreach (DataColumn dColumn in dbTable.Columns) {
-                if (DoesColumnExist(dColumn, columnName, length, dataType, nullable)) {
+                if (DoesColumnExist(dColumn, columnName, length, dataType, nullable, tableName, out errorMessage)) {
                     foundColumn = true;
                     break;
                 }
@@ -619,7 +636,7 @@ public class DefaultDBTables {
 
     #endregion
 
-    private static bool DoesColumnExist(DataColumn dColumn, string columnName, string length, string dataType, bool nullable) {
+    private static bool DoesColumnExist(DataColumn dColumn, string columnName, string length, string dataType, bool nullable, string tableName, out string errorMessage) {
         bool columnCheck = ColumnCheck(dColumn, columnName);
         bool nullableCheck = NullableCheck(dColumn, nullable);
         bool maxLengthNotEqualToOne = dColumn.MaxLength != -1;
@@ -627,7 +644,16 @@ public class DefaultDBTables {
         bool dataTypeCheck = DataTypeCheck(dataType);
         bool columnTypeCheck = ColumnTypeCheck(dColumn, dataType);
 
-        return columnCheck && nullableCheck && (((lengthCheck) && (dataTypeCheck) && (columnTypeCheck)) || (columnTypeCheck && !maxLengthNotEqualToOne));
+        errorMessage = string.Empty;
+        bool noError = columnCheck && nullableCheck && ((lengthCheck && dataTypeCheck && columnTypeCheck) || (columnTypeCheck && !maxLengthNotEqualToOne));
+
+        if (!noError) {
+            if (!lengthCheck || !dataTypeCheck || !columnTypeCheck) {
+                errorMessage = string.Format("Column <span class='db-issue-text'>{0}'s</span> data type does not match table default for <span class='db-issue-text'>{1}</span>.", columnName, tableName);
+            }
+        }
+
+        return noError;
     }
 
     public static void InsertDefaultDataIntoTable(string tableName, bool overrideValues) {

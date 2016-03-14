@@ -176,6 +176,87 @@ public partial class SiteTools_UserAccounts : Page {
             rb_SignUpConfirmationEmail_on.Checked = false;
             rb_SignUpConfirmationEmail_off.Checked = true;
         }
+
+        if (_ss.ForceGroupLogin) {
+            rb_ForceGroupLogin_on.Checked = true;
+            rb_ForceGroupLogin_off.Checked = false;
+            pnl_showpreviewbutton.Enabled = false;
+            pnl_showpreviewbutton.Visible = false;
+            pnl_nologinrequired.Enabled = false;
+            pnl_nologinrequired.Visible = false;
+            pnl_NoLoginMainPage.Enabled = false;
+            pnl_NoLoginMainPage.Visible = false;
+        }
+        else {
+            rb_ForceGroupLogin_on.Checked = false;
+            rb_ForceGroupLogin_off.Checked = true;
+        }
+
+        bool noLoginrequired = _ss.NoLoginRequired;
+        bool showPreviewBtn = _ss.ShowPreviewButtonLogin;
+        if (noLoginrequired) {
+            rb_nologinrequired_on.Checked = true;
+            rb_nologinrequired_off.Checked = false;
+            pnl_showpreviewbutton.Enabled = false;
+            pnl_showpreviewbutton.Visible = false;
+            pnl_showloginmodalondemomode.Enabled = true;
+            pnl_showloginmodalondemomode.Visible = true;
+        }
+        else {
+            rb_nologinrequired_on.Checked = false;
+            rb_nologinrequired_off.Checked = true;
+            pnl_showpreviewbutton.Enabled = true;
+            pnl_showpreviewbutton.Visible = true;
+            pnl_showloginmodalondemomode.Enabled = false;
+            pnl_showloginmodalondemomode.Visible = false;
+        }
+
+        if (_ss.ShowLoginModalOnDemoMode) {
+            rb_ShowLoginModalOnDemoMode_on.Checked = true;
+            rb_ShowLoginModalOnDemoMode_off.Checked = false;
+        }
+        else {
+            rb_ShowLoginModalOnDemoMode_on.Checked = false;
+            rb_ShowLoginModalOnDemoMode_off.Checked = true;
+        }
+
+        if ((!noLoginrequired) && (!showPreviewBtn)) {
+            pnl_NoLoginMainPage.Enabled = false;
+            pnl_NoLoginMainPage.Visible = false;
+            pnl_showpreviewbutton.Enabled = true;
+            pnl_showpreviewbutton.Visible = true;
+        }
+        else if ((noLoginrequired) && (showPreviewBtn)) {
+            pnl_NoLoginMainPage.Enabled = true;
+            pnl_NoLoginMainPage.Visible = true;
+            pnl_showpreviewbutton.Enabled = false;
+            pnl_showpreviewbutton.Visible = false;
+        }
+        else {
+            pnl_NoLoginMainPage.Enabled = true;
+            pnl_NoLoginMainPage.Visible = true;
+        }
+
+        if (showPreviewBtn) {
+            rb_ShowPreviewButtonLogin_on.Checked = true;
+            rb_ShowPreviewButtonLogin_off.Checked = false;
+        }
+        else {
+            rb_ShowPreviewButtonLogin_on.Checked = false;
+            rb_ShowPreviewButtonLogin_off.Checked = true;
+        }
+
+        tb_loginPageMessage.Text = _ss.LoginMessage;
+        lbl_loginMessageDate.Text = "<b class='pad-right-sml'>Date Updated:</b>" + _ss.LoginMessageDate;
+
+        if (noLoginrequired) {
+            pnlLoginMessage.Enabled = false;
+            pnlLoginMessage.Visible = false;
+        }
+        else {
+            pnlLoginMessage.Enabled = true;
+            pnlLoginMessage.Visible = true;
+        }
     }
 
     #endregion
@@ -1013,7 +1094,6 @@ public partial class SiteTools_UserAccounts : Page {
         ServerSettings.update_UserSignUpEmailChecker(false);
     }
 
-
     protected void btn_UpdateEmailAssociation_Click(object sender, EventArgs e) {
         string email = tb_EmailAssociation.Text.Trim();
         if (!string.IsNullOrEmpty(email)) {
@@ -1028,6 +1108,156 @@ public partial class SiteTools_UserAccounts : Page {
             string messageError = "$('#emailassociation_error').html('<small>Email cannot be empty.</small>');setTimeout(function(){$('#emailassociation_error').html('');},4000);";
             RegisterPostbackScripts.RegisterStartupScript(this, messageError);
         }
+    }
+
+    protected void rb_ForceGroupLogin_on_CheckedChanged(object sender, EventArgs e) {
+        if (Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
+            rb_ForceGroupLogin_on.Checked = true;
+            rb_ForceGroupLogin_off.Checked = false;
+            ServerSettings.update_ForceGroupLogin(true);
+
+            pnl_showpreviewbutton.Enabled = false;
+            pnl_showpreviewbutton.Visible = false;
+            pnl_nologinrequired.Enabled = false;
+            pnl_nologinrequired.Visible = false;
+            pnl_NoLoginMainPage.Enabled = false;
+            pnl_NoLoginMainPage.Visible = false;
+        }
+    }
+    protected void rb_ForceGroupLogin_off_CheckedChanged(object sender, EventArgs e) {
+        if (Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
+            rb_ForceGroupLogin_on.Checked = false;
+            rb_ForceGroupLogin_off.Checked = true;
+            ServerSettings.update_ForceGroupLogin(false);
+
+            pnl_nologinrequired.Enabled = true;
+            pnl_nologinrequired.Visible = true;
+
+            if ((!_ss.NoLoginRequired) && (!_ss.ShowPreviewButtonLogin)) {
+                pnl_NoLoginMainPage.Enabled = false;
+                pnl_NoLoginMainPage.Visible = false;
+                pnl_showpreviewbutton.Enabled = true;
+                pnl_showpreviewbutton.Visible = true;
+            }
+            else if ((_ss.NoLoginRequired) && (_ss.ShowPreviewButtonLogin)) {
+                pnl_NoLoginMainPage.Enabled = true;
+                pnl_NoLoginMainPage.Visible = true;
+                pnl_showpreviewbutton.Enabled = false;
+                pnl_showpreviewbutton.Visible = false;
+            }
+            else {
+                pnl_NoLoginMainPage.Enabled = true;
+                pnl_NoLoginMainPage.Visible = true;
+            }
+        }
+    }
+
+    protected void rb_ShowPreviewButtonLogin_on_CheckedChanged(object sender, EventArgs e) {
+        rb_ShowPreviewButtonLogin_on.Checked = true;
+        rb_ShowPreviewButtonLogin_off.Checked = false;
+        ServerSettings.update_ShowPreviewButtonLogin(true);
+        if ((!_ss.NoLoginRequired) && (!_ss.ShowPreviewButtonLogin)) {
+            pnl_NoLoginMainPage.Enabled = false;
+            pnl_NoLoginMainPage.Visible = false;
+        }
+        else {
+            pnl_NoLoginMainPage.Enabled = true;
+            pnl_NoLoginMainPage.Visible = true;
+        }
+
+
+    }
+    protected void rb_ShowPreviewButtonLogin_off_CheckedChanged(object sender, EventArgs e) {
+        rb_ShowPreviewButtonLogin_on.Checked = false;
+        rb_ShowPreviewButtonLogin_off.Checked = true;
+        ServerSettings.update_ShowPreviewButtonLogin(false);
+        if ((!_ss.NoLoginRequired) && (!_ss.ShowPreviewButtonLogin)) {
+            pnl_NoLoginMainPage.Enabled = false;
+            pnl_NoLoginMainPage.Visible = false;
+        }
+        else {
+            pnl_NoLoginMainPage.Enabled = true;
+            pnl_NoLoginMainPage.Visible = true;
+        }
+
+
+    }
+
+    protected void rb_nologinrequired_on_CheckedChanged(object sender, EventArgs e) {
+        if (Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
+            rb_nologinrequired_on.Checked = true;
+            rb_nologinrequired_off.Checked = false;
+            pnl_showpreviewbutton.Enabled = false;
+            pnl_showpreviewbutton.Visible = false;
+            ServerSettings.update_NoLoginRequired(true);
+
+            pnl_NoLoginMainPage.Enabled = true;
+            pnl_NoLoginMainPage.Visible = true;
+
+            pnlLoginMessage.Enabled = false;
+            pnlLoginMessage.Visible = false;
+
+            pnl_showloginmodalondemomode.Enabled = true;
+            pnl_showloginmodalondemomode.Visible = true;
+        }
+    }
+    protected void rb_nologinrequired_off_CheckedChanged(object sender, EventArgs e) {
+        if (Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
+            rb_nologinrequired_on.Checked = false;
+            rb_nologinrequired_off.Checked = true;
+            pnl_showpreviewbutton.Enabled = true;
+            pnl_showpreviewbutton.Visible = true;
+            ServerSettings.update_NoLoginRequired(false);
+            if (!_ss.ShowPreviewButtonLogin) {
+                pnl_NoLoginMainPage.Enabled = false;
+                pnl_NoLoginMainPage.Visible = false;
+            }
+            else {
+                pnl_NoLoginMainPage.Enabled = true;
+                pnl_NoLoginMainPage.Visible = true;
+            }
+
+            pnlLoginMessage.Enabled = true;
+            pnlLoginMessage.Visible = true;
+
+            pnl_showloginmodalondemomode.Enabled = false;
+            pnl_showloginmodalondemomode.Visible = false;
+        }
+    }
+
+    protected void rb_ShowLoginModalOnDemoMode_on_CheckedChanged(object sender, EventArgs e) {
+        if (Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
+            rb_ShowLoginModalOnDemoMode_on.Checked = true;
+            rb_ShowLoginModalOnDemoMode_off.Checked = false;
+            ServerSettings.update_ShowLoginModalOnDemoMode(true);
+
+        }
+    }
+    protected void rb_ShowLoginModalOnDemoMode_off_CheckedChanged(object sender, EventArgs e) {
+        if (Roles.IsUserInRole(_username, ServerSettings.AdminUserName)) {
+            rb_ShowLoginModalOnDemoMode_on.Checked = false;
+            rb_ShowLoginModalOnDemoMode_off.Checked = true;
+            ServerSettings.update_ShowLoginModalOnDemoMode(false);
+
+        }
+    }
+
+    protected void btn_loginPageMessage_Click(object sender, EventArgs e) {
+        string message = tb_loginPageMessage.Text.Trim();
+        if (!string.IsNullOrEmpty(message)) {
+            string date = ServerSettings.ServerDateTime.ToString();
+            ServerSettings.UpdateLoginMessage(message, date);
+
+            lbl_loginMessageDate.Text = "<b class='pad-right'>Date Updated:</b>" + date;
+        }
+    }
+
+    protected void lbtn_loginPageMessage_clear_Click(object sender, EventArgs e) {
+        string date = ServerSettings.ServerDateTime.ToString();
+        ServerSettings.UpdateLoginMessage("", date);
+
+        tb_loginPageMessage.Text = "";
+        lbl_loginMessageDate.Text = "<b class='pad-right'>Date Updated:</b>" + date;
     }
 
     #endregion

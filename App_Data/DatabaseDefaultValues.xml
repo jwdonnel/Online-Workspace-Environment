@@ -1,37 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Tables>
-    <Table name="aspnet_BackgroundServices" key="ID">
-        <Row ApplicationId=""
-             ID="6800d305-f2e4-4b85-8c9e-dc1d8a0e90e1"
-             Name="Auto Backup System"
-             Description="Automatically backs up the servers database for the current site. To adjust the times to update, go to the Database Manager page."
-             DefaultState="Stopped"
-             DLL_Location=""
-             Namespace="OpenWSE_Tools.AppServices.AutoBackupSystem"
-             LogInformation="0"
-             UpdatedBy="administrator"
-             DateUpdated="1/6/2016 6:10:48 PM" />
-        <Row ApplicationId=""
-             ID="52003aa6-ca3e-459d-a769-0afb452dcc6b"
-             Name="Auto Update System"
-             Description="Automatically updates Apps, Workspaces, Notifications, and App Remote features. Stopping this service may cause these features to stop working properly."
-             DefaultState="Running"
-             DLL_Location=""
-             Namespace="OpenWSE_Tools.AutoUpdates.AutoUpdateSystem"
-             LogInformation="0"
-             UpdatedBy="administrator"
-             DateUpdated="1/6/2016 6:10:48 PM" />
-        <Row ApplicationId=""
-             ID="2f6d438b-9ea7-4752-b19f-f7150f712af9"
-             Name="RSS Feed Updater"
-             Description="Automatically gets the latest feeds to speed up load times on app."
-             DefaultState="Stopped"
-             DLL_Location=""
-             Namespace="OpenWSE_Tools.AppServices.RSSFeedUpdater"
-             LogInformation="0"
-             UpdatedBy="administrator"
-             DateUpdated="1/6/2016 6:10:48 PM" />
-    </Table>
     <Table name="AppCategory" key="ID">
         <Row ApplicationId=""
              ID="cebc0bcf-b989-4572-9f86-37f3fab0c708"
@@ -53,6 +21,11 @@
              Category="News"
              DateAdded="1/6/2016 6:10:48 PM"
              CreatedBy="administrator" />
+    </Table>
+    <Table name="Applications" for="System.Data.SqlServerCe.4.0" key="ApplicationName">
+        <Row ApplicationId=""
+             ApplicationName=""
+             Description="" />
     </Table>
     <Table name="AppList" key="ID">
         <Row ApplicationId=""
@@ -482,16 +455,50 @@
              CreatedBy="administrator"
              DateTime="1/6/2016 6:10:48 PM" />
     </Table>
-    <Table name="Applications" for="System.Data.SqlServerCe.4.0" key="ApplicationName">
-        <Row ApplicationId=""
-             ApplicationName=""
-             Description="" />
-    </Table>
     <Table name="aspnet_Applications" for="System.Data.SqlClient" key="ApplicationName">
         <Row ApplicationId=""
              ApplicationName=""
              LoweredApplicationName=""
              Description="" />
+    </Table>
+    <Table name="aspnet_BackgroundServices" key="ID">
+        <Row ApplicationId=""
+             ID="6800d305-f2e4-4b85-8c9e-dc1d8a0e90e1"
+             Name="Auto Backup System"
+             Description="Automatically backs up the servers database for the current site. To adjust the times to update, go to the Database Manager page."
+             DefaultState="Stopped"
+             DLL_Location=""
+             Namespace="OpenWSE_Tools.AppServices.AutoBackupSystem"
+             LogInformation="0"
+             UpdatedBy="administrator"
+             DateUpdated="1/6/2016 6:10:48 PM" />
+        <Row ApplicationId=""
+             ID="52003aa6-ca3e-459d-a769-0afb452dcc6b"
+             Name="Auto Update System"
+             Description="Automatically updates Apps, Workspaces, Notifications, and App Remote features. Stopping this service may cause these features to stop working properly."
+             DefaultState="Running"
+             DLL_Location=""
+             Namespace="OpenWSE_Tools.AutoUpdates.AutoUpdateSystem"
+             LogInformation="0"
+             UpdatedBy="administrator"
+             DateUpdated="1/6/2016 6:10:48 PM" />
+        <Row ApplicationId=""
+             ID="2f6d438b-9ea7-4752-b19f-f7150f712af9"
+             Name="RSS Feed Updater"
+             Description="Automatically gets the latest feeds to speed up load times on app."
+             DefaultState="Stopped"
+             DLL_Location=""
+             Namespace="OpenWSE_Tools.AppServices.RSSFeedUpdater"
+             LogInformation="0"
+             UpdatedBy="administrator"
+             DateUpdated="1/6/2016 6:10:48 PM" />
+    </Table>
+    <Table name="aspnet_PageViewsUsersToIgnore" key="ID">
+        <Row ApplicationId=""
+             ID="878472f4-1782-4d11-acf3-b5566f0f49b2"
+             Username="administrator"
+             UpdatedBy="administrator"
+             DateAdded="1/6/2016 6:10:48 PM" />
     </Table>
     <Table name="aspnet_Roles" for="System.Data.SqlClient" key="RoleId">
         <Row ApplicationId=""
@@ -586,7 +593,8 @@
              DefaultBodyFontSize=""
              DefaultBodyFontColor=""
              ShowLoginModalOnDemoMode="1"
-             AppendTimestampOnScripts="1" />
+             AppendTimestampOnScripts="1"
+             RecordPageViews="1" />
     </Table>
     <Table name="GroupList" key="GroupID">
         <Row ApplicationId=""

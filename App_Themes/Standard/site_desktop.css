@@ -623,7 +623,7 @@ b{font-weight:bold}
 .GridDatePrev:hover,.GridDateNext:hover{background:#212222;background:rgba(0, 0, 0, .5);cursor:pointer}
 .GridNormalRow:hover,.GridAlternate:hover{background:#F5F5F5;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
 .myHeaderStyle{height:35px;margin-bottom:0px;text-align:center;width:100%;background:#eeeeee;background:-moz-linear-gradient(top,  #eeeeee 0%, #cccccc 100%);background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#cccccc));background:-webkit-linear-gradient(top,  #eeeeee 0%,#cccccc 100%);background:-o-linear-gradient(top,  #eeeeee 0%,#cccccc 100%);background:-ms-linear-gradient(top,  #eeeeee 0%,#cccccc 100%);background:linear-gradient(to bottom,  #eeeeee 0%,#cccccc 100%);filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 )}
-.myHeaderStyle td,.myHeaderStyle th{border-bottom:1px solid #B7B7B7;border-right:1px solid transparent;color:#444;font-weight:400;padding:0 5px;vertical-align:middle;font-weight:bold}
+.myHeaderStyle td,.myHeaderStyle th{border-bottom:1px solid #B7B7B7;border-right:1px solid #D0D0D0;color:#444;font-weight:400;padding:0 5px;vertical-align:middle;font-weight:bold}
 .myHeaderStyle a{color:#444;font-weight:700}
 .myHeaderStyle a:hover{text-decoration:underline}
 .myHeaderStyle .td-sort-click{cursor:pointer;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
@@ -634,7 +634,7 @@ b{font-weight:bold}
 .td-sort-click.desc{background-image:url(Icons/sort-descend.png);background-repeat:no-repeat;background-position:left}
 .myItemStyle{width:100%}
 .myItemStyle b{padding-right:5px}
-.myItemStyle td{padding:5px}
+.myItemStyle td{padding:5px;word-break:break-all}
 .myItemStyle a{opacity:0.4;filter:alpha(opacity=40)}
 .myItemStyle:hover a{opacity:1.0;filter:alpha(opacity=100)}
 .customization-light-color,.customization-dark-color,.customization-light-color td,.customization-dark-color td,.customization-light-color th,.customization-dark-color th{-moz-transition:none!important;-webkit-transition:none!important;transition:none!important}
@@ -708,9 +708,10 @@ a{cursor:pointer}
 
 /* Image Boxes
 ----------------------------------*/
-.img-administrator,.img-checkmark,.img-folder,.img-file,.img-background,.img-imgFile,.img-addOverlay,.img-network,.img-share,.img-appmenu,.img-appmenu-alt,.img-backup,.img-restore,.img-overlay,.img-group-alt,.img-download,.img-present,.img-refresh,.img-refresh-alt,.img-popin,.img-close-dark,.img-close-alt,.img-norefresh,.img-addremove,.img-users,.img-pause,.img-play,.img-stop,.img-allow,.img-ignore,.img-back,.img-customize,.img-upload,.img-document,.img-lock,.img-unlock,.img-about,.img-group,.img-app-dark,.img-app-light,.img-colors,.img-view,.img-approve,.img-menudropdown,.img-menudropdown-light,.img-columns,.img-password,.img-printer,.img-camera,.img-mail,.img-nomail,.img-quote,.img-expand-sml,.img-collapse-sml,.img-logoff,.img-links,.img-settings,.img-replace,.img-add,.img-edit{width:16px;height:16px;background-repeat:no-repeat;background-position:center center;display:inline-block;zoom:1;*display:inline}
+.img-administrator,.img-checkmark,.img-xmark,.img-folder,.img-file,.img-background,.img-imgFile,.img-addOverlay,.img-network,.img-share,.img-appmenu,.img-appmenu-alt,.img-backup,.img-restore,.img-overlay,.img-group-alt,.img-download,.img-present,.img-refresh,.img-refresh-alt,.img-popin,.img-close-dark,.img-close-alt,.img-norefresh,.img-addremove,.img-users,.img-pause,.img-play,.img-stop,.img-allow,.img-ignore,.img-back,.img-customize,.img-upload,.img-document,.img-lock,.img-unlock,.img-about,.img-group,.img-app-dark,.img-app-light,.img-colors,.img-view,.img-approve,.img-menudropdown,.img-menudropdown-light,.img-columns,.img-password,.img-printer,.img-camera,.img-mail,.img-nomail,.img-quote,.img-expand-sml,.img-collapse-sml,.img-logoff,.img-links,.img-settings,.img-replace,.img-add,.img-edit{width:16px;height:16px;background-repeat:no-repeat;background-position:center center;display:inline-block;zoom:1;*display:inline}
 .img-administrator{background-image:url(Icons/administrator.png);height:32px;width:32px}
 .img-checkmark{background-image:url(Icons/check_mark.png)}
+.img-xmark{background-image:url(Icons/x_mark.png)}
 .img-folder{background-image:url(Icons/folder.png);height:24px;width:24px}
 .img-file{background-image:url(Icons/file.png);height:24px;width:24px}
 .img-background{background-image:url(Icons/background.png)}
@@ -1251,18 +1252,19 @@ ul.mobile-mode.sitemenu-selection{background:none!important;margin-left:0px!impo
 
 /* Site Tip Modal
 ----------------------------------*/
-#SiteTip-element .Modal-element-modal{min-height:115px;min-width:370px;z-index:20000;position:absolute!important}
-#SiteTip-element .message-text{color:#444;clear:both;margin:10px 0 4px 0;word-wrap:normal;padding:10px;border:1px solid #DDD;background:#FFF;overflow:auto}
-#SiteTip-element img{float:left;max-height:32px;margin-right:5px;margin-bottom:5px}
-#SiteTip-element .tip-title{float:left;font-size:18px;padding-top:10px;font-weight:bold}
-#SiteTip-element .button-holder{clear:both;padding-top:5px;padding-bottom:5px;text-align:right}
-#SiteTip-element .confirm-close-button{margin-right:0px}
-#SiteTip-element .nextprev-button{background:#E0E0E0;border:1px solid #CCC;color:#333;font-weight:normal;float:left;text-shadow:none!important}
-#SiteTip-element .nextprev-button:hover{background:#D5D5D5}
-#SiteTip-element .nextprev-button:active{background:#CFCFCF}
-#SiteTip-element .dont-show-again{float:left}
-#SiteTip-element #dont-show-again-cb{float:left;margin-top:1px;margin-right:3px}
-#SiteTip-element .dont-show-again > input,#SiteTip-element .dont-show-again > label{cursor:pointer}
+#SiteTip-element-modal{display:none;position:fixed;z-index:5000;right:40px;bottom:50px;margin-left:40px;background:rgba(0,0,0,0.8);max-width:450px;-moz-border-radius:15px;-webkit-border-radius:15px;border-radius:15px;-moz-box-shadow:0 2px 4px rgba(0,0,0,.5);-o-box-shadow:0 2px 4px rgba(0,0,0,.5);-webkit-box-shadow:0 2px 4px rgba(0,0,0,.5);box-shadow:0 2px 4px rgba(0,0,0,.5)}
+#SiteTip-element-modal .tip-content-padding{padding:15px}
+#SiteTip-element-modal img{float:left;max-height:22px;margin-right:5px;margin-bottom:5px}
+#SiteTip-element-modal .tip-title{float:left;font-size:18px;font-weight:bold;color:#FFF}
+#SiteTip-element-modal .message-text{color:#FFF;clear:both;margin:5px 0;word-wrap:normal}
+#SiteTip-element-modal .button-holder{clear:both;padding-top:5px;padding-bottom:5px;text-align:right}
+#SiteTip-element-modal .confirm-close-button{margin-right:0px;background:#4D90FE;border:1px solid #3079ED;text-shadow:1px 2px 2px #3079ED;color:#FFF;font-weight:normal}
+#SiteTip-element-modal .nextprev-button{background:#E0E0E0;border:1px solid #CCC;color:#333;font-weight:normal;float:left;text-shadow:none!important}
+#SiteTip-element-modal .nextprev-button:hover{background:#D5D5D5}
+#SiteTip-element-modal .nextprev-button:active{background:#CFCFCF}
+#SiteTip-element-modal .dont-show-again{float:left;font-size:11px}
+#SiteTip-element-modal #dont-show-again-cb{float:left;margin-top:1px;margin-right:3px}
+#SiteTip-element-modal .dont-show-again > input,#SiteTip-element-modal .dont-show-again > label{cursor:pointer;color:#FFF}
 
 
 
@@ -1466,4 +1468,7 @@ input.signintextbox{width:200px;padding:10px;border:1px solid #DDD;background-co
     .searchwrapper{display:block;margin:5px 0!important;width:100%!important;clear:both;float:none!important}
     .editor_titles .title-line{background:#555!important}
     .editor_titles h3{font-size:15px;margin-left:20px}
+    #SiteTip-element-modal{position:absolute;top:50%;bottom:auto;left:30px;right:30px;max-width:none;margin-left:auto;transform:translate(0,-50%)}
+    #SiteTip-element-modal .message-text{font-size:12px}
+    #SiteTip-element-modal .button-holder > .input-buttons{clear:both;margin-top:5px;margin-bottom:5px}
 }

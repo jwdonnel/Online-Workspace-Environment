@@ -35,6 +35,7 @@ public class UpdateServerSettings : System.Web.Services.WebService
 
     public UpdateServerSettings()
     {
+        GetSiteRequests.AddRequest();
         userID = HttpContext.Current.User.Identity;
     }
 

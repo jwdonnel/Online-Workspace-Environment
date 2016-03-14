@@ -348,8 +348,8 @@
                                     </div>
                                     <div class="title-line"></div>
                                     <div class="td-settings-ctrl">
-                                        <asp:TextBox ID="tb_adminnote" runat="server" CssClass="textEntry float-left" Width="350px"
-                                            AutoPostBack="False" TextMode="MultiLine" Height="40px" Font-Names='"Arial"'
+                                        <asp:TextBox ID="tb_adminnote" runat="server" CssClass="textEntry float-left" Width="100%"
+                                            AutoPostBack="False" TextMode="MultiLine" Height="75px" Font-Names='"Arial"'
                                             BorderColor="#D9D9D9" BorderStyle="Solid" BorderWidth="1px" Style="padding: 4px;"
                                             ForeColor="#353535"></asp:TextBox>
                                         <div class="clear-space"></div>
@@ -365,31 +365,6 @@
                                                 <asp:Label ID="lbl_adminnoteby" runat="server" Text=""></asp:Label>
                                     </div>
                                 </div>
-                                <asp:Panel ID="pnlLoginMessage" runat="server">
-                                    <div class="table-settings-box">
-                                        <div class="td-settings-title">
-                                            Login Page Message
-                                        </div>
-                                        <div class="title-line"></div>
-                                        <div class="td-settings-ctrl">
-                                            <asp:TextBox ID="tb_loginPageMessage" runat="server" CssClass="textEntry float-left"
-                                                Width="350px" AutoPostBack="False" TextMode="MultiLine" Height="40px" Font-Names='"Arial"'
-                                                BorderColor="#D9D9D9" BorderStyle="Solid" BorderWidth="1px" Style="padding: 4px;"
-                                                ForeColor="#353535"></asp:TextBox>
-                                            <div class="clear-space"></div>
-                                            <asp:Button ID="btn_loginPageMessage" runat="server" CssClass="no-margin RandomActionBtns input-buttons"
-                                                Text="Update" OnClick="btn_loginPageMessage_Click" />
-                                            <div class="clear-space-five">
-                                            </div>
-                                            <asp:LinkButton ID="lbtn_loginPageMessage" runat="server" CssClass="RandomActionBtns"
-                                                OnClick="lbtn_loginPageMessage_clear_Click">Clear</asp:LinkButton>
-                                        </div>
-                                        <div class="td-settings-desc">
-                                            Add a note for all users to see on the Login Page.
-                                                    <asp:Label ID="lbl_loginMessageDate" runat="server" Text="N/A"></asp:Label>
-                                        </div>
-                                    </div>
-                                </asp:Panel>
                             </asp:Panel>
                             <div class="table-settings-box">
                                 <div class="td-settings-title">
@@ -634,98 +609,6 @@
                                     Select Yes to hide all app and sidebar icons.
                                 </div>
                             </div>
-                            <div class="table-settings-box">
-                                <div class="td-settings-title">
-                                    Force Group Login
-                                </div>
-                                <div class="title-line"></div>
-                                <div class="td-settings-ctrl">
-                                    <div class="field switch inline-block">
-                                        <asp:RadioButton ID="rb_ForceGroupLogin_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                            OnCheckedChanged="rb_ForceGroupLogin_on_CheckedChanged" AutoPostBack="True" />
-                                        <asp:RadioButton ID="rb_ForceGroupLogin_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                            OnCheckedChanged="rb_ForceGroupLogin_off_CheckedChanged" AutoPostBack="True" />
-                                    </div>
-                                </div>
-                                <div class="td-settings-desc">
-                                    You can force users to login to a group by enabling this feature. Enabling this will force users to use the default login page. (No preview or demo users allowed)
-                                </div>
-                            </div>
-                            <asp:Panel ID="pnl_showpreviewbutton" runat="server">
-                                <div class="table-settings-box">
-                                    <div class="td-settings-title">
-                                        Show Preview Button on Login Screen
-                                    </div>
-                                    <div class="title-line"></div>
-                                    <div class="td-settings-ctrl">
-                                        <div class="field switch inline-block">
-                                            <asp:RadioButton ID="rb_ShowPreviewButtonLogin_on" runat="server" Text="Show" CssClass="RandomActionBtns cb-enable"
-                                                OnCheckedChanged="rb_ShowPreviewButtonLogin_on_CheckedChanged" AutoPostBack="True" />
-                                            <asp:RadioButton ID="rb_ShowPreviewButtonLogin_off" runat="server" Text="Hide" CssClass="RandomActionBtns cb-disable"
-                                                OnCheckedChanged="rb_ShowPreviewButtonLogin_off_CheckedChanged" AutoPostBack="True" />
-                                        </div>
-                                    </div>
-                                    <div class="td-settings-desc">
-                                        Select Show to show the preview button on the login screen.
-                                                    (Disabled by default)
-                                    </div>
-                                </div>
-                            </asp:Panel>
-                            <asp:Panel ID="pnl_nologinrequired" runat="server">
-                                <div class="table-settings-box">
-                                    <div class="td-settings-title">
-                                        No Login Required
-                                    </div>
-                                    <div class="title-line"></div>
-                                    <div class="td-settings-ctrl">
-                                        <div class="field switch inline-block">
-                                            <asp:RadioButton ID="rb_nologinrequired_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                                OnCheckedChanged="rb_nologinrequired_on_CheckedChanged" AutoPostBack="True" />
-                                            <asp:RadioButton ID="rb_nologinrequired_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                                OnCheckedChanged="rb_nologinrequired_off_CheckedChanged" AutoPostBack="True" />
-                                        </div>
-                                    </div>
-                                    <div class="td-settings-desc">
-                                        Set to No to make the site available to anyone without
-                                                an account.
-                                    </div>
-                                </div>
-                                <asp:Panel ID="pnl_showloginmodalondemomode" runat="server">
-                                    <div class="table-settings-box">
-                                        <div class="td-settings-title">
-                                            Show Login Modal on Page Load (No Login/Demo Mode)
-                                        </div>
-                                        <div class="title-line"></div>
-                                        <div class="td-settings-ctrl">
-                                            <div class="field switch inline-block">
-                                                <asp:RadioButton ID="rb_ShowLoginModalOnDemoMode_on" runat="server" Text="Yes" CssClass="RandomActionBtns cb-enable"
-                                                    OnCheckedChanged="rb_ShowLoginModalOnDemoMode_on_CheckedChanged" AutoPostBack="True" />
-                                                <asp:RadioButton ID="rb_ShowLoginModalOnDemoMode_off" runat="server" Text="No" CssClass="RandomActionBtns cb-disable"
-                                                    OnCheckedChanged="rb_ShowLoginModalOnDemoMode_off_CheckedChanged" AutoPostBack="True" />
-                                            </div>
-                                        </div>
-                                        <div class="td-settings-desc">
-                                            Set to Yes to force the login modal window on page load. This will only apply when user is attempting to access the Workspace on No Login/Demo mode.
-                                        </div>
-                                    </div>
-                                </asp:Panel>
-                            </asp:Panel>
-                            <asp:Panel ID="pnl_NoLoginMainPage" runat="server" Enabled="false" Visible="false">
-                                <div class="table-settings-box">
-                                    <div class="td-settings-title">
-                                        No Login/Demo Customizations
-                                    </div>
-                                    <div class="title-line"></div>
-                                    <div class="td-settings-ctrl">
-                                        <a href="#iframecontent" class="input-buttons-create float-left" onclick="openWSE.LoadIFrameContent('SiteTools/UserMaintenance/AcctSettings.aspx?u=demouser&toolview=true', this);return false;"
-                                            style="display: block;">Customize Demo User</a>
-                                        <div class="clear"></div>
-                                    </div>
-                                    <div class="td-settings-desc">
-                                        Customize the demo user settings.
-                                    </div>
-                                </div>
-                            </asp:Panel>
                             <div class="clear" style="height: 50px;">
                             </div>
                             <asp:Panel ID="Panel1" CssClass="pnl-section-child" runat="server">

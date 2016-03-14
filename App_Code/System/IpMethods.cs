@@ -18,6 +18,7 @@ using HtmlAgilityPack;
 public class IpMethods : System.Web.Services.WebService {
 
     public IpMethods () {
+        GetSiteRequests.AddRequest();
 
         //Uncomment the following line if using designed components 
         //InitializeComponent(); 

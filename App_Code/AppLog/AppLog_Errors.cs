@@ -13,7 +13,9 @@ using System.Web.Services;
 [System.Web.Script.Services.ScriptService]
 public class AppLog_Errors : System.Web.Services.WebService {
 
-    public AppLog_Errors() { }
+    public AppLog_Errors() {
+        GetSiteRequests.AddRequest();
+    }
 
     [WebMethod(EnableSession = true)]
     public void AddError(string message, string url) {

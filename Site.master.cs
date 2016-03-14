@@ -54,10 +54,6 @@ public partial class SiteMaster : MasterPage {
     #region Authenticate user and load page
 
     protected void Page_Load(object sender, EventArgs e) {
-        if (!IsPostBack) {
-            GetSiteRequests.AddHitCount();
-        }
-
         ServerSettings.AddMetaTagsToPage(this.Page);
 
         #region Rename Image Files
@@ -411,7 +407,7 @@ public partial class SiteMaster : MasterPage {
         
 
         LoginActivity la = new LoginActivity();
-        la.AddItem("Guest User", true, ActivityType.Guest);
+        la.AddItem(ServerSettings.GuestUsername, true, ActivityType.Guest);
     }
     private void SetCurrentPageTitle() {
         if (SiteMap.CurrentNode != null) {
@@ -603,12 +599,7 @@ public partial class SiteMaster : MasterPage {
         }
         #endregion
 
-        if (HelperMethods.ConvertBitToBoolean(Request.QueryString["mobileMode"]) || HelperMethods.ConvertBitToBoolean(Request.QueryString["toolView"])) {
-            siteTips = false;
-        }
-
         SetAppAndChatSidebarIcons(hideSidebarMenuIcons);
-
 
         #region Show Tool Tips
         _strScriptreg.Append("openWSE_Config.showToolTips=" + showToolTips.ToString().ToLower() + ";");

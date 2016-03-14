@@ -1,8 +1,8 @@
 ﻿// -----------------------------------------------------------------------------------
 //
-//	openWSE v5.5
+//	openWSE v5.6
 //	by John Donnelly
-//	Last Modification: 3/1/2016
+//	Last Modification: 3/10/2016
 //
 //	Licensed under the Creative Commons Attribution 2.5 License - http://creativecommons.org/licenses/by/2.5/
 //  	- Free for use in both personal and commercial projects
@@ -105,7 +105,7 @@ var openWSE = function () {
         saveHandler = openWSE.siteRoot() + "WebServices/SaveControls.asmx";
 
         var siteTipCookie = cookie.get("siteTipsOnPageLoad");
-        if ((siteTipCookie != "") && (siteTipCookie != null) && (siteTipCookie != undefined)) {
+        if ((siteTipCookie != "") && (siteTipCookie != null) && (siteTipCookie != undefined) && (openWSE_Config.demoMode)) {
             openWSE_Config.siteTipsOnPageLoad = ConvertBitToBoolean(siteTipCookie);
         }
 
@@ -417,25 +417,17 @@ var openWSE = function () {
                     if (tipArray.length > 0) {
                         tipIndex = Math.round(Math.random() * (tipArray.length - 1));
 
-                        var ele = "<div id='SiteTip-element' class='Modal-element' style='display: none;'>";
-                        ele += "<div class='Modal-overlay'>";
-                        ele += "<div class='Modal-element-align'>";
-                        ele += "<div class='Modal-element-modal' data-setwidth='550'>";
-
-                        // Header
-                        ele += "<div class='ModalHeader'><div><div class='app-head-button-holder-admin'>";
-                        ele += "<a href='#' onclick=\"openWSE.CloseSiteTip();return false;\" class='ModalExitButton'></a>";
-                        ele += "</div><span class='Modal-title'></span></div></div>";
+                        var ele = "<div id='SiteTip-element-modal'>";
 
                         // Body
-                        var nextTipButton = "<input class='input-buttons nextprev-button' type='button' value='Next Tip' onclick=\"openWSE.NextSiteTip();\" style='width: 95px;' />";
-                        var prevTipButton = "<input class='input-buttons nextprev-button' type='button' value='Previous Tip' onclick=\"openWSE.PreviousSiteTip();\" style='width: 95px;' />";
+                        var nextTipButton = "<input class='input-buttons nextprev-button' type='button' value='Next Tip' onclick=\"openWSE.NextSiteTip();\" />";
+                        var prevTipButton = "<input class='input-buttons nextprev-button' type='button' value='Previous Tip' onclick=\"openWSE.PreviousSiteTip();\" />";
                         if (tipArray.length == 1) {
                             nextTipButton = "";
                             prevTipButton = "";
                         }
 
-                        var closeButton = "<input class='input-buttons confirm-close-button' type='button' value='Close' onclick=\"openWSE.CloseSiteTip();\" style='width: 75px;' />";
+                        var closeButton = "<input class='input-buttons confirm-close-button' type='button' value='Close' onclick=\"openWSE.CloseSiteTip();\" />";
                         var dontShowAgain = "<div class='dont-show-again'><input id='dont-show-again-cb' type='checkbox' checked='checked' /><label for='dont-show-again-cb'>Show Tips on Page Load</label></div>";
 
                         if (openWSE_Config.siteTheme == "") {
@@ -445,19 +437,12 @@ var openWSE = function () {
                         var img = "<img alt='confirm' src='" + openWSE.siteRoot() + "App_Themes/" + openWSE_Config.siteTheme + "/Icons/sitetip.png' />";
                         var tipMessage = tipArray[tipIndex];
 
-                        ele += "<div class='ModalPadContent'>" + img + "<span class='tip-title'>Did you know?</span><div class='clear'></div><div class='message-text'>" + tipMessage + "</div>";
-                        ele += "<div class='button-holder'>" + dontShowAgain + "<div class='clear-space'></div><div class='clear-space'></div>" + prevTipButton + nextTipButton + closeButton + "</div></div>";
-                        ele += "</div></div></div></div>";
+                        ele += "<div class='tip-content-padding'>" + img + "<span class='tip-title'>Did you know?</span><div class='clear'></div><div class='message-text'>" + tipMessage + "</div>";
+                        ele += "<div class='button-holder'>" + dontShowAgain + "<div class='clear-space'></div><div class='clear-space'></div>" + prevTipButton + nextTipButton + closeButton + "<div class='clear'></div></div></div>";
+                        ele += "</div>";
 
                         $("body").append(ele);
-                        LoadModalWindow(true, "SiteTip-element", "Site Tips");
-                        AdjustSiteTipModal();
-
-                        $("#SiteTip-element").find(".Modal-overlay").on("click", function (e) {
-                            if (e.target.className == "Modal-overlay") {
-                                openWSE.CloseSiteTip();
-                            }
-                        });
+                        $("#SiteTip-element-modal").fadeIn(openWSE_Config.animationSpeed * 2);
                     }
                 }
             });
@@ -469,16 +454,14 @@ var openWSE = function () {
             tipIndex = 0;
         }
 
-        $("#SiteTip-element").find(".message-text").html(tipArray[tipIndex]);
-        AdjustSiteTipModal();
+        $("#SiteTip-element-modal").find(".message-text").html(tipArray[tipIndex]);
     }
     function PreviousSiteTip() {
         tipIndex--;
         if (tipIndex < 0) {
             tipIndex = tipArray.length - 1;
         }
-        $("#SiteTip-element").find(".message-text").html(tipArray[tipIndex]);
-        AdjustSiteTipModal();
+        $("#SiteTip-element-modal").find(".message-text").html(tipArray[tipIndex]);
     }
     function CloseSiteTip() {
         if (!$("#dont-show-again-cb").prop("checked")) {
@@ -491,23 +474,15 @@ var openWSE = function () {
                     contentType: "application/json; charset=utf-8"
                 });
             }
-
-            cookie.set("siteTipsOnPageLoad", "false", "30");
+            else {
+                cookie.set("siteTipsOnPageLoad", "false", "30");
+            }
         }
 
         tipIndex = 0;
         tipArray = new Array();
 
-        $('#SiteTip-element').remove();
-    }
-    function AdjustSiteTipModal() {
-        var top = $("#SiteTip-element").find(".Modal-element-modal").css("top");
-        if (top == "auto") {
-            $("#SiteTip-element").find(".Modal-element-align").css({
-                marginTop: -($("#SiteTip-element").find(".Modal-element-modal").height() / 2),
-                marginLeft: -($("#SiteTip-element").find(".Modal-element-modal").width() / 2)
-            });
-        }
+        $('#SiteTip-element-modal').remove();
     }
 
 
@@ -6039,29 +6014,33 @@ var openWSE = function () {
         if ($_id.find(".iFrame-apps").length > 0) {
             var _content = $_id.find(".iFrame-apps")[0];
             if (_content.src != null) {
-                if ($_id.find(".app-body").find("div").html() == null) {
-                    if ($_id.find(".app-body").find(".loading-background-holder").length <= 0) {
-                        AppendLoadingMessage($_id.find(".app-body"));
-                    }
-                    $_id.find(".iFrame-apps").one('load', (function () {
-                        $_id.find(".app-body").find(".loading-background-holder").each(function () {
-                            $(this).remove();
-                        });
-                    }));
-                }
-                else {
-                    if ($_id.find(".app-body").find("div").find(".loading-background-holder").length <= 0) {
-                        AppendLoadingMessage($_id.find(".app-body").find("div"));
-                    }
+                var tempContentSrc = _content.src;
+                _content.src = "";
 
-                    $_id.find(".iFrame-apps").one('load', (function () {
-                        $_id.find(".app-body").find("div").find(".loading-background-holder").each(function () {
-                            $(this).remove();
-                        });
-                    }));
-                }
+                setTimeout(function () {
+                    _content.src = tempContentSrc;
+                    if ($_id.find(".app-body").find("div").html() == null) {
+                        if ($_id.find(".app-body").find(".loading-background-holder").length <= 0) {
+                            AppendLoadingMessage($_id.find(".app-body"));
+                        }
+                        $_id.find(".iFrame-apps").one('load', (function () {
+                            $_id.find(".app-body").find(".loading-background-holder").each(function () {
+                                $(this).remove();
+                            });
+                        }));
+                    }
+                    else {
+                        if ($_id.find(".app-body").find("div").find(".loading-background-holder").length <= 0) {
+                            AppendLoadingMessage($_id.find(".app-body").find("div"));
+                        }
 
-                _content.src = _content.src;
+                        $_id.find(".iFrame-apps").one('load', (function () {
+                            $_id.find(".app-body").find("div").find(".loading-background-holder").each(function () {
+                                $(this).remove();
+                            });
+                        }));
+                    }
+                }, 100);
             }
         }
         else {
@@ -7826,6 +7805,10 @@ var openWSE = function () {
     function GetPnlSectionIndex(ele) {
         if (ele.indexOf("&") != -1) {
             ele = ele.replace(ele.substring(ele.indexOf("&")), "");
+        }
+
+        if ($(".pnl-section[id='" + ele + "']").length == 0) {
+            ele = "pnl_" + ele;
         }
 
         for (var i = 0; i < $(".pnl-section").length; i++) {

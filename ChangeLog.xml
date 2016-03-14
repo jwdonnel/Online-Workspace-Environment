@@ -1,6 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Items>
-    <version>Ver. 4.6</version>
+    <version>Ver. 4.6.3</version>
+    <log name="3/14/2016">
+        Default database updates that removes obsolete tables no longer used or needed.
+    </log>
+    <log name="3/7/2016">
+        Added new Page View table and classes to Network Log. This will log the number of times a page is viewed. It will also record the user who viewed it along with the IP Address.<br />
+        Minor fixes to the site menu tabs and adding "pnl_" if the panel id isn't found.<br />
+        Database Scanner now will report which tables/columns are causing the issues.
+    </log>
+    <log name="3/2/2016">
+        Added the Http Referer to the login activity to give the Administrator more knowledge of where users are coming from when accessing the site.<br />
+        Updated Site Login gridview to add Http Referer column.
+    </log>
     <log name="2/29/2016">
         <h3 class="font-bold">
             New to Version 4.6

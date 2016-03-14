@@ -783,7 +783,7 @@ public partial class SiteTools_DbManager : Page {
             }
             if (!DefaultDBTables.DatabaseUpToDate) {
                 if (!ss.AutoFixDBIssues) {
-                    str.Append("<div class='pad-left'><span style='color: red;'>Your Database seems to be out of date.<br />Press the 'Fix' button to update the database.</span><div class='clear-space-five'></div></div>");
+                    str.Append("<div class='pad-left'><small style='color: red;'>Your Database seems to be out of date. Press the 'Fix' button to update the database.</small><div class='clear-space-five'></div></div>");
                 }
 
                 if (dbCall.DataProvider != "System.Data.SqlClient" && dbCall.DataProvider != "System.Data.SqlServerCe.4.0") {
@@ -806,6 +806,8 @@ public partial class SiteTools_DbManager : Page {
             }
 
             pnl_databaseChecker.Controls.Add(new LiteralControl(str.ToString()));
+
+            BuildDatabaseIssueList();
         }
     }
 
@@ -848,6 +850,20 @@ public partial class SiteTools_DbManager : Page {
         catch { }
 
         return "N/A";
+    }
+    private void BuildDatabaseIssueList() {
+        pnl_databaseissues.Controls.Clear();
+
+        if (DefaultDBTables.DatabaseScannerIssues.Count > 0) {
+            StringBuilder str = new StringBuilder();
+            str.Append("<div class='clear-space'></div><div class='clear-space'></div>");
+            str.Append("<h3 class='font-bold'>Database Issues</h3><div class='clear-space-two'></div><ul style='padding-left: 20px;'>");
+            foreach (string issue in DefaultDBTables.DatabaseScannerIssues) {
+                str.Append("<li class='margin-top-sml margin-bottom-sml'>" + issue + "</li>");
+            }
+            str.Append("</ul><div class='clear-space'></div>");
+            pnl_databaseissues.Controls.Add(new LiteralControl(str.ToString()));
+        }
     }
 
     #endregion

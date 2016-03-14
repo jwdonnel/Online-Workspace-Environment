@@ -71,6 +71,7 @@
             <Column id="LoginGroup" type="nvarchar" length="500" nullable="true"></Column>
             <Column id="Success" type="bit" nullable="false"></Column>
             <Column id="ActType" type="nvarchar" length="50" nullable="true"></Column>
+            <Column id="HttpReferer" type="nvarchar" length="2000" nullable="true"></Column>
             <Column id="DateAdded" type="datetime" nullable="false"></Column>
         </Columns>
     </Table>
@@ -114,7 +115,7 @@
     </Table>
     <Table name="aspnet_ServerSettings" primaryKey="ApplicationId">
         <Columns>
-            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="false"></Column>
             <Column id="DocumentsFolder" type="nvarchar" length="4000" nullable="true"></Column>
             <Column id="RecordActivity" type="bit" nullable="true"></Column>
             <Column id="RecordActivityToLogFile" type="bit" nullable="true"></Column>
@@ -195,6 +196,7 @@
             <Column id="DefaultBodyFontColor" type="nvarchar" length="10" nullable="true"></Column>
             <Column id="ShowLoginModalOnDemoMode" type="bit" nullable="true"></Column>
             <Column id="AppendTimestampOnScripts" type="bit" nullable="true"></Column>
+            <Column id="RecordPageViews" type="bit" nullable="true"></Column>
         </Columns>
     </Table>
     <Table name="aspnet_ShowUpdates">
@@ -538,6 +540,25 @@
             <Column id="Attempts" type="int" nullable="false"></Column>
             <Column id="Blocked" type="bit" nullable="false"></Column>
             <Column id="LastAttempt" type="datetime" nullable="true"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_PageViews" primaryKey="ID">
+        <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="IPAddress" type="nvarchar" length="150" nullable="false"></Column>
+            <Column id="Username" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="PageName" type="nvarchar" length="2000" nullable="false"></Column>
+            <Column id="DateAdded" type="datetime" nullable="false"></Column>
+        </Columns>
+    </Table>
+    <Table name="aspnet_PageViewsUsersToIgnore" primaryKey="ID">
+        <Columns>
+            <Column id="ApplicationId" type="uniqueidentifier" nullable="true"></Column>
+            <Column id="ID" type="uniqueidentifier" nullable="false"></Column>
+            <Column id="Username" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="UpdatedBy" type="nvarchar" length="250" nullable="false"></Column>
+            <Column id="DateAdded" type="datetime" nullable="false"></Column>
         </Columns>
     </Table>
     <Table name="Memberships" for="System.Data.SqlServerCe.4.0" primaryKey="UserId">

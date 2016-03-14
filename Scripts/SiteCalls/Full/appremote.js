@@ -1,8 +1,8 @@
 ﻿// -----------------------------------------------------------------------------------
 //
-//	appRemote v4.8
+//	appRemote v4.9
 //	by John Donnelly
-//	Last Modification: 2/23/2016
+//	Last Modification: 3/10/2016
 //
 //	Licensed under the Creative Commons Attribution 2.5 License - http://creativecommons.org/licenses/by/2.5/
 //  	- Free for use in both personal and commercial projects
@@ -751,7 +751,7 @@ var appRemote = function () {
         SetLightColorMode();
 
         var siteTipCookie = cookie.get("siteTipsOnPageLoad");
-        if ((siteTipCookie != "") && (siteTipCookie != null) && (siteTipCookie != undefined)) {
+        if ((siteTipCookie != "") && (siteTipCookie != null) && (siteTipCookie != undefined) && (isDemoMode)) {
             appRemote_Config.siteTipsOnPageLoad = ConvertBitToBoolean(siteTipCookie);
         }
 
@@ -911,20 +911,20 @@ var appRemote = function () {
                     if (tipArray.length > 0) {
                         tipIndex = Math.round(Math.random() * (tipArray.length - 1));
 
-                        var ele = "<div id='SiteTip-element' class='Modal-element' style='display: block; visibility: visible;'>";
+                        var ele = "<div id='SiteTip-element' class='Modal-element' style='display: block; visibility: visible; opacity: 0.0; filter: alpha(opacity=0);'>";
                         ele += "<div class='Modal-overlay'>";
                         ele += "<div class='Modal-element-align'>";
                         ele += "<div class='Modal-element-modal' style='overflow:auto; min-width: " + ($(window).width() - 50) + "px; max-height: " + ($(window).height() - ($("#always-visible").outerHeight() + $("#container-footer").outerHeight() + 50)) + "px;'>";
 
                         // Body
-                        var nextTipButton = "<input class='input-buttons nextprev-button' type='button' value='Next Tip' onclick=\"appRemote.NextSiteTip();\" style='width: 95px;' /><div class='clear-space-five'></div>";
-                        var prevTipButton = "<input class='input-buttons nextprev-button margin-bottom' type='button' value='Previous Tip' onclick=\"appRemote.PreviousSiteTip();\" style='width: 95px;' />";
+                        var nextTipButton = "<input class='input-buttons nextprev-button' type='button' value='Next Tip' onclick=\"appRemote.NextSiteTip();\" /><div class='clear-space-five'></div>";
+                        var prevTipButton = "<input class='input-buttons nextprev-button margin-bottom' type='button' value='Previous Tip' onclick=\"appRemote.PreviousSiteTip();\" />";
                         if (tipArray.length == 1) {
                             nextTipButton = "";
                             prevTipButton = "";
                         }
 
-                        var closeButton = "<input class='input-buttons confirm-close-button float-left' type='button' value='Close' onclick=\"appRemote.CloseSiteTip();\" style='width: 95px;' />";
+                        var closeButton = "<input class='input-buttons confirm-close-button float-left' type='button' value='Close' onclick=\"appRemote.CloseSiteTip();\" />";
                         var dontShowAgain = "<div class='dont-show-again'><input id='dont-show-again-cb' type='checkbox' checked='checked' /><label for='dont-show-again-cb'>Show Tips on Page Load</label></div>";
 
                         if (appRemote_Config.siteTheme == "") {
@@ -940,6 +940,9 @@ var appRemote = function () {
 
                         $("body").append(ele);
                         AdjustSiteTipModal();
+                        $("#SiteTip-element").fadeTo(appRemote_Config.animationSpeed * 2, 1.0, function () {
+                            AdjustSiteTipModal();
+                        });
 
                         $("#SiteTip-element").find(".Modal-overlay").on("click", function (e) {
                             if (e.target.className == "Modal-overlay") {
@@ -979,8 +982,9 @@ var appRemote = function () {
                     contentType: "application/json; charset=utf-8"
                 });
             }
-
-            cookie.set("siteTipsOnPageLoad", "false", "30");
+            else {
+                cookie.set("siteTipsOnPageLoad", "false", "30");
+            }
         }
 
         tipIndex = 0;
@@ -989,13 +993,10 @@ var appRemote = function () {
         $('#SiteTip-element').remove();
     }
     function AdjustSiteTipModal() {
-        var top = $("#SiteTip-element").find(".Modal-element-modal").css("top");
-        if (top == "auto") {
-            $("#SiteTip-element").find(".Modal-element-align").css({
-                marginTop: -($("#SiteTip-element").find(".Modal-element-modal").height() / 2),
-                marginLeft: -($("#SiteTip-element").find(".Modal-element-modal").width() / 2)
-            });
-        }
+        $("#SiteTip-element").find(".Modal-element-align").css({
+            marginTop: -($("#SiteTip-element").find(".Modal-element-modal").height() / 2),
+            marginLeft: -($("#SiteTip-element").find(".Modal-element-modal").width() / 2)
+        });
     }
 
 

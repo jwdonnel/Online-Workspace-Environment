@@ -344,7 +344,5 @@ $(document).ready(function () {
 });
 
 Sys.Application.add_load(function () {
-    if (twitterTimeOut == null) {
-        twitterStation.Init(5);
-    }
+    twitterStation.Init(5);
 });

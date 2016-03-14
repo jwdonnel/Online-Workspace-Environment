@@ -46,6 +46,8 @@ public class ServerSettings {
     public const string AdminUserName = "Administrator";
     public const string OverrideMobileSessionString = "OverrideMobile";
 
+    public const string GuestUsername = "Guest User";
+
     public const string BackupFileExt = ".backup";
     public const string SavedDataFilesExt = ".data";
 
@@ -1067,6 +1069,17 @@ public class ServerSettings {
             CheckAndBuildServerSettingsTable();
             if (SettingsTable.ContainsKey("ShowLoginModalOnDemoMode")) {
                 return HelperMethods.ConvertBitToBoolean(SettingsTable["ShowLoginModalOnDemoMode"]);
+            }
+
+            return false;
+        }
+    }
+
+    public bool RecordPageViews {
+        get {
+            CheckAndBuildServerSettingsTable();
+            if (SettingsTable.ContainsKey("RecordPageViews")) {
+                return HelperMethods.ConvertBitToBoolean(SettingsTable["RecordPageViews"]);
             }
 
             return false;
@@ -2376,6 +2389,15 @@ public class ServerSettings {
             temp = 1;
         }
         dbCall.CallUpdate(dbTable, new List<DatabaseQuery>() { new DatabaseQuery("ShowLoginModalOnDemoMode", temp.ToString()) }, QueryList);
+        UpdateServerSettingsTable();
+    }
+
+    public static void update_RecordPageViews(bool record) {
+        int temp = 0;
+        if (record) {
+            temp = 1;
+        }
+        dbCall.CallUpdate(dbTable, new List<DatabaseQuery>() { new DatabaseQuery("RecordPageViews", temp.ToString()) }, QueryList);
         UpdateServerSettingsTable();
     }
 

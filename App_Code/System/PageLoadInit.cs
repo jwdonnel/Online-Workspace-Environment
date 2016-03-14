@@ -35,6 +35,7 @@ public class PageLoadInit {
     private string _ipAddress;
     private string _sitetheme = "Standard";
     private bool _forceGroupLogin;
+    private readonly PageViews pageViews = new PageViews();
 
     #endregion
 
@@ -180,6 +181,17 @@ public class PageLoadInit {
                 catch { }
             }
 
+            if (isValid && !_IsPostBack && _ss.RecordPageViews) {
+                string tempName = ServerSettings.GuestUsername;
+                if (_userId.IsAuthenticated && !string.IsNullOrEmpty(_userId.Name)) {
+                    tempName = _userId.Name;
+                }
+
+                if (!string.IsNullOrEmpty(tempName)) {
+                    pageViews.AddItem(_ipAddress, tempName, _page.ToString());
+                }
+            }
+
             return isValid;
         }
     }
@@ -204,10 +216,14 @@ public class PageLoadInit {
     }
 
     public bool CheckIfLicenseIsValid() {
-        if ((!CheckLicense.IsDeveloper && !CheckLicense.IsTrial && !CheckLicense.IsExpired) && (!HelperMethods.ConvertBitToBoolean(_Request.QueryString["purchase"]) || (CheckLicense.LicenseValid && !CheckLicense.TrialActivated))) {
-            return true;
+        if (CheckLicense.LicenseIsLoaded) {
+            if ((!CheckLicense.IsDeveloper && !CheckLicense.IsTrial && !CheckLicense.IsExpired) && (!HelperMethods.ConvertBitToBoolean(_Request.QueryString["purchase"]) || (CheckLicense.LicenseValid && !CheckLicense.TrialActivated))) {
+                return true;
+            }
+            return false;
         }
-        return false;
+
+        return true;
     }
 
     public NewUserDefaults DemoCustomizations {

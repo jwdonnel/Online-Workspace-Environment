@@ -27,6 +27,7 @@ using System.Web.UI.HtmlControls;
 public class AcctSettings : System.Web.Services.WebService {
 
     public AcctSettings() {
+        GetSiteRequests.AddRequest();
 
         //Uncomment the following line if using designed components 
         //InitializeComponent(); 

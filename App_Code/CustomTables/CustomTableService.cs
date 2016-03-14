@@ -31,6 +31,8 @@ public class CustomTableService : System.Web.Services.WebService {
     #endregion
 
     public CustomTableService() {
+        GetSiteRequests.AddRequest();
+
         _userId = HttpContext.Current.User.Identity;
         ctv = new CustomTableViewer(_userId.Name);
     }

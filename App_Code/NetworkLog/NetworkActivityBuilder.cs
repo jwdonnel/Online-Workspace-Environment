@@ -30,8 +30,8 @@ public class NetworkActivityBuilder {
     private static NetworkInterface networkInterface;
     private static readonly List<float> cpu = new List<float>();
     private static readonly List<float> siterequests = new List<float>();
-    private static float AverageRequests_request;
-    private static float CurrentRequests_request;
+    public static float AverageRequests_request;
+    public static float CurrentRequests_request;
     private static long lngBytesSend = 0;
     private static long lngBtyesReceived = 0;
     private readonly HttpContext Context;
@@ -49,27 +49,6 @@ public class NetworkActivityBuilder {
         Context = _context;
         Request = _request;
         Response = _response;
-    }
-
-    public string BuildAppLog {
-        get {
-            StringBuilder sb = new StringBuilder();
-            double current = Math.Round(CurrentRequests_request, 2);
-            double average = Math.Round(AverageRequests_request, 2);
-            double maximum = Math.Round(FindMax(siterequests), 2);
-            sb.Append("<div class='averagerequests' align='center'>");
-            sb.Append("<table cellpadding='15' cellspacing='0' style='width: 700px;'><tbody>");
-            sb.Append("<tr><td><h2 class='float-left font-bold pad-right'>Current:</h2><h2 class='float-left'>" + current + "</h2></td>");
-            sb.Append("<td><h2 class='float-left font-bold pad-right'>Average:</h2><h2 class='float-left'>" + average + "</h2></td>");
-            sb.Append("<td><h2 class='float-left font-bold pad-right'>Maximum:</h2><h2 class='float-left'>" + maximum + "</h2></td></tr>");
-            sb.Append("</tbody></table>");
-            sb.Append("</div>");
-
-            if (!GetSiteRequests.GetRequests)
-                sb.Append("<div class='clear'></div><div style='color: #FF0000'>Site requests activity off</div>");
-
-            return sb.ToString();
-        }
     }
 
     public object[] BuildRequests {
@@ -105,11 +84,9 @@ public class NetworkActivityBuilder {
         }
     }
 
-    #region Private Methods
-
-    private static float FindMax(IEnumerable<float> list) {
+    public static float FindMax() {
         try {
-            float returnVal = list.Concat(new[] { float.MinValue }).Max();
+            float returnVal = siterequests.Concat(new[] { float.MinValue }).Max();
             if (returnVal < 0)
                 return 0.0f;
             else
@@ -120,28 +97,4 @@ public class NetworkActivityBuilder {
             return 0.0f;
         }
     }
-    private static void BuildActivity_ForOverlay() {
-        // Populate new series with data 
-        float count = 0.0F;
-        foreach (double s in from t in GetSiteRequests.SiteRequests let targetDt = ServerSettings.ServerDateTime let date1 = t select targetDt.Subtract(date1).TotalSeconds into s where s < 2 select s) {
-            count++;
-        }
-        siterequests.Add(count);
-        AverageRequests_request = 0.0F;
-        CurrentRequests_request = 0.0F;
-        for (int i = 0; i < siterequests.Count; i++) {
-            if (i <= 30) {
-                AverageRequests_request += siterequests[i];
-                CurrentRequests_request = siterequests[i];
-            }
-            else {
-                siterequests.RemoveAt(0);
-                break;
-            }
-        }
-
-        AverageRequests_request = (AverageRequests_request / 60.0F);
-    }
-
-    #endregion
 }

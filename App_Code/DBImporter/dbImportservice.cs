@@ -37,6 +37,8 @@ public class dbImportservice : System.Web.Services.WebService {
     #endregion
 
     public dbImportservice() {
+        GetSiteRequests.AddRequest();
+
         _userId = HttpContext.Current.User.Identity;
         ConnectionStringSettings _connString = ServerSettings.GetRootWebConfig.ConnectionStrings.ConnectionStrings[ServerSettings.DefaultConnectionStringName];
         dbCall = new DatabaseCall(_connString.ProviderName, _connString.ConnectionString);

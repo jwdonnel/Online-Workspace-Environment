@@ -34,6 +34,13 @@
             border-bottom: 1px solid #DFDFDF;
             color: #888;
             background: #FCFCFC;
+            -moz-box-shadow: 1px 1px 2px rgba(0,0,0,.12);
+            -o-box-shadow: 1px 1px 2px rgba(0,0,0,.12);
+            -webkit-box-shadow: 1px 1px 2px rgba(0,0,0,.12);
+            box-shadow: 1px 1px 2px rgba(0,0,0,.12);
+            -webkit-border-bottom-right-radius: 20px;
+            -moz-border-bottom-right-radius: 20px;
+            border-bottom-right-radius: 20px;
         }
 
         .logentry
@@ -458,6 +465,9 @@
                     <div class="clear-space"></div>
                     OpenWSE is free for personal use as long as the copyright notices are intact. In order to remove the copyright, you must purchase a license. Download and run the OpenWSE_Installer.exe which will setup a website on your local machine using IIS. Once you buy the license, you can make any changes you want to the code. 
                     <div class="clear-space"></div>
+                    <div class="clear-space"></div>
+                    <iframe src="<%=OpenWSE.Core.Licensing.CheckLicense.LicenseSite %>iframes/PayPal_Donate.html" style="width: 205px; height: 90px; border: none; overflow: hidden;"></iframe>
+                    <div class="clear"></div>
                 </div>
                 <div class="about-section">
                     <h2>Frameworks and Technologies Used</h2>

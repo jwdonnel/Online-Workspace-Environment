@@ -17,9 +17,10 @@ public struct LoginActivity_Coll {
     private string _loginGroup;
     private bool _success;
     private ActivityType _actType;
+    private string _httpReferer;
     private DateTime _dateAdded;
 
-    public LoginActivity_Coll(string id, string ipAddress, string nameUsed, string loginGroup, string success, string actType, string dateAdded) {
+    public LoginActivity_Coll(string id, string ipAddress, string nameUsed, string loginGroup, string success, string actType, string httpReferer, string dateAdded) {
         _id = id;
         _ipAddress = ipAddress;
         _nameUsed = nameUsed;
@@ -37,6 +38,7 @@ public struct LoginActivity_Coll {
         else {
             _actType = ActivityType.Logout;
         }
+        _httpReferer = httpReferer;
         DateTime.TryParse(dateAdded, out _dateAdded);
     }
 
@@ -62,6 +64,10 @@ public struct LoginActivity_Coll {
 
     public ActivityType ActType {
         get { return _actType; }
+    }
+
+    public string HttpReferer {
+        get { return _httpReferer; }
     }
 
     public DateTime DateAdded {
@@ -101,18 +107,31 @@ public class LoginActivity
 
             string remoteaddress = "Unknown";
             string loginGroup = string.Empty;
+            string httpReferer = string.Empty;
             try {
                 string username = HttpContext.Current.User.Identity.Name;
                 if (GroupSessions.DoesUserHaveGroupLoginSessionKey(username)) {
                     loginGroup = GroupSessions.GetUserGroupSessionName(username);
                 }
 
-                NameValueCollection n = HttpContext.Current.Request.ServerVariables;
-                remoteaddress = n["REMOTE_ADDR"];
-                if (remoteaddress == "::1")
-                    remoteaddress = "127.0.0.1";
+                if (HttpContext.Current != null && HttpContext.Current.Request != null && HttpContext.Current.Request.ServerVariables != null) {
+                    NameValueCollection n = HttpContext.Current.Request.ServerVariables;
+                    remoteaddress = n["REMOTE_ADDR"];
+                    if (remoteaddress == "::1") {
+                        remoteaddress = "127.0.0.1";
+                    }
+
+                    httpReferer = n["HTTP_REFERER"];
+                    if (string.IsNullOrEmpty(httpReferer) && HttpContext.Current.Request.UrlReferrer != null) {
+                        httpReferer = HttpContext.Current.Request.UrlReferrer.OriginalString;
+                    }
+                }
             }
             catch { }
+
+            if (!string.IsNullOrEmpty(httpReferer) && httpReferer.Length > 2000) {
+                httpReferer = httpReferer.Substring(0, 1995) + "...";
+            }
 
             List<DatabaseQuery> query = new List<DatabaseQuery>();
             query.Add(new DatabaseQuery("ApplicationId", ServerSettings.ApplicationID));
@@ -122,6 +141,7 @@ public class LoginActivity
             query.Add(new DatabaseQuery("LoginGroup", loginGroup));
             query.Add(new DatabaseQuery("Success", tempSuccess));
             query.Add(new DatabaseQuery("ActType", actType.ToString()));
+            query.Add(new DatabaseQuery("HttpReferer", httpReferer));
             query.Add(new DatabaseQuery("DateAdded", ServerSettings.ServerDateTime.ToString()));
 
             dbCall.CallInsert("aspnet_LoginActivity", query);
@@ -142,8 +162,9 @@ public class LoginActivity
             string loginGroup = row["LoginGroup"];
             string success = row["Success"];
             string actType = row["ActType"];
+            string httpReferer = row["HttpReferer"];
             string dateAdded = row["DateAdded"];
-            LoginActivity_Coll coll = new LoginActivity_Coll(id, ipAddress, nameUsed, loginGroup, success, actType, dateAdded);
+            LoginActivity_Coll coll = new LoginActivity_Coll(id, ipAddress, nameUsed, loginGroup, success, actType, httpReferer, dateAdded);
             dataTable.Add(coll);
         }
 
@@ -179,8 +200,9 @@ public class LoginActivity
             string loginGroup = row["LoginGroup"];
             string success = row["Success"];
             string actType = row["ActType"];
+            string httpReferer = row["HttpReferer"];
             string dateAdded = row["DateAdded"];
-            coll = new LoginActivity_Coll(id, ipAddress, nameUsed, loginGroup, success, actType, dateAdded);
+            coll = new LoginActivity_Coll(id, ipAddress, nameUsed, loginGroup, success, actType, httpReferer, dateAdded);
             break;
         }
 

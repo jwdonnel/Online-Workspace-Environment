@@ -20,6 +20,7 @@ using System.Xml;
 public class AutoComplete : System.Web.Services.WebService {
 
     public AutoComplete() {
+        GetSiteRequests.AddRequest();
 
         //Uncomment the following line if using designed components 
         //InitializeComponent(); 
@@ -126,6 +127,17 @@ public class AutoComplete : System.Web.Services.WebService {
         return temp.ToArray();
     }
 
+    [WebMethod]
+    public string[] GetListOfUsersWithAdminIncluded(string prefixText, int count) {
+        List<string> temp = GetListOfUsers(prefixText, count).ToList();
+        if (HttpContext.Current.User.Identity.IsAuthenticated) {
+            if (!temp.Contains(ServerSettings.AdminUserName)) {
+                temp.Add(ServerSettings.AdminUserName);
+            }
+            temp.Sort();
+        }
+        return temp.ToArray();
+    }
 
     [WebMethod]
     public string[] GetListOfUsersByFullName(string prefixText, int count) {
