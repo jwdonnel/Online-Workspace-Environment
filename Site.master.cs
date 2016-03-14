@@ -126,9 +126,19 @@ public partial class SiteMaster : MasterPage {
                 && Request.RawUrl.ToLower().Contains("licensemanager.aspx")) {
                 return;
             }
+            else if (!CheckLicense.LicenseIsLoaded && !ServerSettings.CheckWebConfigFile() 
+                && (CheckLicense.IsTrial || CheckLicense.IsDeveloper || CheckLicense.LicenseValid) 
+                && Request.RawUrl.ToLower().Contains("licensemanager.aspx")) {
+                return;
+            }
             else if (!userId.IsAuthenticated && ServerSettings.CheckWebConfigFile()) {
                 Response.Redirect("~/" + ServerSettings.DefaultStartupPage);
             }
+        }
+        else if (!CheckLicense.LicenseIsLoaded && !ServerSettings.CheckWebConfigFile()
+            && (CheckLicense.IsTrial || CheckLicense.IsDeveloper || CheckLicense.LicenseValid)
+            && Request.RawUrl.ToLower().Contains("licensemanager.aspx")) {
+                return;
         }
         else {
             Page.Response.Redirect("~/ErrorPages/Blocked.html");

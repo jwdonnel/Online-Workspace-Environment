@@ -62,6 +62,10 @@ public class PageLoadInit {
             // Validate the site license if not vaild
             CheckLicense.ValidateLicense(_page);
 
+            if (!CheckLicense.LicenseIsLoaded && !ServerSettings.CheckWebConfigFile() && (CheckLicense.IsTrial || CheckLicense.IsDeveloper || CheckLicense.LicenseValid)) {
+                return false;
+            }
+
             bool isValid = false;
 
             #region IP Watch and Listener
