@@ -1,0 +1,3 @@
+﻿.personalcalendar-overlay-entry { float: left; font-size: 12px; padding: 10px; margin-bottom: 10px; min-width: 225px; max-width: 500px; min-height: 110px; margin-right: 15px; margin-left: 15px; position: relative; }
+.personalcalendar-entry-bg { filter: alpha(opacity=35); opacity: 0.35; position: absolute; top: 0; bottom: 0; left: 0; right: 0; -moz-border-radius: 15px; -webkit-border-radius: 15px; border-radius: 15px; }
+.personalcalendar-overlay-entry h4 { font-size: 1.3em!important; clear: both; }

@@ -1,0 +1,6 @@
+﻿.productTableHeader-tr{background:#CFCFCF}
+.productTableHeader-tr td{padding:5px;font-weight:bold;font-size:12px;text-align:left}
+.productTable-tr{background:#FFF;-webkit-transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
+.productTable-tr:hover{background:#EFEFEF}
+.productTable-tr td{padding:4px 5px;border-bottom:1px solid #B7B7B7;font-size:12px}
+.productTable-tr td.alt{background:#EFEFEF}

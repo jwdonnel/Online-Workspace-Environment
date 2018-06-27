@@ -1,0 +1,79 @@
+<table cellspacing="0" rules="all" border="1" style="border-collapse:collapse;">
+	<tr>
+		<td>Date</td><td>Truck Line</td><td>Truck Number</td><td>Customer</td><td>General Direction</td><td>Sales Order</td><td>Weight</td>
+	</tr><tr>
+		<td>2/7/2018</td><td>hx</td><td>21</td><td>american mechanical</td><td>TRUCK LOAD</td><td>156754</td><td>3,977</td>
+	</tr><tr>
+		<td>2/7/2018</td><td>hx</td><td>21</td><td>SOS</td><td>TRUCK LOAD</td><td>156777</td><td>5,587</td>
+	</tr><tr>
+		<td>2/7/2018</td><td>hx</td><td>21</td><td>Holt</td><td>TRUCK LOAD</td><td>156652</td><td>2,863</td>
+	</tr><tr>
+		<td>2/7/2018</td><td>Coomes</td><td>192</td><td>JR Custom</td><td>TRUCK LOAD</td><td>156151,  156305,  156163,  156237,  156369</td><td>47,658</td>
+	</tr><tr>
+		<td>2/7/2018</td><td>P S</td><td>95</td><td>Lozier</td><td>TRUCK LOAD</td><td>156640</td><td>43,894</td>
+	</tr><tr>
+		<td>2/7/2018</td><td>P-S</td><td>183</td><td>lozier</td><td>TRUCK LOAD</td><td>156709</td><td>44,558</td>
+	</tr><tr>
+		<td>2/7/2018</td><td>hx</td><td>21</td><td>Vision Mechanical</td><td>TRUCK LOAD</td><td>156798</td><td>3,515</td>
+	</tr><tr>
+		<td>2/7/2018</td><td>AAA FREIGHT/SIAM LOGISTICS</td><td>123</td><td>123</td><td>Joplin, Mo</td><td>Order #</td><td>Weight</td>
+	</tr><tr>
+		<td>2/6/2018</td><td>Hinson</td><td>1</td><td>LOZIER NORTH PLANT</td><td>TRUCK LOAD</td><td>156572</td><td>45,156</td>
+	</tr><tr>
+		<td>2/6/2018</td><td>TSI</td><td>505</td><td>MORIDGE</td><td>TRUCK LOAD</td><td>156753</td><td>43,968</td>
+	</tr><tr>
+		<td>2/6/2018</td><td>HX</td><td>21</td><td>ACCU-FAB</td><td>TRUCK LOAD</td><td>156779</td><td>10,831</td>
+	</tr><tr>
+		<td>2/6/2018</td><td>CH ROBINSON ( WHITE TRUCKING )</td><td>875</td><td>LOZIER NORTH PLANT</td><td>TRUCK LOAD</td><td>156574</td><td>44,260</td>
+	</tr><tr>
+		<td>2/5/2018</td><td>HX DELIVERY</td><td>30</td><td>A-LUSTER</td><td>TRUCK LOAD</td><td>156380</td><td>4,141</td>
+	</tr><tr>
+		<td>2/5/2018</td><td>KENNETH HINSON</td><td>1</td><td>KASA FAB</td><td>TRUCK LOAD</td><td>155738, 156282, 156284, 156668, 156669, 156680, 156651</td><td>37,962</td>
+	</tr><tr>
+		<td>2/5/2018</td><td>HX DELIVERY</td><td>29</td><td>TK METALS</td><td>TRUCK LOAD</td><td>156715</td><td>5,096</td>
+	</tr><tr>
+		<td>2/5/2018</td><td>PETERSON TRANSPOTATION</td><td>P21</td><td>LOZIER-WEST PLANT</td><td>TRUCK LOAD</td><td>156492</td><td>37,384</td>
+	</tr><tr>
+		<td>2/5/2018</td><td>PETERSON TRANSPORTATION</td><td>P17</td><td>LOZIER-NORTH PLANT</td><td>TRUCK LOAD</td><td>156728</td><td>44,655</td>
+	</tr><tr>
+		<td>2/5/2018</td><td>HX DELIVERY</td><td>21</td><td>VISION CONSTRUCTION</td><td>TRUCK LOAD</td><td>156735</td><td>90</td>
+	</tr><tr>
+		<td>2/5/2018</td><td>HX DELIVERY</td><td>21</td><td>SYSTEMAIR</td><td>TRUCK LOAD</td><td>156512</td><td>8,074</td>
+	</tr><tr>
+		<td>2/5/2018</td><td>KENNETH HINSON</td><td>1</td><td>MORIDGE</td><td>TRUCK LOAD</td><td>152575</td><td>40,100</td>
+	</tr><tr>
+		<td>2/5/2018</td><td>GIESKE</td><td>30</td><td>GIESKE</td><td>TRUCK LOAD</td><td>156727</td><td>2,568</td>
+	</tr><tr>
+		<td>2/2/2018</td><td>RL</td><td>pt4482</td><td>Roto Mix</td><td>TRUCK LOAD</td><td>165517</td><td>939</td>
+	</tr><tr>
+		<td>2/2/2018</td><td>CANAL INTERNATIONAL</td><td>8530</td><td>LOZIER-NORTH PLANT</td><td>TRUCK LOAD</td><td>156560</td><td>44,391</td>
+	</tr><tr>
+		<td>2/2/2018</td><td>hx</td><td>30</td><td>NORTH TOPEKA FAB</td><td>TRUCK LOAD</td><td>156628</td><td>8,675</td>
+	</tr><tr>
+		<td>2/2/2018</td><td>RL</td><td>pt4482</td><td>roto mix</td><td>TRUCK LOAD</td><td>165488</td><td>492</td>
+	</tr><tr>
+		<td>2/2/2018</td><td>MCINTOSH</td><td>2</td><td>AMERICAN RAMP</td><td>TRUCK LOAD</td><td>156729,  156516,  156520</td><td>32,976</td>
+	</tr><tr>
+		<td>2/2/2018</td><td>KENNETH</td><td>1</td><td>BOYD METALS - FORT SMITH</td><td>TRUCK LOAD</td><td>156545</td><td>45,505</td>
+	</tr><tr>
+		<td>2/1/2018</td><td>HX DELIVERY</td><td>30</td><td>CLAY BAILEY</td><td>TRUCK LOAD</td><td>156452</td><td>12,102</td>
+	</tr><tr>
+		<td>2/1/2018</td><td>COOMES</td><td>343</td><td>MAC EQUIPMENT/SCHENCK PROCESS</td><td>TRUCK LOAD</td><td>154977</td><td>48,243</td>
+	</tr><tr>
+		<td>2/1/2018</td><td>HX DELIVERY</td><td>30</td><td>STANDARD SHEET METAL</td><td>TRUCK LOAD</td><td>156654</td><td>3,937</td>
+	</tr><tr>
+		<td>2/1/2018</td><td>KENNETH HINSON</td><td>1</td><td>PRECISION METAL FAB</td><td>TRUCK LOAD</td><td>156509</td><td>44,783</td>
+	</tr><tr>
+		<td>2/1/2018</td><td>HX DELIVERY</td><td>24</td><td>ICF INDUSTRIES</td><td>TRUCK LOAD</td><td>156639</td><td>2,000</td>
+	</tr><tr>
+		<td>2/1/2018</td><td>HX DELIVERY</td><td>31</td><td>PATHFINDER SYSTEMS</td><td>TRUCK LOAD</td><td>156618</td><td>5,211</td>
+	</tr><tr>
+		<td>2/1/2018</td><td>HX DELIVERY</td><td>23</td><td>ACCU-FAB</td><td>TRUCK LOAD</td><td>156637</td><td>4,236</td>
+	</tr><tr>
+		<td>2/1/2018</td><td>HX DELIVERY</td><td>23</td><td>LBA</td><td>TRUCK LOAD</td><td>156648</td><td>2,587</td>
+	</tr><tr>
+		<td>2/1/2018</td><td>TSI-KANSAS</td><td>505</td><td>LOZIER-NP2</td><td>TRUCK LOAD</td><td>156193</td><td>40,115</td>
+	</tr><tr>
+		<td>2/1/2018</td><td>HX DELIVERY</td><td>31</td><td>FLYNN MIDWEST</td><td>TRUCK LOAD</td><td>156657</td><td>3,933</td>
+	</tr>
+</table>

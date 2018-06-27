@@ -1,0 +1,14 @@
+﻿.ui-autocomplete { max-height: 300px; }
+.eventlog-datecol { font-weight: bold; text-align: right; padding-right: 10px; width: 115px; }
+.event-entry-holder { padding: 5px 35px 5px 5px; min-height: 38px; }
+    .event-entry-holder .event-entry-title { clear: both; display: block; padding-bottom: 2px; font-weight: bold; }
+    .event-entry-holder .event-entry-text { clear: both; display: block; font-size: 12px; }
+    .event-entry-holder .event-entry-title, .event-entry-holder .event-entry-text { text-align: left!important; }
+#cb_ViewErrorsOnly, #cb_ViewMoreDetails { float: left; }
+label[for="cb_ViewErrorsOnly"], label[for="cb_ViewMoreDetails"] { float: left; }
+.file-section ul { list-style: none; }
+.file-section li { padding: 10px 7px; float: left; min-width: 400px; height: 15px; }
+    .file-section li > a { display: none; float: left; margin-left: 10px; margin-top: -2px; }
+    .file-section li:hover > a { display: block; }
+.file-section span { cursor: pointer; }
+    .file-section span:hover { text-decoration: underline; }

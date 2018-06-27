@@ -1,0 +1,3 @@
+﻿#MainContent_pnl_iplistener_holder label { font-size: 10px!important; }
+.use-currentip-btn { cursor: pointer; position: relative; z-index: 1; float: right; margin-top: 3px; margin-right: 7px; }
+#txt_ipaddress_watchlist, #tb_createnew_listener { width: 250px!important; }

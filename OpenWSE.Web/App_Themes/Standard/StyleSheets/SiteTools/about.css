@@ -1,0 +1,29 @@
+﻿#siteInfo ul { list-style: none; }
+#siteInfo li { padding: 2px 5px; }
+.logdates { /* font-weight: bold; */ text-align: center; width: 90px; border-right: 1px solid #DFDFDF; border-bottom: 1px solid #DFDFDF; color: #888; background: #FCFCFC; }
+.logentry { border-bottom: 1px solid #DFDFDF; }
+#changeLog { font-size: 14px; }
+#siteInfo, #termsofuse, #changeLog, #helppages { padding: 0 20px 10px 20px; line-height: normal; position: relative; }
+#helppage-select-holder, #forkmeInfo, .pnlLinkBtns_Holder { padding: 0 10px 10px 10px; }
+#lbl_currentVer { font-weight: bold; }
+.termsofuse-section { padding-bottom: 30px; clear: both; }
+.termsofus-section-title { font-weight: bold; clear: both; padding-bottom: 10px; }
+.termsofus-section-text { clear: both;}
+.screenshot-img, .workspace-img { max-height: 450px; max-width: 100%; }
+.version-img { max-height: 100px; -moz-box-shadow: 0 2px 4px rgba(0,0,0,.12); -o-box-shadow: 0 2px 4px rgba(0,0,0,.12); -webkit-box-shadow: 0 2px 4px rgba(0,0,0,.12); box-shadow: 0 2px 4px rgba(0,0,0,.12); }
+.lnk_Download { border: 1px solid #3079ED; background: #4D90FE; float: left; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; -webkit-transition: all .2s ease-in-out; -moz-transition: all .2s ease-in-out; transition: all .2s ease-in-out; }
+    .lnk_Download .download-text { color: #FFF; font-size: 14px; font-weight: bold; padding: 10px 15px; float: left; }
+    .lnk_Download:hover { background: #357AE8; boder: 1px solid #2F5BB7; }
+    .lnk_Download:active { background: #2B65BC; border: 1px solid #234589; }
+
+#forkme_banner { float: left; z-index: 10; padding: 10px 50px 10px 10px; color: #FFF; background: url('../../../../Standard_Images/About Logos/blacktocat.png') #0090FF no-repeat 95% 50%; font-weight: 700; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); border-bottom-left-radius: 2px; border-bottom-right-radius: 2px; text-decoration: none; text-shadow: none; transition: color 0.5s ease; transition: text-shadow 0.5s ease; -webkit-transition: color 0.5s ease; -webkit-transition: text-shadow 0.5s ease; -moz-transition: color 0.5s ease; -moz-transition: text-shadow 0.5s ease; -o-transition: color 0.5s ease; -o-transition: text-shadow 0.5s ease; -ms-transition: color 0.5s ease; -ms-transition: text-shadow 0.5s ease; }
+#pnlLinkBtns { padding-top: 35px; }
+.help-intro-text li { color: #CCC; }
+.mobile-pnlLinkBtns { background: none!important; border-bottom: none!important; }
+.mobile-changeLog { padding: 0!important; font-size: 12px !important; }
+    .mobile-changeLog table { border-spacing: 0; border-collapse: collapse; }
+    .mobile-changeLog .pad-all { padding: 5px !important; }
+.aspNetDisabled { cursor: default !important; background: #CCC !important; border: #AAA !important; }
+    .aspNetDisabled .download-text { color: #F1F1F1 !important; text-shadow: 1px 2px 2px #BBB !important; }
+.td-settings-ctrl { line-height: 22px; font-size: 14px; }
+.history-image { max-width: 100%; width: 500px; cursor: pointer; }

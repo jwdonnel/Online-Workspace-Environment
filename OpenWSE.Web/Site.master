@@ -1,0 +1,555 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="SiteMaster" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta name="author" content="John Donnelly" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="revisit-after" content="10 days" />
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <link id="Link1" runat="server" rel="shortcut icon" href="~/Standard_Images/favicon.ico" type="image/x-icon" />
+    <link id="Link2" runat="server" rel="icon" href="~/Standard_Images/favicon.ico" type="image/ico" />
+    <script type="text/javascript">
+        function onBrowserUnloadFunction() {
+            try {
+                openWSE.SaveAccordionState();
+                openWSE.SetLeftSidebarScrollTop();
+                openWSE.OnBrowserClose();
+            }
+            catch (evt) { }
+        }
+    </script>
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body id="site_mainbody" runat="server" onbeforeunload="onBrowserUnloadFunction();">
+    <!--[if lt IE 9]>
+        <div class="lt-ie9-bg">
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser.</p>
+            <p>Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        </div>
+    <![endif]-->
+    <form runat="server" id="ct101" enctype="multipart/form-data">
+        <asp:ScriptManager ID="ScriptManager_Main" runat="server" AsyncPostBackTimeout="360000">
+        </asp:ScriptManager>
+        <h1 style="display: none;">Home Workspace</h1>
+        <div id="top_bar" runat="server">
+            <div id="top-logo-holder">
+                <a id="lnk_BackToWorkspace" href="~/Default.aspx" runat="server" title="Back to Workspace"></a>
+            </div>
+            <div id="top-button-holder">
+                <div id="sidebartoggle_tab" class="top-bar-menu-button">
+                    <ul>
+                        <li class="a sidebar-menu-toggle" title="Toggle sidebar" onclick="openWSE.ShowHideAccordianSidebar();return false;"></li>
+                    </ul>
+                </div>
+                <div id="settings_tab" runat="server" class="top-bar-menu-button">
+                    <div class="active-div"></div>
+                    <ul>
+                        <li class="a settings-menu-toggle" title="Layout Options"></li>
+                        <li class="b">
+                            <div class="li-header">
+                                Layout<a id="hyp_AccountCustomizations" runat="server" class="float-right pad-left-big margin-left-big" visible="false" title="Customize your account" onclick="openWSE.CloseTopDropDowns();">Customizations</a>
+                            </div>
+                            <div class="li-pnl-tab">
+                                <div class="clear-space"></div>
+                                <h3 class="pad-left pad-top">Style
+                                </h3>
+                                <div class="clear-space-two"></div>
+                                <div class="pad-left pad-top pad-bottom pad-right">
+                                    <div class="float-left pad-right-big">
+                                        <asp:RadioButton ID="rb_BoxedLayout" runat="server" Text="&nbsp;Boxed" CssClass="radiobutton-style" GroupName="layoutstyles" />
+                                    </div>
+                                    <div class="float-left pad-right-big">
+                                        <asp:RadioButton ID="rb_WideLayout" runat="server" Text="&nbsp;Wide" CssClass="radiobutton-style" GroupName="layoutstyles" />
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="clear-space"></div>
+                                <div class="border-top"></div>
+                                <div class="clear-space"></div>
+                                <h3 class="pad-left pad-top">Color
+                                </h3>
+                                <div class="clear-space-two"></div>
+                                <div id="div_ColorOptionsHolder" runat="server" class="pad-all-sml">
+                                </div>
+                                <div class="clear-space"></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div id="background_tab" runat="server" class="top-bar-menu-button">
+                    <div class="active-div"></div>
+                    <ul>
+                        <li class="a background-menu-toggle" title="Select a background"></li>
+                        <li class="b">
+                            <div class="li-header">
+                                Background Settings<div class="background-more-settings-holder float-right pad-left-big margin-left-big"></div>
+                            </div>
+                            <div class="li-pnl-tab">
+                                <div class="pad-all">
+                                    <div id="background-selector-holder">
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div id="group_tab" runat="server" class="top-bar-menu-button">
+                    <div class="active-div"></div>
+                    <ul>
+                        <li class="a group-menu-toggle" title="View and log into a group"></li>
+                        <li class="b">
+                            <div class="li-header">
+                                Group List<a href="~/SiteTools/UserMaintenance/GroupOrg.aspx" id="lb_manageGroups" runat="server" class="float-right" visible="false" title="Manage your groups" onclick="openWSE.CloseTopDropDowns();">Manage</a>
+                            </div>
+                            <div class="li-pnl-tab">
+                                <div id="grouplistdiv">
+                                </div>
+                                <div class="group-loginhint">
+                                    You must be apart of that group in order to login. Once logged in, all default settings for that group will be applied to your account. These settings will be removed once you log out of the group. Your Apps, Overlays, and Notifications will be overridden with the group's settings.
+                                </div>
+                            </div>
+                            <div id="divGroupLogoff" class="li-footer">
+                                <asp:LinkButton ID="aGroupLogoff" runat="server" OnClick="aGroupLogoff_Click" CssClass="RandomActionBtns">Log out of Group</asp:LinkButton>
+                                <div class="clear"></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div id="overlay_tab" runat="server" class="top-bar-menu-button">
+                    <div class="active-div"></div>
+                    <ul>
+                        <li class="a overlay-menu-toggle" title="Toggle overlays"></li>
+                        <li class="b">
+                            <div class="li-header">
+                                Overlays<a id="btn_addOverlayButton" runat="server" class="addOverlay-bg float-right" onclick="openWSE.CallOverlayList();return false;">Add</a>
+                            </div>
+                            <div class="li-pnl-tab">
+                                <asp:Panel ID="pnl_OverlaysAll" runat="server" ViewStateMode="Disabled" EnableViewState="false">
+                                </asp:Panel>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="searchwrapper-tools-search">
+                    <a title="Search" onclick="openWSE.SearchSite(this);return false;"></a>
+                    <input type="text" placeholder="Search" autocomplete="off" />
+                    <div class="clear"></div>
+                </div>
+                <div id="workspace-selector" class="top-bar-menu-button" style="display: none;">
+                    <div class="active-div"></div>
+                    <ul>
+                        <li class="a workspace-menu-toggle" title="Select a workspace"></li>
+                        <li class="b">
+                            <div class="li-header">
+                                Workspace
+                            </div>
+                            <div class="li-pnl-tab">
+                                <asp:Panel ID="ddl_WorkspaceSelector" runat="server"></asp:Panel>
+                                <div class="clear"></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="user_profile_tab" runat="server" class="top-bar-userinfo-button">
+                <div class="active-div"></div>
+                <ul>
+                    <li class="a">
+                        <asp:Label ID="lbl_UserName" runat="server" CssClass="username-top-info" ToolTip="Account Options"></asp:Label></li>
+                    <li class="b">
+                        <div class="li-header">
+                            My Account
+                        </div>
+                        <div class="pad-all">
+                            <div class="pad-all">
+                                <div class="float-left margin-right profile-tab-acctimg">
+                                    <asp:Image ID="img_Profile" runat="server" CssClass="acct-image"></asp:Image>
+                                    <div class="btn_changephoto" onclick="openWSE.ChangeUserProfileImage();">
+                                        Update
+                                    </div>
+                                </div>
+                                <div class="float-left pad-left">
+                                    <asp:Label ID="lbl_UserFullName" runat="server" Text="" CssClass="title-dd-name"></asp:Label>
+                                    <div class="clear-space-two">
+                                    </div>
+                                    <asp:Label ID="lbl_UserEmail" runat="server" Text=""></asp:Label>
+                                    <div class="clear-space-five"></div>
+                                    <asp:HyperLink ID="hyp_accountSettings" runat="server" Text="My Account Settings" NavigateUrl="~/SiteTools/UserTools/AcctSettings.aspx" CssClass="account-link-style margin-right" Target="_blank"></asp:HyperLink>
+                                </div>
+                                <div class="clear">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="profile_tab_Buttons" class="li-footer">
+                            <asp:LinkButton ID="lbtn_signoff" runat="server" OnClick="lbtn_signoff_Click">Log Out</asp:LinkButton>
+                            <div class="clear"></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div id="pnl_Login_NonAuth" runat="server" visible="false" class="top-bar-userinfo-button">
+                <div class="active-div"></div>
+                <ul>
+                    <li class="a"><span id="span_signinText" runat="server" class="signin-text">Login</span></li>
+                    <li class="b">
+                        <div class="li-header">
+                            <asp:Label ID="LoginOrRegister" runat="server" Text="Login or Register"></asp:Label>
+                        </div>
+                        <div id="login-modal-div" class="pad-left pad-right pad-bottom pad-top-sml">
+                            <div id="Login-holder">
+                                <asp:Label ID="lbl_LoginMessage_Master" runat="server" Text=""></asp:Label>
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td valign="top">
+                                            <div class="pad-left">
+                                                <div id="SocialLogin_borderSep">
+                                                    <div class="loginwith-api-text">
+                                                        Log Into Your Account
+                                                    </div>
+                                                    <div class="clear"></div>
+                                                    <asp:Login ID="Login1" runat="server" FailureText="<div class='clear-space'></div><div style='color: #D80000; padding-bottom: 5px;'>Invalid Username or Password.</div>"
+                                                        LoginButtonText="Login" TitleText="" Width="100%" DestinationPageUrl="Default.aspx"
+                                                        OnLoggingIn="Login_LoggingIn" OnLoggedIn="Login_Loggedin" OnLoginError="Login_error"
+                                                        Style="position: relative; z-index: 5000">
+                                                        <LayoutTemplate>
+                                                            <asp:Panel ID="pnl_Login" runat="server" DefaultButton="LoginButton">
+                                                                <asp:Literal ID="FailureText" runat="server" EnableViewState="False"></asp:Literal>
+                                                                <div class="clear"></div>
+                                                                <div class="textbox-group-padding">
+                                                                    <div class="textbox-group">
+                                                                        <div class="username-login-img"></div>
+                                                                        <asp:TextBox ID="UserName" runat="server" CssClass="signintextbox focus-textbox" placeholder="Username" autocomplete="off"></asp:TextBox>
+                                                                    </div>
+                                                                    <asp:RequiredFieldValidator ID="UserNameRequired" runat="server" ControlToValidate="UserName"
+                                                                        CssClass="failureNotification" ErrorMessage="" ForeColor="Red" ToolTip="Username is required."
+                                                                        ValidationGroup="ctl00$Login1">*</asp:RequiredFieldValidator>
+                                                                    <div class="clear"></div>
+                                                                </div>
+                                                                <div class="clear-space"></div>
+                                                                <div class="textbox-group-padding">
+                                                                    <div class="textbox-group">
+                                                                        <div class="password-login-img"></div>
+                                                                        <asp:TextBox ID="Password" runat="server" TextMode="Password" CssClass="signintextbox" placeholder="Password" autocomplete="off"></asp:TextBox>
+                                                                    </div>
+                                                                    <asp:RequiredFieldValidator ID="PasswordRequired" runat="server" ControlToValidate="Password"
+                                                                        CssClass="failureNotification" ErrorMessage="" ForeColor="Red" ToolTip="Password is required."
+                                                                        ValidationGroup="ctl00$Login1">*</asp:RequiredFieldValidator>
+                                                                    <div class="clear"></div>
+                                                                </div>
+                                                                <div class="clear-space"></div>
+                                                                <asp:Button ID="LoginButton" runat="server" CommandName="Login" ValidationGroup="ctl00$Login1"
+                                                                    Text="Log in" CssClass="input-buttons-create input-buttons-login" />
+                                                                <div class="clear"></div>
+                                                                <div id="rememberme-holder">
+                                                                    <asp:CheckBox ID="RememberMe" runat="server" Text=" Remember me" />
+                                                                </div>
+                                                            </asp:Panel>
+                                                        </LayoutTemplate>
+                                                        <TextBoxStyle BackColor="White" />
+                                                        <ValidatorTextStyle Font-Bold="True" ForeColor="Red" />
+                                                    </asp:Login>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td id="sociallogin_td" runat="server" valign="top">
+                                            <asp:UpdatePanel ID="updatepnl_socialLogin" runat="server">
+                                                <ContentTemplate>
+                                                    <div class="loginwith-api-text">
+                                                        Or Login With
+                                                    </div>
+                                                    <div class="clear"></div>
+                                                    <asp:LinkButton ID="lbtn_signinwith_Google" runat="server" CssClass="loginwith-api google-btn margin-right" OnClick="lbtn_signinwith_Google_Click">
+                                                                <span class="google-login-img"></span><span class="google-login-text">Login with Google</span>
+                                                    </asp:LinkButton>
+                                                    <div class="clear"></div>
+                                                    <asp:LinkButton ID="lbtn_signinwith_Twitter" runat="server" CssClass="loginwith-api twitter-btn margin-right" OnClick="lbtn_signinwith_Twitter_Click">
+                                                                <span class="twitter-login-img"></span><span class="twitter-login-text">Login with Twitter</span>
+                                                    </asp:LinkButton>
+                                                    <div class="clear"></div>
+                                                    <asp:LinkButton ID="lbtn_signinwith_Facebook" runat="server" CssClass="loginwith-api facebook-btn margin-right" OnClick="lbtn_signinwith_Facebook_Click">
+                                                                <span class="facebook-login-img"></span><span class="facebook-login-text">Login with Facebook</span>
+                                                    </asp:LinkButton>
+                                                </ContentTemplate>
+                                            </asp:UpdatePanel>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div align="center">
+                                    <a href="#" id="lnk_forgotpassword" class="margin-left margin-right margin-top-big" onclick="openWSE.LoadRecoveryPassword();return false;">Forgot your Password?</a>
+                                    <a href="#" id="login_register_link" class="margin-left margin-right margin-top-big" onclick="openWSE.LoadCreateAccountHolder();return false;">Create a new account</a>
+                                </div>
+                            </div>
+                            <div id="CreateAccount-holder" style="display: none;">
+                                <div id="iframe-createaccount-holder">
+                                </div>
+                            </div>
+                            <div id="ForgotPassword-holder" style="display: none;">
+                                <div class="clear-space"></div>
+                                <h4>Please provide your username. An email will be sent to this account using the email address associated with your account. Click the link in the email to recover your account. Always change your password after recovering your account.</h4>
+                                <div class="clear-space"></div>
+                                <table cellpadding="5" cellspacing="5" style="margin: 0 auto;">
+                                    <tr>
+                                        <td style="text-align: left;">
+                                            <asp:UpdatePanel ID="updatepnl_forgotPassword" runat="server" UpdateMode="Conditional">
+                                                <ContentTemplate>
+                                                    <asp:Panel ID="pnl_forgotPassword" runat="server" DefaultButton="btn_passwordrecovery">
+                                                        <div class="textbox-group-padding">
+                                                            <div class="textbox-group">
+                                                                <div class="username-login-img"></div>
+                                                                <asp:TextBox ID="tb_username_recovery" runat="server" CssClass="signintextbox" placeholder="Username"></asp:TextBox>
+                                                            </div>
+                                                            <asp:RequiredFieldValidator ID="UserNameRequired_recovery" runat="server" ControlToValidate="tb_username_recovery"
+                                                                ErrorMessage="" Font-Bold="True" ForeColor="Red" ToolTip="User Name is required."
+                                                                ValidationGroup="UsernameRecovery">*</asp:RequiredFieldValidator>
+                                                        </div>
+                                                        <div class="clear-space"></div>
+                                                        <asp:Button ID="btn_passwordrecovery" runat="server" OnClick="btn_passwordrecovery_Click"
+                                                            CssClass="input-buttons-create input-buttons-login" Text="Send Email" ValidationGroup="UsernameRecovery" />
+                                                    </asp:Panel>
+                                                    <asp:Label ID="lbl_passwordResetMessage" runat="server" Text=""></asp:Label>
+                                                </ContentTemplate>
+                                                <Triggers>
+                                                    <asp:AsyncPostBackTrigger ControlID="btn_passwordrecovery" />
+                                                </Triggers>
+                                            </asp:UpdatePanel>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="clear-space"></div>
+                                <div class="clear-space"></div>
+                            </div>
+                            <div style="text-align: center;">
+                                <a href="#" id="register_password_cancel" onclick="openWSE.LoadCreateAccountHolder();return false;" style="display: none;">Cancel</a>
+                                <div class="clear-space"></div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div id="top-userinfo-holder">
+                <div id="notifications_tab" runat="server" class="top-bar-userinfo-button">
+                    <div class="active-div"></div>
+                    <ul>
+                        <li class="a" title="View notifications">
+                            <span id="lbl_notifications"></span>
+                        </li>
+                        <li id="notification-tab-b" class="b">
+                            <div class="li-header">
+                                Notifications<a id="lb_clearNoti" href="#clear" class="float-right margin-right margin-left-big"
+                                    onclick="openWSE.NotiActionsClearAll();return false;" style="display: none;">Dismiss All</a><a id="lb_acctNotifications" runat="server" class="float-right" title="Manage your notification settings" onclick="openWSE.CloseTopDropDowns();">Settings</a>
+                            </div>
+                            <div class="li-pnl-tab">
+                                <div id="NotificationHolder">
+                                </div>
+                            </div>
+                            <div class="li-footer">
+                                <asp:HyperLink ID="hyp_showallnotifications" runat="server" NavigateUrl="~/SiteTools/UserTools/MyNotifications.aspx" CssClass="float-left" Text="View all notifications"></asp:HyperLink>
+                                <div class="clear"></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="top-bar-datetime">
+                <div id="DateDisplay">
+                </div>
+                <div id="localtime">
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div id="top_bar_toolview_holder" runat="server" visible="false" class="iframe-top-bar">
+            <div id="iframe_title_logo" runat="server" class="iframe-title-logo"></div>
+            <span class="iframe-title-top-bar">
+                <asp:Label ID="lbl_pageName" runat="server"></asp:Label>
+            </span>
+            <a onclick="return openWSE.CloseWindow();" class="close-iframe" title="Close"></a>
+            <div class="clear"></div>
+        </div>
+        <div class="fixed-container-border-left"></div>
+        <div class="fixed-container-border-right"></div>
+        <div class="fixed-container-holder-background">
+            <div class="fixed-container-holder">
+                <div id="sidebar_container" runat="server">
+                    <asp:Panel ID="pnl_icons" runat="server" CssClass="sidebar-linkpanels">
+                        <div id="pnl_icons-nav-title" class="nav-title">Applications</div>
+                        <asp:UpdatePanel ID="updatePnl_AppList" runat="server" UpdateMode="Conditional">
+                            <ContentTemplate>
+                                <asp:PlaceHolder ID="ph_iconList" runat="server"></asp:PlaceHolder>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                        <div class="nav-divider"></div>
+                    </asp:Panel>
+                    <asp:Panel ID="minimized_app_bar" runat="server" CssClass="sidebar-linkpanels" data-show="true" Style="display: none;">
+                        <div class="nav-title">Minimized Applications</div>
+                        <div id="minimized_app_bar_holder"></div>
+                        <div class="nav-divider"></div>
+                    </asp:Panel>
+                    <asp:Panel ID="pnl_chat_users" runat="server" CssClass="sidebar-linkpanels">
+                        <div class="nav-title">Chat</div>
+                        <div id="chat_sidebar_holder">
+                            <div id="statusDiv">
+                                <a href="#" class="chatstatus_mid"><span id="currentStatus" style="width: 130px;"></span></a>
+                                <div id="ul_StatusList" style="display: none;">
+                                    <ul style="list-style: none;">
+                                        <li class="updatestatus">
+                                            <div class='statusUserDiv statusUserOnline'>
+                                            </div>
+                                            <a href="#Available">Available</a></li>
+                                        <li class="updatestatus">
+                                            <div class='statusUserDiv statusUserBusy'>
+                                            </div>
+                                            <a href="#Busy">Busy</a></li>
+                                        <li class="updatestatus">
+                                            <div class='statusUserDiv statusUserAway'>
+                                            </div>
+                                            <a href="#Away">Away</a></li>
+                                        <li class="updatestatus">
+                                            <div class='statusUserDiv statusUserOffline'>
+                                            </div>
+                                            <a href="#Out">Offline</a></li>
+                                    </ul>
+                                </div>
+                                <div style="display: none;">
+                                    <div class="clear-space-two"></div>
+                                    <span class="pad-right"><b>Users Online:</b></span><span id="header-total-online"></span>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <div id="chatuserlist">
+                                <h3 class="pad-left-big pad-bottom-big">Loading users....
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="nav-divider"></div>
+                    </asp:Panel>
+                    <asp:Panel ID="pnl_tools" runat="server" CssClass="sidebar-linkpanels">
+                        <div id="sidebar_accordian" runat="server">
+                            <asp:PlaceHolder ID="placeHolder_SettingsTabs" runat="server"></asp:PlaceHolder>
+                        </div>
+                    </asp:Panel>
+                </div>
+                <div id="main_container" runat="server">
+                    <asp:UpdatePanel ID="MainContent_updatepnl_apploader" runat="server" ClientIDMode="Static"
+                        EnableViewState="False" ViewStateMode="Disabled">
+                        <ContentTemplate>
+                            <asp:HiddenField ID="hf_loadApp1" runat="server" ClientIDMode="Static" />
+                            <asp:HiddenField ID="hf_loadOverlay1" runat="server" ClientIDMode="Static" />
+                            <asp:HiddenField ID="hf_ReloadApp" runat="server" ClientIDMode="Static" />
+                            <asp:HiddenField ID="hf_SearchSite" runat="server" ClientIDMode="Static" />
+                            <asp:HiddenField ID="hf_aboutstatsapp" runat="server" ClientIDMode="Static" />
+                            <div class="move-holder" style="display: none; visibility: hidden;">
+                                <asp:PlaceHolder ID="PlaceHolder1" runat="server" ClientIDMode="Static" ViewStateMode="Disabled"
+                                    EnableViewState="false"></asp:PlaceHolder>
+                            </div>
+                            <asp:HiddenField ID="hf_UpdateAll" runat="server" OnValueChanged="hf_UpdateAll_ValueChanged" />
+                            <asp:HiddenField ID="hf_noti_update_hiddenField" runat="server" />
+                            <div id="noti-update-element">
+                                <div class="noti-update-element-align">
+                                    <div class="noti-update-element-modal">
+                                        <asp:Image ID="img_noti_update_image" runat="server" />
+                                        <div class="float-left">
+                                            <h1 class="inline-block">You have a new Notification</h1>
+                                            <div class="clear">
+                                            </div>
+                                            <h2 class="inline-block">
+                                                <asp:Label ID="lbl_noti_update_message" runat="server"></asp:Label>
+                                            </h2>
+                                            <asp:Label ID="lbl_noti_update_popup_Description" runat="server" Style="display: none;"></asp:Label>
+                                        </div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                    <asp:UpdatePanel ID="MainContent_updatepnl_notificationpopup" runat="server" UpdateMode="Conditional">
+                        <ContentTemplate>
+                            <asp:Label ID="lbl_noti_update_popup_CurrCount" runat="server" Visible="false"></asp:Label>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                    <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+                </div>
+                <div id="footer_container" runat="server">
+                    <div id="copyright-footer" class="float-left">
+                        <asp:Literal ID="ltl_footercopyright" runat="server"></asp:Literal></div>
+                    <div class="help-icon" title="Need help?">
+                    </div>
+                    <div id="footer-signdate" class="float-right">
+                        <a href="#" title="Open Mobile Workspace" class="my-app-remote-link" onclick="return openWSE.OpenMobileWorkspace();">Mobile</a><a href="#iframecontent" onclick="openWSE.LoadIFrameContent('About.aspx');return false;">About</a><a href="#iframecontent" onclick="openWSE.LoadIFrameContent('About.aspx?a=termsofuse');return false;">Terms</a>
+                    </div>
+                </div>
+                <div id="aboutApp-element" class="Modal-element">
+                    <div class="Modal-overlay">
+                        <div class="Modal-element-align">
+                            <div class="Modal-element-modal" data-setwidth="700">
+                                <div class="ModalHeader">
+                                    <div>
+                                        <div class="app-head-button-holder-admin">
+                                            <a href="#close" onclick="openWSE.LoadModalWindow(false, 'aboutApp-element', '');return false;" class="ModalExitButton"></a>
+                                        </div>
+                                        <span class="img-about float-left margin-right"></span>
+                                        <span class="Modal-title"></span>
+                                    </div>
+                                </div>
+                                <asp:UpdatePanel ID="updatepnl_aboutHolder" runat="server" UpdateMode="Conditional">
+                                    <ContentTemplate>
+                                        <div class="ModalScrollContent">
+                                            <div class="ModalPadContent">
+                                                <asp:Panel ID="pnl_aboutHolder" runat="server">
+                                                </asp:Panel>
+                                            </div>
+                                        </div>
+                                        <div class="ModalButtonHolder">
+                                            <a href="#" id="btn_uninstallApp" class="modal-ok-btn" runat="server" visible="false">
+                                                <span class="td-subtract-btn float-left margin-right-sml" style="padding: 0px 2px 0 0!important; margin-top: 0px!important;"></span>Uninstall</a>
+                                            <input type="button" value="Close" onclick="openWSE.LoadModalWindow(false, 'aboutApp-element', '');" class="input-buttons modal-cancel-btn" />
+                                        </div>
+                                    </ContentTemplate>
+                                </asp:UpdatePanel>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="overlayEdit-element" class="Modal-element">
+                    <div class="Modal-element-align">
+                        <div class="Modal-element-modal" data-setwidth="700">
+                            <div class="ModalHeader">
+                                <div>
+                                    <div class="app-head-button-holder-admin">
+                                        <a href="#" onclick="openWSE.LoadModalWindow(false, 'overlayEdit-element', '');return false;"
+                                            class="ModalExitButton"></a>
+                                    </div>
+                                    <span class="Modal-title"></span>
+                                </div>
+                            </div>
+                            <div class="ModalScrollContent">
+                                <div class="ModalPadContent">
+                                    Overlays will be automatically updated upon click.
+                                                            <div class="clear-space"></div>
+                                    <div id="overlay-edit-list"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="extra_modal_holder"></div>
+                <div id="help_main_holder" style="display: none;">
+                    <div id="helpmenu_title">
+                    </div>
+                    <div class="clear-space">
+                    </div>
+                    <div id="helpdiv_pageholder" class="ModalPadContent">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="fixed-footer-container-left"></div>
+        <div class="fixed-footer-container-right"></div>
+        <asp:HiddenField ID="hf_chatsound" runat="server" />
+    </form>
+</body>
+</html>

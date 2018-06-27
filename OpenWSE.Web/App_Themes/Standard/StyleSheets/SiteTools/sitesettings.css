@@ -1,0 +1,19 @@
+﻿.ajax__slider_h_rail { width: 178px!important; margin-right: 10px; }
+.keyword-split-array-holder { border: 1px solid #D9D9D9; padding: 5px; float: left; width: 98%; min-height: 25px; background: #FFF; }
+.keyword-split-array-item { background-color: #4A9CD3; color: #FFF; height: 15px; padding: 7px 10px 7px 10px; float: left; cursor: pointer; margin-right: 7px; margin-bottom: 8px; -moz-border-radius: 15px; -webkit-border-radius: 15px; border-radius: 15px; -moz-box-shadow: -3px 2px 4px rgba(0,0,0,.25); -webkit-box-shadow: 0 2px 4px rgba(0,0,0,.25); box-shadow: 0 2px 4px rgba(0,0,0,.25); }
+    .keyword-split-array-item:hover { background-color: #357AE8; }
+.keyword-split-array-input { border: none; color: #353535; padding: 4px 8px; margin-top: 2px; margin-right: 7px; float: left; outline: none; }
+.keyword-split-array-item-edit { float: left; margin-right: 5px; margin-bottom: 7px; }
+    .keyword-split-array-item-edit .keyword-split-array-input { float: none; margin-top: 0; margin-right: 0px; }
+.keyword-split-array-input-remove { height: 12px; width: 15px; background: url(../../App/headerbar-btns.png) no-repeat -109px 0; overflow: hidden; float: right; margin-top: 2px; margin-left: 5px; }
+    .keyword-split-array-input-remove:hover { background: url(../../App/headerbar-btns.png) no-repeat -109px -13px; }
+.table_SystemInfo { clear: both; display: block; padding: 0 10px; cursor: default; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; }
+    .table_SystemInfo ul { margin-left: 17px; }
+    .table_SystemInfo li { padding-bottom: 10px; padding-right: 20px; word-wrap: break-word; white-space: pre-wrap; word-break: break-word; }
+    .table_SystemInfo .header-li-padding { padding-right: 5px; }
+    .table_SystemInfo .label-success, .table_SystemInfo .label-warning { display: inline; padding: 3px 5px; color: #FFF; font-size: 12px; font-weight: bold; margin-left: 5px; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+    .table_SystemInfo .label-success { background-color: #17B76D; }
+    .table_SystemInfo .label-warning { background-color: #F39C12; }
+    .table_SystemInfo .assembly-info-space { clear: both; display: block; height: 5px; }
+    .table_SystemInfo i { display: block; clear: both; padding-bottom: 3px; }
+    .table_SystemInfo .assembly-info-style { font-size: 12px; }

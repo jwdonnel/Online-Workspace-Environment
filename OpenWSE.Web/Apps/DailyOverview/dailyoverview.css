@@ -1,0 +1,9 @@
+﻿.td-sort-click a
+{
+    text-decoration: none !important;
+}
+
+.GridNormalRow td, .GridAlternate td
+{
+    padding: 8px 5px;
+}

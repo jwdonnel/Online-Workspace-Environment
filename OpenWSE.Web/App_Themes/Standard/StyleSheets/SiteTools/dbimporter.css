@@ -1,0 +1,8 @@
+﻿.checkbox-new-click, .checkbox-edit-click { cursor: default; }
+#MainContent_cb_ddselect td { padding: 10px 0; }
+    #MainContent_cb_ddselect td > input[type='checkbox'] { float: left; margin-top: 1px; }
+.cb_style > input[type='checkbox'] { float: left; }
+.cb_style > label { float: left; }
+#table_columns_summary .GridViewNumRow { cursor: move; }
+.view-edit-condition { clear: both; padding-top: 3px; }
+    .view-edit-condition a { font-size: 11px; }

@@ -1,0 +1,24 @@
+﻿#RSSFeed_Overlay_Position .rss-title { font-weight: bold; color: #353535; font-size: 18px; }
+#RSSFeed_Overlay_Position .rss-title, #RSSFeed_Overlay_Position .rss-author, #RSSFeed_Overlay_Position .rss-description, #RSSFeed_Overlay_Position .rss-content, #RSSFeed_Overlay_Position .rss-article-source { display: block; }
+#RSSFeed_Overlay_Position .rss-article-source { font-size: 15px; color: #353535; padding-top: 24px; padding-bottom: 5px; font-style: italic; }
+    #RSSFeed_Overlay_Position .rss-article-source img { max-height: 32px; }
+#RSSFeed_Overlay_Position .rss-author { font-size: 12px; display: block; padding-bottom: 5px; display: none; }
+#RSSFeed_Overlay_Position .rss-content, #RSSFeed_Overlay_Position .rss-description { line-height: 20px; font-size: 15px; }
+#RSSFeed_Overlay_Position .rssFeed p { line-height: 20px; font-size: 15px; display: block; clear: both; margin-top: 5px; }
+#RSSFeed_Overlay_Position .rssFeed iframe { margin: 10px 0; }
+#RSSFeed_Overlay_Position .rss-content img { float: left; margin: 2px; margin-right: 8px; }
+#RSSFeed_Overlay_Position .rss-description img, #RSSFeed_Overlay_Position .rss-content img, #RSSFeed_Overlay_Position .rss-content .img-container { height: auto!important; max-width: 95%!important; display: block; padding: 10px; }
+#RSSFeed_Overlay_Position .rss-description .size-full, #RSSFeed_Overlay_Position .rss-content .size-full { height: 100%!important; }
+#RSSFeed_Overlay_Position .rss-content figcaption { display: block; clear: both; font-size: 11px; padding-bottom: 15px; }
+#RSSFeed_Overlay_Position .rss-description .feedflare, #RSSFeed_Overlay_Position .rss-description .item-share-buttons, #RSSFeed_Overlay_Position .rss-content .feedflare, #RSSFeed_Overlay_Position .rss-content .item-share-buttons { display: none; }
+#RSSFeed_Overlay_Position .rss-content p { padding-bottom: 2px; }
+#RSSFeed_Overlay_Position .rss-content h3, #RSSFeed_Overlay_Position .rss-description h3 { padding-top: 20px; font-size: 15px; font-weight: normal; }
+#RSSFeed_Overlay_Position .rss-content a[rel="nofollow"], #RSSFeed_Overlay_Position .rss-description a[rel="nofollow"] { display: none; }
+#RSSFeed_Overlay_Position .rss-content h2, #RSSFeed_Overlay_Position .rss-description h2 { padding: 12px 0 3px 0; }
+#RSSFeed_Overlay_Position .rss-content ul, #RSSFeed_Overlay_Position .rss-description ul { list-style: circle; padding: 5px 10px 5px 20px; clear: both; width: auto!important; height: 100%!important; }
+#RSSFeed_Overlay_Position .rss-content li, #RSSFeed_Overlay_Position .rss-description li { padding: 5px 0; }
+#RSSFeed_Overlay_Position ul.share-buttons { list-style: none; height: 30px; padding: 2px 0 2px 0; display: block; width: auto!important; }
+    #RSSFeed_Overlay_Position ul.share-buttons li { float: left; padding: 0 8px 0 0; }
+    #RSSFeed_Overlay_Position ul.share-buttons a { cursor: pointer; }
+    #RSSFeed_Overlay_Position ul.share-buttons img { height: 20px; padding: 0!important; }
+#RSSFeed_Overlay_Position { min-width: 300px; }

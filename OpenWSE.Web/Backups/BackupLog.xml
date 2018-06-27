@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Backups>
+  <Backup>
+    <Filename>DBFull_131653230382699173.backup</Filename>
+    <Description>Full Database Download</Description>
+    <BackupDate>03/12/2018 10:10:40</BackupDate>
+    <RestoreDate>N/A</RestoreDate>
+    <Size>14.95 MB</Size>
+    <User>administrator</User>
+    <ApplicationID>3aabfa1d-b05c-49dc-a806-4bb0441f8d8c</ApplicationID>
+  </Backup>
+</Backups>

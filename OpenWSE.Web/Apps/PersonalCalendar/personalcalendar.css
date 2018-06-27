@@ -1,0 +1,8 @@
+﻿.calendar-bg-selectors.selected { border: 2px solid #000; -moz-border-radius: 2px; -webkit-border-radius: 2px; border-radius: 2px; -moz-box-shadow: 0 2px 4px rgba(0,0,0,.5); -o-box-shadow: 0 2px 4px rgba(0,0,0,.5); -webkit-box-shadow: 0 2px 4px rgba(0,0,0,.5); box-shadow: 0 2px 4px rgba(0,0,0,.5); }
+.calendar-bg-selectors { filter: alpha(opacity=75); opacity: 0.75; transition: all .1s ease-in-out; -moz-transition: all .1s ease-in-out; -webkit-transition: all .1s ease-in-out; width: 10px; height: 10px; border: 2px solid #E0E0E0; margin-right: 8px; padding: 3px; }
+    .calendar-bg-selectors:hover { border: 2px solid #555656; -moz-border-radius: 2px; -webkit-border-radius: 2px; border-radius: 2px; }
+#rendering-print { position: fixed; left: 0; right: 0; top: 0; bottom: 0; background: #FFF; z-index: 10000; }
+    #rendering-print .text { font-size: 20px; text-align: center; margin-top: 20%; color: #444; }
+.upcomingEvents-li .personalcalendar-overlay-entry { float: left; font-size: 12px; padding: 10px; margin-bottom: 10px; min-width: 225px; max-width: 500px; margin-right: 15px; margin-left: 15px; position: relative; }
+.upcomingEvents-li .personalcalendar-entry-bg { filter: alpha(opacity=35); opacity: 0.35; position: absolute; top: 0; bottom: 0; left: 0; right: 0; -moz-border-radius: 15px; -webkit-border-radius: 15px; border-radius: 15px; }
+.upcomingEvents-li .personalcalendar-overlay-entry h4 { font-size: 1.3em!important; clear: both; }

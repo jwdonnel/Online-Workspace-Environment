@@ -1,0 +1,46 @@
+﻿.td-bg-color { color: #FFF; background: #ABBCD9; background: -moz-linear-gradient(top, rgba(171, 188, 217, 1) 0%, rgba(99, 128, 179, 1) 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(171, 188, 217, 1)), color-stop(100%,rgba(99, 128, 179, 1))); background: -webkit-linear-gradient(top, rgba(171, 188, 217, 1) 0%,rgba(99, 128, 179, 1) 100%); background: -o-linear-gradient(top, rgba(171, 188, 217, 1) 0%,rgba(99, 128, 179, 1) 100%); background: -ms-linear-gradient(top, rgba(171, 188, 217, 1) 0%,rgba(99, 128, 179, 1) 100%); background: linear-gradient(to bottom, rgba(171, 188, 217, 1) 0%,rgba(99, 128, 179, 1) 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#abbcd9', endColorstr='#6380b3',GradientType=0 ); }
+
+td.contactFormInput { padding: 0 10px; text-align: left; }
+
+.statusTicker { margin: 2px 0 10px 0; padding: 5px; }
+
+.GridDateHeader { font-family: arial,helvetica; font-size: 14px; font-weight: 700; text-align: center; width: 100%; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
+
+.GridDateHeader2 { background: #FFF; border: 1px solid #CCC; font-family: arial,helvetica; font-size: 14px; text-align: center; min-width: 680px; width: 100%; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
+
+.GridDatePrev { float: left; font-size: large; font-weight: 700; height: 33px; padding-top: 9px; text-align: center; width: 40px; background: -moz-linear-gradient(left,rgba(0,0,0,0.65) 0,rgba(0,0,0,0) 100%); background: -webkit-gradient(linear,left top,right top,color-stop(0%,rgba(0,0,0,0.65)),color-stop(100%,rgba(0,0,0,0))); background: -webkit-linear-gradient(left,rgba(0,0,0,0.65) 0,rgba(0,0,0,0) 100%); background: -o-linear-gradient(left,rgba(0,0,0,0.65) 0,rgba(0,0,0,0) 100%); background: -ms-linear-gradient(left,rgba(0,0,0,0.65) 0,rgba(0,0,0,0) 100%); background: linear-gradient(to right,rgba(0,0,0,0.65) 0,rgba(0,0,0,0) 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#a6000000',endColorstr='#00000000',GradientType=1); }
+
+.GridDateNext { float: right; font-size: large; font-weight: 700; height: 33px; padding-top: 9px; text-align: center; width: 40px; background: -moz-linear-gradient(left,rgba(0,0,0,0) 0,rgba(0,0,0,0.65) 100%); background: -webkit-gradient(linear,left top,right top,color-stop(0%,rgba(0,0,0,0)),color-stop(100%,rgba(0,0,0,0.65))); background: -webkit-linear-gradient(left,rgba(0,0,0,0) 0,rgba(0,0,0,0.65) 100%); background: -o-linear-gradient(left,rgba(0,0,0,0) 0,rgba(0,0,0,0.65) 100%); background: -ms-linear-gradient(left,rgba(0,0,0,0) 0,rgba(0,0,0,0.65) 100%); background: linear-gradient(to right,rgba(0,0,0,0) 0,rgba(0,0,0,0.65) 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000',endColorstr='#a6000000',GradientType=1); }
+
+.GridViewNumRowComp { background: #e3e3e3; border-right: 1px solid #e2e2e2 !important; color: #333; font-size: 1.3em; }
+
+.gridviewnumrowampm { color: #333; font-size: .8em !important; }
+
+.myItemStyleDP { display: inline-block; zoom: 1; *display: inline; }
+
+    .myItemStyleDP dd { font-weight: bold; color: #555; margin: 0 15px 5px 0; padding: 0 15px 0 0; }
+
+    .myItemStyleDP dt { color: #707070; float: left; margin: 0 0 5px; padding: 0 15px 0 0; text-align: right; width: 100px; }
+
+.ajaxLoading { height: 297px; width: 100%; }
+
+    .ajaxLoading img { float: left; padding-right: 10px; }
+
+.sch_pickup { background-color: #ffeeba; }
+
+.sch_delivery { background-color: #e7f1ff; }
+
+.stylefour { background: #F1F1F1; position: relative; display: block; min-height: 50px; font-size: 1.10em; top: 0; left: 0; right: 1px; border-bottom: 1px solid #E5E5E5; }
+    .stylefour img { float: right; padding-right: 10px; padding-top: 4px; max-height: 45px; }
+    .stylefour span { font-size: 25px; float: left; color: #555656; padding: 12px 0 0 20px; }
+
+.sidebar-padding { -moz-box-shadow: none!important; -webkit-box-shadow: none!important; box-shadow: none!important; }
+
+ul#ScheduleMenu, ul.ctlLineLinks, ul.homedashlinks { margin: 0; padding: 0; list-style-type: none; width: auto; }
+    ul#ScheduleMenu li a, ul.ctlLineLinks a, ul.homedashlinks a { display: block; float: left; color: #888; text-decoration: none; padding: 8px 15px 8px 15px; line-height: 35px; }
+    ul#ScheduleMenu li, ul.ctlLineLinks li, ul.homedashlinks li { display: block; float: left; margin-top: -2px; -moz-transition: all .1s ease-in-out; -webkit-transition: all .1s ease-in-out; transition: all .1s ease-in-out; }
+        ul#ScheduleMenu li:hover a, ul.ctlLineLinks li:hover a, ul.homedashlinks li:hover a { text-decoration: underline; }
+        ul#ScheduleMenu li.active a, ul.ctlLineLinks li.active a, ul.homedashlinks li.active a { text-decoration: none!important; }
+        ul#ScheduleMenu li.active, ul.ctlLineLinks li.active, ul.homedashlinks li.active { background: #6D83AF; margin-top: -2px; }
+            ul#ScheduleMenu li.active a, ul.ctlLineLinks li.active a, ul.homedashlinks li.active a { color: #FFF; }
+        ul#ScheduleMenu li, ul.ctlLineLinks li, ul.homedashlinks li, ul#ScheduleMenu li.active, ul.ctlLineLinks li.active, ul.homedashlinks li.active { margin-top: 0px!important; }

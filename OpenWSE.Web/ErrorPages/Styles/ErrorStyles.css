@@ -1,0 +1,20 @@
+* { margin: 0; padding: 0; }
+body { background-color: #FFF; font-family: "Open Sans","Helvetica Neue",Arial,sans-serif; margin: 0;}
+.clear { clear: both; }
+
+.input-buttons { display: inline-block; margin-bottom: 0; font-weight: 400; text-align: center; vertical-align: middle; touch-action: manipulation; cursor: pointer; border: 1px solid #999; white-space: nowrap; padding: 6px 12px; font-size: 13px; line-height: 1.5385; border-radius: 4px; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; line-height: 1.33; border-radius: 6px; color: #353535; font-size: 16px; padding: 14px 25px; background-color: transparent; }
+    .input-buttons:hover { color: #353535; background-color: #fff; }
+    .input-buttons:active { outline: 0; -webkit-box-shadow: inset 0 3px 5px rgba(0,0,0,.125); box-shadow: inset 0 3px 5px rgba(0,0,0,.125); }
+
+.section { color: #353535; position: relative; z-index: 1; padding: 70px 0; border-bottom: 1px solid #D1D1D1; background: #EAEAEA; overflow: auto; text-align: center; }
+.section-code { font-size: 190px; text-transform: uppercase; clear: both; display: block; margin-bottom: 10px; line-height: 190px; font-weight: 400; }
+.section-message-holder { clear: both; display: inline-block; text-align: center; margin-bottom: 20px; }
+    .section-message-holder img { float: left; height: 32px; margin-right: 10px; margin-top: 3px; }
+    .section-message-holder .section-message { font-size: 32px; text-transform: uppercase; float: left; }
+
+@media screen and (max-width: 750px) {
+    .section { padding: 25px 0; }
+    .section-code { font-size: 140px; line-height: 140px; }
+    .section-message-holder img { height: 20px; margin-right: 7px; margin-top: 1px; }
+    .section-message-holder .section-message { font-size: 20px; }
+}

@@ -1,0 +1,50 @@
+﻿.ui-autocomplete { max-height: 300px; }
+.http-referer-text a { opacity: 1.0!important; filter: alpha(opacity=100)!important; }
+.login-entry-holder { float: left; padding: 5px 35px 5px 0; min-height: 38px; }
+    .login-entry-holder .login-entry-title { clear: both; display: block; padding-bottom: 2px; font-weight: bold; }
+    .login-entry-holder .login-entry-text { clear: both; display: block; font-size: 12px; }
+    .login-entry-holder .login-entry-title, .login-entry-holder .login-entry-text { text-align: left!important; }
+    .login-entry-holder .http-referer-text > a { width: 100%; white-space: pre-wrap; word-break: break-all; word-wrap: break-word; }
+.ipaddress-login-entry { min-width: 100px; }
+.nameused-login-entry { min-width: 150px; }
+.type-login-entry, .valid-login-entry { min-width: 50px; }
+.date-login-entry { min-width: 125px; }
+.httpreferer-login-entry { float: none!important; clear: both; }
+.usertoignore-item { clear: both; padding: 5px 0; }
+    .usertoignore-item .td-delete-btn { display: none; }
+    .usertoignore-item:hover .td-delete-btn { display: block; }
+#page-view-chartcol { padding-top: 5px; padding-bottom: 15px; }
+#pnl_NetworkInfoHolder .network-info-holder { float: left; padding-right: 30px; width: 35%; }
+.network-info-tables { border-spacing: 0; border-collapse: collapse; width: 100%; }
+.network-info-title, .network-info-value { padding: 8px 10px 8px 5px; text-align: left; vertical-align: middle; }
+.myHeaderStyle-network-tables { height: 35px!important; margin-bottom: 0px!important; text-align: left; width: 100%!important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; display: table-row!important; }
+    .myHeaderStyle-network-tables td, .myHeaderStyle-network-tables th { border-bottom: 2px solid #DDD!important; color: #74747E; font-size: 105%; padding: 0 5px; vertical-align: middle; font-weight: bold; display: table-cell!important; }
+#loginmap_div { width: 100% !important; height: 600px !important; border: 1px solid #CCC; }
+#loginmap_div_loading, #loginmap_div_error { padding-bottom: 10px; }
+.common-stats-div { float: left; position: relative; margin-right: 20px; margin-bottom: 20px; width: 25%; max-width: 400px; height: 150px; cursor: default; background-repeat: no-repeat; background-position: 95% 35px; background-size: 60px 60px; border-radius: 2px; -moz-border-radius: 2px; -webkit-border-radius: 2px; -moz-transition: all .4s ease-in-out; -webkit-transition: all .4s ease-in-out; transition: all .4s ease-in-out; }
+    .common-stats-div:hover { background-size: 72px 72px; background-position: 95% 28px; }
+    .common-stats-div .common-stats-title { padding: 10px; display: block; clear: both; color: #FFF; font-size: 13px; font-weight: bold; }
+    .common-stats-div .common-stats-count { float: left; padding: 10px 10px 0 10px; font-size: 50px; font-weight: bold; color: #FFF; }
+    .common-stats-div .common-stats-moreinfo { cursor: pointer; position: absolute; display: block; clear: both; opacity: 0.7; filter: alpha(opacity=70); background-color: rgba(0, 0, 0, 0.3); color: #FFF; font-size: 12px; bottom: 0; left: 0; right: 0; text-align: center; height: 30px; line-height: 30px; -moz-transition: all .2s ease-in-out; -webkit-transition: all .2s ease-in-out; transition: all .2s ease-in-out; }
+        .common-stats-div .common-stats-moreinfo:hover, .common-stats-div .common-stats-moreinfo:active { opacity: 1.0; filter: alpha(opacity=100); }
+        .common-stats-div .common-stats-moreinfo:active { background-color: rgba(0, 0, 0, 0.4); }
+    .common-stats-div .common-stats-moreinfo-image { width: 12px; height: 12px; display: inline-block; margin-left: 3px; margin-bottom: -2px; background-image: url(../../Icons/sidebar-show-alt.png); background-repeat: no-repeat; background-position: center center; }
+#div_NewVisitors.common-stats-div { background-color: #308AAD; background-image: url(../../Icons/guest-64.png); }
+#div_RegisteredUsers.common-stats-div { background-color: #00A65A; background-image: url(../../Icons/newusers-64.png);  }
+#div_RecentLogins.common-stats-div { background-color: #DD4B39; background-image: url(../../Icons/login-64.png); }
+
+
+@media screen and (max-width: 1000px) {
+    .network-info-holder { float: none; padding-right: 0; display: block; padding-bottom: 30px; width: 100%; }
+    .myHeaderStyle td[data-columnname="Page Url"], .myItemStyle td[data-columnname="Page Url"] { display: none; }
+    .login-entry-holder { float: none; clear: both; width: 100%; }
+    .httpreferer-login-entry a { overflow: hidden; text-overflow: ellipsis; word-wrap: normal; white-space: nowrap; width: 100%; word-break: normal; }
+    .common-stats-div { width: 40%; }
+}
+
+@media screen and (max-width: 750px) {
+    #page-view-chartcol, #ChartRequests, #showhide_chartrequests_btn, #showhide_pageViewChart_btn, #MainContent_pnl_interactivityholder { display: none; }
+    .network-info-holder { display: block; clear: both; width: 100%!important; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; }
+    #loginmap_div { width: 100% !important; height: 350px !important; }
+    .common-stats-div { clear: both; float: none; width: 100%; }
+}

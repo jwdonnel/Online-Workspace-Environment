@@ -1,0 +1,12 @@
+---------------- START ----------------
+
+Date Logged: 6/11/2018 1:01:53 PM
+User: Administrator
+IP Address: N/A
+EventName: Memory Usage Alert
+EventComment: The server's Memory usage for this site has reached 250,340 K.<br />To change when this message is shown, adjust the 'MEMORY MONITOR ALERT VALUE' located under Server Timezone and Monitoring Settings on the Site Settings page. The current value is 250,000 K.<span style='display: none;'>error</span>
+RequestUrl: 
+ExceptionType: N/A
+StackTrace: N/A
+
+---------------- END ----------------

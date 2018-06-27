@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+    <siteMapNode url="/">
+        <siteMapNode url="~/SiteTools/UserTools/AcctSettings.aspx" title="Account Settings" icon="~/App_Themes/[THEME]/SiteLinkIcons/accountsettings.png" category="Account Tools" tooltip="Manage your personal settings">
+            <siteMapNode url="~/SiteTools/UserTools/AcctSettings.aspx?tab=pnl_UserInformation" title="User Info" />
+            <siteMapNode url="~/SiteTools/UserTools/AcctSettings.aspx?tab=pnl_NotificationSettings" title="Notifications" />
+            <siteMapNode url="~/SiteTools/UserTools/AcctSettings.aspx?tab=pnl_WorkspaceOverlays" title="Overlays" />
+            <siteMapNode url="~/SiteTools/UserTools/AcctSettings.aspx?tab=pnl_UserAppOverrides" title="App Overrides" />
+            <siteMapNode url="~/SiteTools/UserTools/AcctSettings.aspx?tab=pnl_WorkspaceContainer" title="Workspace" />
+            <siteMapNode url="~/SiteTools/UserTools/AcctSettings.aspx?tab=pnl_IconSelector" title="App Selector" />
+            <siteMapNode url="~/SiteTools/UserTools/AcctSettings.aspx?tab=pnl_SiteCustomizations" title="Miscellaneous" />
+        </siteMapNode>
+        <siteMapNode url="~/SiteTools/NetworkMaintenance/Analytics.aspx" title="Analytics" icon="~/App_Themes/[THEME]/SiteLinkIcons/analytics.png" category="Network Tools" tooltip="View network data regarding logins, pages viewed, ect..">
+            <siteMapNode url="~/SiteTools/NetworkMaintenance/Analytics.aspx?tab=activity" title="Overview" />
+            <siteMapNode url="~/SiteTools/NetworkMaintenance/Analytics.aspx?tab=loginActivity" title="Logins" />
+            <siteMapNode url="~/SiteTools/NetworkMaintenance/Analytics.aspx?tab=networkSettings" title="Settings" roles="Administrator" />
+        </siteMapNode>
+        <siteMapNode url="~/SiteTools/AppMaintenance/AppCategory.aspx" title="App Categories" icon="~/App_Themes/[THEME]/SiteLinkIcons/appcategory.png" category="App Management" tooltip="Place Apps in categories for grouping" />
+        <siteMapNode url="~/SiteTools/Installers/AppInstaller.aspx" title="App Installer" icon="~/App_Themes/[THEME]/SiteLinkIcons/appinstaller.png" category="Installers" tooltip="Install/Uninstall Apps for your account" />
+        <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx" title="App Manager" icon="~/App_Themes/[THEME]/SiteLinkIcons/appmanager.png" category="App Management" tooltip="Add/Edit/Delete Apps">
+            <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?tab=edit" title="Edit Apps" overwriteevent="true" />
+            <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?tab=easycreate" title="Simple Create" overwriteevent="true" />
+            <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?tab=upload" title="Upload App" overwriteevent="true" />
+            <siteMapNode url="~/SiteTools/AppMaintenance/AppManager.aspx?tab=params" title="App Parameters" overwriteevent="true" />
+        </siteMapNode>
+        <siteMapNode url="~/SiteTools/AppMaintenance/AppPackages.aspx" title="App Packages" icon="~/App_Themes/[THEME]/SiteLinkIcons/apppackages.png" category="App Management" tooltip="Create app packages to use for the App Installer or default group apps">
+            <siteMapNode url="~/SiteTools/AppMaintenance/AppPackages.aspx?tab=pnl_packagelist" title="Package List" />
+            <siteMapNode url="~/SiteTools/AppMaintenance/AppPackages.aspx?tab=pnl_packagesettings" title="Settings" roles="Administrator" />
+        </siteMapNode>
+        <siteMapNode url="~/SiteTools/ServerMaintenance/BackgroundServices.aspx" title="Background Services" icon="~/App_Themes/[THEME]/SiteLinkIcons/backgroundservices.png" category="Site Management" tooltip="Add custom background stervices" />
+        <siteMapNode url="~/SiteTools/DBMaintenance/CustomTables.aspx" title="Custom Tables" icon="~/App_Themes/[THEME]/SiteLinkIcons/customtables.png" category="Database Tools" tooltip="Create/Edit tables on your local database" />
+        <siteMapNode url="~/SiteTools/DBMaintenance/dbManager.aspx" title="Database Manager" icon="~/App_Themes/[THEME]/SiteLinkIcons/dbmanager.png" category="Database Tools" tooltip="Backup/Restore and manage auto backups">
+            <siteMapNode url="~/SiteTools/DBMaintenance/dbManager.aspx?tab=pnl_databaseRecovery" title="Backup/Recovery" />
+            <siteMapNode url="~/SiteTools/DBMaintenance/dbManager.aspx?tab=pnl_adminOnly_RestoreDefaults" title="Defaults" adminuser-only="true" />
+            <siteMapNode url="~/SiteTools/DBMaintenance/dbManager.aspx?tab=pnl_adminOnly_DbScanner" title="Database Scanner" />
+            <siteMapNode url="~/SiteTools/DBMaintenance/dbManager.aspx?tab=pnl_autobackstyem" title="Backup Schedule" />
+        </siteMapNode>
+        <siteMapNode url="~/SiteTools/NetworkMaintenance/EventLogs.aspx" title="Event Logs" icon="~/App_Themes/[THEME]/SiteLinkIcons/eventlogs.png" category="Network Tools" tooltip="View network event logs">
+            <siteMapNode url="~/SiteTools/NetworkMaintenance/EventLogs.aspx?tab=log" title="Events" />
+            <siteMapNode url="~/SiteTools/NetworkMaintenance/EventLogs.aspx?tab=ignore" title="Ignored Events" />
+            <siteMapNode url="~/SiteTools/NetworkMaintenance/EventLogs.aspx?tab=networkSettings" title="Settings" roles="Administrator" />
+        </siteMapNode>
+        <siteMapNode url="~/SiteTools/ServerMaintenance/FileManager.aspx" title="File Manager" icon="~/App_Themes/[THEME]/SiteLinkIcons/filemanager.png" category="Site Management" tooltip="View/Edit javascript and css files " />
+        <siteMapNode url="~/SiteTools/UserMaintenance/GroupOrg.aspx" title="Group Organizer" icon="~/App_Themes/[THEME]/SiteLinkIcons/grouporg.png" category="User Management" tooltip="Create/Edit and manage groups" />
+        <siteMapNode url="~/SiteTools/NetworkMaintenance/IPManager.aspx" title="IP Manager" icon="~/App_Themes/[THEME]/SiteLinkIcons/ipmanager.png" category="Network Tools" tooltip="View/Edit IP Watchlist and Listener">
+            <siteMapNode url="~/SiteTools/NetworkMaintenance/IPManager.aspx?tab=ipwatchlist" title="IP WatchList" />
+            <siteMapNode url="~/SiteTools/NetworkMaintenance/IPManager.aspx?tab=iplistener" title="IP Listener" />
+            <siteMapNode url="~/SiteTools/NetworkMaintenance/IPManager.aspx?tab=networkSettings" title="Settings" roles="Administrator" />
+        </siteMapNode>
+        <siteMapNode url="~/SiteTools/ServerMaintenance/JqueryPlugins.aspx" title="Jquery Plugins" icon="~/App_Themes/[THEME]/SiteLinkIcons/siteplugins.png" category="Site Management" tooltip="Import jQuery plugins to use" />
+        <siteMapNode url="~/SiteTools/ServerMaintenance/OverlayManager.aspx" title="Overlay Manager" icon="~/App_Themes/[THEME]/SiteLinkIcons/overlays.png" category="Site Management" tooltip="Upload/Edit workspace overlays" />
+        <siteMapNode url="~/SiteTools/Installers/PluginInstaller.aspx" title="Plugin Installer" icon="~/App_Themes/[THEME]/SiteLinkIcons/plugininstaller.png" category="Installers" tooltip="Install/Uninstall jQuery plugins for your account" />
+        <siteMapNode url="~/SiteTools/ServerMaintenance/SiteSettings.aspx" title="Site Settings" icon="~/App_Themes/[THEME]/SiteLinkIcons/sitesettings.png" category="Site Management" tooltip="Manage the server/site settings and behavior">
+            <siteMapNode url="~/SiteTools/ServerMaintenance/SiteSettings.aspx?tab=pnl_SystemInfo" title="System Information" />
+            <siteMapNode url="~/SiteTools/ServerMaintenance/SiteSettings.aspx?tab=pnl_ServerSettings" title="Server Settings" />
+            <siteMapNode url="~/SiteTools/ServerMaintenance/SiteSettings.aspx?tab=pnl_emailSettings" title="Mail Settings" />
+            <siteMapNode url="~/SiteTools/ServerMaintenance/SiteSettings.aspx?tab=pnl_admincontrolsonly" title="Administrative Settings" adminuser-only="true" />
+            <siteMapNode url="~/SiteTools/ServerMaintenance/SiteSettings.aspx?tab=pnl_Customizations" title="Site Customizations" roles="Administrator" />
+        </siteMapNode>
+        <siteMapNode url="~/SiteTools/ServerMaintenance/StartupScripts.aspx" title="Startup Scripts" icon="~/App_Themes/[THEME]/SiteLinkIcons/startupscripts.png" category="Site Management" tooltip="Add/Edit the scripts that are needed at run time">
+            <siteMapNode url="~/SiteTools/ServerMaintenance/StartupScripts.aspx?tab=javascripts" title="Javascript" />
+            <siteMapNode url="~/SiteTools/ServerMaintenance/StartupScripts.aspx?tab=stylesheets" title="Stylesheets" />
+            <siteMapNode url="~/SiteTools/ServerMaintenance/StartupScripts.aspx?tab=settings" title="Settings" roles="Administrator" />
+        </siteMapNode>
+        <siteMapNode url="~/SiteTools/DBMaintenance/dbImporter.aspx" title="Table Importer" icon="~/App_Themes/[THEME]/SiteLinkIcons/dbimporter.png" category="Database Tools" tooltip="Import tables from different types of databases">
+            <siteMapNode url="~/SiteTools/DBMaintenance/dbImporter.aspx?tab=pnl_TableEntries" title="Table Imports"></siteMapNode>
+            <siteMapNode url="~/SiteTools/DBMaintenance/dbImporter.aspx?tab=pnl_SavedConnections" title="Saved Connections" />
+        </siteMapNode>
+        <siteMapNode url="~/SiteTools/DBMaintenance/dbViewer.aspx" title="Table Viewer" icon="~/App_Themes/[THEME]/SiteLinkIcons/dbviewer.png" category="Database Tools" tooltip="View tables apart of the site" />
+        <siteMapNode url="~/SiteTools/UserMaintenance/UserAccounts.aspx" title="User Accounts" icon="~/App_Themes/[THEME]/SiteLinkIcons/useraccounts.png" category="User Management" tooltip="Add/Edit users on this site">
+            <siteMapNode url="~/SiteTools/UserMaintenance/UserAccounts.aspx?tab=pnl_useraccounts" title="User List" />
+            <siteMapNode url="~/SiteTools/UserMaintenance/UserAccounts.aspx?tab=pnl_userappsandplugins" title="Apps and Plugins" />
+            <siteMapNode url="~/SiteTools/UserMaintenance/UserAccounts.aspx?tab=pnl_usersettings" title="Settings" roles="Administrator" />
+        </siteMapNode>
+        <siteMapNode url="~/SiteTools/UserTools/MyNotifications.aspx" title="My Notifications" icon="~/App_Themes/[THEME]/SiteLinkIcons/mynotifications.png" category="Account Tools" tooltip="View all your notifications and messages" />
+        <siteMapNode url="~/Default.aspx" title="Workspace" icon="~/App_Themes/[THEME]/SiteLinkIcons/workspace.png" category="Account Tools" tooltip="Your main tool for opening apps" />
+    </siteMapNode>
+</siteMap>

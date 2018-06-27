@@ -1,0 +1,5 @@
+<table cellspacing="0" rules="all" border="1" style="border-collapse:collapse;">
+	<tr>
+		<td>Date</td><td>Truck Line</td><td>Truck Number</td><td>Customer</td><td>General Direction</td><td>Sales Order</td><td>Weight</td>
+	</tr>
+</table>

@@ -1,0 +1,7 @@
+﻿#editor { height: 195px; width: 600px; font-size: 14px; }
+#updateEditor { height: 150px; width: 98%; font-size: 14px; position: relative; }
+#MainContent_radioButton_FileList td, #MainContent_checkbox_FileList td { padding: 3px 0; }
+#MainContent_radioButton_FileList input, #MainContent_checkbox_FileList input { float: left; margin-right: 2px; margin-top: 1px; }
+.associated-plugin-text { font-size: 11px; }
+#MainContent_cb_enableUpload, #cb_installAfter { float: left; }
+label[for="MainContent_cb_enableUpload"], label[for="cb_installAfter"] { float: left; }

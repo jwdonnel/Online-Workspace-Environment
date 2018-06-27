@@ -1,0 +1,15 @@
+﻿#messageboard_overlay_pnl .message-entry { display: block; clear: both; }
+    #messageboard_overlay_pnl .message-entry .message-entry-holder { border-bottom: 1px solid #DDD; padding: 10px 35px 10px 0; margin: 0 10px 10px 10px; position: relative; }
+    #messageboard_overlay_pnl .message-entry .message-entry-holder-userInfo { float: left; margin-bottom: 10px; white-space: nowrap; }
+    #messageboard_overlay_pnl .message-entry .message-entry-holder-messageInfo { }
+    #messageboard_overlay_pnl .message-entry .message-responses { padding-left: 30px; }
+    #messageboard_overlay_pnl .message-entry .message-button-holder { float: right; }
+    #messageboard_overlay_pnl .message-entry .message-userimage { float: left; padding-right: 5px; }
+    #messageboard_overlay_pnl .message-entry .message-username { float: left; margin-top: 0; }
+    #messageboard_overlay_pnl .message-entry .message-fullname-text { font-size: 12px; padding-left: 1px; padding-right: 5px; color: #6580BE; font-weight: bold; }
+    #messageboard_overlay_pnl .message-entry .message-username-text { font-size: 12px; }
+    #messageboard_overlay_pnl .message-entry .message-text { padding: 0 0 10px 0; margin-left: 36px; }
+    #messageboard_overlay_pnl .message-entry .message-date { font-size: 10px; color: #999; margin-top: -7px; margin-left: 36px; clear: both; float: left; }
+#messageboard_overlay_pnl .message-responses:last-child .message-entry-holder { border-bottom: none !important; }
+#messageboard_overlay_pnl .sch_ColorCode { width: 22px !important; height: 22px !important; }
+    #messageboard_overlay_pnl .sch_ColorCode > img { height: 20px !important; }

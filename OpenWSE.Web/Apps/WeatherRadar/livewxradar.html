@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <iframe id="livewxradar-iframe" width="100%" style="border:0;" frameborder="0" seamless="seamless" allowfullscreen="true"></iframe>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var $iframe = $("#livewxradar-iframe");
+            resizeLiveWXRadar($iframe);
+        });
+
+        $(window).resize(function () {
+            var $iframe = $("#livewxradar-iframe");
+            if (!$iframe.parent().hasClass("app-body")) {
+                resizeLiveWXRadar($iframe);
+            }
+        });
+
+        function resizeLiveWXRadar(iframeObj) {
+            if (iframeObj.length > 0) {
+                var livewxradarUrl = location.protocol + "//builder.zoomradar.net/zoomradar_weather_map/weather_page.php?key=WCrH8db3YQIBi4m&w=100%&h=[INSERTHEIGHT]&z=5&lat=37.7369792&lng=-92.4838654&pan=1&temperature=1&temperature_off=1&stormTracks=1&stormReports=1&legend=1&windDirection=1&windDirection_off=1&search=1&satellite=1&autoloop=0&warn=1&mapads=503&sitep=&fullscreen=1&gmap_key=37&bulletins=1&allWarn=1";
+                var parentHeight = iframeObj.parent().outerHeight() - 3;
+                iframeObj.attr("src", livewxradarUrl.replace("[INSERTHEIGHT]", parentHeight));
+                iframeObj.css("height", parentHeight + "px");
+            }
+        }
+    </script>
+</body>
+</html>

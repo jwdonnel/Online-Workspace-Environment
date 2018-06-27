@@ -1,0 +1,155 @@
+﻿/* Main Table Style
+----------------------------------*/
+.gridview-table-holder { width: 100%; overflow: auto; border: none; background: #FFF; padding: 10px 0 3px 0; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; }
+.gridview-table { border-spacing: 0; border-collapse: collapse; width: 100%; border: 1px solid #E5E5E5; }
+#js_sortable-table, #css_sortable-table { border-spacing: 0; border-collapse: collapse; width: 100%; border: 1px solid #E5E5E5; }
+    #js_sortable-table .myHeaderStyle td, #css_sortable-table .myHeaderStyle td { border-right: 1px solid #E5E5E5; }
+
+
+
+/* Header Style
+----------------------------------*/
+.myHeaderStyle { height: 35px; margin-bottom: 0px; text-align: left; width: 100%; }
+    .myHeaderStyle td, .myHeaderStyle th { border-bottom: 2px solid #DDD; color: #000; padding-top: 8px!important; padding-bottom: 8px!important; padding-left: 5px; padding-right: 10px; vertical-align: middle; font-weight: bold; background-color: #F9F9F9; }
+    .myHeaderStyle a { color: #555; font-weight: 700; }
+        .myHeaderStyle a:hover { text-decoration: underline; }
+    .myHeaderStyle .td-sort-click { cursor: pointer; user-select: none; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none; }
+        .myHeaderStyle .td-sort-click:hover { text-decoration: underline; }
+.td-sort-click.asc, .td-sort-click.desc { background-repeat: no-repeat; background-position: 5px center; padding-left: 25px; }
+.td-sort-click.asc { background-image: url(../../Icons/Tables/sort-asc.png); }
+.td-sort-click.desc { background-image: url(../../Icons/Tables/sort-desc.png); }
+
+
+
+/* Row Style
+----------------------------------*/
+.GridViewNumRow { text-align: left; padding-left: 10px!important; }
+.GridNormalRow { background: #FFF; border-bottom: 1px solid #E5E5E5; }
+.GridAlternate { background: #F9F9F9; border-bottom: 1px solid #E5E5E5; }
+    .GridNormalRow:hover, .GridAlternate:hover { background: #F5F5F5; -moz-transition: all .2s ease-in-out; -webkit-transition: all .2s ease-in-out; transition: all .2s ease-in-out; }
+.myItemStyle, .addItemRow { width: 100%; }
+    .myItemStyle.activeClick { background-color: #fffbcd; }
+    .myItemStyle b, .addItemRow b { padding-right: 5px; }
+.ui-sortable tr.myItemStyle.no-animation-hover, .ui-sortable-handle, .ui-sortable > tr { -moz-transition: none !important; -webkit-transition: none !important; transition: none !important; }
+.GVPagerNumActive { border-left: 1px solid #898989; border-right: 1px solid #898989; font-weight: 700; margin: 5px 1px 0; padding: 2px 5px; text-decoration: none; color: #212222; }
+.emptyGridView-td, .emptyGridView-search-td { padding: 0!important; }
+.emptyGridView { color: #555; padding: 10px 7px; font-weight: bold; }
+.GridDatePrev:hover, .GridDateNext:hover { background: #212222; background: rgba(0, 0, 0, .5); cursor: pointer; }
+.gridview-table td, .myItemStyle td, .addItemRow td { padding: 12px 10px 12px 5px; border-right: 1px solid #E5E5E5; }
+.gridview-table .hide-table-row { display: none!important; }
+.myItemStyle .textEntry-noWidth, .addItemRow .textEntry-noWidth { width: 100%; text-align: left; }
+
+
+
+/* Pager Style
+----------------------------------*/
+.GridViewPager { background-color: #F9F9F9; border-top: 1px solid #E5E5E5; }
+.GridViewPager a { padding: 2px 3px; font-size: 14px; }
+.GridViewPager span { padding: 2px 3px; font-size: 14px; font-weight: bold; }
+.gridview-pager-holder { float: right; padding: 3px; }
+    .gridview-pager-holder .textEntry { margin-top: -1px; }
+    .gridview-pager-holder .input-buttons.no-margin { height: 27px !important; line-height: 17px !important; }
+.GridViewPager-Btns { float: right; margin: 4px 3px 0 3px; opacity: 0.7; filter: alpha(opacity=70); }
+    .GridViewPager-Btns:hover, .GridViewPager-Btns:active { opacity: 1.0; filter: alpha(opacity=100); }
+.gridview-pager-holder, .gridview-search-holder, .table-pagesize-selector { margin-top: 0; }
+.table-pagesize-outof { margin-top: 7px; float: right; padding: 3px; margin-left: 15px; }
+.table-pagesize-selector { float: left; padding: 3px; }
+    .table-pagesize-selector select { margin-left: 15px; }
+
+
+
+/* Image Buttons (For Tables)
+----------------------------------*/
+.td-add-btn, .td-subtract-btn, .td-delete-btn, .td-edit-btn, .td-update-btn, .td-cancel-btn, .td-restore-btn, .td-download-btn, .td-view-btn, .td-details-btn, .td-reset-btn, .pg-next-btn, .pg-prev-btn, .pg-first-btn, .pg-last-btn, .td-empty-btn, .td-addremove-btn, .td-network-btn, .td-users-btn, .td-share-btn, .td-password-btn, .td-lock-btn, .td-unlock-btn, .td-mail-btn, .td-nomail-btn, .td-refresh-btn, .td-norefresh-btn, .td-allow-btn, .td-ignore-btn, .td-app-btn { width: 16px; height: 16px; outline: none; padding: 3px; background-repeat: no-repeat; background-position: center center; display: inline-block; zoom: 1; *display: inline; }
+.td-add-btn { background-image: url(../../Icons/Tables/add.png); }
+.td-subtract-btn { background-image: url(../../Icons/Tables/subtract.png); }
+.td-delete-btn { background-image: url(../../Icons/Tables/delete.png); }
+.td-edit-btn { background-image: url(../../Icons/Tables/edit.png); }
+.td-update-btn { background-image: url(../../Icons/Tables/update.png); }
+.td-cancel-btn, .td-reset-btn { background-image: url(../../Icons/Tables/cancel.png); }
+.td-restore-btn { background-image: url(../../Icons/Tables/restore.png); }
+.td-download-btn { background-image: url(../../Icons/Tables/download.png); }
+.td-view-btn { background-image: url(../../Icons/Tables/view.png); }
+.td-details-btn { background-image: url(../../Icons/Tables/details.png); }
+.td-addremove-btn { background-image: url(../../Icons/Tables/add-remove.png); }
+.td-network-btn { background-image: url(../../Icons/Tables/network.png); }
+.td-users-btn { background-image: url(../../Icons/Tables/users.png); }
+.td-share-btn { background-image: url(../../Icons/Tables/share.png); }
+.td-password-btn { background-image: url(../../Icons/Tables/password.png); }
+.td-lock-btn { background-image: url(../../Icons/Tables/lock.png); }
+.td-unlock-btn { background-image: url(../../Icons/Tables/unlock.png); }
+.td-mail-btn { background-image: url(../../Icons/Tables/mail.png); }
+.td-nomail-btn { background-image: url(../../Icons/Tables/nomail.png); }
+.td-refresh-btn { background-image: url(../../Icons/Tables/refresh.png); }
+.td-norefresh-btn { background-image: url(../../Icons/Tables/norefresh.png); }
+.td-allow-btn { background-image: url(../../Icons/Tables/allow.png); }
+.td-ignore-btn { background-image: url(../../Icons/Tables/ignore.png); }
+.td-app-btn { background-image: url(../../Icons/Tables/app.png); }
+.pg-next-btn { background-image: url(../../Icons/Tables/nextpage.png); }
+.pg-prev-btn { background-image: url(../../Icons/Tables/prevpage.png); }
+.pg-first-btn { background-image: url(../../Icons/Tables/firstpage.png); }
+.pg-last-btn { background-image: url(../../Icons/Tables/lastpage.png); }
+
+
+
+/* Edit Buttons Style
+----------------------------------*/
+.edit-column-1-items, .edit-column-1-items-nocontent { width: 45px; }
+.edit-column-2-items, .edit-column-2-items-nocontent { width: 65px; }
+.edit-column-3-items, .edit-column-3-items-nocontent { width: 95px; }
+.edit-column-4-items, .edit-column-4-items-nocontent { width: 115px; }
+.myItemStyle.activeClick .myItemStyle-action-btns a { visibility: visible; }
+.myItemStyle-action-btns a, .addItemRow a { margin-left: 2px; margin-right: 2px; }
+.myItemStyle-action-btns a { visibility: hidden; }
+.myItemStyle:hover a, .myItemStyle a.td-update-btn, .myItemStyle a.td-cancel-btn { visibility: visible; }
+
+
+
+/* Table Search Style
+----------------------------------*/
+#SearchTable-element .search-text { width: 99%; }
+input.search-match-case { float: left; margin-top: 1px; margin-right: 2px; }
+label[for="cb_search-match-case"] { float: left; }
+.search-hide { display: none!important; }
+.gridview-search-holder { float: left; padding: 3px; }
+    .gridview-search-holder .search-btn, .gridview-search-holder .clear-search-btn { cursor: pointer; border: 1px solid #CCC; padding: 5px; background-color: #EFEFEF; background-repeat: no-repeat; background-position: center center; width: 16px; height: 16px; float: left; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; -moz-transition: all .2s ease-in-out; -webkit-transition: all .2s ease-in-out; transition: all .2s ease-in-out; }
+    .gridview-search-holder .search-btn { background-image: url(../../Icons/search-sml.png); }
+    .gridview-search-holder .clear-search-btn { background-image: url(../../Icons/update.png); margin-left: 10px; }
+        .gridview-search-holder .search-btn:hover, .gridview-search-holder .clear-search-btn:hover { background-color: #E5E5E5; }
+        .gridview-search-holder .search-btn:active, .gridview-search-holder .clear-search-btn:active { background-color: #DDD; }
+
+
+
+/* Custom Table Styles
+----------------------------------*/
+.customization-light-color, .customization-dark-color, .customization-light-color td, .customization-dark-color td, .customization-light-color th, .customization-dark-color th { -moz-transition: none!important; -webkit-transition: none!important; transition: none!important; }
+    .customization-light-color, .customization-light-color td, .customization-light-color th { color: #FFF; }
+    .customization-dark-color, .customization-dark-color td, .customization-dark-color th { color: #353535; }
+
+
+
+@media screen and (max-width: 750px) {
+    .gridview-table { width: 99%; }
+    .myHeaderStyle td[width="40px"]:first-child, .myHeaderStyle td[width="45px"]:first-child, .myHeaderStyle td[width="54px"]:first-child { display: none; }
+    .myHeaderStyle td, .myHeaderStyle th { border-bottom: 1px solid rgba(150,150,150,0.4); }
+    .myItemStyle { border-bottom: none; }
+    .GridViewNumRow { font-weight: bold; font-size: 14px; }
+    .myItemStyle td, .addItemRow td, .myHeaderStyle td, .myHeaderStyle th { display: inline-block; width: 100%!important; min-width: 100%!important; text-align: center!important; word-break: break-all; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; }
+    .myItemStyle td, .addItemRow td { padding: 10px 5px; border-bottom: 1px solid #E5E5E5; }
+    .myHeaderStyle td, .myHeaderStyle th { padding: 5px 0; font-size: 105%!important; }
+    .myItemStyle .app-rater-installer { display: inline-block; }
+    .myItemStyle, .addItemRow { width: 100%; display: inline-block; margin-top: 15px; margin-bottom: 15px; border-top: 2px solid #999; }
+        .myItemStyle .float-left, .addItemRow .float-left { float: none; display: inline-block; }
+        .addItemRow .addrow-emptycell { display: none; }
+    .myHeaderStyle { display: inline-table; margin-bottom: 15px; background: #F5F5F5; -webkit-box-shadow: 0 2px 10px rgba(0,0,0,.2); box-shadow: 0 2px 10px rgba(0,0,0,.2); -moz-box-shadow: 0 2px 10px rgba(0,0,0,.2); }
+    .myItemStyle a { visibility: visible!important; }
+    .edit-column-1-items:before, .edit-column-2-items:before, .edit-column-3-items:before, .edit-column-4-items:before { content: "Actions"; }
+    .td-sort-click.asc, .td-sort-click.desc { padding-left: 0; text-indent: 0; background-position: 5px center; }
+    .GridViewPager .table-pagesize-selector { float: right!important; }
+    .GridViewPager .table-pagesize-outof { float: none!important; padding-top: 10px; display: block; clear: both; margin-left: 0!important; }
+    .GridViewPager .gridview-pager-holder { float: none!important; display: block; clear: both; margin-left: -10px; margin-right: -10px; }
+    .GridViewPager .page-index-textbox { width: 45px!important; }
+    .table-notiMessages td { display: block; }
+    .table-notiMessages .alert-panel-noti-btns-remove { visibility: visible!important; }
+    .table-notiMessages .notification-icon { margin-left: -10px; }
+}

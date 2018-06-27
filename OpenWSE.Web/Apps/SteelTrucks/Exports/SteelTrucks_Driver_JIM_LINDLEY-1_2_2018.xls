@@ -1,0 +1,17 @@
+<table cellspacing="0" rules="all" border="1" style="border-collapse:collapse;">
+	<tr>
+		<td>Date</td><td>Driver</td><td>Unit</td><td>Direction</td><td>Customer</td><td>City</td><td>OrderNumber</td><td>Weight</td>
+	</tr><tr>
+		<td>1/2/2018 1:00:00 AM</td><td>JIM LINDLEY</td><td>STRAIGHT TRUCK</td><td>Local</td><td>GRAIN VALLEY TOOL</td><td>GRAIN VALLEY, MO</td><td>155339</td><td>3,847</td>
+	</tr><tr>
+		<td>1/2/2018 1:00:00 AM</td><td>JIM LINDLEY</td><td>STRAIGHT TRUCK</td><td>Local</td><td>ZEPHYR PRODUCTS</td><td>LEAVENWORTH, KS</td><td>155535</td><td>6000</td>
+	</tr><tr>
+		<td>1/2/2018 1:00:00 AM</td><td>JIM LINDLEY</td><td>STRAIGHT TRUCK</td><td>Local</td><td>SPS PROCESSING-KANSAS CITY</td><td>INDUSTRIAL AIRPO, KS</td><td>155541</td><td>11250</td>
+	</tr><tr>
+		<td>1/2/2018 1:00:00 AM</td><td>JIM LINDLEY</td><td>STRAIGHT TRUCK</td><td>Local</td><td>asdf</td><td>BRIGHTON, MO</td><td>asdf</td><td>123</td>
+	</tr><tr>
+		<td>1/2/2018 1:00:00 AM</td><td>JIM LINDLEY</td><td>STRAIGHT TRUCK</td><td>Local</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+	</tr><tr>
+		<td>1/2/2018 1:00:00 AM</td><td>JIM LINDLEY</td><td>STRAIGHT TRUCK</td><td>Local</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+	</tr>
+</table>

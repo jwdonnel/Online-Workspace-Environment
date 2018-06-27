@@ -1,0 +1,12 @@
+﻿.myHeaderStyle td[data-columnname="W"], .myHeaderStyle td[data-columnname="D"], .myHeaderStyle td[data-columnname="L"] { color:#FFF!important; background-color: #0881C6!important; }
+input:disabled { cursor: default!important; background-color: #F5F5F5!important; }
+img.steel-inventory-image, img.steel-inventory-image-edit { cursor: pointer; max-width: 50px; }
+.steelInventory-image-select { float: left; margin-right: 20px; position: relative; }
+    .steelInventory-image-select img { cursor: pointer; max-width: 100px; height: 100px; border: 1px solid transparent; padding: 3px; -moz-transition: all .2s ease-in-out; -webkit-transition: all .2s ease-in-out; transition: all .2s ease-in-out; }
+        .steelInventory-image-select img:hover { border: 1px solid #555; }
+    .steelInventory-image-select .delete-invimg { display: none; cursor: pointer; position: absolute; z-index: 1; top: 0; right: 0; width: 16px; height: 16px; background-color: #FFF; background-image: url(../../App_Themes/Standard/Icons/Tables/delete.png); background-repeat: no-repeat; background-position: center center; }
+    .steelInventory-image-select:hover .delete-invimg { display: block; }
+#img_Image_Insert { cursor: pointer; max-width: 50px;}
+.steelinventory-image-preview-overlay { position: fixed; z-index: 12001; left: 0; right: 0; top: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.3); }
+    .steelinventory-image-preview-overlay .steelinventory-image-preview { position: absolute; background: #FFF; left: 50%; top: 50%; padding: 10px; border: 1px solid #CCC; transform: translate(-50%, -50%); -moz-transform: translate(-50%, -50%); -webkit-transform: translate(-50%, -50%); border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; }
+    .steelinventory-image-preview-overlay img { max-width: 500px; }
