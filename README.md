@@ -1,11 +1,13 @@
-<img alt="OpenWSE - Open Workspace Environment" src="http://openwse.com/Standard_Images/About%20Logos/openwse.png" />
+<img alt="OpenWSE - Open Workspace Environment" src="https://openwse.com/Standard_Images/About%20Logos/openwse.png" />
 <br />
 <hr />
+<br />
+<a href="https://openwse.com" target="_blank">Visit OpenWSE now.</a> New updates coming soon!
 <br />
 OpenWSE is free for personal use as long as the copyright notices are intact. In order to remove the copyright, you must purchase a license. Download and run the OpenWSE_Installer.exe which will setup a website on your local machine using IIS. Once you buy the license, you can make any changes you want to the code.
 <br />
 <br />
-<img alt="workspace" src="http://openwse.com/Standard_Images/About%20Logos/Workspace.jpg" />
+<img alt="workspace" src="https://openwse.com/Standard_Images/About%20Logos/Workspace.jpg" />
 <br />
 <br />
 <b>Introduction</b>
@@ -43,10 +45,10 @@ The workspace works like your desktop computer. You can open, close, minimize, m
 You can choose the number of workspaces you want to show.<br />
 Apps can be opened to specific workspaces.<br />
 Each workspace can have its own background. (If enabled)<br />
-You can switch between workspaces by selecting the <img alt="" src="http://openwse.com/App_Themes/Standard/Icons/workspace.png"> Workspace at the top left corner of the screen or by pressing Alt + Up Key/Down Key<br />
-You can also toggle the overlays by selecting the <img alt="" src="http://openwse.com/App_Themes/Standard/Icons/overlay.png"> or by pressing Alt + O<br />
-<img alt="Workspace" src="http://openwse.com/Standard_Images/About Logos/openwse_v4.6.jpg" style="width: 480px; float: left;">
-<img alt="Workspace" src="http://openwse.com/Standard_Images/About Logos/openwse_v4.6_overlays.jpg" style="width: 480px; float: left;">
+You can switch between workspaces by selecting the <img alt="" src="https://openwse.com/App_Themes/Standard/Icons/workspace.png"> Workspace at the top left corner of the screen or by pressing Alt + Up Key/Down Key<br />
+You can also toggle the overlays by selecting the <img alt="" src="https://openwse.com/App_Themes/Standard/Icons/overlay.png"> or by pressing Alt + O<br />
+<img alt="Workspace" src="https://openwse.com/Standard_Images/About Logos/openwse_v4.6.jpg" style="width: 480px; float: left;">
+<img alt="Workspace" src="https://openwse.com/Standard_Images/About Logos/openwse_v4.6_overlays.jpg" style="width: 480px; float: left;">
 <br />
 <br />
 <b>Site Tools</b>
@@ -62,12 +64,12 @@ Track issues, user logins, site request, speeds, and enable the IP Listener whic
 <table style="width: 100%;">
                         <tbody><tr>
                             <td align="center" valign="top">
-                                <img alt="Site Settings" src="http://openwse.com/Standard_Images/About Logos/networklog.jpg" style="width: 400px;">
+                                <img alt="Site Settings" src="https://openwse.com/Standard_Images/About Logos/networklog.jpg" style="width: 400px;">
                                 <div class="clear-space"></div>
                                 <h3>Network Log</h3>
                             </td>
                             <td align="center" valign="top">
-                                <img alt="Custom Tables" src="http://openwse.com/Standard_Images/About Logos/customtables.jpg" style="width: 400px;">
+                                <img alt="Custom Tables" src="https://openwse.com/Standard_Images/About Logos/customtables.jpg" style="width: 400px;">
                                 <div class="clear-space"></div>
                                 <h3>Custom Tables</h3>
                             </td>
@@ -80,7 +82,7 @@ Track issues, user logins, site request, speeds, and enable the IP Listener whic
 Control your workspace from your mobile device.<br />
 Use the App Remote on your mobile device to open up apps on the device and chat.<br />
 You do not have to be on the same network as your workspace. The App Remote works from anywhere as long as there is an internet connection.<br />
-<img alt="App Remote" src="http://openwse.com/Standard_Images/About%20Logos/appremote.jpg">
+<img alt="App Remote" src="https://openwse.com/Standard_Images/About%20Logos/appremote.jpg">
 <br />
 <br />
 <b>Chat Client</b>
@@ -88,7 +90,7 @@ You do not have to be on the same network as your workspace. The App Remote work
 Communicate with other users that are apart of your group.<br />
 Add emoicons, images, url links, and even YouTube videos. These will be formated to view, click, and play in the chat session.<br />
 Set your current state to either Available, Away, Busy, or Offline.<br />
-<img alt="Chat Client" src="http://openwse.com/Standard_Images/About%20Logos/chatclient.jpg">
+<img alt="Chat Client" src="https://openwse.com/Standard_Images/About%20Logos/chatclient.jpg">
 <br />
 <br />
 <b>Frameworks and Technologies Used</b>
