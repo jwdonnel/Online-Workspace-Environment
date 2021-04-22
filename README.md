@@ -1,7 +1,3 @@
-<img alt="OpenWSE - Open Workspace Environment" src="https://openwse.com/Standard_Images/About%20Logos/openwse.png" />
-<br />
-<hr />
-<br />
 <a href="https://openwse.com" target="_blank">Visit OpenWSE now.</a> New updates coming soon!
 <br />
 OpenWSE is free for personal use as long as the copyright notices are intact. In order to remove the copyright, you must purchase a license. Download and run the OpenWSE_Installer.exe which will setup a website on your local machine using IIS. Once you buy the license, you can make any changes you want to the code.
