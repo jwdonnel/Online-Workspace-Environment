@@ -47,8 +47,7 @@ Apps can be opened to specific workspaces.<br />
 Each workspace can have its own background. (If enabled)<br />
 You can switch between workspaces by selecting the <img alt="" src="https://openwse.com/App_Themes/Standard/Icons/workspace.png"> Workspace at the top left corner of the screen or by pressing Alt + Up Key/Down Key<br />
 You can also toggle the overlays by selecting the <img alt="" src="https://openwse.com/App_Themes/Standard/Icons/overlay.png"> or by pressing Alt + O<br />
-<img alt="Workspace" src="https://openwse.com/Standard_Images/About Logos/openwse_v4.6.jpg" style="width: 480px; float: left;">
-<img alt="Workspace" src="https://openwse.com/Standard_Images/About Logos/openwse_v4.6_overlays.jpg" style="width: 480px; float: left;">
+<img alt="Workspace" src="https://openwse.com/Standard_Images/About%20Logos/History/v4.6.jpg" style="width: 480px; float: left;">
 <br />
 <br />
 <b>Site Tools</b>
